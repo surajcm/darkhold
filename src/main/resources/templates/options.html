@@ -1,0 +1,113 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+    <title>Getting Started: Darkhold classroom quiz experience</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link href='https://fonts.googleapis.com/css?family=Audiowide' rel='stylesheet'>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"><link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <style>
+        body {
+            background-image: url("images/funky-lines.png");
+            font-family: 'Audiowide';font-size: 26px;
+        }
+        section {
+            padding-top: 4rem;
+            padding-bottom: 5rem;
+            background-color: #f1f4fa;
+        }
+        .wrap {
+            display: flex;
+            background: white;
+            padding: 1rem 1rem 1rem 1rem;
+            border-radius: 0.5rem;
+            box-shadow: 7px 7px 30px -5px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+        }
+
+        .ico-wrap {
+            margin: auto;
+        }
+
+        .mbr-iconfont {
+            font-size: 4.5rem !important;
+            color: #313131;
+            margin: 1rem;
+            padding-right: 1rem;
+        }
+        .vcenter {
+            margin: auto;
+        }
+
+        .mbr-section-title3 {
+            text-align: left;
+        }
+        h2 {
+            margin-top: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+        .display-5 {
+            font-size: 1.4rem;
+        }
+        .mbr-bold {
+            font-weight: 700;
+        }
+
+        p {
+            padding-top: 0.5rem;
+            padding-bottom: 0.5rem;
+            line-height: 25px;
+        }
+        .display-6 {
+            font-size: 1re
+        }
+    </style>
+    <script type="text/javascript">
+        function createChallenge() {
+            document.forms[0].action="/createChallenge";
+            document.forms[0].submit();
+        }
+
+        function viewChallenge() {
+            document.forms[0].action="/viewChallenge";
+            document.forms[0].submit();
+        }
+    </script>
+</head>
+<body>
+<form action="#" method="post">
+    <div class="container-fluid">
+        <div class="row justify-content-center align-items-center d-flex text-center h-100">
+            <div class="col-lg-6 mbr-col-md-10">
+                <div class="wrap" onclick="javascript:createChallenge()">
+                    <div class="ico-wrap">
+                        <span class="mbr-iconfont fa-calendar fa"></span>
+                    </div>
+                    <div class="text-wrap vcenter">
+                        <h2 class="mbr-fonts-style mbr-bold mbr-section-title3 display-5">Set up new <span>Challenge</span></h2>
+                        <p class="mbr-fonts-style text1 mbr-text display-6">Create a new challenge</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6 mbr-col-md-10">
+                <div class="wrap" onclick="javascript:viewChallenge()">
+                    <div class="ico-wrap">
+                        <span class="mbr-iconfont fa-trophy fa"></span>
+                    </div>
+                    <div class="text-wrap vcenter">
+                        <h2 class="mbr-fonts-style mbr-bold mbr-section-title3 display-5">View existing <span>Challenge</span></h2>
+                        <p class="mbr-fonts-style text1 mbr-text display-6">See the existing challenges, edit them and start the challenges</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+</body>
+</html>
