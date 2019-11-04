@@ -11,13 +11,13 @@ public class OptionsController {
 
     @PostMapping("/createChallenge")
     public String createChallenge() {
-        log.info("into the log me method");
+        log.info("into the createChallenge method");
         return "createchallenge";
     }
 
     @PostMapping("/viewChallenge")
     public String viewChallenges() {
-        log.info("into the log me method");
+        log.info("into the viewChallenge method");
         return "viewchallenges";
     }
 }

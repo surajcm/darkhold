@@ -1,0 +1,193 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+    <title>Getting Started: Darkhold classroom quiz experience</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link href='https://fonts.googleapis.com/css?family=Audiowide' rel='stylesheet'>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <style>
+        @import url('https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css');
+        body {
+            background-image: url("images/funky-lines.png");
+            font-family: 'Audiowide';font-size: 26px;
+        }
+        section{
+            padding: 60px 0;
+        }
+
+        #accordion-style-1 h1,
+        #accordion-style-1 a{
+            color:#007b5e;
+        }
+        #accordion-style-1 .btn-link {
+            font-weight: 400;
+            color: #007b5e;
+            background-color: transparent;
+            text-decoration: none !important;
+            font-size: 16px;
+            padding-left: 25px;
+        }
+
+        #accordion-style-1 .card-body {
+            font-size: 12px;
+            border-top: 2px solid #007b5e;
+        }
+
+        #accordion-style-1 .card-header .btn.collapsed .fa.main{
+            display:none;
+        }
+
+        #accordion-style-1 .card-header .btn .fa.main{
+            background: #007b5e;
+            padding: 13px 11px;
+            color: #ffffff;
+            width: 35px;
+            height: 41px;
+            position: absolute;
+            left: -1px;
+            top: 10px;
+            border-top-right-radius: 7px;
+            border-bottom-right-radius: 7px;
+            display:block;
+        }
+        .card {
+            max-width: 100%;
+        }
+        .card-text {
+            word-wrap: break-word;
+        }
+    </style>
+    <script type="text/javascript">
+       function logOut() {
+            document.forms[0].action="/";
+            document.forms[0].submit();
+       }
+       function toChallenges() {
+            document.forms[0].action="/viewChallenge";
+            document.forms[0].submit();
+       }
+       function publish() {
+            document.forms[0].action="/publish";
+            document.forms[0].submit();
+       }
+    </script>
+</head>
+<body>
+<nav class="navbar transparent navbar-inverse">
+    <button class="btn btn-lg btn-rised align-middle btn-primary ml-auto mr-3 order-lg-last" type="button" onclick="javascript:logOut()" >Logout</button>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown"
+            aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+</nav>
+<form action="#" method="post">
+<div class="container-fluid bg-gray" id="accordion-style-1">
+    <div class="container">
+        <section>
+            <div class="row">
+                <div class="col-12">
+                    <h1 class="text-green mb-4 text-center">AWS QUIZ 101</h1>
+                </div>
+                <div class="col-10 mx-auto">
+                    <div class="accordion" id="accordionExample">
+                        <div class="card">
+                            <div class="card-header" id="headingOne">
+                                <h5 class="mb-0">
+                                    <button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                        <i class="fa fa-amazon main"></i><i class="fa fa-angle-double-right mr-3"></i>
+                                        <div class="card-text">
+                                        A company is storing an access key (access key ID and secret access key) in a text file on a custom AMI. The company uses the access key to access DynamoDB tables from instances created from the AMI. The security team has mandated a more secure solution.
+                                        Which solution will meet the security team’s mandate?
+                                        </div>
+                                    </button>
+                                </h5>
+                            </div>
+
+                            <div id="collapseOne" class="collapse show fade" aria-labelledby="headingOne" data-parent="#accordionExample">
+                                <div class="card-body">
+                                    <p>
+                                    A. Put the access key in an S3 bucket, and retrieve the access key on boot from the instance.
+                                    </p>
+                                    <p>
+                                    B. Pass the access key to the instances through instance user data.
+                                    </p>
+                                    <p>
+                                    C. Obtain the access key from a key server launched in a private subnet.
+                                    </p>
+                                    <p>
+                                    D. Create an IAM role with permissions to access the table, and launch all instances with the new role.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-header" id="headingTwo">
+                                <h5 class="mb-0">
+                                    <button class="btn btn-link collapsed btn-block text-left" type="button" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                                        <i class="fa fa-plus main"></i><i class="fa fa-angle-double-right mr-3"></i>A company is developing a highly available web application using stateless web servers. Which services are suitable for storing session state data?
+                                    </button>
+                                </h5>
+                            </div>
+                            <div id="collapseTwo" class="collapse fade" aria-labelledby="headingTwo" data-parent="#accordionExample">
+                                <div class="card-body">
+                                    <p>A. DynamoDB</p>
+                                    <p>B. Elastic Load Balancing</p>
+                                    <p>C. ElastiCache</p>
+                                    <p>D. Storage Gateway</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-header" id="headingThree">
+                                <h5 class="mb-0">
+                                    <button class="btn btn-link collapsed btn-block text-left" type="button" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                                        <i class="fa fa-expeditedssl main"></i><i class="fa fa-angle-double-right mr-3"></i>Company salespeople upload their sales figures daily. A Solutions Architect needs a durable storage solution for these documents that also protects against users accidentally deleting important documents.
+                                        Which action will protect against unintended user actions?
+                                    </button>
+                                </h5>
+                            </div>
+                            <div id="collapseThree" class="collapse fade" aria-labelledby="headingThree" data-parent="#accordionExample">
+                                <div class="card-body">
+                                    <p>A. Store data in an EBS volume and create snapshots once a week.</p>
+                                    <p>B. Store data in an S3 bucket and enable versioning.</p>
+                                    <p>C. Store data in two S3 buckets in different AWS regions.</p>
+                                    <p>D. Store data on EC2 instance storage.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-header" id="headingFour">
+                                <h5 class="mb-0">
+                                    <button class="btn btn-link collapsed btn-block text-left" type="button" data-toggle="collapse" data-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+                                        <i class="fa fa-envelope main"></i><i class="fa fa-angle-double-right mr-3"></i>An application requires a highly available relational database with an initial storage capacity of 8 TB. The database will grow by 8 GB every day. To support expected traffic, at least eight read replicas will be required to handle database reads.
+                                        Which option will meet these requirements?
+                                    </button>
+                                </h5>
+                            </div>
+                            <div id="collapseFour" class="collapse fade" aria-labelledby="headingFour" data-parent="#accordionExample">
+                                <div class="card-body">
+                                    <p>A. DynamoDB</p>
+                                    <p>B. Amazon S3</p>
+                                    <p>C. Amazon Aurora</p>
+                                    <p>D. Amazon Redshift</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12">
+                    <button type="button" class="btn btn-warning  pl-5 pr-5" onclick="javascript:toChallenges()" >Back to challenges</button>
+                    <button type="button" class="btn btn-warning  pl-5 pr-5" onclick="javascript:publish()" >Publish game</button>
+                </div>
+            </div>
+        </section>
+    </div>
+</div>
+</form>
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+</body>
+</html>

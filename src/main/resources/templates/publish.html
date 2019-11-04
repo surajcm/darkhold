@@ -1,0 +1,77 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+    <title>Getting Started: Darkhold classroom quiz experience</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link href='https://fonts.googleapis.com/css?family=Audiowide' rel='stylesheet'>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <style>
+        body {
+            background-image: url("images/funky-lines.png");
+            font-family: 'Audiowide';font-size: 26px;
+        }
+        .navbar.transparent.navbar-inverse .navbar-inner {
+            border-width: 0px;
+            -webkit-box-shadow: 0px 0px;
+            box-shadow: 0px 0px;
+            background-color: rgba(0,0,0,0.0);
+            background-image: -webkit-gradient(linear, 50.00% 0.00%, 50.00% 100.00%, color-stop( 0% , rgba(0,0,0,0.00)),color-stop( 100% , rgba(0,0,0,0.00)));
+            background-image: -webkit-linear-gradient(270deg,rgba(0,0,0,0.00) 0%,rgba(0,0,0,0.00) 100%);
+            background-image: linear-gradient(180deg,rgba(0,0,0,0.00) 0%,rgba(0,0,0,0.00) 100%);
+        }
+        .jumbotron {
+            background: none
+        }
+        .form-control {
+          background: #f7f7f7 none repeat scroll 0 0;
+          border: 3px solid #d4d4d4;
+          border-radius: 4px;
+          font-size: 30px;
+          height: 80px;
+          line-height: 50px;
+          width: 180px;
+        }
+        input[type=number]:focus {
+          border: 3px solid #555;
+        }
+        #message_disp {
+            color: red;
+        }
+    </style>
+    <script type="text/javascript">
+        function startGame() {
+            document.forms[0].action="/game";
+            document.forms[0].submit();
+        }
+    </script>
+</head>
+<body>
+<nav class="navbar transparent navbar-inverse">
+    <button class="btn btn-lg btn-rised align-middle btn-primary ml-auto mr-3 order-lg-last" type="button" onclick="javascript:logMeIn()" >LogOut</button>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown"
+            aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+</nav>
+<form action="#" th:action="@{/startGame}" method="post">
+    <div class="container-fluid">
+        <div class="row justify-content-center align-items-center d-flex text-center h-100">
+            <div class="col-12 col-md-8  h-50">
+                <div class="jumbotron min-vh-100 text-center m-0 d-flex flex-column justify-content-center">
+                    <h1 class="display-2 text-dark mb-2 mt-5" id="head_msg">Your Quiz PIN is : <strong>12312</strong> </h1>
+                    <div id="messenger">
+                        <p id="message_disp"></p>
+                    </div>
+                    <p><a class="btn bg-danger shadow-lg btn-round text-light btn-lg btn-rised" onclick="javascript:startGame()">Start Game</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+</body>
+</html>

@@ -64,6 +64,9 @@
         .display-6 {
             font-size: 1re
         }
+        .section {
+            background: none
+        }
     </style>
     <script type="text/javascript">
         function createChallenge() {
@@ -75,9 +78,22 @@
             document.forms[0].action="/viewChallenge";
             document.forms[0].submit();
         }
+
+        function logOut() {
+            document.forms[0].action="/";
+            document.forms[0].submit();
+        }
     </script>
 </head>
 <body>
+<nav class="navbar transparent navbar-inverse">
+    <button class="btn btn-lg btn-rised align-middle btn-primary ml-auto mr-3 order-lg-last" type="button" onclick="javascript:logOut()" >Logout</button>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown"
+            aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+</nav>
+<section>
 <form action="#" method="post">
     <div class="container-fluid">
         <div class="row justify-content-center align-items-center d-flex text-center h-100">
@@ -106,6 +122,7 @@
         </div>
     </div>
 </form>
+</section>
 <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
