@@ -68,12 +68,12 @@
     </style>
     <script type="text/javascript">
         function logMeIn() {
-            document.forms[0].action="/logmein";
+            document.forms[0].action="/login";
             document.forms[0].submit();
         }
 
         function signup() {
-            document.forms[0].action="/signUp";
+            document.forms[0].action="/registration";
             document.forms[0].submit();
         }
     </script>
@@ -86,13 +86,13 @@
             <h3>Sign up</h3>
             <form>
                 <div class="form-group">
-                    <input type="text" class="form-control" placeholder="Your Name *" value="" />
+                    <input type="text" name="username" class="form-control" placeholder="Your Name *" value="" />
                 </div>
                 <div class="form-group">
-                    <input type="text" class="form-control" placeholder="Your Email *" value="" />
+                    <input type="password" name="password" class="form-control" placeholder="Your Password *" value="" />
                 </div>
                 <div class="form-group">
-                    <input type="password" class="form-control" placeholder="Your Password *" value="" />
+                    <input type="password" name="passwordConfirm" class="form-control" placeholder="Confirm password" value="" />
                 </div>
                 <div class="form-group">
                     <input type="button" class="btnSubmit" value="Sign up" onclick="javascript:signup()"/>
