@@ -82,6 +82,7 @@
 <form action="#" th:action="@{/login}" method="post">
 <div class="container login-container">
     <div class="row">
+        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
         <div class="col-md-6 login-form-1">
             <h3>Sign up</h3>
             <form>

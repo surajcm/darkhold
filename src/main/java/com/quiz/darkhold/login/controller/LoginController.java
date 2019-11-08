@@ -29,7 +29,7 @@ public class LoginController {
 
 
     @GetMapping("/login")
-    public String login(Model model, String error, String logout) {
+    public String loginGet(Model model, String error, String logout) {
         log.info("inside the login method");
         if (error != null) {
             log.info("inside the login method, error : "+ error);
@@ -40,7 +40,7 @@ public class LoginController {
             model.addAttribute("message", "You have been logged out successfully.");
         }
         model.addAttribute("userForm", new User());
-        return "login";
+        return "options";
     }
 
     @GetMapping("/registration")
@@ -67,9 +67,15 @@ public class LoginController {
         return "redirect:/";
     }
 
-    @PostMapping("/loginMe")
+    @PostMapping("/logmein")
     public String loginMe(Model model) {
         log.info("into loginMe");
+        return "login";
+    }
+
+    @GetMapping("/logmein")
+    public String loginMe2(Model model) {
+        log.info("into GET loginMe");
         return "login";
     }
 }
