@@ -24,9 +24,9 @@ plugins {
 	id 'com.github.spotbugs' version '1.6.8' apply false
 }
 
-group = 'com.quiz.mjölnir'
+group = 'com.quiz.darkhold'
 version = '0.0.1-SNAPSHOT'
-sourceCompatibility = JavaVersion.VERSION_12
+sourceCompatibility = JavaVersion.VERSION_13
 
 repositories {
 	mavenCentral()

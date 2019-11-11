@@ -28,9 +28,13 @@ public class LoginController {
     private UserValidator userValidator;
 
 
-    @GetMapping("/login")
-    public String loginGet(Model model, String error, String logout) {
+    @PostMapping("/logme")
+    public String loginGet(Model model, @ModelAttribute("userForm") User userForm, String error, String logout) {
         log.info("inside the login method");
+        log.info("model is : "+model.asMap().keySet().toString());
+        log.info("userForm is : "+userForm.getUsername());
+        securityService.autoLogin(userForm.getUsername(), userForm.getPassword());
+        log.info("autoLogin done !!!");
         if (error != null) {
             log.info("inside the login method, error : "+ error);
             model.addAttribute("error", "Your username and password is invalid.");
@@ -59,10 +63,10 @@ public class LoginController {
             log.info(bindingResult.getAllErrors().get(0));
             return "login";
         }
-
+        //Role admin = new Role();
+        //admin.setName("ADMIN");
+        //userForm.setRoles(Collections.singleton(admin));
         userService.save(userForm);
-
-        securityService.autoLogin(userForm.getUsername(), userForm.getPasswordConfirm());
 
         return "redirect:/";
     }

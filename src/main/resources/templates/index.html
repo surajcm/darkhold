@@ -103,7 +103,7 @@
 </head>
 <body>
     <nav class="navbar transparent navbar-inverse">
-        <button class="btn btn-lg btn-rised align-middle btn-primary ml-auto mr-3 order-lg-last" type="button" onclick="javascript:logMeIn()" >LogIn</button>
+        <button class="btn btn-lg btn-rised align-middle btn-primary ml-auto mr-3 order-lg-last" type="button" onclick="javascript:logMeIn()" >LogIn / SignUp</button>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown"
                 aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -114,6 +114,7 @@
             <div class="row justify-content-center align-items-center d-flex text-center h-100">
                 <div class="col-12 col-md-8  h-50">
                     <div class="jumbotron min-vh-100 text-center m-0 d-flex flex-column justify-content-center">
+                        <div id="logMessage"></div>
                         <h1 class="display-2  text-dark mb-2 mt-5" id="head_msg"><strong>Enter Quiz PIN</strong> </h1>
                         <div class="justify-content-center align-items-center d-flex text-center">
                             <input class="form-control lead text-dark mb-5" th:field="*{gamePin}" id="gamePin" name="gamePin" type="number"  autofocus />
