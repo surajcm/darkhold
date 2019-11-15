@@ -1,5 +1,6 @@
 package com.quiz.darkhold.login.controller;
 
+import com.quiz.darkhold.home.model.GameInfo;
 import com.quiz.darkhold.login.entity.User;
 import com.quiz.darkhold.login.service.SecurityService;
 import com.quiz.darkhold.login.service.UserService;
@@ -55,7 +56,7 @@ public class LoginController {
     }
 
     @PostMapping("/registration")
-    public String registration(@ModelAttribute("userForm") User userForm, BindingResult bindingResult) {
+    public String registration(Model model, @ModelAttribute("userForm") User userForm, BindingResult bindingResult) {
         log.info("inside the registration post method");
         userValidator.validate(userForm, bindingResult);
 
@@ -63,12 +64,13 @@ public class LoginController {
             log.info(bindingResult.getAllErrors().get(0));
             return "login";
         }
-        //Role admin = new Role();
-        //admin.setName("ADMIN");
-        //userForm.setRoles(Collections.singleton(admin));
         userService.save(userForm);
 
-        return "redirect:/";
+        //return "redirect:/";
+        GameInfo gameInfo = new GameInfo();
+        gameInfo.setMessage("Successfully created the account !!!");
+        model.addAttribute("gameinfo", gameInfo);
+        return "index";
     }
 
     @PostMapping("/logmein")

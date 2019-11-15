@@ -114,7 +114,14 @@
             <div class="row justify-content-center align-items-center d-flex text-center h-100">
                 <div class="col-12 col-md-8  h-50">
                     <div class="jumbotron min-vh-100 text-center m-0 d-flex flex-column justify-content-center">
-                        <div id="logMessage"></div>
+                        <span th:if="${gameinfo != null && gameinfo.message != null}">
+                            <div class="alert alert-success alert-dismissible" id="logMessage">
+                                <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                                <p th:inline="text" >
+                                    [[${gameinfo.message}]]
+                                </p>
+                            </div>
+                        </span>
                         <h1 class="display-2  text-dark mb-2 mt-5" id="head_msg"><strong>Enter Quiz PIN</strong> </h1>
                         <div class="justify-content-center align-items-center d-flex text-center">
                             <input class="form-control lead text-dark mb-5" th:field="*{gamePin}" id="gamePin" name="gamePin" type="number"  autofocus />

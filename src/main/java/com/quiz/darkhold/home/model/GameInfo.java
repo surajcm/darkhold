@@ -5,6 +5,7 @@ import java.util.StringJoiner;
 public class GameInfo {
     String gamePin;
     String name;
+    String message;
 
     public String getGamePin() {
         return gamePin;
@@ -22,11 +23,20 @@ public class GameInfo {
         this.name = name;
     }
 
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
     @Override
     public String toString() {
         return new StringJoiner(", ", GameInfo.class.getSimpleName() + "[", "]")
                 .add("gamePin='" + gamePin + "'")
                 .add("name='" + name + "'")
+                .add("message='" + message + "'")
                 .toString();
     }
 }
