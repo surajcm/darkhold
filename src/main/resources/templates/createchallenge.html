@@ -28,6 +28,43 @@
             margin-right: 0;
         }
     </style>
+    <script type="text/javascript">
+
+        function uploadPDF() {
+            //alert("clicked");
+            //var token = $("meta[name='_csrf']").attr("content");
+            //var header = $("meta[name='_csrf_header']").attr("content");
+            // Get form
+            var form = $('#fileUploadForm')[0];
+
+            // Create an FormData object
+            var data = new FormData(form);
+
+            $.ajax({
+                type: "POST",
+                enctype: 'multipart/form-data',
+                url: "${contextPath}/exams/upload_pdf",
+                data: data,
+                processData: false,
+                contentType: false,
+                cache: false,
+                timeout: 600000,
+                beforeSend: function(xhr) {
+                    xhr.setRequestHeader(header, token);
+                },
+                success: function (data) {
+                    console.log("SUCCESS : ", data);
+                    if (data != "") {
+                        //writePDFSummary(data);
+                    }
+                },
+                error: function (e) {
+                    console.log("ERROR : ", e);
+                }
+            });
+        }
+
+    </script>
 </head>
 <body>
 <nav class="navbar transparent navbar-inverse">
@@ -45,27 +82,31 @@
             <div class="row justify-content-center">
                 <div class="col-md-8">
                     <div class="card">
-                        <div class="card-header">Register</div>
+                        <div class="card-header">Create Challenge</div>
                         <div class="card-body">
-                            <form name="my-form" onsubmit="return validform()" action="success.php" method="">
+                            <form>
                                 <div class="form-group row">
-                                    <label for="full_name" class="col-md-4 col-form-label text-md-right">Full Name</label>
+                                    <label for="title" class="col-md-4 col-form-label text-md-right">Challenge title</label>
                                     <div class="col-md-6">
-                                        <input type="text" id="full_name" class="form-control" name="full-name">
+                                        <input type="text" id="title" class="form-control" name="title">
                                     </div>
                                 </div>
 
                                 <div class="form-group row">
-                                    <label for="email_address" class="col-md-4 col-form-label text-md-right">E-Mail Address</label>
+                                    <label for="description" class="col-md-4 col-form-label text-md-right">Description</label>
                                     <div class="col-md-6">
-                                        <input type="text" id="email_address" class="form-control" name="email-address">
+                                        <textarea id="description" class="form-control" name="description" rows="4" cols="50" ></textarea>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label for="upload" class="col-md-4 col-form-label text-md-right">Upload questions as file</label>
+                                    <div class="col-md-6">
+                                        <input class="form-control" type="file" name="upload" id="upload"/>
                                     </div>
                                 </div>
 
                                 <div class="col-md-6 offset-md-4">
-                                    <button type="submit" class="btn btn-primary">
-                                        Register
-                                    </button>
+                                    <input class="btn btn-primary" value="Submit" type="button" id="btnSubmit" onclick="javascript:uploadPDF()"/>
                                 </div>
                             </form>
                         </div>
