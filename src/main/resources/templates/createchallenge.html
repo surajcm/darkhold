@@ -1,12 +1,17 @@
 <!DOCTYPE HTML>
-<html lang="en">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
 <head>
     <title>Getting Started: Darkhold classroom quiz experience</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="_csrf" content="${_csrf.token}"/>
+    <!-- default header name is X-CSRF-TOKEN -->
+    <meta name="_csrf_header" content="${_csrf.headerName}"/>
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link href='https://fonts.googleapis.com/css?family=Audiowide' rel='stylesheet'>
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"><link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+
     <style>
         body {
             background-image: url("images/funky-lines.png");
@@ -27,47 +32,83 @@
             margin-left: 0;
             margin-right: 0;
         }
+        .icon-bar a {
+            display: block;
+            text-align: center;
+            padding: 16px;
+            transition: all 0.3s ease;
+            font-size: 36px;
+        }
+        table, th, td {
+            border: 1px solid black;
+        }
     </style>
     <script type="text/javascript">
 
         function uploadPDF() {
             //alert("clicked");
-            //var token = $("meta[name='_csrf']").attr("content");
-            //var header = $("meta[name='_csrf_header']").attr("content");
-            // Get form
-            var form = $('#fileUploadForm')[0];
 
-            // Create an FormData object
-            var data = new FormData(form);
+            var uploadButton = document.getElementById('btnSubmit');
 
-            $.ajax({
-                type: "POST",
-                enctype: 'multipart/form-data',
-                url: "${contextPath}/exams/upload_pdf",
-                data: data,
-                processData: false,
-                contentType: false,
-                cache: false,
-                timeout: 600000,
-                beforeSend: function(xhr) {
-                    xhr.setRequestHeader(header, token);
-                },
-                success: function (data) {
-                    console.log("SUCCESS : ", data);
-                    if (data != "") {
-                        //writePDFSummary(data);
-                    }
-                },
-                error: function (e) {
-                    console.log("ERROR : ", e);
+            var progress = document.getElementById('progress');
+            var progressdiv = document.getElementById('progressdiv');
+            progress.style.display = "block";
+            uploadButton.innerHTML = 'Uploading...';
+
+            var fileSelect = document.getElementById('upload');
+            var title = document.getElementById('title').value;
+            var description = document.getElementById('description').value;
+
+            var files = fileSelect.files;
+            var formData = new FormData();
+            var file = files[0];
+
+            formData.append('upload', file, file.name);
+            formData.append('title', title);
+            formData.append('description', description);
+
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST', '/upload_challenge', true);
+            xhr.upload.onprogress = function (e) {
+                update_progress(e);
+            }
+            xhr.onload = function (e) {
+                if (xhr.status === 200) {
+                    console.log(xhr.responseText);
+                    uploadButton.innerHTML = 'Submit';
+                    progressdiv.innerHTML = "<h3 style='color:green' >" + xhr.responseText + "</h3>";
+                    progress.style.display = "none";
+                } else {
+                    alert('An error occurred!');
                 }
-            });
+            };
+            xhr.send(formData);
         }
 
+        function update_progress(e) {
+            var uploadButton = document.getElementById('btnSubmit');
+            var progress = document.getElementById('progress');
+            if (e.lengthComputable) {
+                var percentage = Math.round((e.loaded/e.total)*100);
+                progress.value = percentage;
+                uploadButton.innerHTML = 'Upload '+percentage+'%';
+                console.log("percent " + percentage + '%' );
+            } else {
+                console.log("Unable to compute progress information since the total size is unknown");
+            }
+        }
+
+        function toOptions() {
+            document.forms[0].action="/options";
+            document.forms[0].submit();
+        }
     </script>
 </head>
 <body>
 <nav class="navbar transparent navbar-inverse">
+    <div class="icon-bar" onclick="javascript:toOptions()">
+        <a class="active" href="#"><i class="fa fa-home"></i></a>
+    </div>
     <span class="ml-auto mr-3 order-lg-last" th:text="${#authentication.getPrincipal().getUsername()}"></span>
     <button class="btn btn-lg btn-rised align-middle btn-primary ml-auto mr-3 order-lg-last" type="button" onclick="javascript:logOut()" >Logout</button>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown"
@@ -75,7 +116,7 @@
         <span class="navbar-toggler-icon"></span>
     </button>
 </nav>
-<form action="#" method="post">
+<form  method="POST" id="fileUploadForm" action="${contextPath}/exams/upload_pdf" enctype="multipart/form-data">
     <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
     <main class="my-form">
         <div class="container">
@@ -99,10 +140,31 @@
                                     </div>
                                 </div>
                                 <div class="form-group row">
+                                    <div class="alert alert-info alert-dismissible">
+                                        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                                        Please use the following format for excel sheet creation
+                                        <table>
+                                            <thead>
+                                            <tr>
+                                                <th>Question - max 120 characters</th>
+                                                <th>Answer 1 - max 75 characters</th>
+                                                <th>Answer 2 - max 75 characters</th>
+                                                <th>Answer 3 - max 75 characters</th>
+                                                <th>Answer 4 - max 75 characters</th>
+                                                <th>Correct answer(s) - choose at least one</th>
+                                            </tr>
+                                            </thead>
+                                        </table>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
                                     <label for="upload" class="col-md-4 col-form-label text-md-right">Upload questions as file</label>
                                     <div class="col-md-6">
-                                        <input class="form-control" type="file" name="upload" id="upload"/>
+                                        <input class="form-control" type="file" name="upload" id="upload" accept=".xlsx" />
                                     </div>
+                                </div>
+                                <div class="form-group row">
+                                    <p id="progressdiv"><progress max="100" value="0" id="progress" style="display: none;"></progress></p>
                                 </div>
 
                                 <div class="col-md-6 offset-md-4">

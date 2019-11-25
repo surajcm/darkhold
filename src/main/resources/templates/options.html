@@ -71,6 +71,13 @@
         .section {
             background: none
         }
+        .icon-bar a {
+            display: block;
+            text-align: center;
+            padding: 16px;
+            transition: all 0.3s ease;
+            font-size: 36px;
+        }
     </style>
     <script type="text/javascript">
         function createChallenge() {
@@ -91,6 +98,9 @@
 </head>
 <body>
 <nav class="navbar transparent navbar-inverse">
+    <div class="icon-bar">
+        <a class="active" href="#"><i class="fa fa-home"></i></a>
+    </div>
     <span class="ml-auto mr-3 order-lg-last" th:text="${#authentication.getPrincipal().getUsername()}"></span>
     <button class="btn btn-lg btn-rised align-middle btn-primary ml-auto mr-3 order-lg-last" type="button" onclick="javascript:logOut()" >Logout</button>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown"
