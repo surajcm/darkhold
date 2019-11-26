@@ -1,5 +1,5 @@
 <!DOCTYPE HTML>
-<html lang="en">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
 <head>
     <title>Getting Started: Darkhold classroom quiz experience</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
@@ -8,6 +8,8 @@
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"><link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+
     <style>
         body {
             background-image: url("images/funky-lines.png");
@@ -142,6 +144,13 @@
         .end-icon {
           margin-left: 16px;
         }
+        .icon-bar a {
+            display: block;
+            text-align: center;
+            padding: 16px;
+            transition: all 0.3s ease;
+            font-size: 36px;
+        }
     </style>
     <script type="text/javascript">
         function selectQuiz(elem) {
@@ -153,10 +162,18 @@
             document.forms[0].action="/";
             document.forms[0].submit();
         }
+        function toOptions() {
+            document.forms[0].action="/options";
+            document.forms[0].submit();
+        }
     </script>
 </head>
 <body>
 <nav class="navbar transparent navbar-inverse">
+    <div class="icon-bar" onclick="javascript:toOptions()">
+        <a class="active" href="#"><i class="fa fa-home"></i></a>
+    </div>
+    <span class="ml-auto mr-3 order-lg-last" th:text="${#authentication.getPrincipal().getUsername()}"></span>
     <button class="btn btn-lg btn-rised align-middle btn-primary ml-auto mr-3 order-lg-last" type="button" onclick="javascript:logOut()" >Logout</button>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown"
             aria-expanded="false" aria-label="Toggle navigation">
