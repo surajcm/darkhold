@@ -91,14 +91,19 @@
         }
 
         function logOut() {
-            document.forms[0].action="/";
+            document.forms[0].action="/logout";
+            document.forms[0].submit();
+        }
+
+        function toHome() {
+            document.forms[0].action="/home";
             document.forms[0].submit();
         }
     </script>
 </head>
 <body>
 <nav class="navbar transparent navbar-inverse">
-    <div class="icon-bar">
+    <div class="icon-bar" onclick="javascript:toHome()">
         <a class="active" href="#"><i class="fa fa-home"></i></a>
     </div>
     <span class="ml-auto mr-3 order-lg-last" th:text="${#authentication.getPrincipal().getUsername()}"></span>

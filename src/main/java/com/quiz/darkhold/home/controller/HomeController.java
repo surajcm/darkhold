@@ -22,6 +22,13 @@ public class HomeController {
         return "index";
     }
 
+    @PostMapping("/home")
+    public String toHome(Model model) {
+        logger.info("Going to toHome page ");
+        model.addAttribute("gameinfo", new GameInfo());
+        return "index";
+    }
+
     @PostMapping("/enterGame/")
     public @ResponseBody
     Boolean enterGame(@ModelAttribute("gamePin") String gamePin) {
@@ -35,6 +42,13 @@ public class HomeController {
         logger.info("gameInfo is "+ gameInfo);
         // validate gamePin
         return "gamewait";
+    }
+
+    @PostMapping("/logout")
+    public String toLogout(Model model) {
+        logger.info("Going to Logout page ");
+        model.addAttribute("gameinfo", new GameInfo());
+        return "index";
     }
 
 }
