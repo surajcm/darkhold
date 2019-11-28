@@ -1,4 +1,4 @@
-package com.quiz.darkhold.challenge;
+package com.quiz.darkhold.challenge.service;
 
 import com.quiz.darkhold.challenge.entity.Challenge;
 import com.quiz.darkhold.challenge.entity.Options;

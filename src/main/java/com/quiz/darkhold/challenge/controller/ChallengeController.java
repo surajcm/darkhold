@@ -1,6 +1,6 @@
 package com.quiz.darkhold.challenge.controller;
 
-import com.quiz.darkhold.challenge.ChallengeService;
+import com.quiz.darkhold.challenge.service.ChallengeService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +18,7 @@ public class ChallengeController {
     private final Logger logger = LoggerFactory.getLogger(ChallengeController.class);
 
     @PostMapping("/options")
-    public String publish() {
+    public String options() {
         logger.info("on to options");
         return "options";
     }
