@@ -155,6 +155,7 @@
     <script type="text/javascript">
         function selectQuiz(elem) {
             console.log('triggering quiz of '+elem.id);
+            document.getElementById('challenges').value = elem.id;
             document.forms[0].action="/preconfigure";
             document.forms[0].submit();
         }
@@ -181,8 +182,9 @@
     </button>
 </nav>
 <section class="search-banner text-white form-arka-plan" id="search-banner">
-    <form action="#" method="post">
-    <div class="container my-5">
+    <form action="#" th:object="${challengeInfo}" method="post">
+        <input type="hidden" th:name="challenges" id="challenges"/>
+        <div class="container my-5">
         <div class="row text-center pb-4">
             <div class="col-md-12">
                 <h2 class="text-white siyah-cerceve">Search for the challenges</h2>
@@ -210,50 +212,16 @@
         <br>
         <h4>Recent challenges</h4>
         <hr>
-        <div class="border-card" id="aws_quiz_101" onclick="javascript:selectQuiz(this);">
-            <div class="card-type-icon with-border">1</div>
-            <div class="content-wrapper">
-                <div class="label-group fixed">
-                    <p class="title">AWS QUIZ 101</p>
+        <div th:each="ch: ${challengeInfo.challengeSummaryList}">
+            <div class="border-card" th:id="${ch.challengeId}" onclick="javascript:selectQuiz(this);">
+                <div class="card-type-icon with-border"><p th:text="${ch.challengeId}" /></div>
+                <div class="content-wrapper">
+                    <div class="label-group fixed">
+                        <p class="title" th:text="${ch.challengeName}" />
+                    </div>
                 </div>
+                <i class="material-icons end-icon">more_vert</i>
             </div>
-            <i class="material-icons end-icon">more_vert</i>
-        </div>
-        <div class="border-card" id="aws_quiz_102" onclick="javascript:selectQuiz(this);">
-            <div class="card-type-icon with-border">2</div>
-            <div class="content-wrapper">
-                <div class="label-group fixed">
-                    <p class="title">AWS QUIZ 102</p>
-                </div>
-            </div>
-            <i class="material-icons end-icon">more_vert</i>
-        </div>
-        <div class="border-card" id="aws_ec2_quiz_01" onclick="javascript:selectQuiz(this);">
-            <div class="card-type-icon with-border">3</div>
-            <div class="content-wrapper">
-                <div class="label-group fixed">
-                    <p class="title">AWS EC2 QUIZ 01</p>
-                </div>
-            </div>
-            <i class="material-icons end-icon">more_vert</i>
-        </div>
-        <div class="border-card" id="aws_ec2_quiz_02" onclick="javascript:selectQuiz(this);">
-            <div class="card-type-icon with-border">4</div>
-            <div class="content-wrapper">
-                <div class="label-group fixed">
-                    <p class="title">AWS EC2 QUIZ 02</p>
-                </div>
-            </div>
-            <i class="material-icons end-icon">more_vert</i>
-        </div>
-        <div class="border-card" id="aws_s3_quiz_01" onclick="javascript:selectQuiz(this);">
-            <div class="card-type-icon with-border">5</div>
-            <div class="content-wrapper">
-                <div class="label-group fixed">
-                    <p class="title">AWS S3 QUIZ 01</p>
-                </div>
-            </div>
-            <i class="material-icons end-icon">more_vert</i>
         </div>
     </div>
     </form>

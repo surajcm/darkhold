@@ -44,17 +44,17 @@ public class OptionsController {
 
         ChallengeSummary summary3 = new ChallengeSummary();
         summary3.setChallengeId(3);
-        summary3.setChallengeName("AWS QUIZ 103");
+        summary3.setChallengeName("AWS EC2 QUIZ 01");
         summaries.add(summary3);
 
         ChallengeSummary summary4= new ChallengeSummary();
         summary4.setChallengeId(4);
-        summary4.setChallengeName("AWS QUIZ 104");
+        summary4.setChallengeName("AWS EC2 QUIZ 02");
         summaries.add(summary4);
 
         ChallengeSummary summary5= new ChallengeSummary();
         summary5.setChallengeId(5);
-        summary5.setChallengeName("AWS QUIZ 102");
+        summary5.setChallengeName("AWS S3 QUIZ 01");
         summaries.add(summary5);
 
         challengeInfo.setChallengeSummaryList(summaries);
