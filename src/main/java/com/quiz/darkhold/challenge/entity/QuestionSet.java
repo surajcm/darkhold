@@ -9,7 +9,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.StringJoiner;
 
@@ -21,7 +20,6 @@ public class QuestionSet implements Serializable {
     private Long id;
 
     @NotNull
-    @Size(max = 100)
     @Column
     private String question;
 

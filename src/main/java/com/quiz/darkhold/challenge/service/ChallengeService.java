@@ -7,6 +7,7 @@ import com.quiz.darkhold.challenge.exception.ChallengeException;
 import com.quiz.darkhold.challenge.repository.ChallengeRepository;
 import com.quiz.darkhold.challenge.repository.QuestionSetRepository;
 import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -42,7 +43,6 @@ public class ChallengeService {
         challenge.setTitle(title);
         challenge.setDescription(description);
         challenge.setQuestionSets(questionSets);
-        //save challenge to db
         final Challenge savedChallenge = challengeRepository.save(challenge);
         questionSets.forEach(q -> q.setChallenge(savedChallenge));
         questionSets.forEach(questionSet -> questionSetRepository.save(questionSet));
@@ -54,42 +54,9 @@ public class ChallengeService {
         try {
             workbook = new XSSFWorkbook(upload.getInputStream());
             Sheet datatypeSheet = workbook.getSheetAt(0);
-            Iterator<Row> iterator = datatypeSheet.iterator();
 
-            while (iterator.hasNext()) {
-                Row currentRow = iterator.next();
-                Iterator<Cell> cellIterator = currentRow.iterator();
-                QuestionSet questionSet = new QuestionSet();
-                while (cellIterator.hasNext()) {
-                    Cell currentCell = cellIterator.next();
-                    switch (currentCell.getColumnIndex()) {
-                        case 0:
-                            questionSet.setQuestion(currentCell.getStringCellValue());
-                            break;
-                        case 1:
-                            questionSet.setAnswer1(currentCell.getStringCellValue());
-                            break;
-                        case 2:
-                            questionSet.setAnswer2(currentCell.getStringCellValue());
-                            break;
-                        case 3:
-                            questionSet.setAnswer3(currentCell.getStringCellValue());
-                            break;
-                        case 4:
-                            questionSet.setAnswer4(currentCell.getStringCellValue());
-                            break;
-                        case 5:
-                            String options = currentCell.getStringCellValue();
-                            String optionsList = populateOptionsFromString(options);
-                            questionSet.setCorrectOptions(optionsList);
-                            break;
-                        default:
-                            logger.error("Unknown option at " + currentCell.getColumnIndex()
-                                    + ", Text is : " + currentCell.getStringCellValue());
-                    }
-                }
-                logger.info("Current questions : " + questionSet);
-                questionSets.add(questionSet);
+            for (Row currentRow : datatypeSheet) {
+                questionSets.add(populateQuestionSet(currentRow));
             }
         } catch (IOException e) {
             logger.error(e.getMessage());
@@ -105,6 +72,56 @@ public class ChallengeService {
         }
 
         return questionSets;
+    }
+
+    private QuestionSet populateQuestionSet(Row currentRow) {
+        Iterator<Cell> cellIterator = currentRow.iterator();
+        QuestionSet questionSet = new QuestionSet();
+        while (cellIterator.hasNext()) {
+            Cell currentCell = cellIterator.next();
+            switch (currentCell.getColumnIndex()) {
+                case 0:
+                    questionSet.setQuestion(currentCell.getStringCellValue());
+                    break;
+                case 1:
+                    questionSet.setAnswer1(fetchCurrentCellValue(currentCell));
+                    break;
+                case 2:
+                    questionSet.setAnswer2(fetchCurrentCellValue(currentCell));
+                    break;
+                case 3:
+                    questionSet.setAnswer3(fetchCurrentCellValue(currentCell));
+                    break;
+                case 4:
+                    questionSet.setAnswer4(fetchCurrentCellValue(currentCell));
+                    break;
+                case 5:
+                    String options = currentCell.getStringCellValue();
+                    String optionsList = populateOptionsFromString(options);
+                    questionSet.setCorrectOptions(optionsList);
+                    break;
+                default:
+                    logger.error("Unknown option at " + currentCell.getColumnIndex()
+                            + ", Text is : " + currentCell.getStringCellValue());
+            }
+        }
+        logger.info("Current questions : " + questionSet);
+        return questionSet;
+    }
+
+    private String fetchCurrentCellValue(Cell currentCell) {
+        String result = null;
+        if (currentCell.getCellType() == CellType.STRING) {
+            result = currentCell.getStringCellValue();
+        } else if (currentCell.getCellType() == CellType.NUMERIC) {
+            result = String.valueOf(currentCell.getNumericCellValue());
+        } else if (currentCell.getCellType() == CellType.BOOLEAN) {
+            result = String.valueOf(currentCell.getBooleanCellValue());
+        } else {
+            logger.error("Invalid cell type on  " + currentCell.getColumnIndex()
+                    + " is "+currentCell.getCellType().name());
+        }
+        return result;
     }
 
     private String populateOptionsFromString(String options) {
