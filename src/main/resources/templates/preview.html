@@ -8,7 +8,6 @@
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <style>
-        @import url('https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css');
         body {
             background-image: url("images/funky-lines.png");
             font-family: 'Audiowide';font-size: 26px;
@@ -16,48 +15,135 @@
         section{
             padding: 60px 0;
         }
+       .checkout-wrapper{padding-top: 40px; padding-bottom:40px; background-color: #fafbfa;}
+        .checkout{    background-color: #fff;
+            border:1px solid #eaefe9;
 
-        #accordion-style-1 h1,
-        #accordion-style-1 a{
-            color:#007b5e;
-        }
-        #accordion-style-1 .btn-link {
-            font-weight: 400;
-            color: #007b5e;
-            background-color: transparent;
-            text-decoration: none !important;
-            font-size: 16px;
-            padding-left: 25px;
+            font-size: 14px;}
+        .panel{margin-bottom: 0px;}
+        .checkout-step {
+
+            border-top: 1px solid #f2f2f2;
+            color: #666;
+            font-size: 14px;
+            padding: 30px;
+            position: relative;
         }
 
-        #accordion-style-1 .card-body {
+        .checkout-step-number {
+            border-radius: 50%;
+            border: 1px solid #666;
+            display: inline-block;
             font-size: 12px;
-            border-top: 2px solid #007b5e;
+            height: 32px;
+            margin-right: 26px;
+            padding: 6px;
+            text-align: center;
+            width: 32px;
         }
+        .checkout-step-title{ font-size: 18px;
+            font-weight: 500;
+            vertical-align: middle;display: inline-block; margin: 0px;
+             }
 
-        #accordion-style-1 .card-header .btn.collapsed .fa.main{
-            display:none;
+        .checout-address-step{}
+        .checout-address-step .form-group{margin-bottom: 18px;display: inline-block;
+            width: 100%;}
+
+        .checkout-step-body{padding-left: 60px; padding-top: 30px;}
+
+        .checkout-step-active{display: block;}
+        .checkout-step-disabled{display: none;}
+
+        .checkout-login{}
+        .login-phone{display: inline-block;}
+        .login-phone:after {
+            content: '+91 - ';
+            font-size: 14px;
+            left: 36px;
         }
-
-        #accordion-style-1 .card-header .btn .fa.main{
-            background: #007b5e;
-            padding: 13px 11px;
-            color: #ffffff;
-            width: 35px;
-            height: 41px;
+        .login-phone:before {
+            content: "";
+            font-style: normal;
+            color: #333;
+            font-size: 18px;
+            left: 12px;
+                display: inline-block;
+            font: normal normal normal 14px/1 FontAwesome;
+            font-size: inherit;
+            text-rendering: auto;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+        .login-phone:after, .login-phone:before {
             position: absolute;
-            left: -1px;
-            top: 10px;
-            border-top-right-radius: 7px;
-            border-bottom-right-radius: 7px;
-            display:block;
+            top: 50%;
+            -webkit-transform: translateY(-50%);
+            transform: translateY(-50%);
         }
-        .card {
-            max-width: 100%;
+        .login-phone .form-control {
+            padding-left: 68px;
+            font-size: 14px;
+
         }
-        .card-text {
-            word-wrap: break-word;
+        .checkout-login .btn{height: 42px;     line-height: 1.8;}
+
+        .otp-verifaction{margin-top: 30px;}
+        .checkout-sidebar{background-color: #fff;
+            border:1px solid #eaefe9; padding: 30px; margin-bottom: 30px;}
+        .checkout-sidebar-merchant-box{background-color: #fff;
+            border:1px solid #eaefe9; margin-bottom: 30px;}
+        .checkout-total{border-bottom: 1px solid #eaefe9; padding-bottom: 10px;margin-bottom: 10px; }
+        .checkout-invoice{display: inline-block;
+            width: 100%;}
+        .checout-invoice-title{    float: left; color: #30322f;}
+        .checout-invoice-price{    float: right; color: #30322f;}
+        .checkout-charges{display: inline-block;
+            width: 100%;}
+        .checout-charges-title{float: left; }
+        .checout-charges-price{float: right;}
+        .charges-free{color: #43b02a; font-weight: 600;}
+        .checkout-payable{display: inline-block;
+            width: 100%; color: #333;}
+        .checkout-payable-title{float: left; }
+        .checkout-payable-price{float: right;}
+
+        .checkout-cart-merchant-box{ padding: 20px;display: inline-block;width: 100%; border-bottom: 1px solid #eaefe9;
+         padding-bottom: 20px; }
+        .checkout-cart-merchant-name{color: #30322f; float: left;}
+        .checkout-cart-merchant-item{ float: right; color: #30322f; }
+        .checkout-cart-products{}
+
+        .checkout-cart-products .checkout-charges{ padding: 10px 20px;
+            color: #333;}
+        .checkout-cart-item{ border-bottom: 1px solid #eaefe9;
+            box-sizing: border-box;
+            display: table;
+            font-size: 12px;
+            padding: 22px 20px;
+            width: 100%;}
+         .checkout-item-list{}
+        .checkout-item-count{ float: left; }
+        .checkout-item-img{width: 60px; float: left;}
+        .checkout-item-name-box{ float: left; }
+        .checkout-item-title{ color: #30322f; font-size: 14px;  }
+        .checkout-item-unit{  }
+        .checkout-item-price{float: right;color: #30322f; font-size: 14px; font-weight: 600;}
+
+
+        .checkout-viewmore-btn{padding: 10px; text-align: center;}
+
+        .header-checkout-item{text-align: right; padding-top: 20px;}
+        .checkout-promise-item {
+            background-repeat: no-repeat;
+            background-size: 14px;
+            display: inline-block;
+            margin-left: 20px;
+            padding-left: 24px;
+            color: #30322f;
         }
+        .checkout-promise-item i{padding-right: 10px;color: #43b02a;}
+
         .icon-bar a {
             display: block;
             text-align: center;
@@ -105,93 +191,77 @@
                 <div class="col-12">
                     <h1 class="text-green mb-4 text-center">AWS QUIZ 101</h1>
                 </div>
-                <div class="col-10 mx-auto">
-                    <div class="accordion" id="accordionExample">
-                        <div class="card">
-                            <div class="card-header" id="headingOne">
-                                <h5 class="mb-0">
-                                    <button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                                        <i class="fa fa-amazon main"></i><i class="fa fa-angle-double-right mr-3"></i>
-                                        <div class="card-text">
-                                        A company is storing an access key (access key ID and secret access key) in a text file on a custom AMI. The company uses the access key to access DynamoDB tables from instances created from the AMI. The security team has mandated a more secure solution.
-                                        Which solution will meet the security team’s mandate?
+                <div class="col-md-12">
+                    <div id="accordion" class="checkout">
+                        <div class="panel checkout-step">
+                            <div role="tab" id="headingFour4"> <span class="checkout-step-number">1</span>
+                                <h4 class="checkout-step-title"> <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFour4"  > Payment </a> </h4>
+                            </div>
+                            <div id="collapseFour4" class="panel-collapse collapse">
+                                <div class="checkout-step-body">
+                                    Payment Mode
+                                    <a href="#" class="btn btn-default">Proccess to first</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel checkout-step">
+                            <div role="tab" id="headingTwo"> <span class="checkout-step-number">2</span>
+                                <h4 class="checkout-step-title"> <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" > Delivery Address </a> </h4>
+                            </div>
+                            <div id="collapseTwo" class="panel-collapse collapse">
+                                <div class="checkout-step-body">
+                                    <div class="checout-address-step">
+                                        <div class="row">
+                                            <form class="">
+                                                <div class="form-group">
+                                                    <label class="col-md-12 control-label" for="address"></label>
+                                                    <div class="col-md-12 ">
+                                                        <label class="radio-inline" for="address-0">
+                                                            <input type="radio" name="address" id="address-0" value="Home" checked="checked"> Home </label>
+                                                    </div>
+                                                </div>
+                                            </form>
                                         </div>
-                                    </button>
-                                </h5>
-                            </div>
-
-                            <div id="collapseOne" class="collapse show fade" aria-labelledby="headingOne" data-parent="#accordionExample">
-                                <div class="card-body">
-                                    <p>
-                                    A. Put the access key in an S3 bucket, and retrieve the access key on boot from the instance.
-                                    </p>
-                                    <p>
-                                    B. Pass the access key to the instances through instance user data.
-                                    </p>
-                                    <p>
-                                    C. Obtain the access key from a key server launched in a private subnet.
-                                    </p>
-                                    <p>
-                                    D. Create an IAM role with permissions to access the table, and launch all instances with the new role.
-                                    </p>
+                                    </div>
+                                    <a class="collapsed btn btn-default" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseThree"> Next </a>
                                 </div>
                             </div>
                         </div>
-                        <div class="card">
-                            <div class="card-header" id="headingTwo">
-                                <h5 class="mb-0">
-                                    <button class="btn btn-link collapsed btn-block text-left" type="button" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-                                        <i class="fa fa-plus main"></i><i class="fa fa-angle-double-right mr-3"></i>A company is developing a highly available web application using stateless web servers. Which services are suitable for storing session state data?
-                                    </button>
-                                </h5>
+                        <div class="panel checkout-step">
+                            <div role="tab" id="headingThree"> <span class="checkout-step-number">3</span>
+                                <h4 class="checkout-step-title"> <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseThree"  > Time & Date </a> </h4>
                             </div>
-                            <div id="collapseTwo" class="collapse fade" aria-labelledby="headingTwo" data-parent="#accordionExample">
-                                <div class="card-body">
-                                    <p>A. DynamoDB</p>
-                                    <p>B. Elastic Load Balancing</p>
-                                    <p>C. ElastiCache</p>
-                                    <p>D. Storage Gateway</p>
+                            <div id="collapseThree" class="panel-collapse collapse">
+                                <div class="checkout-step-body">
+                                    <div class="row">
+                                        <div class="form-group">
+                                            <label class="col-md-12 control-label" for="time">Time</label>
+                                            <div class="col-md-12">
+                                                <div class="radio">
+                                                    <label for="time-0">
+                                                        <input type="radio" name="time" id="time-0" value="8:00 - 9:00" checked="checked"> 8:00 - 9:00 </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <a class="collapsed btn btn-default" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFour"> Next </a>
                                 </div>
                             </div>
                         </div>
-                        <div class="card">
-                            <div class="card-header" id="headingThree">
-                                <h5 class="mb-0">
-                                    <button class="btn btn-link collapsed btn-block text-left" type="button" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-                                        <i class="fa fa-expeditedssl main"></i><i class="fa fa-angle-double-right mr-3"></i>Company salespeople upload their sales figures daily. A Solutions Architect needs a durable storage solution for these documents that also protects against users accidentally deleting important documents.
-                                        Which action will protect against unintended user actions?
-                                    </button>
-                                </h5>
+                        <div class="panel checkout-step">
+                            <div role="tab" id="headingFour"> <span class="checkout-step-number">4</span>
+                                <h4 class="checkout-step-title"> <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFour"  > Payment </a> </h4>
                             </div>
-                            <div id="collapseThree" class="collapse fade" aria-labelledby="headingThree" data-parent="#accordionExample">
-                                <div class="card-body">
-                                    <p>A. Store data in an EBS volume and create snapshots once a week.</p>
-                                    <p>B. Store data in an S3 bucket and enable versioning.</p>
-                                    <p>C. Store data in two S3 buckets in different AWS regions.</p>
-                                    <p>D. Store data on EC2 instance storage.</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="card">
-                            <div class="card-header" id="headingFour">
-                                <h5 class="mb-0">
-                                    <button class="btn btn-link collapsed btn-block text-left" type="button" data-toggle="collapse" data-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
-                                        <i class="fa fa-envelope main"></i><i class="fa fa-angle-double-right mr-3"></i>An application requires a highly available relational database with an initial storage capacity of 8 TB. The database will grow by 8 GB every day. To support expected traffic, at least eight read replicas will be required to handle database reads.
-                                        Which option will meet these requirements?
-                                    </button>
-                                </h5>
-                            </div>
-                            <div id="collapseFour" class="collapse fade" aria-labelledby="headingFour" data-parent="#accordionExample">
-                                <div class="card-body">
-                                    <p>A. DynamoDB</p>
-                                    <p>B. Amazon S3</p>
-                                    <p>C. Amazon Aurora</p>
-                                    <p>D. Amazon Redshift</p>
+                            <div id="collapseFour" class="panel-collapse collapse">
+                                <div class="checkout-step-body">
+                                    Payment Mode
+                                    <a href="#" class="btn btn-default">Proccess to payment</a>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
+
                 <div class="col-12">
                     <button type="button" class="btn btn-warning  pl-5 pr-5" onclick="javascript:toChallenges()" >Back to challenges</button>
                     <button type="button" class="btn btn-warning  pl-5 pr-5" onclick="javascript:publish()" >Publish game</button>
