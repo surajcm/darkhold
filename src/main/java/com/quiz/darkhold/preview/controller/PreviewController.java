@@ -21,7 +21,13 @@ public class PreviewController {
     public String preconfigure(Model model, @RequestParam("challenges") String challenges) {
         log.info("into the preconfigure method : " + challenges);
         PreviewInfo previewInfo = previewService.fetchQuestions(challenges);
-        model.addAttribute("challengeInfo", previewInfo);
+        model.addAttribute("previewInfo", previewInfo);
         return "preview";
+    }
+
+    @PostMapping("/publish")
+    public String publish() {
+        //todo: work on this
+        return "index";
     }
 }

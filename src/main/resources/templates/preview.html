@@ -7,6 +7,8 @@
     <link href='https://fonts.googleapis.com/css?family=Audiowide' rel='stylesheet'>
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"><link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+
     <style>
         body {
             background-image: url("images/funky-lines.png");
@@ -15,20 +17,21 @@
         section{
             padding: 60px 0;
         }
-       .checkout-wrapper{padding-top: 40px; padding-bottom:40px; background-color: #fafbfa;}
-        .checkout{    background-color: #fff;
+       .checkout {
+            background-color: #fff;
             border:1px solid #eaefe9;
-
-            font-size: 14px;}
-        .panel{margin-bottom: 0px;}
-        .checkout-step {
-
+            font-size: 14px;
+       }
+       .panel{
+            margin-bottom: 0px;
+       }
+       .checkout-step {
             border-top: 1px solid #f2f2f2;
             color: #666;
             font-size: 14px;
             padding: 30px;
             position: relative;
-        }
+       }
 
         .checkout-step-number {
             border-radius: 50%;
@@ -41,109 +44,24 @@
             text-align: center;
             width: 32px;
         }
-        .checkout-step-title{ font-size: 18px;
-            font-weight: 500;
-            vertical-align: middle;display: inline-block; margin: 0px;
-             }
-
-        .checout-address-step{}
-        .checout-address-step .form-group{margin-bottom: 18px;display: inline-block;
-            width: 100%;}
-
-        .checkout-step-body{padding-left: 60px; padding-top: 30px;}
-
-        .checkout-step-active{display: block;}
-        .checkout-step-disabled{display: none;}
-
-        .checkout-login{}
-        .login-phone{display: inline-block;}
-        .login-phone:after {
-            content: '+91 - ';
-            font-size: 14px;
-            left: 36px;
-        }
-        .login-phone:before {
-            content: "";
-            font-style: normal;
-            color: #333;
-            font-size: 18px;
-            left: 12px;
-                display: inline-block;
-            font: normal normal normal 14px/1 FontAwesome;
-            font-size: inherit;
-            text-rendering: auto;
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
-        }
-        .login-phone:after, .login-phone:before {
-            position: absolute;
-            top: 50%;
-            -webkit-transform: translateY(-50%);
-            transform: translateY(-50%);
-        }
-        .login-phone .form-control {
-            padding-left: 68px;
-            font-size: 14px;
-
-        }
-        .checkout-login .btn{height: 42px;     line-height: 1.8;}
-
-        .otp-verifaction{margin-top: 30px;}
-        .checkout-sidebar{background-color: #fff;
-            border:1px solid #eaefe9; padding: 30px; margin-bottom: 30px;}
-        .checkout-sidebar-merchant-box{background-color: #fff;
-            border:1px solid #eaefe9; margin-bottom: 30px;}
-        .checkout-total{border-bottom: 1px solid #eaefe9; padding-bottom: 10px;margin-bottom: 10px; }
-        .checkout-invoice{display: inline-block;
-            width: 100%;}
-        .checout-invoice-title{    float: left; color: #30322f;}
-        .checout-invoice-price{    float: right; color: #30322f;}
-        .checkout-charges{display: inline-block;
-            width: 100%;}
-        .checout-charges-title{float: left; }
-        .checout-charges-price{float: right;}
-        .charges-free{color: #43b02a; font-weight: 600;}
-        .checkout-payable{display: inline-block;
-            width: 100%; color: #333;}
-        .checkout-payable-title{float: left; }
-        .checkout-payable-price{float: right;}
-
-        .checkout-cart-merchant-box{ padding: 20px;display: inline-block;width: 100%; border-bottom: 1px solid #eaefe9;
-         padding-bottom: 20px; }
-        .checkout-cart-merchant-name{color: #30322f; float: left;}
-        .checkout-cart-merchant-item{ float: right; color: #30322f; }
-        .checkout-cart-products{}
-
-        .checkout-cart-products .checkout-charges{ padding: 10px 20px;
-            color: #333;}
-        .checkout-cart-item{ border-bottom: 1px solid #eaefe9;
-            box-sizing: border-box;
-            display: table;
-            font-size: 12px;
-            padding: 22px 20px;
-            width: 100%;}
-         .checkout-item-list{}
-        .checkout-item-count{ float: left; }
-        .checkout-item-img{width: 60px; float: left;}
-        .checkout-item-name-box{ float: left; }
-        .checkout-item-title{ color: #30322f; font-size: 14px;  }
-        .checkout-item-unit{  }
-        .checkout-item-price{float: right;color: #30322f; font-size: 14px; font-weight: 600;}
-
-
-        .checkout-viewmore-btn{padding: 10px; text-align: center;}
-
-        .header-checkout-item{text-align: right; padding-top: 20px;}
-        .checkout-promise-item {
-            background-repeat: no-repeat;
-            background-size: 14px;
+        .checkout-step-title {
             display: inline-block;
-            margin-left: 20px;
-            padding-left: 24px;
-            color: #30322f;
+            margin: 0px;
         }
-        .checkout-promise-item i{padding-right: 10px;color: #43b02a;}
 
+        p.title {
+          color: #323232;
+          font-weight: 500;
+        }
+        p.title_correct {
+          color: #228524;
+          font-weight: 500;
+        }
+
+        .checkout-step-body {
+            padding-left: 60px;
+            padding-top: 30px;
+        }
         .icon-bar a {
             display: block;
             text-align: center;
@@ -183,85 +101,35 @@
         <span class="navbar-toggler-icon"></span>
     </button>
 </nav>
-<form action="#" method="post">
+<form action="#" th:object="${previewInfo}" method="post">
+<input type="hidden" th:name="challengeName" id="challengeName"/>
 <div class="container-fluid bg-gray" id="accordion-style-1">
     <div class="container">
         <section>
             <div class="row">
                 <div class="col-12">
-                    <h1 class="text-green mb-4 text-center">AWS QUIZ 101</h1>
+                    <h1 th:inline="text" class="text-green mb-4 text-center">[[${previewInfo.challengeName}]]</h1>
                 </div>
                 <div class="col-md-12">
                     <div id="accordion" class="checkout">
-                        <div class="panel checkout-step">
-                            <div role="tab" id="headingFour4"> <span class="checkout-step-number">1</span>
-                                <h4 class="checkout-step-title"> <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFour4"  > Payment </a> </h4>
-                            </div>
-                            <div id="collapseFour4" class="panel-collapse collapse">
-                                <div class="checkout-step-body">
-                                    Payment Mode
-                                    <a href="#" class="btn btn-default">Proccess to first</a>
+                        <div th:each="ch : ${previewInfo.questionSets}" class="panel checkout-step">
+                            <div role="tab" th:id="headingFour + ${chStat.index}">
+                                <span class="checkout-step-number" th:text="${chStat.index + 1}"></span>
+                                <div class="checkout-step-title">
+                                    <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" th:href="@{'#collapseFour' + ${chStat.index}}" th:text="${ch.question}"></a>
                                 </div>
                             </div>
-                        </div>
-                        <div class="panel checkout-step">
-                            <div role="tab" id="headingTwo"> <span class="checkout-step-number">2</span>
-                                <h4 class="checkout-step-title"> <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" > Delivery Address </a> </h4>
-                            </div>
-                            <div id="collapseTwo" class="panel-collapse collapse">
+                            <div th:id="collapseFour + ${chStat.index}" class="panel-collapse collapse">
                                 <div class="checkout-step-body">
-                                    <div class="checout-address-step">
-                                        <div class="row">
-                                            <form class="">
-                                                <div class="form-group">
-                                                    <label class="col-md-12 control-label" for="address"></label>
-                                                    <div class="col-md-12 ">
-                                                        <label class="radio-inline" for="address-0">
-                                                            <input type="radio" name="address" id="address-0" value="Home" checked="checked"> Home </label>
-                                                    </div>
-                                                </div>
-                                            </form>
-                                        </div>
-                                    </div>
-                                    <a class="collapsed btn btn-default" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseThree"> Next </a>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="panel checkout-step">
-                            <div role="tab" id="headingThree"> <span class="checkout-step-number">3</span>
-                                <h4 class="checkout-step-title"> <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseThree"  > Time & Date </a> </h4>
-                            </div>
-                            <div id="collapseThree" class="panel-collapse collapse">
-                                <div class="checkout-step-body">
-                                    <div class="row">
-                                        <div class="form-group">
-                                            <label class="col-md-12 control-label" for="time">Time</label>
-                                            <div class="col-md-12">
-                                                <div class="radio">
-                                                    <label for="time-0">
-                                                        <input type="radio" name="time" id="time-0" value="8:00 - 9:00" checked="checked"> 8:00 - 9:00 </label>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <a class="collapsed btn btn-default" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFour"> Next </a>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="panel checkout-step">
-                            <div role="tab" id="headingFour"> <span class="checkout-step-number">4</span>
-                                <h4 class="checkout-step-title"> <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFour"  > Payment </a> </h4>
-                            </div>
-                            <div id="collapseFour" class="panel-collapse collapse">
-                                <div class="checkout-step-body">
-                                    Payment Mode
-                                    <a href="#" class="btn btn-default">Proccess to payment</a>
+                                    <p th:class="${#strings.contains(ch.correctOptions, 'A')} ? 'title_correct' : 'title'" th:if="${ch.answer2 != null}" th:text="'A. '+ ${ch.answer1}"></p>
+                                    <p th:class="${#strings.contains(ch.correctOptions, 'B')} ? 'title_correct' : 'title'" th:if="${ch.answer2 != null}" th:text="'B. '+ ${ch.answer2}"></p>
+                                    <p th:class="${#strings.contains(ch.correctOptions, 'C')} ? 'title_correct' : 'title'" th:if="${ch.answer3 != null}" th:text="'C. '+ ${ch.answer3}"></p>
+                                    <p th:class="${#strings.contains(ch.correctOptions, 'D')} ? 'title_correct' : 'title'" th:if="${ch.answer4 != null}" th:text="'D. '+ ${ch.answer4}"></p>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-
                 <div class="col-12">
                     <button type="button" class="btn btn-warning  pl-5 pr-5" onclick="javascript:toChallenges()" >Back to challenges</button>
                     <button type="button" class="btn btn-warning  pl-5 pr-5" onclick="javascript:publish()" >Publish game</button>
