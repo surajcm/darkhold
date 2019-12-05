@@ -26,8 +26,9 @@ public class PreviewController {
     }
 
     @PostMapping("/publish")
-    public String publish() {
+    public String publish(Model model, @RequestParam("challengeId") String challengeId) {
+        log.info("into publish method : " + challengeId);
         //todo: work on this
-        return "index";
+        return "publish";
     }
 }

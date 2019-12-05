@@ -20,6 +20,7 @@ public class PreviewService {
         Challenge challenge = challengeRepository.getOne(challengeOne);
         previewInfo.setQuestionSets(new ArrayList<>(challenge.getQuestionSets()));
         previewInfo.setChallengeName(challenge.getTitle());
+        previewInfo.setChallengeId(challengeId);
         return previewInfo;
     }
 

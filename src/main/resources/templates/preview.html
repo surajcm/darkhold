@@ -80,6 +80,8 @@
             document.forms[0].submit();
        }
        function publish() {
+            var challengeId = document.getElementById('challengeId').value;
+            console.log('triggering quiz of '+challengeId);
             document.forms[0].action="/publish";
             document.forms[0].submit();
        }
@@ -102,7 +104,7 @@
     </button>
 </nav>
 <form action="#" th:object="${previewInfo}" method="post">
-<input type="hidden" th:name="challengeName" id="challengeName"/>
+<input type="hidden" th:value="${previewInfo.challengeId}" id="challengeId"/>
 <div class="container-fluid bg-gray" id="accordion-style-1">
     <div class="container">
         <section>
