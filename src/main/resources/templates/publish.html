@@ -5,8 +5,10 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link href='https://fonts.googleapis.com/css?family=Audiowide' rel='stylesheet'>
-    <!-- Bootstrap CSS -->
+
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"><link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+
     <style>
         body {
             background-image: url("images/funky-lines.png");
@@ -42,6 +44,9 @@
     </style>
     <script type="text/javascript">
         function startGame() {
+            var pin = document.getElementById('quizPin').value;
+            console.log('triggering quiz with pin '+pin);
+            document.getElementById('quiz_pin').value = pin;
             document.forms[0].action="/game";
             document.forms[0].submit();
         }
@@ -49,18 +54,24 @@
 </head>
 <body>
 <nav class="navbar transparent navbar-inverse">
-    <button class="btn btn-lg btn-rised align-middle btn-primary ml-auto mr-3 order-lg-last" type="button" onclick="javascript:logMeIn()" >LogOut</button>
+    <div class="icon-bar" onclick="javascript:toOptions()">
+        <a class="active" href="#"><i class="fa fa-home"></i></a>
+    </div>
+    <span class="ml-auto mr-3 order-lg-last" th:text="${#authentication.getPrincipal().getUsername()}"></span>
+    <button class="btn btn-lg btn-rised align-middle btn-primary ml-auto mr-3 order-lg-last" type="button" onclick="javascript:logOut()" >Logout</button>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown"
             aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
 </nav>
-<form action="#" th:action="@{/startGame}" method="post">
+<form action="#" th:object="${quizPin}" method="post">
+    <input type="hidden" th:value="${quizPin}" id="quizPin"/>
+    <input type="hidden" th:name="quiz_pin" id="quiz_pin"/>
     <div class="container-fluid">
         <div class="row justify-content-center align-items-center d-flex text-center h-100">
             <div class="col-12 col-md-8  h-50">
                 <div class="jumbotron min-vh-100 text-center m-0 d-flex flex-column justify-content-center">
-                    <h1 class="display-2 text-dark mb-2 mt-5" id="head_msg">Your Quiz PIN is : <strong>12312</strong> </h1>
+                    <h1 class="display-2 text-dark mb-2 mt-5" id="head_msg">Your Quiz PIN is : <strong>[[${quizPin}]]</strong> </h1>
                     <div id="messenger">
                         <p id="message_disp"></p>
                     </div>

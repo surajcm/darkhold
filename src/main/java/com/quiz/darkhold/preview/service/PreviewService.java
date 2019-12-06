@@ -3,6 +3,7 @@ package com.quiz.darkhold.preview.service;
 import com.quiz.darkhold.challenge.entity.Challenge;
 import com.quiz.darkhold.challenge.repository.ChallengeRepository;
 import com.quiz.darkhold.preview.model.PreviewInfo;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -24,4 +25,9 @@ public class PreviewService {
         return previewInfo;
     }
 
+    public String generateQuizPin(String challengeId) {
+        String generatedString = RandomStringUtils.random(5, false, true);
+        //todo: save to db?
+        return generatedString;
+    }
 }

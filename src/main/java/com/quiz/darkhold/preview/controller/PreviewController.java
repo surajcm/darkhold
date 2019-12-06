@@ -10,6 +10,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+@SuppressWarnings("unused")
 @Controller
 public class PreviewController {
     private final Log log = LogFactory.getLog(PreviewController.class);
@@ -26,9 +27,11 @@ public class PreviewController {
     }
 
     @PostMapping("/publish")
-    public String publish(Model model, @RequestParam("challengeId") String challengeId) {
+    public String publish(Model model, @RequestParam("challenge_id") String challengeId) {
         log.info("into publish method : " + challengeId);
-        //todo: work on this
+        String quizPin = previewService.generateQuizPin(challengeId);
+        model.addAttribute("quizPin", quizPin);
+        log.info("publish method, quizPin : " + quizPin);
         return "publish";
     }
 }
