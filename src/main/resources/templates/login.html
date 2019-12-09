@@ -1,10 +1,9 @@
 <!DOCTYPE HTML>
 <html lang="en">
 <head>
-    <title>Getting Started: Darkhold classroom quiz experience</title>
+    <title>Log in: Darkhold classroom quiz experience</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <link href='https://fonts.googleapis.com/css?family=Audiowide' rel='stylesheet'>
     <link href="styles/bootstrap.4.0.0.min.css" rel="stylesheet" />
     <link href="styles/login.css" rel="stylesheet" />
     <script type="text/javascript">
@@ -19,7 +18,7 @@
             document.forms[0].submit();
         }
 
-        function signup() {
+        function signUp() {
             document.forms[0].action="/registration";
             document.forms[0].submit();
         }
@@ -43,7 +42,7 @@
                     <input type="password" name="passwordConfirm" class="form-control" placeholder="Confirm password" value="" />
                 </div>
                 <div class="form-group">
-                    <input type="button" class="btnSubmit" value="Sign up" onclick="javascript:signup()"/>
+                    <input type="button" class="btnSubmit" value="Sign up" onclick="javascript:signUp()"/>
                 </div>
             </form>
         </div>
@@ -60,7 +59,7 @@
                     <input type="button" class="btnSubmit" value="Login" onclick="javascript:logMeIn()" />
                 </div>
                 <div class="form-group">
-                    <a href="#" class="ForgetPwd" value="Login">Forget Password?</a>
+                    <a href="#" class="ForgetPwd">Forget Password?</a>
                 </div>
             </form>
         </div>

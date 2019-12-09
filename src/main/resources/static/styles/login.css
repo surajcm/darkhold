@@ -1,11 +1,16 @@
+@import url('https://fonts.googleapis.com/css?family=Audiowide&display=swap');
 body {
     background-image: url("../images/funky-lines.png");
-    font-family: 'Audiowide';font-size: 26px;
+    font-family: 'Audiowide', cursive;
+    font-weight: 400;
+    font-size: 26px;
+    text-decoration :none;
 }
 .login-container{
     margin-top: 5%;
     margin-bottom: 5%;
 }
+
 .login-form-1{
     padding: 5%;
     box-shadow: 0 5px 8px 0 rgba(0, 0, 0, 0.2), 0 9px 26px 0 rgba(0, 0, 0, 0.19);
