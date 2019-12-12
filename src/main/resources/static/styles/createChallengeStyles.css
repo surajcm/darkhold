@@ -1,0 +1,32 @@
+@import url('audiowide.css');
+body {
+    background-image: url("../images/funky-lines.png");
+    font-family: 'Audiowide', cursive;
+    font-weight: 400;
+    text-decoration :none;
+    margin: 0;
+    font-size: .9rem;
+    font-weight: 400;
+    line-height: 1.6;
+    color: #212529;
+    text-align: left;
+}
+.my-form {
+    padding-top: 1.5rem;
+    padding-bottom: 1.5rem;
+}
+
+.my-form .row {
+    margin-left: 0;
+    margin-right: 0;
+}
+.icon-bar a {
+    display: block;
+    text-align: center;
+    padding: 16px;
+    transition: all 0.3s ease;
+    font-size: 36px;
+}
+table, th, td {
+    border: 1px solid black;
+}
