@@ -1,0 +1,42 @@
+@import url('audiowide.css');
+body {
+    background-image: url("../images/funky-lines.png");
+        font-family: 'Audiowide', cursive;
+        font-weight: 400;
+        font-size: 26px;
+        text-decoration :none;
+}
+.navbar.transparent.navbar-inverse .navbar-inner {
+    border-width: 0px;
+    -webkit-box-shadow: 0px 0px;
+    box-shadow: 0px 0px;
+    background-color: rgba(0,0,0,0.0);
+    background-image: -webkit-gradient(linear, 50.00% 0.00%, 50.00% 100.00%, color-stop( 0% , rgba(0,0,0,0.00)),color-stop( 100% , rgba(0,0,0,0.00)));
+    background-image: -webkit-linear-gradient(270deg,rgba(0,0,0,0.00) 0%,rgba(0,0,0,0.00) 100%);
+    background-image: linear-gradient(180deg,rgba(0,0,0,0.00) 0%,rgba(0,0,0,0.00) 100%);
+}
+.jumbotron {
+    background: none
+}
+.form-control {
+  background: #f7f7f7 none repeat scroll 0 0;
+  border: 3px solid #d4d4d4;
+  border-radius: 4px;
+  font-size: 30px;
+  height: 80px;
+  line-height: 50px;
+  width: 180px;
+}
+input[type=number]:focus {
+  border: 3px solid #555;
+}
+#message_disp {
+    color: red;
+}
+.icon-bar a {
+    display: block;
+    text-align: center;
+    padding: 16px;
+    transition: all 0.3s ease;
+    font-size: 36px;
+}
