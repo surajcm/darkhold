@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link href="styles/bootstrap.4.0.0.min.css" rel="stylesheet" />
     <link href="styles/option-styles.css" rel="stylesheet" />
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css">
 
     <script type="text/javascript">
         function createChallenge() {
@@ -33,7 +33,7 @@
 <body>
 <nav class="navbar transparent navbar-inverse">
     <div class="icon-bar" onclick="javascript:toHome()">
-        <a class="active" href="#"><i class="fa fa-home"></i></a>
+        <a class="active" href="#"><i class="fas fa-home"></i></a>
     </div>
     <span class="ml-auto mr-3 order-lg-last" th:text="${#authentication.getPrincipal().getUsername()}"></span>
     <button class="btn btn-lg btn-rised align-middle btn-primary ml-auto mr-3 order-lg-last" type="button" onclick="javascript:logOut()" >Logout</button>
@@ -52,7 +52,7 @@
                     <div class="col-lg-6 mbr-col-md-10">
                         <div class="wrap" onclick="javascript:createChallenge()">
                             <div class="ico-wrap">
-                                <span class="mbr-iconfont fa-calendar fa"></span>
+                                <span class="mbr-iconfont fa-calendar fas"></span>
                             </div>
                             <div class="text-wrap vcenter">
                                 <h2 class="mbr-fonts-style mbr-bold mbr-section-title3 display-5">Set up new <span>Challenge</span></h2>
@@ -63,7 +63,7 @@
                     <div class="col-lg-6 mbr-col-md-10">
                         <div class="wrap" onclick="javascript:viewChallenge()">
                             <div class="ico-wrap">
-                                <span class="mbr-iconfont fa-trophy fa"></span>
+                                <span class="mbr-iconfont fa-trophy fas"></span>
                             </div>
                             <div class="text-wrap vcenter">
                                 <h2 class="mbr-fonts-style mbr-bold mbr-section-title3 display-5">View existing <span>Challenge</span></h2>
@@ -76,7 +76,6 @@
         </div>
     </div>
 </form>
-
 <script type="text/javascript" src="scripts/jquery-3.2.1.slim.min.js"></script>
 <script type="text/javascript" src="scripts/popper.min.js"></script>
 <script type="text/javascript" src="scripts/bootstrap.min.js"></script>

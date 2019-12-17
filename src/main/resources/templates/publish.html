@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link href="styles/bootstrap.4.0.0.min.css" rel="stylesheet" />
     <link href="styles/publish-styles.css" rel="stylesheet" />
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css">
 
     <script type="text/javascript">
         function startGame() {
@@ -21,7 +21,7 @@
 <body>
 <nav class="navbar transparent navbar-inverse">
     <div class="icon-bar" onclick="javascript:toOptions()">
-        <a class="active" href="#"><i class="fa fa-home"></i></a>
+        <a class="active" href="#"><i class="fas fa-home"></i></a>
     </div>
     <span class="ml-auto mr-3 order-lg-last" th:text="${#authentication.getPrincipal().getUsername()}"></span>
     <button class="btn btn-lg btn-rised align-middle btn-primary ml-auto mr-3 order-lg-last" type="button" onclick="javascript:logOut()" >Logout</button>

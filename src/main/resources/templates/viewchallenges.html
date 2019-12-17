@@ -6,152 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link href='https://fonts.googleapis.com/css?family=Audiowide' rel='stylesheet'>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"><link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-
-    <style>
-        body {
-            background-image: url("images/funky-lines.png");
-            font-family: 'Audiowide';font-size: 26px;
-        }
-        .firma-ara{
-            padding-bottom: 100px;
-            padding-top: 100px;
-        }
-        .form-arka-plan{
-            background-position: center;
-            background-repeat: no-repeat;
-            background-size: cover;
-        }
-        .acik-renk-form{
-            background: rgba(255, 255, 255, 0.58);
-        }
-        .siyah-cerceve{
-            -webkit-text-fill-color: white;
-            -webkit-text-stroke-width: 1px;
-            -webkit-text-stroke-color: black;
-        }
-
-        h4 {
-          font-family: "Roboto";
-          font-weight: 500;
-          font-size: 14px;
-          color: #aeaeae;
-          text-transform: uppercase;
-          margin: 0;
-        }
-
-        hr {
-          margin-bottom: 16px;
-          border: 1px solid #eaeaea;
-        }
-
-        .border-card {
-          background: #fff;
-          margin-bottom: 30px;
-          display: flex;
-          align-items: center;
-          font-family: "Roboto";
-          font-size: 14px;
-          padding: 12px 16px;
-          cursor: pointer;
-          border-radius: 4px;
-          border: 1px solid #eaeaea;
-          box-shadow: 0px 2px 1px 0px rgba(0, 0, 0, 0.1);
-          transition: all 0.25s ease;
-        }
-        .border-card:hover {
-          -webkit-transform: translateY(-1px);
-                  transform: translateY(-1px);
-          box-shadow: 0 5px 10px 0 rgba(0, 0, 0, 0.1), 0 5px 10px 0 rgba(0, 0, 0, 0.1);
-        }
-        .border-card.over {
-          background: rgba(70, 222, 151, 0.15);
-          padding-top: 24px;
-          padding-bottom: 24px;
-          border: 2px solid #47DE97;
-          box-shadow: 0 5px 10px 0 rgba(0, 0, 0, 0), 0 5px 10px 0 rgba(0, 0, 0, 0);
-        }
-        .border-card.over .card-type-icon {
-          color: #47DE97 !important;
-        }
-        .border-card.over p {
-          color: #47DE97 !important;
-        }
-
-        .content-wrapper {
-          display: flex;
-          justify-content: flex-start;
-          width: 100%;
-          white-space: nowrap;
-          overflow: hidden;
-          transition: all 0.25s ease;
-        }
-
-        .min-gap {
-          flex: 0 0 40px;
-        }
-
-        .card-type-icon {
-          flex-grow: 0;
-          flex-shrink: 0;
-          margin-right: 16px;
-          font-weight: 400;
-          color: #323232;
-          border-radius: 50%;
-          width: 40px;
-          height: 40px;
-          text-align: center;
-          line-height: 40px;
-          font-size: 14px;
-          transition: all 0.25s ease;
-        }
-        .card-type-icon.with-border {
-          color: #aeaeae;
-          border: 1px solid #eaeaea;
-        }
-        .card-type-icon i {
-          line-height: 40px;
-        }
-
-        .label-group {
-          white-space: nowrap;
-          overflow: hidden;
-        }
-        .label-group.fixed {
-          flex-shrink: 0;
-        }
-        .label-group p {
-          margin: 0px;
-          line-height: 21px;
-          white-space: nowrap;
-          overflow: hidden;
-          text-overflow: ellipsis;
-        }
-        .label-group p.title {
-          color: #323232;
-          font-weight: 500;
-        }
-        .label-group p.title.cta {
-          text-transform: uppercase;
-        }
-        .label-group p.caption {
-          font-weight: 400;
-          color: #aeaeae;
-        }
-
-        .end-icon {
-          margin-left: 16px;
-        }
-        .icon-bar a {
-            display: block;
-            text-align: center;
-            padding: 16px;
-            transition: all 0.3s ease;
-            font-size: 36px;
-        }
-    </style>
+    <link href="styles/bootstrap.4.0.0.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css">
+    <link href="styles/challenge-styles.css" rel="stylesheet" />
     <script type="text/javascript">
         function selectQuiz(elem) {
             console.log('triggering quiz of '+elem.id);
@@ -172,7 +29,7 @@
 <body>
 <nav class="navbar transparent navbar-inverse">
     <div class="icon-bar" onclick="javascript:toOptions()">
-        <a class="active" href="#"><i class="fa fa-home"></i></a>
+        <a class="active" href="#"><i class="fas fa-home"></i></a>
     </div>
     <span class="ml-auto mr-3 order-lg-last" th:text="${#authentication.getPrincipal().getUsername()}"></span>
     <button class="btn btn-lg btn-rised align-middle btn-primary ml-auto mr-3 order-lg-last" type="button" onclick="javascript:logOut()" >Logout</button>
@@ -226,8 +83,8 @@
     </div>
     </form>
 </section>
-<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+<script type="text/javascript" src="scripts/jquery-3.2.1.slim.min.js"></script>
+<script type="text/javascript" src="scripts/popper.min.js"></script>
+<script type="text/javascript" src="scripts/bootstrap.min.js"></script>
 </body>
 </html>
