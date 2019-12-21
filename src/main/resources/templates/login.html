@@ -11,14 +11,14 @@
             document.getElementById('username').value = document.getElementById('loginUsername').value;
             document.getElementById('password').value = document.getElementById('loginPassword').value;
             // we should have a better way to do this
-            //document.forms[0].username = document.getElementById('loginUsername').value;
-            //document.forms[0].password = document.getElementById('loginPassword').value;
 
             document.forms[0].action="/logme";
             document.forms[0].submit();
         }
 
         function signUp() {
+            document.getElementById('username').value = document.getElementById('sign_username').value;
+            document.getElementById('password').value = document.getElementById('sign_password').value;
             document.forms[0].action="/registration";
             document.forms[0].submit();
         }
@@ -29,14 +29,16 @@
 <div class="container login-container">
     <div class="row">
         <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+        <input type="hidden" name="username" id="username" />
+        <input type="hidden" name="password" id="password"/>
         <div class="col-md-6 login-form-1">
             <h3>Sign up</h3>
             <form>
                 <div class="form-group">
-                    <input type="text" name="username" id="username" class="form-control" placeholder="Your Username *" value="" />
+                    <input type="text" name="sign_username" id="sign_username" class="form-control" placeholder="Your Username *" value="" />
                 </div>
                 <div class="form-group">
-                    <input type="password" name="password" id="password" class="form-control" placeholder="Your Password *" value="" />
+                    <input type="password" name="sign_password" id="sign_password" class="form-control" placeholder="Your Password *" value="" />
                 </div>
                 <div class="form-group">
                     <input type="password" name="passwordConfirm" class="form-control" placeholder="Confirm password" value="" />

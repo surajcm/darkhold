@@ -66,7 +66,6 @@ public class LoginController {
         }
         userService.save(userForm);
 
-        //return "redirect:/";
         GameInfo gameInfo = new GameInfo();
         gameInfo.setMessage("Successfully created the account !!!");
         model.addAttribute("gameinfo", gameInfo);

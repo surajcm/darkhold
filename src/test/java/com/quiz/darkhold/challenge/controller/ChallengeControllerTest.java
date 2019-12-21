@@ -8,6 +8,6 @@ public class ChallengeControllerTest {
 
     @Test
     public void handleFileUpload() {
-        ChallengeService
+        //ChallengeService
     }
 }
