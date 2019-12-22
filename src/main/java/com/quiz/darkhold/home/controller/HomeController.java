@@ -43,19 +43,4 @@ public class HomeController {
         // validate gamePin
         return "gamewait";
     }
-
-    /*@PostMapping("/logout")
-    public String toLogout(Model model) {
-        logger.info("Going to Logout page ");
-        model.addAttribute("gameinfo", new GameInfo());
-        return "index";
-    }
-
-    @GetMapping("/logout")
-    public String getLogout(Model model) {
-        logger.info("Going to Logout page ");
-        model.addAttribute("gameinfo", new GameInfo());
-        return "index";
-    }*/
-
 }
