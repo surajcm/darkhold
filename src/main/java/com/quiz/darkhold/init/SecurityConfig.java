@@ -30,7 +30,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .authorizeRequests().antMatchers("/options","/createChallenge","/viewChallenge").authenticated()
                 .and()
-                .authorizeRequests().antMatchers("/", "/home","/resources/**","/registration","/images/*","/logmein","/logme").permitAll();
+                .authorizeRequests().antMatchers("/", "/home","/resources/**","/registration","/images/*","/logmein","/logme").permitAll()
+                .and()
+                .logout()
+                .logoutSuccessUrl("/")
+                .invalidateHttpSession(true)
+                .deleteCookies("JSESSIONID");
         /*http.authorizeRequests()
                     .antMatchers("/", "/home","/resources/**","/registration","/images/*","/logmein","/logme").permitAll()
                     .and().antMatcher("/viewChallenge").authorizeRequests();*/
