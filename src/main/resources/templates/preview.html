@@ -10,6 +10,7 @@
 
     <script type="text/javascript">
        function logOut() {
+            document.forms[0].method = "get";
             document.forms[0].action="/";
             document.forms[0].submit();
        }
