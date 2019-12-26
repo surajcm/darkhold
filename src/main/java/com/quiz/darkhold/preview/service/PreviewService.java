@@ -2,6 +2,7 @@ package com.quiz.darkhold.preview.service;
 
 import com.quiz.darkhold.challenge.entity.Challenge;
 import com.quiz.darkhold.challenge.repository.ChallengeRepository;
+import com.quiz.darkhold.game.repository.GameRepository;
 import com.quiz.darkhold.preview.model.PreviewInfo;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,9 @@ public class PreviewService {
 
     @Autowired
     private ChallengeRepository challengeRepository;
+
+    @Autowired
+    private GameRepository gameRepository;
 
     public PreviewInfo fetchQuestions(String challengeId) {
         PreviewInfo previewInfo = new PreviewInfo();
