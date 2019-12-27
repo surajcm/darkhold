@@ -1,8 +1,10 @@
 package com.quiz.darkhold.home.controller;
 
 import com.quiz.darkhold.home.model.GameInfo;
+import com.quiz.darkhold.home.service.HomeService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,6 +14,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
 public class HomeController {
+    @Autowired
+    private HomeService homeService;
 
     private final Logger logger = LoggerFactory.getLogger(HomeController.class);
 
@@ -33,8 +37,7 @@ public class HomeController {
     public @ResponseBody
     Boolean enterGame(@ModelAttribute("gamePin") String gamePin) {
         logger.info("Game pin is "+ gamePin);
-        // validate gamePin
-        return Boolean.TRUE;
+        return homeService.validateGamePin(gamePin);
     }
 
     @PostMapping("/joinGame")
