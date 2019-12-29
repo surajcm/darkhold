@@ -1,7 +1,11 @@
 package com.quiz.darkhold.game.controller;
 
+import com.quiz.darkhold.game.model.User;
+import com.quiz.darkhold.game.model.UserResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -15,5 +19,12 @@ public class GameController {
     public String startGame(Model model, @RequestParam("quiz_pin") String quiz_pin) {
         logger.info("On to game :"+ quiz_pin);
         return "game";
+    }
+
+    @MessageMapping("/user")
+    @SendTo("/topic/user")
+    public UserResponse getUser(User user) {
+        logger.info("On to getUser :"+ user);
+        return new UserResponse("Hi " + user.getName());
     }
 }
