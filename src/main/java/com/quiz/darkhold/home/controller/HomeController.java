@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
 public class HomeController {
+    public static final String GAME_INFO = "gameinfo";
     @Autowired
     private HomeService homeService;
 
@@ -21,15 +22,15 @@ public class HomeController {
 
     @GetMapping("/")
     public String home(Model model) {
-        logger.info("Going to home page ");
-        model.addAttribute("gameinfo", new GameInfo());
+        logger.info("Going home page ");
+        model.addAttribute(GAME_INFO, new GameInfo());
         return "index";
     }
 
     @PostMapping("/home")
     public String toHome(Model model) {
         logger.info("Going to toHome page ");
-        model.addAttribute("gameinfo", new GameInfo());
+        model.addAttribute(GAME_INFO, new GameInfo());
         return "index";
     }
 
@@ -41,9 +42,9 @@ public class HomeController {
     }
 
     @PostMapping("/joinGame")
-    public String joinGame(@ModelAttribute GameInfo gameInfo) {
+    public String joinGame(@ModelAttribute GameInfo gameInfo, Model model) {
         logger.info("gameInfo is "+ gameInfo);
-        // validate gamePin
+        model.addAttribute(GAME_INFO, gameInfo);
         return "gamewait";
     }
 }

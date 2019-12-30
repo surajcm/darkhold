@@ -1,6 +1,6 @@
 package com.quiz.darkhold.game.controller;
 
-import com.quiz.darkhold.game.model.User;
+import com.quiz.darkhold.game.model.Game;
 import com.quiz.darkhold.game.model.UserResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,8 +23,8 @@ public class GameController {
 
     @MessageMapping("/user")
     @SendTo("/topic/user")
-    public UserResponse getUser(User user) {
-        logger.info("On to getUser :"+ user);
-        return new UserResponse("Hi " + user.getName());
+    public UserResponse getGame(Game game) {
+        logger.info("On to getGame :"+ game);
+        return new UserResponse("Hi " + game.getName());
     }
 }
