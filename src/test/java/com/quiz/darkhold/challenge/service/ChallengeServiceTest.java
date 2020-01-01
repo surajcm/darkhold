@@ -1,21 +1,19 @@
 package com.quiz.darkhold.challenge.service;
 
 import com.quiz.darkhold.challenge.exception.ChallengeException;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.web.multipart.MultipartFile;
 
 public class ChallengeServiceTest {
-    private ChallengeService challengeService;
+    private ChallengeService challengeService = new ChallengeService();
 
     @Test
-    public void verifyReadProcessAndSaveChallenge(){
-        try {
+    public void verifyReadProcessAndSaveChallengeWithException() {
+        Assertions.assertThrows(ChallengeException.class, () -> {
             challengeService.readProcessAndSaveChallenge(mockMultipartFile(),"Test1","Super test");
-        } catch (ChallengeException e) {
-            e.printStackTrace();
-            //fail(e.getErrorMessage());
-        }
+        });
     }
 
     private MultipartFile mockMultipartFile() {

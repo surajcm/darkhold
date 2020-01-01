@@ -6,6 +6,7 @@ import com.quiz.darkhold.challenge.entity.QuestionSet;
 import com.quiz.darkhold.challenge.exception.ChallengeException;
 import com.quiz.darkhold.challenge.repository.ChallengeRepository;
 import com.quiz.darkhold.challenge.repository.QuestionSetRepository;
+import org.apache.poi.openxml4j.exceptions.NotOfficeXmlFileException;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.Row;
@@ -58,7 +59,7 @@ public class ChallengeService {
             for (Row currentRow : datatypeSheet) {
                 questionSets.add(populateQuestionSet(currentRow));
             }
-        } catch (IOException e) {
+        } catch (IOException | NotOfficeXmlFileException e) {
             logger.error(e.getMessage());
             throw new ChallengeException("Unable to process the file..");
         } finally {
