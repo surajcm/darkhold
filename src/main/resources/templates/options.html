@@ -19,6 +19,11 @@
             document.forms[0].submit();
         }
 
+        function activeChallenge() {
+            document.forms[0].action="/viewChallenge";
+            document.forms[0].submit();
+        }
+
         function logOut() {
             document.forms[0].action="/logout";
             document.forms[0].submit();
@@ -68,6 +73,17 @@
                             <div class="text-wrap vcenter">
                                 <h2 class="mbr-fonts-style mbr-bold mbr-section-title3 display-5">View existing <span>Challenge</span></h2>
                                 <p class="mbr-fonts-style text1 mbr-text display-6">See the existing challenges, edit them and start the challenges</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 mbr-col-md-10">
+                        <div class="wrap" onclick="javascript:activeChallenge()">
+                            <div class="ico-wrap">
+                                <span class="mbr-iconfont fa-space-shuttle fas"></span>
+                            </div>
+                            <div class="text-wrap vcenter">
+                                <h2 class="mbr-fonts-style mbr-bold mbr-section-title3 display-5">View active <span>Challenge</span></h2>
+                                <p class="mbr-fonts-style text1 mbr-text display-6">See the currently running challenges</p>
                             </div>
                         </div>
                     </div>
