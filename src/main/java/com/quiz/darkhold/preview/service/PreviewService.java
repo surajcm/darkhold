@@ -6,6 +6,7 @@ import com.quiz.darkhold.game.entity.Game;
 import com.quiz.darkhold.game.entity.GameStatus;
 import com.quiz.darkhold.game.repository.GameRepository;
 import com.quiz.darkhold.preview.model.PreviewInfo;
+import com.quiz.darkhold.preview.repository.CurrentGame;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -23,6 +24,9 @@ public class PreviewService {
 
     @Autowired
     private GameRepository gameRepository;
+
+    @Autowired
+    private CurrentGame currentGame;
 
     public PreviewInfo fetchQuestions(String challengeId) {
         PreviewInfo previewInfo = new PreviewInfo();
@@ -42,6 +46,7 @@ public class PreviewService {
         game.setGameStatus(GameStatus.WAITING.name());
         game.setParticipants(getUsername());
         gameRepository.save(game);
+        currentGame.saveCurrentStatus();
         return generatedString;
     }
 
