@@ -41,12 +41,13 @@ public class PreviewService {
     public String generateQuizPin(String challengeId) {
         String generatedString = RandomStringUtils.random(5, false, true);
         //todo : link challenge to game
+        String currentUser = getUsername();
         Game game = new Game();
         game.setPin(generatedString);
         game.setGameStatus(GameStatus.WAITING.name());
-        game.setParticipants(getUsername());
+        game.setParticipants(currentUser);
         gameRepository.save(game);
-        currentGame.saveCurrentStatus();
+        currentGame.saveCurrentStatus(currentUser, generatedString);
         return generatedString;
     }
 

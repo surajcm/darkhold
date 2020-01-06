@@ -21,10 +21,10 @@ public class CurrentGame {
         NitriteCollection collection = db.getCollection("test");
     }
 
-    public void saveCurrentStatus() {
-        List abc = new ArrayList<>();
-        abc.add("apple");
-        abc.add("orange");
+    public void saveCurrentStatus(String username, String pin) {
+        List<String> users = new ArrayList<>();
+        users.add(username);
+
         Nitrite db = Nitrite.builder()
                 .compressed()
                 .filePath("/tmp/test.db")
@@ -32,10 +32,8 @@ public class CurrentGame {
         // Create a Nitrite Collection
         NitriteCollection collection = db.getCollection("test");
         // create a document to populate data
-        Document doc = Document.createDocument("firstName", "John")
-                .put("lastName", "Doe")
-                .put("fruits", abc)
-                .put("note", "a quick brown fox jump over the lazy dog");
+        Document doc = Document.createDocument("pin", pin)
+                .put("users", users);
 
         // insert the document
         collection.insert(doc);
