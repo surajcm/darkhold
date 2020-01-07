@@ -6,6 +6,7 @@ import com.quiz.darkhold.game.entity.Game;
 import com.quiz.darkhold.game.entity.GameStatus;
 import com.quiz.darkhold.game.repository.GameRepository;
 import com.quiz.darkhold.preview.model.PreviewInfo;
+import com.quiz.darkhold.preview.model.PublishInfo;
 import com.quiz.darkhold.preview.repository.CurrentGame;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,7 +39,7 @@ public class PreviewService {
         return previewInfo;
     }
 
-    public String generateQuizPin(String challengeId) {
+    public PublishInfo generateQuizPin(String challengeId) {
         String generatedString = RandomStringUtils.random(5, false, true);
         //todo : link challenge to game
         String currentUser = getUsername();
@@ -47,8 +48,11 @@ public class PreviewService {
         game.setGameStatus(GameStatus.WAITING.name());
         game.setParticipants(currentUser);
         gameRepository.save(game);
-        currentGame.saveCurrentStatus(currentUser, generatedString);
-        return generatedString;
+        PublishInfo publishInfo = new PublishInfo();
+        publishInfo.setPin(generatedString);
+        publishInfo.setUsername(currentUser);
+        currentGame.saveCurrentStatus(publishInfo);
+        return publishInfo;
     }
 
     private String getUsername() {

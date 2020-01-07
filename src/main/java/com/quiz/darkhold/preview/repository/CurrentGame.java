@@ -1,5 +1,6 @@
 package com.quiz.darkhold.preview.repository;
 
+import com.quiz.darkhold.preview.model.PublishInfo;
 import org.dizitart.no2.Document;
 import org.dizitart.no2.Nitrite;
 import org.dizitart.no2.NitriteCollection;
@@ -21,9 +22,9 @@ public class CurrentGame {
         NitriteCollection collection = db.getCollection("test");
     }
 
-    public void saveCurrentStatus(String username, String pin) {
+    public void saveCurrentStatus(PublishInfo publishInfo) {
         List<String> users = new ArrayList<>();
-        users.add(username);
+        users.add(publishInfo.getUsername());
 
         Nitrite db = Nitrite.builder()
                 .compressed()
@@ -32,7 +33,7 @@ public class CurrentGame {
         // Create a Nitrite Collection
         NitriteCollection collection = db.getCollection("test");
         // create a document to populate data
-        Document doc = Document.createDocument("pin", pin)
+        Document doc = Document.createDocument("pin", publishInfo.getPin())
                 .put("users", users);
 
         // insert the document

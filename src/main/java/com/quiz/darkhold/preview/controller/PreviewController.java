@@ -1,6 +1,7 @@
 package com.quiz.darkhold.preview.controller;
 
 import com.quiz.darkhold.preview.model.PreviewInfo;
+import com.quiz.darkhold.preview.model.PublishInfo;
 import com.quiz.darkhold.preview.service.PreviewService;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -29,9 +30,10 @@ public class PreviewController {
     @PostMapping("/publish")
     public String publish(Model model, @RequestParam("challenge_id") String challengeId) {
         log.info("into publish method : " + challengeId);
-        String quizPin = previewService.generateQuizPin(challengeId);
-        model.addAttribute("quizPin", quizPin);
-        log.info("publish method, quizPin : " + quizPin);
+        PublishInfo publishInfo = previewService.generateQuizPin(challengeId);
+        model.addAttribute("quizPin", publishInfo.getPin());
+        model.addAttribute("user", publishInfo.getUsername());
+        log.info("publish method, quizPin : " + publishInfo.getPin());
         return "publish";
     }
 }
