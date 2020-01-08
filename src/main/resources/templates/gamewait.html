@@ -65,6 +65,9 @@
                 </tr>
                 </thead>
                 <tbody id="players">
+                    <tr th:each="user : ${gameinfo.users}">
+                        <td><span th:text="${user}"></span></td>
+                    </tr>
                 </tbody>
             </table>
         </div>

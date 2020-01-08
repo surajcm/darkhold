@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @Controller
 public class HomeController {
     public static final String GAME_INFO = "gameinfo";
+
     @Autowired
     private HomeService homeService;
 
@@ -44,6 +45,7 @@ public class HomeController {
     @PostMapping("/joinGame")
     public String joinGame(@ModelAttribute GameInfo gameInfo, Model model) {
         logger.info("gameInfo is "+ gameInfo);
+        gameInfo.setUsers(homeService.participantsInActiveQuiz(gameInfo.getGamePin()));
         model.addAttribute(GAME_INFO, gameInfo);
         return "gamewait";
     }

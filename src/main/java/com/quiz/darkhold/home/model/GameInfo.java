@@ -1,11 +1,13 @@
 package com.quiz.darkhold.home.model;
 
+import java.util.List;
 import java.util.StringJoiner;
 
 public class GameInfo {
     String gamePin;
     String name;
     String message;
+    List<String> users;
 
     public String getGamePin() {
         return gamePin;
@@ -29,6 +31,14 @@ public class GameInfo {
 
     public void setMessage(String message) {
         this.message = message;
+    }
+
+    public List<String> getUsers() {
+        return users;
+    }
+
+    public void setUsers(List<String> users) {
+        this.users = users;
     }
 
     @Override
