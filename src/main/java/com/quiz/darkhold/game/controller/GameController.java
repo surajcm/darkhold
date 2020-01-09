@@ -2,8 +2,10 @@ package com.quiz.darkhold.game.controller;
 
 import com.quiz.darkhold.game.model.Game;
 import com.quiz.darkhold.game.model.UserResponse;
+import com.quiz.darkhold.game.service.GameService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Controller;
@@ -11,9 +13,14 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.List;
+
 @Controller
 public class GameController {
     private final Logger logger = LoggerFactory.getLogger(GameController.class);
+
+    @Autowired
+    private GameService gameService;
 
     @PostMapping("/game")
     public String startGame(Model model, @RequestParam("quiz_pin") String quiz_pin) {
@@ -25,6 +32,8 @@ public class GameController {
     @SendTo("/topic/user")
     public UserResponse getGame(Game game) {
         logger.info("On to getGame :"+ game);
+        List<String> users = gameService.saveAndGetAllParticipants(game.getPin(), game.getName());
+        //put this in response
         return new UserResponse("Hi " + game.getName());
     }
 }

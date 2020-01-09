@@ -17,15 +17,17 @@
         }
         function connect() {
             var name_val = document.getElementById('name').value;
+            var pin_val = document.getElementById('quizPin').value;
             var socket = new SockJS('/darkhold-websocket');
             stompClient = Stomp.over(socket);
             stompClient.connect({}, function (frame) {
                 console.log('Connected: ' + frame);
-                stompClient.send("/app/user", {}, JSON.stringify({'name': name_val}));
+                stompClient.send("/app/user", {}, JSON.stringify({'name': name_val, 'pin': pin_val}));
             });
         }
         function showGreeting(message) {
-            alert(message);
+            console.log(message);
+            document.getElementById('players').append("<tr><td>" + message + "</td></tr>");
         }
     </script>
 </head>

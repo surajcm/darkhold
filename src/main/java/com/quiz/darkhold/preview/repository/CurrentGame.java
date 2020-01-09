@@ -26,11 +26,9 @@ public class CurrentGame {
     public void saveCurrentStatus(PublishInfo publishInfo) {
         List<String> users = new ArrayList<>();
         users.add(publishInfo.getUsername());
-        // create a document to populate data
         Document doc = Document.createDocument("pin", publishInfo.getPin())
                 .put("users", users);
 
-        // insert the document
         collection.insert(doc);
     }
 
@@ -39,5 +37,13 @@ public class CurrentGame {
         List<String> users = (List<String>) cursor.toList().get(0).get("users");
         logger.info("Participants are :" + users);
         return users;
+    }
+
+    public void saveUserToActiveGame(String pin, String userName) {
+        Cursor cursor = collection.find(Filters.and(eq("pin", pin)));
+        Document doc = cursor.toList().get(0);
+        List<String> users = (List<String>) doc.get("users");
+        users.add(userName);
+        collection.update(doc);
     }
 }
