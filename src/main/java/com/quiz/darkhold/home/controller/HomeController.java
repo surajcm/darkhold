@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.util.List;
+
 @Controller
 public class HomeController {
     public static final String GAME_INFO = "gameinfo";
@@ -44,8 +46,10 @@ public class HomeController {
 
     @PostMapping("/joinGame")
     public String joinGame(@ModelAttribute GameInfo gameInfo, Model model) {
-        logger.info("gameInfo is "+ gameInfo);
-        gameInfo.setUsers(homeService.participantsInActiveQuiz(gameInfo.getGamePin()));
+        logger.info("joinGame : gameInfo is "+ gameInfo);
+        List<String> activeUsers = homeService.participantsInActiveQuiz(gameInfo.getGamePin());
+        activeUsers.add(gameInfo.getName());
+        gameInfo.setUsers(activeUsers);
         model.addAttribute(GAME_INFO, gameInfo);
         return "gamewait";
     }
