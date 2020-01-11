@@ -32,7 +32,7 @@ public class GameController {
     @SendTo("/topic/user")
     public UserResponse getGame(Game game) {
         logger.info("On to getGame :"+ game);
-        List<String> users = gameService.saveAndGetAllParticipants(game.getPin(), game.getName());
+        List<String> users = gameService.getAllParticipants(game.getPin());
         //put this in response
         return new UserResponse("Hi " + game.getName());
     }

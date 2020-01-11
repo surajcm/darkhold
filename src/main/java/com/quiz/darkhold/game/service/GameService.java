@@ -16,4 +16,8 @@ public class GameService {
         currentGame.saveUserToActiveGame(pin, userName);
         return currentGame.getActiveUsersInGame(pin);
     }
+
+    public List<String> getAllParticipants(String pin) {
+        return currentGame.getActiveUsersInGame(pin);
+    }
 }
