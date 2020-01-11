@@ -41,7 +41,10 @@
         }
         function showGreeting(message) {
             console.log(message);
-            document.getElementById('players').append("<tr><td>" + message + "</td></tr>");
+            var tableRef = document.getElementById('conversation').getElementsByTagName('tbody')[0];
+            var newRow = tableRef.insertRow(tableRef.rows.length);
+            newRow.innerHTML = message;
+            //document.getElementById('players').append("<tr><td>" + message + "</td></tr>");
         }
     </script>
 </head>
