@@ -16,6 +16,7 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class PreviewService {
@@ -59,5 +60,15 @@ public class PreviewService {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         User user = (org.springframework.security.core.userdetails.User) auth.getPrincipal();
         return user.getUsername();
+    }
+
+    public PublishInfo getActiveChallenge() {
+        List<Game> activeGames = gameRepository.findByGameStatusNot(GameStatus.FINISHED.name());
+        Game activeGame = activeGames.get(0);
+        //currently, we are taking the first one, may need optimization if we run multiple games in parallel
+        PublishInfo publishInfo = new PublishInfo();
+        publishInfo.setPin(activeGame.getPin());
+        publishInfo.setUsername(getUsername());
+        return publishInfo;
     }
 }

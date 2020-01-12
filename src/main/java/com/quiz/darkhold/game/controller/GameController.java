@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
+@SuppressWarnings("unused")
 @Controller
 public class GameController {
     private final Logger logger = LoggerFactory.getLogger(GameController.class);
