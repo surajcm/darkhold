@@ -23,6 +23,10 @@
             stompClient.connect({}, function (frame) {
                 console.log('Connected: ' + frame);
                 stompClient.send("/app/user", {}, JSON.stringify({'name': name_val, 'pin': pin_val}));
+                //listen...
+                stompClient.subscribe('/topic/user', function (greeting) {
+                    showGreeting(JSON.parse(greeting.body).content);
+                });
             });
         }
         function showGreeting(message) {

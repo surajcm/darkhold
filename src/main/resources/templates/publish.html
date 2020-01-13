@@ -31,8 +31,6 @@
             var socket = new SockJS('/darkhold-websocket');
             stompClient = Stomp.over(socket);
             stompClient.connect({}, function (frame) {
-                //setConnected(true);
-                console.log('Connected: ' + frame);
                 stompClient.subscribe('/topic/user', function (greeting) {
                     showGreeting(JSON.parse(greeting.body).content);
                 });
@@ -43,7 +41,6 @@
             var tableRef = document.getElementById('conversation').getElementsByTagName('tbody')[0];
             var newRow = tableRef.insertRow(tableRef.rows.length);
             newRow.innerHTML = message;
-            //document.getElementById('players').append("<tr><td>" + message + "</td></tr>");
         }
     </script>
 </head>
