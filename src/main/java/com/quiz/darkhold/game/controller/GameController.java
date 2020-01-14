@@ -35,6 +35,6 @@ public class GameController {
         logger.info("On to getGame :"+ game);
         List<String> users = gameService.getAllParticipants(game.getPin());
         //put this in response
-        return new UserResponse("Hi " + game.getName());
+        return new UserResponse(users);
     }
 }

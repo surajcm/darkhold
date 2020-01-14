@@ -1,16 +1,18 @@
 package com.quiz.darkhold.game.model;
 
+import java.util.List;
+
 public class UserResponse {
-    String content;
+    List<String> users;
 
     public UserResponse() {
     }
 
-    public String getContent() {
-        return content;
+    public List<String> getUsers() {
+        return users;
     }
 
-    public UserResponse(String content) {
-        this.content = content;
+    public UserResponse(List<String> users) {
+        this.users = users;
     }
 }

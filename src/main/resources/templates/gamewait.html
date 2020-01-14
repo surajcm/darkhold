@@ -25,13 +25,16 @@
                 stompClient.send("/app/user", {}, JSON.stringify({'name': name_val, 'pin': pin_val}));
                 //listen...
                 stompClient.subscribe('/topic/user', function (greeting) {
-                    showGreeting(JSON.parse(greeting.body).content);
+                    showGreeting(JSON.parse(greeting.body).users);
                 });
             });
         }
         function showGreeting(message) {
             console.log(message);
-            document.getElementById('players').append("<tr><td>" + message + "</td></tr>");
+
+            for (i = 0; i < message.length; i++) {
+                document.getElementById('players').append("<tr><td>" + message[i] + "</td></tr>");
+            }
         }
     </script>
 </head>

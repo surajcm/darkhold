@@ -32,7 +32,7 @@
             stompClient = Stomp.over(socket);
             stompClient.connect({}, function (frame) {
                 stompClient.subscribe('/topic/user', function (greeting) {
-                    showGreeting(JSON.parse(greeting.body).content);
+                    showGreeting(JSON.parse(greeting.body).users);
                 });
             });
         }
@@ -41,6 +41,10 @@
             var tableRef = document.getElementById('conversation').getElementsByTagName('tbody')[0];
             var newRow = tableRef.insertRow(tableRef.rows.length);
             newRow.innerHTML = message;
+            for (i = 0; i < message.length; i++) {
+                var newRow = tableRef.insertRow(tableRef.rows.length);
+                newRow.innerHTML = message[i];
+            }
         }
     </script>
 </head>
