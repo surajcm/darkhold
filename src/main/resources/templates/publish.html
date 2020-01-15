@@ -38,9 +38,9 @@
         }
         function showGreeting(message) {
             console.log(message);
+            var new_tbody = document.createElement('tbody');
             var tableRef = document.getElementById('conversation').getElementsByTagName('tbody')[0];
-            var newRow = tableRef.insertRow(tableRef.rows.length);
-            newRow.innerHTML = message;
+            tableRef.innerHTML = "";
             for (i = 0; i < message.length; i++) {
                 var newRow = tableRef.insertRow(tableRef.rows.length);
                 newRow.innerHTML = message[i];

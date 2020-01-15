@@ -3,6 +3,13 @@ function logMeIn() {
     document.forms[0].submit();
 }
 
+function runScript(e) {
+    if (e.keyCode == 13) {
+        enterGame();
+        return false;
+    }
+}
+
 function enterGame() {
     var gamePin = document.getElementById("gamePin").value;
     if (gamePin.length > 0) {

@@ -31,8 +31,8 @@
                         </span>
                         <h1 class="display-2  text-dark mb-2 mt-5" id="head_msg"><strong>Enter Quiz PIN</strong> </h1>
                         <div class="justify-content-center align-items-center d-flex text-center">
-                            <input class="form-control lead text-dark mb-5" th:field="*{gamePin}" id="gamePin" name="gamePin" type="number"  autofocus />
-                            <input class="form-control lead text-dark mb-5" style="display:none" th:field="*{name}" id="username" name="username" type="text"  />
+                            <input class="form-control lead text-dark mb-5" th:field="*{gamePin}" id="gamePin" name="gamePin" type="number" onkeypress="return runScript(event)" autofocus />
+                            <input class="form-control lead text-dark mb-5" style="display:none" th:field="*{name}" id="username" name="username" onkeypress="return runScript(event)" type="text"  />
                         </div>
                         <div id="messenger">
                             <p id="message_disp"></p>
