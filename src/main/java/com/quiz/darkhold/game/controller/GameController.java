@@ -1,6 +1,7 @@
 package com.quiz.darkhold.game.controller;
 
 import com.quiz.darkhold.game.model.Game;
+import com.quiz.darkhold.game.model.StartTrigger;
 import com.quiz.darkhold.game.model.UserResponse;
 import com.quiz.darkhold.game.service.GameService;
 import org.slf4j.Logger;
@@ -36,5 +37,12 @@ public class GameController {
         List<String> users = gameService.getAllParticipants(game.getPin());
         //put this in response
         return new UserResponse(users);
+    }
+
+    @MessageMapping("/start")
+    @SendTo("/topic/start")
+    public StartTrigger startGame(String pin) {
+        logger.info("On to startGame :"+ pin);
+        return new StartTrigger(pin);
     }
 }
