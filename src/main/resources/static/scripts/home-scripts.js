@@ -6,6 +6,7 @@ function logMeIn() {
 function runScript(e) {
     if (e.keyCode == 13) {
         enterGame();
+        document.getElementById("username").focus();
         return false;
     }
 }

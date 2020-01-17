@@ -19,10 +19,27 @@
             stompClient.connect({}, function (frame) {
                 console.log('Connected: ' + frame);
                 stompClient.send("/app/start", {}, JSON.stringify({'pin': pin}));
+                stompClient.subscribe('/topic/start', function (greeting) {
+                    gotoMyGame();
+                });
             });
             console.log("submitting....");
+            //wait(3000);
             //document.forms[0].action="/game";
             //document.forms[0].submit();
+        }
+
+        function wait(ms){
+           var start = new Date().getTime();
+           var end = start;
+           while(end < start + ms) {
+             end = new Date().getTime();
+          }
+        }
+        
+        function gotoMyGame() {
+            document.forms[0].action="/game";
+            document.forms[0].submit();
         }
 
         function logOut() {
