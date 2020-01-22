@@ -27,7 +27,7 @@ public class GameController {
     @PostMapping("/game")
     public String startGame(Model model, @RequestParam("quiz_pin") String quiz_pin) {
         logger.info("On to game :"+ quiz_pin);
-        return "game";
+        return "interstitial";
     }
 
     @MessageMapping("/user")
