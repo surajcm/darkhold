@@ -1,3 +1,19 @@
+@import url('audiowide.css');
+body {
+    background-image: url("../images/funky-lines.png");
+    font-family: 'Audiowide', cursive;
+    font-size: 26px;
+}
+.body-style {
+    display: -webkit-flex;
+    display: flex;
+    -webkit-flex-wrap: wrap;
+    flex-wrap: wrap;
+    -webkit-align-content: center;
+    align-content: center;
+    margin-top:30vh;
+    font-family:Sans-serif;
+}
 .pinkBg {
     background-color: #ed184f!important;
     background-image: linear-gradient(90deg, #fd5581, #fd8b55);
