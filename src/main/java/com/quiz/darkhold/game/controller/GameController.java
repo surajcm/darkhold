@@ -24,10 +24,16 @@ public class GameController {
     @Autowired
     private GameService gameService;
 
+    @PostMapping("/interstitial")
+    public String startInterstitial(Model model, @RequestParam("quiz_pin") String quiz_pin) {
+        logger.info("On to interstitial :"+ quiz_pin);
+        return "interstitial";
+    }
+
     @PostMapping("/game")
     public String startGame(Model model, @RequestParam("quiz_pin") String quiz_pin) {
         logger.info("On to game :"+ quiz_pin);
-        return "interstitial";
+        return "game";
     }
 
     @MessageMapping("/user")
