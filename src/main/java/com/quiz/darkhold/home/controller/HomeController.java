@@ -2,6 +2,7 @@ package com.quiz.darkhold.home.controller;
 
 import com.quiz.darkhold.home.model.GameInfo;
 import com.quiz.darkhold.home.service.HomeService;
+import com.quiz.darkhold.login.service.SecurityService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,11 +18,15 @@ import java.util.List;
 @Controller
 public class HomeController {
     public static final String GAME_INFO = "gameinfo";
+    private static final String UNREGISTERED_USER = "UNREGISTERED_USER";
+    private final Logger logger = LoggerFactory.getLogger(HomeController.class);
 
     @Autowired
     private HomeService homeService;
 
-    private final Logger logger = LoggerFactory.getLogger(HomeController.class);
+    @Autowired
+    private SecurityService securityService;
+
 
     @GetMapping("/")
     public String home(Model model) {
@@ -47,6 +52,8 @@ public class HomeController {
     @PostMapping("/joinGame")
     public String joinGame(@ModelAttribute GameInfo gameInfo, Model model) {
         logger.info("joinGame : gameInfo is "+ gameInfo);
+        securityService.autoLogin(gameInfo.getName(), UNREGISTERED_USER);
+        logger.info("autoLogin done !!!");
         List<String> activeUsers = homeService.participantsInActiveQuiz(gameInfo.getGamePin());
         activeUsers.add(gameInfo.getName());
         gameInfo.setUsers(activeUsers);
