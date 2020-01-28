@@ -26,7 +26,7 @@ public class Game {
     String gameStatus;
 
     @Column
-    String participants;
+    String challengeId;
 
     @Column(name = "createdOn")
     private OffsetDateTime createdOn;
@@ -58,12 +58,12 @@ public class Game {
         this.gameStatus = gameStatus;
     }
 
-    public String getParticipants() {
-        return participants;
+    public String getChallengeId() {
+        return challengeId;
     }
 
-    public void setParticipants(String participants) {
-        this.participants = participants;
+    public void setChallengeId(String challengeId) {
+        this.challengeId = challengeId;
     }
 
     public OffsetDateTime getCreatedOn() {

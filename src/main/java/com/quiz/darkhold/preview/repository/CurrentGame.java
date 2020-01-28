@@ -18,6 +18,8 @@ import static org.dizitart.no2.filters.Filters.eq;
 @Repository
 public class CurrentGame {
 
+    public static final String PIN = "pin";
+    public static final String USERS = "users";
     private final Logger logger = LoggerFactory.getLogger(CurrentGame.class);
 
     @Autowired
@@ -26,24 +28,31 @@ public class CurrentGame {
     public void saveCurrentStatus(PublishInfo publishInfo) {
         List<String> users = new ArrayList<>();
         users.add(publishInfo.getUsername());
-        Document doc = Document.createDocument("pin", publishInfo.getPin())
-                .put("users", users);
+        Document doc = Document.createDocument(PIN, publishInfo.getPin())
+                .put(USERS, users).put("currentQuestionNo", -1);
 
         collection.insert(doc);
     }
 
     public List<String> getActiveUsersInGame(String pin) {
-        Cursor cursor = collection.find(Filters.and(eq("pin", pin)));
-        List<String> users = (List<String>) cursor.toList().get(0).get("users");
+        Cursor cursor = collection.find(Filters.and(eq(PIN, pin)));
+        List<String> users = (List<String>) cursor.toList().get(0).get(USERS);
         logger.info("Participants are :" + users);
         return users;
     }
 
     public void saveUserToActiveGame(String pin, String userName) {
-        Cursor cursor = collection.find(Filters.and(eq("pin", pin)));
+        Cursor cursor = collection.find(Filters.and(eq(PIN, pin)));
         Document doc = cursor.toList().get(0);
-        List<String> users = (List<String>) doc.get("users");
+        List<String> users = (List<String>) doc.get(USERS);
         users.add(userName);
         collection.update(doc);
+    }
+
+    public int getCurrentQuestionNo(String pin) {
+        Cursor cursor = collection.find(Filters.and(eq(PIN, pin)));
+        Integer questionNo = (Integer) cursor.toList().get(0).get("currentQuestionNo");
+        logger.info("questionNo :" + questionNo);
+        return questionNo;
     }
 }

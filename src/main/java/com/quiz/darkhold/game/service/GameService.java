@@ -20,4 +20,8 @@ public class GameService {
     public List<String> getAllParticipants(String pin) {
         return currentGame.getActiveUsersInGame(pin);
     }
+
+    public int getCurrentQuestionNo(String pin) {
+        return currentGame.getCurrentQuestionNo(pin);
+    }
 }

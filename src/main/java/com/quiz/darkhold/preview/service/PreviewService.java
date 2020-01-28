@@ -47,7 +47,7 @@ public class PreviewService {
         Game game = new Game();
         game.setPin(generatedString);
         game.setGameStatus(GameStatus.WAITING.name());
-        game.setParticipants(currentUser);
+        game.setChallengeId(challengeId);
         gameRepository.save(game);
         PublishInfo publishInfo = new PublishInfo();
         publishInfo.setPin(generatedString);

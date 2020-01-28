@@ -4,6 +4,8 @@ import com.quiz.darkhold.game.model.Game;
 import com.quiz.darkhold.game.model.StartTrigger;
 import com.quiz.darkhold.game.model.UserResponse;
 import com.quiz.darkhold.game.service.GameService;
+import com.quiz.darkhold.preview.model.PublishInfo;
+import com.quiz.darkhold.preview.service.PreviewService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +24,9 @@ public class GameController {
     private final Logger logger = LoggerFactory.getLogger(GameController.class);
 
     @Autowired
+    private PreviewService previewService;
+
+    @Autowired
     private GameService gameService;
 
     @PostMapping("/interstitial")
@@ -31,8 +36,12 @@ public class GameController {
     }
 
     @PostMapping("/game")
-    public String startGame(Model model, @RequestParam("quiz_pin") String quiz_pin) {
-        logger.info("On to game :"+ quiz_pin);
+    public String startGame(Model model) {
+        logger.info("On to game :");
+        PublishInfo publishInfo = previewService.getActiveChallenge();
+        int currentQuestionNumber = gameService.getCurrentQuestionNo(publishInfo.getPin());
+        //get next question number + increment current q#
+        //put the question to the model
         return "game";
     }
 
@@ -41,7 +50,6 @@ public class GameController {
     public UserResponse getGame(Game game) {
         logger.info("On to getGame :"+ game);
         List<String> users = gameService.getAllParticipants(game.getPin());
-        //put this in response
         return new UserResponse(users);
     }
 
