@@ -35,6 +35,18 @@ public class GameController {
         return "interstitial";
     }
 
+    @PostMapping("/question")
+    public String question(Model model) {
+        logger.info("On to question :");
+        // get current question number
+        // if question number == -1, fetch the questions and load it to nitrate
+        // get 0 the question and add it to model
+        // if question number != -1, fetch question set from nitrate and 
+        PublishInfo publishInfo = previewService.getActiveChallenge();
+        int currentQuestionNumber = gameService.getCurrentQuestionNo(publishInfo.getPin());
+        return "question";
+    }
+
     @PostMapping("/game")
     public String startGame(Model model) {
         logger.info("On to game :");

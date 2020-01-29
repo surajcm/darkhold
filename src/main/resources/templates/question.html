@@ -5,13 +5,13 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link href="styles/bootstrap.4.0.0.min.css" rel="stylesheet" />
-    <link href="styles/interstitial-styles.css" rel="stylesheet" />
+    <link href="styles/error-styles.css" rel="stylesheet" />
     <script type="text/javascript">
         function loading() {
-            setTimeout(function(){ askQuestion(); }, 5000);
+            setTimeout(function(){ startGame(); }, 3000);
         }
-        function askQuestion() {
-            document.forms[0].action="/question";
+        function startGame() {
+            document.forms[0].action="/game";
             document.forms[0].submit();
         }
     </script>
@@ -19,20 +19,12 @@
 <body onload="loading()">
     <form action="#" method="post">
         <div class="container">
-            <div class="row">
-                <div class="container">
-                    <div class="row">
-                        <a href="#" class="intro-banner-vdo-play-btn pinkBg">
-                            <i class="glyphicon glyphicon-play whiteText" aria-hidden="true"></i>
-                            <span class="ripple pinkBg"></span>
-                            <span class="ripple pinkBg"></span>
-                            <span class="ripple pinkBg"></span>
-                        </a>
-                    </div>
-                </div>
+            <div class="body-style">
+
             </div>
         </div>
     </form>
+
     <script type="text/javascript" src="scripts/jquery-3.2.1.slim.min.js"></script>
     <script type="text/javascript" src="scripts/popper.min.js"></script>
     <script type="text/javascript" src="scripts/bootstrap.min.js"></script>

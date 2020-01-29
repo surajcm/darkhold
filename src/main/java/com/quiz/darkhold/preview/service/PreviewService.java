@@ -42,7 +42,6 @@ public class PreviewService {
 
     public PublishInfo generateQuizPin(String challengeId) {
         String generatedString = RandomStringUtils.random(5, false, true);
-        //todo : link challenge to game
         String currentUser = getUsername();
         Game game = new Game();
         game.setPin(generatedString);
