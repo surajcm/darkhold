@@ -1,6 +1,7 @@
 package com.quiz.darkhold.game.controller;
 
 import com.quiz.darkhold.game.model.Game;
+import com.quiz.darkhold.game.model.QuestionOnGame;
 import com.quiz.darkhold.game.model.StartTrigger;
 import com.quiz.darkhold.game.model.UserResponse;
 import com.quiz.darkhold.game.service.GameService;
@@ -38,12 +39,24 @@ public class GameController {
     @PostMapping("/question")
     public String question(Model model) {
         logger.info("On to question :");
+        PublishInfo publishInfo = previewService.getActiveChallenge();
+        String question;
         // get current question number
         // if question number == -1, fetch the questions and load it to nitrate
-        // get 0 the question and add it to model
-        // if question number != -1, fetch question set from nitrate and 
-        PublishInfo publishInfo = previewService.getActiveChallenge();
         int currentQuestionNumber = gameService.getCurrentQuestionNo(publishInfo.getPin());
+        if (currentQuestionNumber == -1) {
+            currentQuestionNumber = 10;
+        } else {
+            currentQuestionNumber = 0;
+
+        }
+        // get 0 the question and add it to model
+        // if question number != -1, fetch question set from nitrate and
+        question = "You must create an S3 bucket before uploading your data to S3.";
+        QuestionOnGame questionOnGame = new QuestionOnGame();
+        questionOnGame.setCurrentQuestionNumber(currentQuestionNumber);
+        questionOnGame.setQuestion(question);
+        model.addAttribute("QuestionOnGame", questionOnGame);
         return "question";
     }
 

@@ -16,11 +16,13 @@
         }
     </script>
 </head>
-<body onload="loading()">
+<body onload="loading()" th:object="${QuestionOnGame}" method="post">
     <form action="#" method="post">
         <div class="container">
             <div class="body-style">
-
+                <p th:inline="text" >
+                    [[${QuestionOnGame.currentQuestionNumber}]] [[${QuestionOnGame.question}]]
+                </p>
             </div>
         </div>
     </form>
