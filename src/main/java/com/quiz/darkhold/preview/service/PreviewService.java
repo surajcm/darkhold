@@ -40,6 +40,18 @@ public class PreviewService {
         return previewInfo;
     }
 
+    public PreviewInfo fetchQuestionsFromPin(String pin) {
+        Game game = gameRepository.findByPin(pin);
+        String challengeId = game.getChallengeId();
+        PreviewInfo previewInfo = new PreviewInfo();
+        Long challengeOne = Long.valueOf(challengeId);
+        Challenge challenge = challengeRepository.getOne(challengeOne);
+        previewInfo.setQuestionSets(new ArrayList<>(challenge.getQuestionSets()));
+        previewInfo.setChallengeName(challenge.getTitle());
+        previewInfo.setChallengeId(challengeId);
+        return previewInfo;
+    }
+
     public PublishInfo generateQuizPin(String challengeId) {
         String generatedString = RandomStringUtils.random(5, false, true);
         String currentUser = getUsername();

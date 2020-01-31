@@ -1,5 +1,6 @@
 package com.quiz.darkhold.preview.repository;
 
+import com.quiz.darkhold.challenge.entity.QuestionSet;
 import com.quiz.darkhold.preview.model.PublishInfo;
 import org.dizitart.no2.Cursor;
 import org.dizitart.no2.Document;
@@ -29,7 +30,9 @@ public class CurrentGame {
         List<String> users = new ArrayList<>();
         users.add(publishInfo.getUsername());
         Document doc = Document.createDocument(PIN, publishInfo.getPin())
-                .put(USERS, users).put("currentQuestionNo", -1);
+                .put(USERS, users)
+                .put("currentQuestionNo", -1)
+                .put("questions", new ArrayList<>());
 
         collection.insert(doc);
     }
@@ -49,10 +52,33 @@ public class CurrentGame {
         collection.update(doc);
     }
 
+    public void saveQuestionsToActiveGame(String pin, List<QuestionSet> questionSets) {
+        Cursor cursor = collection.find(Filters.and(eq(PIN, pin)));
+        Document doc = cursor.toList().get(0);
+        List<QuestionSet> questions = (List<QuestionSet>) doc.get("questions");
+        questions.addAll(questionSets);
+        int questionCount = (Integer) doc.get("currentQuestionNo");
+        questionCount++;
+        collection.update(doc);
+    }
+
     public int getCurrentQuestionNo(String pin) {
         Cursor cursor = collection.find(Filters.and(eq(PIN, pin)));
         Integer questionNo = (Integer) cursor.toList().get(0).get("currentQuestionNo");
         logger.info("questionNo :" + questionNo);
         return questionNo;
+    }
+
+    public List<QuestionSet> getQuestionsOnAPin(String pin) {
+        Cursor cursor = collection.find(Filters.and(eq(PIN, pin)));
+        List<QuestionSet> questions = (List<QuestionSet>) cursor.toList().get(0).get("questions");
+        logger.info("question count :" + questions.size());
+        return questions;
+    }
+
+    public void incrementQuestionCount(String pin, int currentQuestionNumber) {
+        Cursor cursor = collection.find(Filters.and(eq(PIN, pin)));
+        Integer questionNo = (Integer) cursor.toList().get(0).get("currentQuestionNo");
+        questionNo++;
     }
 }
