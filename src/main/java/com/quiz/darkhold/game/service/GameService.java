@@ -1,6 +1,7 @@
 package com.quiz.darkhold.game.service;
 
 import com.quiz.darkhold.challenge.entity.QuestionSet;
+import com.quiz.darkhold.game.model.Challenge;
 import com.quiz.darkhold.game.model.QuestionOnGame;
 import com.quiz.darkhold.preview.model.PreviewInfo;
 import com.quiz.darkhold.preview.model.PublishInfo;
@@ -58,5 +59,12 @@ public class GameService {
         questionOnGame.setQuestion(questionSet.getQuestion());
         currentGame.incrementQuestionCount(pin, currentQuestionNumber);
         return questionOnGame;
+    }
+
+    public Challenge getCurrentQuestionSet(String pin, int currentQuestionNumber) {
+        Challenge challenge = new Challenge();
+        challenge.setQuestionNumber(currentQuestionNumber);
+        challenge.setQuestionSet(currentGame.getQuestionsOnAPin(pin).get(currentQuestionNumber));
+        return challenge;
     }
 }

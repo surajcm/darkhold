@@ -1,5 +1,6 @@
 package com.quiz.darkhold.game.controller;
 
+import com.quiz.darkhold.game.model.Challenge;
 import com.quiz.darkhold.game.model.Game;
 import com.quiz.darkhold.game.model.QuestionOnGame;
 import com.quiz.darkhold.game.model.StartTrigger;
@@ -43,6 +44,7 @@ public class GameController {
         } else {
             questionOnGame = gameService.fetchAnotherQuestion(publishInfo.getPin(), currentQuestionNumber);
         }
+        questionOnGame.setCurrentQuestionNumber(questionOnGame.getCurrentQuestionNumber() + 1);
         model.addAttribute("QuestionOnGame", questionOnGame);
         return "question";
     }
@@ -52,8 +54,10 @@ public class GameController {
         logger.info("On to game :");
         PublishInfo publishInfo = gameService.getActiveChallenge();
         int currentQuestionNumber = gameService.getCurrentQuestionNo(publishInfo.getPin());
-        //get next question number + increment current q#
-        //put the question to the model
+        Challenge challenge = gameService.getCurrentQuestionSet(publishInfo.getPin(),
+                currentQuestionNumber + 1);
+        challenge.setQuestionNumber(challenge.getQuestionNumber() + 1);
+        model.addAttribute("challenge", challenge);
         return "game";
     }
 
