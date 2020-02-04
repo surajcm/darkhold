@@ -11,13 +11,9 @@
         function startTimer(duration, display) {
             var timer = duration, minutes, seconds;
             setInterval(function () {
-                minutes = parseInt(timer / 60, 10)
                 seconds = parseInt(timer % 60, 10);
 
-                minutes = minutes < 10 ? "0" + minutes : minutes;
-                seconds = seconds < 10 ? "0" + seconds : seconds;
-
-                display.textContent = minutes + ":" + seconds;
+                display.textContent = seconds;
 
                 if (--timer < 0) {
                     timer = duration;
@@ -26,9 +22,9 @@
         }
 
         window.onload = function () {
-            var fiveMinutes = 60 * 5,
+            var twentySeconds = 20,
                 display = document.querySelector('#time');
-            startTimer(fiveMinutes, display);
+            startTimer(twentySeconds, display);
         };
     </script>
 </head>
@@ -78,7 +74,7 @@
                 </div>
             </div>
         </div>
-        <div>Registration closes in <span id="time">05:00</span> minutes!</div>
+        <div><span id="time">20</span></div>
     </div>
 </form>
 <script type="text/javascript" src="scripts/jquery-3.2.1.slim.min.js"></script>
