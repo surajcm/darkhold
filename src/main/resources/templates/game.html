@@ -105,19 +105,22 @@
     $(document).ready(function() {
 
 			var clock2;
-			clock2 = $('.clock2').FlipClock({
-		        clockFace: 'MinuteCounter',
-		        autoStart: false,
-		        callbacks: {
-		        	stop: function() {
-		        		$('.message').html('The clock has stopped!')
-		        	}
-		        }
-		    });
+			clock2 = new FlipClock($('.clock2'), 20, {
+					clockFace: 'Counter'
+			});
 
-		    clock2.setTime(20);
-		    clock2.setCountdown(true);
-		    clock2.start();
+			var timer = new FlipClock.Timer(clock2, {
+					callbacks: {
+						interval: function() {
+							clock2.decrement()
+						},
+						stop: function() {
+		        		    $('.message').html('The clock has stopped!')
+		        	    }
+					}
+				});
+				timer.start();
+
             $( "span.flip-clock-divider" ).remove();
 		});
 </script>
