@@ -61,6 +61,18 @@ public class GameController {
         return "game";
     }
 
+    @PostMapping("/timed")
+    public String timed(Model model) {
+        logger.info("On to the timed :");
+        return "timeout";
+    }
+
+    @PostMapping("/check_score")
+    public String scoreCheck(Model model) {
+        logger.info("On to the check_score :");
+        return "scoreboard";
+    }
+
     @MessageMapping("/user")
     @SendTo("/topic/user")
     public UserResponse getGame(Game game) {

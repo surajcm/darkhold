@@ -89,7 +89,8 @@
     });
 
     function callTimeOut() {
-        alert("triggering timeout");
+        document.forms[0].action="/timed";
+        document.forms[0].submit();
     }
 </script>
 </body>
