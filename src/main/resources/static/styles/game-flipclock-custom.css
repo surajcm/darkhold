@@ -1,0 +1,35 @@
+.flip-clock-wrapper ul li a div.down{
+    border-bottom-left-radius: 0px !important;
+    border-bottom-right-radius: 0px !important;
+}
+.clock.flip-clock-wrapper ul li a div div.inn{
+    font-size: 11px !important;
+    line-height: 25px !important;
+}
+ul.flip {
+    padding: 0px 10px !important;
+}
+.clock.flip-clock-wrapper ul{
+  width: 15px !important;
+  height: 25px !important;
+}
+.clock.flip-clock-wrapper ul li a div.up:after{
+    top: 12px !important;
+}
+.flip-clock-wrapper ul.flip.flip:nth-child(even){
+    margin: 0px 10px 0px 0px !important;
+    border-radius: 0px 6px 6px 0px !important;
+}
+.flip-clock-wrapper ul.flip:nth-child(even) li a div div.inn{
+    background-color: #ff7c0c !important;
+    border-radius: 0px 6px 6px 0px !important;
+}
+
+.flip-clock-wrapper ul.flip.flip:nth-child(odd){
+    margin: 0px !important;
+    border-radius: 6px 0px 0px 6px !important;
+}
+.flip-clock-wrapper ul.flip:nth-child(odd) li a div div.inn{
+    background-color: #f39a3f !important;
+    border-radius: 6px 0px 0px 6px !important;
+}

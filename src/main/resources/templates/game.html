@@ -8,44 +8,7 @@
     <link href="styles/font-awesome-all.5.11.2.min.css" rel="stylesheet" />
     <link href="styles/game-styles.css" rel="stylesheet" />
     <link rel="stylesheet" href="styles/flipclock.css" />
-    <style type="text/css">
-            .flip-clock-wrapper ul li a div.down{
-                border-bottom-left-radius: 0px !important;
-                border-bottom-right-radius: 0px !important;
-            }
-            .clock.flip-clock-wrapper ul li a div div.inn{
-                font-size: 11px !important;
-                line-height: 25px !important;
-            }
-            ul.flip {
-                padding: 0px 10px !important;
-            }
-            .clock.flip-clock-wrapper ul{
-              width: 15px !important;
-              height: 25px !important;
-            }
-            .clock.flip-clock-wrapper ul li a div.up:after{
-                top: 12px !important;
-            }
-            .flip-clock-wrapper ul.flip.flip:nth-child(even){
-                margin: 0px 10px 0px 0px !important;
-                border-radius: 0px 6px 6px 0px !important;
-            }
-            .flip-clock-wrapper ul.flip:nth-child(even) li a div div.inn{
-                background-color: #ff7c0c !important;
-                border-radius: 0px 6px 6px 0px !important;
-            }
-
-            .flip-clock-wrapper ul.flip.flip:nth-child(odd){
-                margin: 0px !important;
-                border-radius: 6px 0px 0px 6px !important;
-            }
-            .flip-clock-wrapper ul.flip:nth-child(odd) li a div div.inn{
-                background-color: #f39a3f !important;
-                border-radius: 6px 0px 0px 6px !important;
-            }
-    </style>
-
+    <link rel="stylesheet" href="styles/game-flipclock-custom.css" />
 </head>
 <body>
 <form action="#" th:object="${challenge}" method="post">
@@ -103,26 +66,31 @@
 <script type="text/javascript" src="scripts/flipclock.js"></script>
 <script type="text/javascript">
     $(document).ready(function() {
+        var clock2;
+        clock2 = new FlipClock($('.clock2'), 20, {
+                clockFace: 'Counter'
+        });
 
-			var clock2;
-			clock2 = new FlipClock($('.clock2'), 20, {
-					clockFace: 'Counter'
-			});
+        var timer = new FlipClock.Timer(clock2, {
+            callbacks: {
+                interval: function() {
+                    if (clock2.getTime().time <= 0) {
+                        clock2.stop();
+                        timer.stop();
+                        callTimeOut();
+                    }
+                    clock2.decrement()
+                }
+            }
+        });
+        timer.start();
 
-			var timer = new FlipClock.Timer(clock2, {
-					callbacks: {
-						interval: function() {
-							clock2.decrement()
-						},
-						stop: function() {
-		        		    $('.message').html('The clock has stopped!')
-		        	    }
-					}
-				});
-				timer.start();
+        $( "span.flip-clock-divider" ).remove();
+    });
 
-            $( "span.flip-clock-divider" ).remove();
-		});
+    function callTimeOut() {
+        alert("triggering timeout");
+    }
 </script>
 </body>
 </html>
