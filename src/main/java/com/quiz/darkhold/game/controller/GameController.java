@@ -70,6 +70,7 @@ public class GameController {
     @PostMapping("/check_score")
     public String scoreCheck(Model model) {
         logger.info("On to the check_score :");
+        //todo: load the score
         return "scoreboard";
     }
 
