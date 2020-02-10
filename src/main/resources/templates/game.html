@@ -23,7 +23,7 @@
         <div class="box">
             <div class="container">
                 <div class="row">
-                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                    <div id="optionA" class="col-lg-6 col-md-6 col-sm-6 col-xs-12" onclick="waitAndShowAnswer(this)">
                         <div class="box-part text-center">
                             <i class="fab fa-instagram fa-3x" aria-hidden="true"></i>
                             <div class="title">
@@ -31,7 +31,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                    <div id="optionB" class="col-lg-6 col-md-6 col-sm-6 col-xs-12" onclick="waitAndShowAnswer(this)">
                         <div class="box-part text-center">
                             <i class="fab fa-twitter fa-3x" aria-hidden="true"></i>
                             <div class="title">
@@ -39,7 +39,8 @@
                             </div>
                         </div>
                     </div>
-                    <div th:if="${not #strings.isEmpty(challenge.QuestionSet.answer3)}" class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                    <div id="optionC"  th:if="${not #strings.isEmpty(challenge.QuestionSet.answer3)}"
+                         class="col-lg-6 col-md-6 col-sm-6 col-xs-12" onclick="waitAndShowAnswer(this)">
                         <div class="box-part text-center">
                             <i class="fab fa-facebook fa-3x" aria-hidden="true"></i>
                             <div class="title">
@@ -47,7 +48,8 @@
                             </div>
                         </div>
                     </div>
-                    <div th:if="${not #strings.isEmpty(challenge.QuestionSet.answer4)}" class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                    <div id="optionD" th:if="${not #strings.isEmpty(challenge.QuestionSet.answer4)}"
+                         class="col-lg-6 col-md-6 col-sm-6 col-xs-12" onclick="waitAndShowAnswer(this)">
                         <div class="box-part text-center">
                             <i class="fab fa-pinterest-p fa-3x" aria-hidden="true"></i>
                             <div class="title">
@@ -93,6 +95,10 @@
     function callTimeOut() {
         document.forms[0].action="/timed";
         document.forms[0].submit();
+    }
+
+    function waitAndShowAnswer(elem) {
+        alert(elem.id);
     }
 </script>
 </body>
