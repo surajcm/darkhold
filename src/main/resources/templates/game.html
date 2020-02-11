@@ -98,7 +98,23 @@
     }
 
     function waitAndShowAnswer(elem) {
-        alert(elem.id);
+        var correctAnswer = document.getElementById('correctOptions').value;
+        console.log('correctAnswer '+correctAnswer);
+        var selectedAnswer = elem.id.charAt(elem.id.length -1);
+        console.log('selectedAnswer '+selectedAnswer);
+        // split with comma
+        var answers = correctAnswer.split(",");
+        var correct = false;
+        for (i = 0; i < answers.length; i++) {
+            if ( selectedAnswer == answers[i] ) {
+                correct = true;
+            }
+        }
+        if (correct) {
+            alert("Selected answer is correct");
+        } else {
+            alert("Selected answer is incorrect");
+        }
     }
 </script>
 </body>
