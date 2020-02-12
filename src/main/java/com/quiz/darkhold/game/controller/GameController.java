@@ -14,6 +14,7 @@ import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -62,8 +63,8 @@ public class GameController {
     }
 
     @PostMapping("/timed")
-    public String timed(Model model) {
-        logger.info("On to the timed :");
+    public String timed(Model model, @ModelAttribute("selectedOptions") String selectedOptions) {
+        logger.info("On to the timed :"+ selectedOptions);
         return "timeout";
     }
 
