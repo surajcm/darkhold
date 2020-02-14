@@ -14,7 +14,7 @@
 <form action="#" th:object="${challenge}" method="post">
     <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
     <input type="hidden" th:value="${challenge.QuestionSet.correctOptions}" id="correctOptions"/>
-    <input type="hidden" id="selectedOptions"/>
+    <input type="hidden" th:name="selectedOptions" id="selectedOptions"/>
     <div class="container">
         <div class="row pt-1 pb-1">
             <div class="col-lg-12">
