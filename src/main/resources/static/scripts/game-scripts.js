@@ -41,10 +41,41 @@ function waitAndShowAnswer(elem) {
         }
     }
     if (correct) {
-        alert("Selected answer is correct");
+        //alert("Selected answer is correct");
         document.getElementById('selectedOptions').value = "correct";
+        hideOptions();
     } else {
-        alert("Selected answer is incorrect");
+        //alert("Selected answer is incorrect");
         document.getElementById('selectedOptions').value = "incorrect";
+        hideOptions();
     }
+}
+
+function hideOptions() {
+    var optionA = document.getElementById("optionA");
+    optionA.setAttribute('style','display:none');
+    var optionB = document.getElementById("optionB");
+    optionB.setAttribute('style','display:none');
+    var optionC = document.getElementById("optionC");
+    if (optionC != null) {
+        optionC.setAttribute('style','display:none');
+    }
+    var optionD = document.getElementById("optionD");
+    if(optionD != null) {
+        optionD.setAttribute('style','display:none');
+    }
+    var answerSpace = document.getElementById("answerSpace");
+    //<div class="spinner-grow" style="width: 3rem; height: 3rem;" role="status">
+    //  <span class="sr-only">Loading...</span>
+    //</div>
+    var spinner = document.createElement('div');
+    spinner.id = 'spinner';
+    spinner.class = 'spinner-grow';
+    spinner.style="width: 3rem; height: 3rem;"
+    spinner.role="status"
+    var loader = document.createElement('span');
+    loader.class ="sr-only";
+    spinner.appendChild(loader);
+    answerSpace.appendChild(spinner);
+
 }

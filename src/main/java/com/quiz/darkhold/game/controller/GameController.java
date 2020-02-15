@@ -1,12 +1,15 @@
 package com.quiz.darkhold.game.controller;
 
 import com.quiz.darkhold.game.model.Challenge;
+import com.quiz.darkhold.game.model.CurrentStatus;
+import com.quiz.darkhold.game.model.ExamStatus;
 import com.quiz.darkhold.game.model.Game;
 import com.quiz.darkhold.game.model.QuestionOnGame;
 import com.quiz.darkhold.game.model.StartTrigger;
 import com.quiz.darkhold.game.model.UserResponse;
 import com.quiz.darkhold.game.service.GameService;
 import com.quiz.darkhold.preview.model.PublishInfo;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -64,6 +67,21 @@ public class GameController {
     @PostMapping("/timed")
     public String timed(Model model, @RequestParam("selectedOptions") String selectedOptions) {
         logger.info("On to the timed :"+ selectedOptions);
+        ExamStatus status;
+        CurrentStatus currentStatus = new CurrentStatus();
+        if (StringUtils.isNotEmpty(selectedOptions)) {
+            if (selectedOptions.equalsIgnoreCase("correct")) {
+                status = ExamStatus.SUCCESS;
+            } else if (selectedOptions.equalsIgnoreCase("incorrect")) {
+                status = ExamStatus.FAILURE;
+            } else {
+                status = ExamStatus.TIME_OUT;
+            }
+        } else {
+            status = ExamStatus.TIME_OUT;
+        }
+        currentStatus.setStatus(status.name());
+        model.addAttribute("currentStatus", currentStatus);
         return "timeout";
     }
 

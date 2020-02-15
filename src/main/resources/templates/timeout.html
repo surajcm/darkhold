@@ -8,7 +8,7 @@
     <link href="styles/error-styles.css" rel="stylesheet" />
     <script type="text/javascript">
         function loading() {
-            setTimeout(function(){ checkScore(); }, 2000);
+            setTimeout(function(){ checkScore(); }, 5000);
         }
         function checkScore() {
             document.forms[0].action="/check_score";
@@ -17,11 +17,11 @@
     </script>
 </head>
 <body onload="loading()">
-<form action="#" method="post">
+<form action="#" th:object="${currentStatus}" method="post">
     <div class="container">
         <div class="body-style">
             <div style="width:45%;float:left;margin-left:50px;">
-                <h1 style="font-weight:bold;font-size:34px;">Timed Out !!!!</h1>
+                <h1 style="font-weight:bold;font-size:34px;">[[${currentStatus.status}]] !!!!</h1>
             </div>
         </div>
     </div>
