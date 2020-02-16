@@ -20,6 +20,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.security.Principal;
 import java.util.List;
 
 @SuppressWarnings("unused")
@@ -102,8 +103,10 @@ public class GameController {
 
     @MessageMapping("/start")
     @SendTo("/topic/start")
-    public StartTrigger startGame(String pin) {
+    public StartTrigger startGame(String pin, Principal principal) {
+        // this is triggered by the game moderator
         logger.info("On to startGame :" + pin);
+        logger.info("On to startGame : user : " + principal.getName());
         return new StartTrigger(pin);
     }
 }

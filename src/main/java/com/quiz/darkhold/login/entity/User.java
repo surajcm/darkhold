@@ -9,6 +9,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 import java.util.Set;
+import java.util.StringJoiner;
 
 @Entity
 @Table(name = "user")
@@ -65,5 +66,16 @@ public class User {
 
     public void setRoles(Set<Role> roles) {
         this.roles = roles;
+    }
+
+    @Override
+    public String toString() {
+        return new StringJoiner(", ", User.class.getSimpleName() + "[", "]")
+                .add("id=" + id)
+                .add("username='" + username + "'")
+                .add("password='" + password + "'")
+                .add("passwordConfirm='" + passwordConfirm + "'")
+                .add("roles=" + roles)
+                .toString();
     }
 }
