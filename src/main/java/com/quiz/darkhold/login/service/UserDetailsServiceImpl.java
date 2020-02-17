@@ -1,6 +1,5 @@
 package com.quiz.darkhold.login.service;
 
-import com.quiz.darkhold.login.entity.Role;
 import com.quiz.darkhold.login.entity.User;
 import com.quiz.darkhold.login.repository.UserRepository;
 import org.slf4j.Logger;
@@ -14,8 +13,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
@@ -31,11 +30,11 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         if (user == null) throw new UsernameNotFoundException(username);
         logger.info("current user ->" + user);
 
-        Set<GrantedAuthority> grantedAuthorities = new HashSet<>();
-        for (Role role : user.getRoles()){
-            grantedAuthorities.add(new SimpleGrantedAuthority(role.getName()));
-        }
+        Set<GrantedAuthority> grantedAuthorities =
+                user.getRoles().stream().map(role -> new SimpleGrantedAuthority(role.getName()))
+                        .collect(Collectors.toSet());
 
-        return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(), grantedAuthorities);
+        return new org.springframework.security.core.userdetails.User(user.getUsername(),
+                user.getPassword(), grantedAuthorities);
     }
 }
