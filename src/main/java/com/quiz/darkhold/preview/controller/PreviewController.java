@@ -11,6 +11,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.security.Principal;
+
 @SuppressWarnings("unused")
 @Controller
 public class PreviewController {
@@ -28,9 +30,9 @@ public class PreviewController {
     }
 
     @PostMapping("/publish")
-    public String publish(Model model, @RequestParam("challenge_id") String challengeId) {
+    public String publish(Model model, @RequestParam("challenge_id") String challengeId, Principal principal) {
         log.info("into publish method : " + challengeId);
-        PublishInfo publishInfo = previewService.generateQuizPin(challengeId);
+        PublishInfo publishInfo = previewService.generateQuizPin(challengeId, principal.getName());
         model.addAttribute("quizPin", publishInfo.getPin());
         model.addAttribute("user", publishInfo.getUsername());
         log.info("publish method, quizPin : " + publishInfo.getPin());

@@ -13,6 +13,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import static org.dizitart.no2.filters.Filters.eq;
 
@@ -52,13 +53,11 @@ public class CurrentGame {
         collection.update(doc);
     }
 
-    public void saveQuestionsToActiveGame(String pin, List<QuestionSet> questionSets) {
+    public void saveQuestionsToActiveGame(String pin, Set<QuestionSet> questionSets) {
         Cursor cursor = collection.find(Filters.and(eq(PIN, pin)));
         Document doc = cursor.toList().get(0);
-        List<QuestionSet> questions = (List<QuestionSet>) doc.get("questions");
+        Set<QuestionSet> questions = (Set<QuestionSet>) doc.get("questions");
         questions.addAll(questionSets);
-        int questionCount = (Integer) doc.get("currentQuestionNo");
-        questionCount++;
         collection.update(doc);
     }
 

@@ -1,7 +1,6 @@
 function uploadPDF() {
 
     var uploadButton = document.getElementById('btnSubmit');
-
     var progress = document.getElementById('progress');
     var progressdiv = document.getElementById('progressdiv');
     progress.style.display = "block";

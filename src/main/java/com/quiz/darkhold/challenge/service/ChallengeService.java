@@ -21,8 +21,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -50,7 +50,7 @@ public class ChallengeService {
     }
 
     private Set<QuestionSet> readAndProcessChallenge(MultipartFile upload) throws ChallengeException {
-        Set<QuestionSet> questionSets = new HashSet<>();
+        Set<QuestionSet> questionSets = new LinkedHashSet<>();
         Workbook workbook = null;
         try {
             workbook = new XSSFWorkbook(upload.getInputStream());

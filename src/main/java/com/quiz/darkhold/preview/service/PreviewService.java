@@ -10,12 +10,8 @@ import com.quiz.darkhold.preview.model.PublishInfo;
 import com.quiz.darkhold.preview.repository.CurrentGame;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -34,7 +30,7 @@ public class PreviewService {
         PreviewInfo previewInfo = new PreviewInfo();
         Long challengeOne = Long.valueOf(challengeId);
         Challenge challenge = challengeRepository.getOne(challengeOne);
-        previewInfo.setQuestionSets(new ArrayList<>(challenge.getQuestionSets()));
+        previewInfo.setQuestionSets(challenge.getQuestionSets());
         previewInfo.setChallengeName(challenge.getTitle());
         previewInfo.setChallengeId(challengeId);
         return previewInfo;
@@ -46,15 +42,14 @@ public class PreviewService {
         PreviewInfo previewInfo = new PreviewInfo();
         Long challengeOne = Long.valueOf(challengeId);
         Challenge challenge = challengeRepository.getOne(challengeOne);
-        previewInfo.setQuestionSets(new ArrayList<>(challenge.getQuestionSets()));
+        previewInfo.setQuestionSets(challenge.getQuestionSets());
         previewInfo.setChallengeName(challenge.getTitle());
         previewInfo.setChallengeId(challengeId);
         return previewInfo;
     }
 
-    public PublishInfo generateQuizPin(String challengeId) {
+    public PublishInfo generateQuizPin(String challengeId, String currentUser) {
         String generatedString = RandomStringUtils.random(5, false, true);
-        String currentUser = getUsername();
         Game game = new Game();
         game.setPin(generatedString);
         game.setGameStatus(GameStatus.WAITING.name());
@@ -67,19 +62,14 @@ public class PreviewService {
         return publishInfo;
     }
 
-    private String getUsername() {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        User user = (org.springframework.security.core.userdetails.User) auth.getPrincipal();
-        return user.getUsername();
-    }
 
-    public PublishInfo getActiveChallenge() {
+    public PublishInfo getActiveChallenge(String name) {
         List<Game> activeGames = gameRepository.findByGameStatusNot(GameStatus.FINISHED.name());
         Game activeGame = activeGames.get(0);
         //currently, we are taking the first one, may need optimization if we run multiple games in parallel
         PublishInfo publishInfo = new PublishInfo();
         publishInfo.setPin(activeGame.getPin());
-        publishInfo.setUsername(getUsername());
+        publishInfo.setUsername(name);
         return publishInfo;
     }
 }

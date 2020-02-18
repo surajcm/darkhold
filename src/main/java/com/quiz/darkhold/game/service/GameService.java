@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Set;
 
 @Service
 public class GameService {
@@ -22,8 +23,8 @@ public class GameService {
     private PreviewService previewService;
 
 
-    public PublishInfo getActiveChallenge() {
-        return  previewService.getActiveChallenge();
+    public PublishInfo getActiveChallenge(String name) {
+        return  previewService.getActiveChallenge(name);
     }
 
     public List<String> saveAndGetAllParticipants(String pin, String userName) {
@@ -41,12 +42,12 @@ public class GameService {
 
     public QuestionOnGame initialFetchAndUpdateNitrate(String pin) {
         PreviewInfo previewInfo = previewService.fetchQuestionsFromPin(pin);
-        List<QuestionSet> questionSets = previewInfo.getQuestionSets();
+        Set<QuestionSet> questionSets = previewInfo.getQuestionSets();
         // fetch the questions and load it to nitrate
         currentGame.saveQuestionsToActiveGame(pin, questionSets);
         QuestionOnGame questionOnGame = new QuestionOnGame();
         questionOnGame.setCurrentQuestionNumber(0);
-        questionOnGame.setQuestion(questionSets.get(0).getQuestion());
+        questionSets.stream().findFirst().ifPresent(e -> questionOnGame.setQuestion(e.getQuestion()));
         return questionOnGame;
     }
 

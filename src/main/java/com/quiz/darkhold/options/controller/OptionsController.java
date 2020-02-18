@@ -10,6 +10,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import java.security.Principal;
+
 @Controller
 public class OptionsController {
     private final Log log = LogFactory.getLog(OptionsController.class);
@@ -33,9 +35,9 @@ public class OptionsController {
     }
 
     @PostMapping("/activeChallenge")
-    public String activeChallenges(Model model) {
+    public String activeChallenges(Model model, Principal principal) {
         log.info("into the activeChallenge method");
-        PublishInfo publishInfo = previewService.getActiveChallenge();
+        PublishInfo publishInfo = previewService.getActiveChallenge(principal.getName());
         model.addAttribute("quizPin", publishInfo.getPin());
         //todo : find a way to get all users binded
         model.addAttribute("user", publishInfo.getUsername());

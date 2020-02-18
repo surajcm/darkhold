@@ -38,9 +38,9 @@ public class GameController {
     }
 
     @PostMapping("/question")
-    public String question(Model model) {
+    public String question(Model model,Principal principal ) {
         logger.info("On to question :");
-        PublishInfo publishInfo = gameService.getActiveChallenge();
+        PublishInfo publishInfo = gameService.getActiveChallenge(principal.getName());
         int currentQuestionNumber = gameService.getCurrentQuestionNo(publishInfo.getPin());
         QuestionOnGame questionOnGame;
         if (currentQuestionNumber == -1) {
@@ -54,9 +54,9 @@ public class GameController {
     }
 
     @PostMapping("/game")
-    public String startGame(Model model) {
+    public String startGame(Model model, Principal principal) {
         logger.info("On to game :");
-        PublishInfo publishInfo = gameService.getActiveChallenge();
+        PublishInfo publishInfo = gameService.getActiveChallenge(principal.getName());
         int currentQuestionNumber = gameService.getCurrentQuestionNo(publishInfo.getPin());
         Challenge challenge = gameService.getCurrentQuestionSet(publishInfo.getPin(),
                 currentQuestionNumber + 1);
