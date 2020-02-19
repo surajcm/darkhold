@@ -6,6 +6,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.OrderBy;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Table;
@@ -14,7 +15,7 @@ import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.time.OffsetDateTime;
 import java.time.ZoneId;
-import java.util.Set;
+import java.util.List;
 
 @Entity
 @Table(name = "challenge")
@@ -42,7 +43,8 @@ public class Challenge implements Serializable {
     private OffsetDateTime modifiedOn;
 
     @OneToMany(mappedBy = "challenge")
-    private Set<QuestionSet> questionSets;
+    @OrderBy("id")
+    private List<QuestionSet> questionSets;
 
     public Long getId() {
         return id;
@@ -84,11 +86,11 @@ public class Challenge implements Serializable {
         this.modifiedOn = modifiedOn;
     }
 
-    public Set<QuestionSet> getQuestionSets() {
+    public List<QuestionSet> getQuestionSets() {
         return questionSets;
     }
 
-    public void setQuestionSets(Set<QuestionSet> questionSets) {
+    public void setQuestionSets(List<QuestionSet> questionSets) {
         this.questionSets = questionSets;
     }
 

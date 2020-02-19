@@ -23,6 +23,8 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -39,7 +41,7 @@ public class ChallengeService {
 
     public void readProcessAndSaveChallenge(MultipartFile upload, String title, String description)
             throws ChallengeException {
-        Set<QuestionSet> questionSets = readAndProcessChallenge(upload);
+        List<QuestionSet> questionSets = readAndProcessChallenge(upload);
         Challenge challenge = new Challenge();
         challenge.setTitle(title);
         challenge.setDescription(description);
@@ -49,8 +51,8 @@ public class ChallengeService {
         questionSets.forEach(questionSet -> questionSetRepository.save(questionSet));
     }
 
-    private Set<QuestionSet> readAndProcessChallenge(MultipartFile upload) throws ChallengeException {
-        Set<QuestionSet> questionSets = new LinkedHashSet<>();
+    private List<QuestionSet> readAndProcessChallenge(MultipartFile upload) throws ChallengeException {
+        List<QuestionSet> questionSets = new LinkedList<>();
         Workbook workbook = null;
         try {
             workbook = new XSSFWorkbook(upload.getInputStream());

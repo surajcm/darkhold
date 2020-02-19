@@ -42,7 +42,7 @@ public class GameService {
 
     public QuestionOnGame initialFetchAndUpdateNitrate(String pin) {
         PreviewInfo previewInfo = previewService.fetchQuestionsFromPin(pin);
-        Set<QuestionSet> questionSets = previewInfo.getQuestionSets();
+        List<QuestionSet> questionSets = previewInfo.getQuestionSets();
         // fetch the questions and load it to nitrate
         currentGame.saveQuestionsToActiveGame(pin, questionSets);
         QuestionOnGame questionOnGame = new QuestionOnGame();
