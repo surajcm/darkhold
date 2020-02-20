@@ -74,9 +74,12 @@ public class CurrentGame {
         return questions;
     }
 
-    public void incrementQuestionCount(String pin, int currentQuestionNumber) {
+    public void incrementQuestionCount(String pin) {
         Cursor cursor = collection.find(Filters.and(eq(PIN, pin)));
         Integer questionNo = (Integer) cursor.toList().get(0).get("currentQuestionNo");
         questionNo++;
+        Document doc = cursor.toList().get(0);
+        doc.put("currentQuestionNo", questionNo);
+        collection.update(doc);
     }
 }

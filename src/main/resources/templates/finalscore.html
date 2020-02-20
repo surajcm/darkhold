@@ -7,22 +7,18 @@
     <link href="styles/bootstrap.4.0.0.min.css" rel="stylesheet" />
     <link href="styles/error-styles.css" rel="stylesheet" />
     <script type="text/javascript">
-       function checkScore() {
-            document.forms[0].action="/check_score";
-            document.forms[0].submit();
-        }
+
     </script>
 </head>
 <body>
-<form action="#" th:object="${currentStatus}" method="post">
+<form action="#" method="post">
     <div class="container">
         <div class="body-style">
             <div style="width:45%;float:left;margin-left:50px;">
-                <h1 style="font-weight:bold;font-size:34px;">[[${currentStatus.status}]] !!!!</h1>
+                <h1 style="font-weight:bold;font-size:34px;">Final Scores !!!!</h1>
             </div>
             <div>
                 <br/>
-                <button class="button-style" onclick="javascript:checkScore();">Next</button>
             </div>
         </div>
     </div>

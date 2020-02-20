@@ -7,14 +7,16 @@ import com.quiz.darkhold.preview.model.PreviewInfo;
 import com.quiz.darkhold.preview.model.PublishInfo;
 import com.quiz.darkhold.preview.repository.CurrentGame;
 import com.quiz.darkhold.preview.service.PreviewService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Set;
 
 @Service
 public class GameService {
+    private final Logger logger = LoggerFactory.getLogger(GameService.class);
 
     @Autowired
     private CurrentGame currentGame;
@@ -24,7 +26,7 @@ public class GameService {
 
 
     public PublishInfo getActiveChallenge(String name) {
-        return  previewService.getActiveChallenge(name);
+        return previewService.getActiveChallenge(name);
     }
 
     public List<String> saveAndGetAllParticipants(String pin, String userName) {
@@ -51,14 +53,18 @@ public class GameService {
         return questionOnGame;
     }
 
+    public List<QuestionSet> getQuestionsOnAPin(String pin) {
+        return currentGame.getQuestionsOnAPin(pin);
+    }
+
     public QuestionOnGame fetchAnotherQuestion(String pin, int currentQuestionNumber) {
         List<QuestionSet> questionSets = currentGame.getQuestionsOnAPin(pin);
+
         QuestionSet questionSet = questionSets.get(currentQuestionNumber + 1);
 
         QuestionOnGame questionOnGame = new QuestionOnGame();
         questionOnGame.setCurrentQuestionNumber(currentQuestionNumber + 1);
         questionOnGame.setQuestion(questionSet.getQuestion());
-        currentGame.incrementQuestionCount(pin, currentQuestionNumber);
         return questionOnGame;
     }
 
@@ -67,5 +73,9 @@ public class GameService {
         challenge.setQuestionNumber(currentQuestionNumber);
         challenge.setQuestionSet(currentGame.getQuestionsOnAPin(pin).get(currentQuestionNumber));
         return challenge;
+    }
+
+    public void updateQuestionNo(String pin) {
+        currentGame.incrementQuestionCount(pin);
     }
 }

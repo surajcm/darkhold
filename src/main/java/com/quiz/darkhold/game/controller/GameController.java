@@ -1,5 +1,6 @@
 package com.quiz.darkhold.game.controller;
 
+import com.quiz.darkhold.challenge.entity.QuestionSet;
 import com.quiz.darkhold.game.model.Challenge;
 import com.quiz.darkhold.game.model.CurrentStatus;
 import com.quiz.darkhold.game.model.ExamStatus;
@@ -38,7 +39,7 @@ public class GameController {
     }
 
     @PostMapping("/question")
-    public String question(Model model,Principal principal ) {
+    public String question(Model model, Principal principal) {
         logger.info("On to question :");
         PublishInfo publishInfo = gameService.getActiveChallenge(principal.getName());
         int currentQuestionNumber = gameService.getCurrentQuestionNo(publishInfo.getPin());
@@ -46,11 +47,23 @@ public class GameController {
         if (currentQuestionNumber == -1) {
             questionOnGame = gameService.initialFetchAndUpdateNitrate(publishInfo.getPin());
         } else {
-            questionOnGame = gameService.fetchAnotherQuestion(publishInfo.getPin(), currentQuestionNumber);
+            List<QuestionSet> questionSets = gameService.getQuestionsOnAPin(publishInfo.getPin());
+            logger.info("Size of question set is" + questionSets.size()
+                    + ", and current question # is " + currentQuestionNumber);
+            if (questionSets.size() - 1 > currentQuestionNumber) {
+                questionOnGame = gameService.fetchAnotherQuestion(publishInfo.getPin(), currentQuestionNumber);
+            } else {
+                return finalScore(model);
+            }
         }
         questionOnGame.setCurrentQuestionNumber(questionOnGame.getCurrentQuestionNumber() + 1);
         model.addAttribute("QuestionOnGame", questionOnGame);
         return "question";
+    }
+
+    private String finalScore(Model model) {
+        logger.info("On to the finalScore :");
+        return "finalscore";
     }
 
     @PostMapping("/game")
@@ -61,6 +74,7 @@ public class GameController {
         Challenge challenge = gameService.getCurrentQuestionSet(publishInfo.getPin(),
                 currentQuestionNumber + 1);
         challenge.setQuestionNumber(challenge.getQuestionNumber() + 1);
+        gameService.updateQuestionNo(publishInfo.getPin());
         model.addAttribute("challenge", challenge);
         return "game";
     }
