@@ -12,10 +12,9 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 public class ChallengeController {
+    private final Logger logger = LoggerFactory.getLogger(ChallengeController.class);
     @Autowired
     private ChallengeService challengeService;
-
-    private final Logger logger = LoggerFactory.getLogger(ChallengeController.class);
 
     @PostMapping("/options")
     public String options() {
@@ -23,6 +22,15 @@ public class ChallengeController {
         return "options";
     }
 
+    /**
+     * Upload the challenge as a predefined excel sheet
+     *
+     * @param upload             excel file
+     * @param title              game title
+     * @param description        description
+     * @param redirectAttributes no idea
+     * @return its ajax so return a json
+     */
     @PostMapping("/upload_challenge")
     public @ResponseBody
     String handleFileUpload(MultipartFile upload, String title, String description,
@@ -34,7 +42,7 @@ public class ChallengeController {
         logger.info("File details getOriginalFilename : " + upload.getOriginalFilename());
         logger.info("File details getSize : " + upload.getSize());
         try {
-            challengeService.readProcessAndSaveChallenge(upload,title,description);
+            challengeService.readProcessAndSaveChallenge(upload, title, description);
             responseText = "Successfully created " + title + " !!!";
         } catch (Exception e) {
             logger.error(e.getMessage());

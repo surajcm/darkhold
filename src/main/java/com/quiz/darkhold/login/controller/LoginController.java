@@ -32,12 +32,12 @@ public class LoginController {
     @PostMapping("/logme")
     public String loginGet(Model model, @ModelAttribute("userForm") User userForm, String error, String logout) {
         log.info("inside the login method");
-        log.info("model is : "+model.asMap().keySet().toString());
-        log.info("userForm is : "+userForm.getUsername());
+        log.info("model is : " + model.asMap().keySet().toString());
+        log.info("userForm is : " + userForm.getUsername());
         securityService.autoLogin(userForm.getUsername(), userForm.getPassword());
         log.info("autoLogin done !!!");
         if (error != null) {
-            log.info("inside the login method, error : "+ error);
+            log.info("inside the login method, error : " + error);
             model.addAttribute("error", "Your username and password is invalid.");
         }
 

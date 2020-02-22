@@ -22,22 +22,18 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Iterator;
-import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @Service
 public class ChallengeService {
+    private final Logger logger = LoggerFactory.getLogger(ChallengeService.class);
     @Autowired
     private ChallengeRepository challengeRepository;
-
     @Autowired
     private QuestionSetRepository questionSetRepository;
-
-    private final Logger logger = LoggerFactory.getLogger(ChallengeService.class);
 
     public void readProcessAndSaveChallenge(MultipartFile upload, String title, String description)
             throws ChallengeException {
@@ -122,7 +118,7 @@ public class ChallengeService {
             result = String.valueOf(currentCell.getBooleanCellValue());
         } else {
             logger.error("Invalid cell type on  " + currentCell.getColumnIndex()
-                    + " is "+currentCell.getCellType().name());
+                    + " is " + currentCell.getCellType().name());
         }
         return result;
     }
