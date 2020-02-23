@@ -1,7 +1,7 @@
 apply plugin: 'checkstyle'
 apply plugin: 'pmd'
 apply plugin: 'jacoco'
-apply plugin: 'com.github.spotbugs'
+//apply plugin: 'com.github.spotbugs'
 
 checkstyle {
     toolVersion = '8.12'
@@ -10,13 +10,13 @@ checkstyle {
     maxWarnings = 0
 }
 
-spotbugs {
-    toolVersion = '3.1.12'
-    ignoreFailures = true
-}
+//spotbugs {
+    //toolVersion = '3.1.12'
+    //ignoreFailures = true
+//}
 
 pmd {
-    toolVersion = '6.20'
+    toolVersion = '6.17.0'
     ignoreFailures = false
     ruleSetFiles = files("gradle/static-code-analysis/pmd/ruleset.xml")
     ruleSets = []

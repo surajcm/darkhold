@@ -21,6 +21,13 @@ public class PreviewController {
     @Autowired
     private PreviewService previewService;
 
+    /**
+     * on to the preview page with the selected challenge
+     *
+     * @param model      model
+     * @param challenges selected one
+     * @return preview page
+     */
     @PostMapping("/preconfigure")
     public String preconfigure(Model model, @RequestParam("challenges") String challenges) {
         log.info("into the preconfigure method : " + challenges);
@@ -29,6 +36,14 @@ public class PreviewController {
         return "preview";
     }
 
+    /**
+     * publish the game
+     *
+     * @param model       model
+     * @param challengeId of game
+     * @param principal   auth
+     * @return publish page
+     */
     @PostMapping("/publish")
     public String publish(Model model, @RequestParam("challenge_id") String challengeId, Principal principal) {
         log.info("into publish method : " + challengeId);

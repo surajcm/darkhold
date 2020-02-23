@@ -7,8 +7,6 @@ import com.quiz.darkhold.preview.model.PreviewInfo;
 import com.quiz.darkhold.preview.model.PublishInfo;
 import com.quiz.darkhold.preview.repository.CurrentGame;
 import com.quiz.darkhold.preview.service.PreviewService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,8 +14,6 @@ import java.util.List;
 
 @Service
 public class GameService {
-    private final Logger logger = LoggerFactory.getLogger(GameService.class);
-
     @Autowired
     private CurrentGame currentGame;
 
@@ -42,6 +38,12 @@ public class GameService {
         return currentGame.getCurrentQuestionNo(pin);
     }
 
+    /**
+     * During start of the game, get the first question
+     *
+     * @param pin of the game
+     * @return question
+     */
     public QuestionOnGame initialFetchAndUpdateNitrate(String pin) {
         PreviewInfo previewInfo = previewService.fetchQuestionsFromPin(pin);
         List<QuestionSet> questionSets = previewInfo.getQuestionSets();
@@ -57,6 +59,13 @@ public class GameService {
         return currentGame.getQuestionsOnAPin(pin);
     }
 
+    /**
+     * Fetch the next question and it's options
+     *
+     * @param pin                   game pin
+     * @param currentQuestionNumber current one
+     * @return question
+     */
     public QuestionOnGame fetchAnotherQuestion(String pin, int currentQuestionNumber) {
         List<QuestionSet> questionSets = currentGame.getQuestionsOnAPin(pin);
 
@@ -68,6 +77,13 @@ public class GameService {
         return questionOnGame;
     }
 
+    /**
+     * Once we have the question number, get the questions from nitrate
+     *
+     * @param pin                   of game
+     * @param currentQuestionNumber yes it is
+     * @return challenge
+     */
     public Challenge getCurrentQuestionSet(String pin, int currentQuestionNumber) {
         Challenge challenge = new Challenge();
         challenge.setQuestionNumber(currentQuestionNumber);

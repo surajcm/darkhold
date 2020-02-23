@@ -19,7 +19,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private UserDetailsService userDetailsService;
 
     @Bean
-    public BCryptPasswordEncoder bCryptPasswordEncoder() {
+    public BCryptPasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
@@ -29,18 +29,22 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.csrf().disable()
                 .httpBasic()
                 .and()
-                .authorizeRequests().antMatchers("/options","/createChallenge","/viewChallenge").authenticated()
+                .authorizeRequests().antMatchers("/options","/createChallenge","/viewChallenge")
+                    .authenticated()
                 .and()
-                .authorizeRequests().antMatchers("/", "/home","/resources/**","/registration","/images/*","/logmein","/logme").permitAll()
+                .authorizeRequests().antMatchers("/", "/home","/resources/**","/registration",
+                    "/images/*","/logmein","/logme").permitAll()
                 .and()
                 .logout()
                 .logoutSuccessUrl("/")
                 .invalidateHttpSession(true)
                 .deleteCookies("JSESSIONID");
         /*http.authorizeRequests()
-                    .antMatchers("/", "/home","/resources/**","/registration","/images/*","/logmein","/logme").permitAll()
+                    .antMatchers("/", "/home","/resources/**","/registration","/images/*",
+                        "/logmein","/logme").permitAll()
                     .and().antMatcher("/viewChallenge").authorizeRequests();*/
-        //http.authorizeRequests().antMatchers("/options","/createChallenge","viewChallenge").authenticated();
+        //http.authorizeRequests().antMatchers("/options","/createChallenge",
+        //  "viewChallenge").authenticated();
     }
 
     @Bean
@@ -50,6 +54,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(userDetailsService).passwordEncoder(bCryptPasswordEncoder());
+        auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
     }
 }

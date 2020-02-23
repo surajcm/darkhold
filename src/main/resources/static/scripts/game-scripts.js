@@ -23,7 +23,7 @@ $(document).ready(function() {
 
 function callTimeOut() {
     //alert(document.getElementById('selectedOptions').value);
-    document.forms[0].action="/timed";
+    document.forms[0].action="/answer";
     document.forms[0].submit();
 }
 

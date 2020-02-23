@@ -14,8 +14,8 @@ public class UserValidator implements Validator {
     private UserService userService;
 
     @Override
-    public boolean supports(Class<?> aClass) {
-        return User.class.equals(aClass);
+    public boolean supports(Class<?> clazz) {
+        return User.class.equals(clazz);
     }
 
     @Override

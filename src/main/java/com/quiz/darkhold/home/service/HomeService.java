@@ -17,6 +17,11 @@ public class HomeService {
     @Autowired
     private CurrentGame currentGame;
 
+    /**
+     * Verifies whether the entered pin is valid or not
+     * @param pin pin
+     * @return true or false
+     */
     public Boolean validateGamePin(String pin) {
         Game game = gameRepository.findByPin(pin);
         if (game != null && (game.getGameStatus().equalsIgnoreCase(GameStatus.WAITING.name())

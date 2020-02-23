@@ -16,10 +16,15 @@ public class OptionsService {
     @Autowired
     private ChallengeRepository challengeRepository;
 
+    /**
+     * get all challenges and display it there
+     * @return challenges
+     */
     public ChallengeInfo populateChallengeInfo() {
         ChallengeInfo challengeInfo = new ChallengeInfo();
         List<ChallengeSummary> summaries = new ArrayList<>();
         List<Challenge>  challenges = challengeRepository.findAll();
+        //todo : use streams
         for (Challenge challenge:challenges) {
             ChallengeSummary summary = new ChallengeSummary();
             summary.setChallengeId(challenge.getId().intValue());

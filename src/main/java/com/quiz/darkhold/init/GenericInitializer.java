@@ -8,6 +8,11 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class GenericInitializer {
 
+    /**
+     * Create the bean for in memory nitrate db
+     *
+     * @return bean of nitrate
+     */
     @Bean
     public NitriteCollection createNitriteCollection() {
         Nitrite db = Nitrite.builder()
@@ -15,8 +20,7 @@ public class GenericInitializer {
                 .filePath("/tmp/test.db")
                 .openOrCreate("user", "password");
         // Create a Nitrite Collection
-        NitriteCollection collection = db.getCollection("test");
-        return collection;
+        return db.getCollection("test");
     }
 
 }

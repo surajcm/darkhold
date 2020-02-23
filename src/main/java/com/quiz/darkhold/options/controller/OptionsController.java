@@ -21,12 +21,21 @@ public class OptionsController {
     @Autowired
     private PreviewService previewService;
 
+    /**
+     * on to create challenge page
+     * @return create challenge page
+     */
     @PostMapping("/createChallenge")
     public String createChallenge() {
         log.info("into the createChallenge method");
         return "createchallenge";
     }
 
+    /**
+     * on to view challenge page, with a view of challenges
+     * @param model model
+     * @return view challenge page
+     */
     @PostMapping("/viewChallenge")
     public String viewChallenges(Model model) {
         log.info("into the viewChallenge method");
@@ -34,6 +43,12 @@ public class OptionsController {
         return "viewchallenges";
     }
 
+    /**
+     * show the currently running challenge
+     * @param model model
+     * @param principal auth
+     * @return publish page
+     */
     @PostMapping("/activeChallenge")
     public String activeChallenges(Model model, Principal principal) {
         log.info("into the activeChallenge method");

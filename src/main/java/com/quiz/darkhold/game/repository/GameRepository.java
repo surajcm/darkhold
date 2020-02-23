@@ -7,7 +7,8 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface GameRepository  extends JpaRepository<Game, Long> {
+public interface GameRepository extends JpaRepository<Game, Long> {
     Game findByPin(String pin);
+
     List<Game> findByGameStatusNot(String gameStatus);
 }

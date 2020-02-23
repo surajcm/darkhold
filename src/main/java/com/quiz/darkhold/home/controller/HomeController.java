@@ -27,7 +27,11 @@ public class HomeController {
     @Autowired
     private SecurityService securityService;
 
-
+    /**
+     * Initial home redirect
+     * @param model model
+     * @return to index
+     */
     @GetMapping("/")
     public String home(Model model) {
         logger.info("Going home page ");
@@ -35,6 +39,11 @@ public class HomeController {
         return "index";
     }
 
+    /**
+     * same home redirect from various pages on post
+     * @param model model
+     * @return to index
+     */
     @PostMapping("/home")
     public String toHome(Model model) {
         logger.info("Going to toHome page ");
@@ -42,16 +51,27 @@ public class HomeController {
         return "index";
     }
 
+    /**
+     * Validate the user entered pin and direct the user to name entering screen
+     * @param gamePin pin
+     * @return ajax call to same page
+     */
     @PostMapping("/enterGame/")
     public @ResponseBody
     Boolean enterGame(@ModelAttribute("gamePin") String gamePin) {
-        logger.info("Game pin is "+ gamePin);
+        logger.info("Game pin is " + gamePin);
         return homeService.validateGamePin(gamePin);
     }
 
+    /**
+     * If the user entered pin is correct, go to the page where everyone waits for the game to start
+     * @param gameInfo user info
+     * @param model model
+     * @return wait screen
+     */
     @PostMapping("/joinGame")
     public String joinGame(@ModelAttribute GameInfo gameInfo, Model model) {
-        logger.info("joinGame : gameInfo is "+ gameInfo);
+        logger.info("joinGame : gameInfo is " + gameInfo);
         securityService.autoLogin(gameInfo.getName(), UNREGISTERED_USER);
         logger.info("autoLogin done !!!");
         List<String> activeUsers = homeService.participantsInActiveQuiz(gameInfo.getGamePin());

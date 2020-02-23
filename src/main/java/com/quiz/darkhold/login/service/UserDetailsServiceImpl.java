@@ -18,16 +18,17 @@ import java.util.stream.Collectors;
 
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
+    private static final Logger logger = LoggerFactory.getLogger(UserDetailsServiceImpl.class);
     @Autowired
     private UserRepository userRepository;
-
-    private static final Logger logger = LoggerFactory.getLogger(UserDetailsServiceImpl.class);
 
     @Override
     @Transactional(readOnly = true)
     public UserDetails loadUserByUsername(String username) {
         User user = userRepository.findByUsername(username);
-        if (user == null) throw new UsernameNotFoundException(username);
+        if (user == null) {
+            throw new UsernameNotFoundException(username);
+        }
         logger.info("current user ->" + user);
 
         Set<GrantedAuthority> grantedAuthorities =

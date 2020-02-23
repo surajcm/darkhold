@@ -28,7 +28,14 @@ public class LoginController {
     @Autowired
     private UserValidator userValidator;
 
-
+    /**
+     * log me in
+     * @param model model
+     * @param userForm user info
+     * @param error if present
+     * @param logout if triggered logout
+     * @return to the home options screen
+     */
     @PostMapping("/logme")
     public String loginGet(Model model, @ModelAttribute("userForm") User userForm, String error, String logout) {
         log.info("inside the login method");
@@ -48,6 +55,11 @@ public class LoginController {
         return "options";
     }
 
+    /**
+     * Registration page
+     * @param model model
+     * @return registration page
+     */
     @GetMapping("/registration")
     public String registration(Model model) {
         model.addAttribute("userForm", new User());
@@ -55,6 +67,13 @@ public class LoginController {
         return "registration";
     }
 
+    /**
+     * Register a new user
+     * @param model model
+     * @param userForm user info
+     * @param bindingResult validation binding
+     * @return go to the index page after login
+     */
     @PostMapping("/registration")
     public String registration(Model model, @ModelAttribute("userForm") User userForm, BindingResult bindingResult) {
         log.info("inside the registration post method");
@@ -72,12 +91,22 @@ public class LoginController {
         return "index";
     }
 
+    /**
+     * on to login page via post
+     * @param model model
+     * @return login
+     */
     @PostMapping("/logmein")
     public String loginMe(Model model) {
         log.info("into loginMe");
         return "login";
     }
 
+    /**
+     * on to login page via get
+     * @param model model
+     * @return login
+     */
     @GetMapping("/logmein")
     public String loginMe2(Model model) {
         log.info("into GET loginMe");

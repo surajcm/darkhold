@@ -33,11 +33,18 @@ public class GameController {
     private GameService gameService;
 
     @PostMapping("/interstitial")
-    public String startInterstitial(Model model, @RequestParam("quiz_pin") String quiz_pin) {
-        logger.info("On to interstitial :" + quiz_pin);
+    public String startInterstitial(Model model, @RequestParam("quiz_pin") String quizPin) {
+        logger.info("On to interstitial :" + quizPin);
         return "interstitial";
     }
 
+    /**
+     * On to the page where the only question is getting displayed for few seconds
+     *
+     * @param model     model
+     * @param principal auth
+     * @return question page
+     */
     @PostMapping("/question")
     public String question(Model model, Principal principal) {
         logger.info("On to question :");
@@ -66,6 +73,13 @@ public class GameController {
         return "finalscore";
     }
 
+    /**
+     * On to the game
+     *
+     * @param model     model
+     * @param principal auth
+     * @return game page
+     */
     @PostMapping("/game")
     public String startGame(Model model, Principal principal) {
         logger.info("On to game :");
@@ -79,9 +93,16 @@ public class GameController {
         return "game";
     }
 
-    @PostMapping("/timed")
+    /**
+     * Answer the question with correct/incorrect options or time out
+     *
+     * @param model           model
+     * @param selectedOptions answer
+     * @return to the answer show page
+     */
+    @PostMapping("/answer")
     public String timed(Model model, @RequestParam("selectedOptions") String selectedOptions) {
-        logger.info("On to the timed :"+ selectedOptions);
+        logger.info("On to the answer :" + selectedOptions);
         ExamStatus status;
         CurrentStatus currentStatus = new CurrentStatus();
         if (StringUtils.isNotEmpty(selectedOptions)) {
@@ -97,9 +118,15 @@ public class GameController {
         }
         currentStatus.setStatus(status.name());
         model.addAttribute("currentStatus", currentStatus);
-        return "timeout";
+        return "answer";
     }
 
+    /**
+     * show the till now score and display who are the top 3 players
+     *
+     * @param model model
+     * @return to scoreboard
+     */
     @PostMapping("/check_score")
     public String scoreCheck(Model model) {
         logger.info("On to the check_score :");
@@ -107,6 +134,12 @@ public class GameController {
         return "scoreboard";
     }
 
+    /**
+     * Always active, will add the new user and give it back in response
+     *
+     * @param game game
+     * @return ajax
+     */
     @MessageMapping("/user")
     @SendTo("/topic/user")
     public UserResponse getGame(Game game) {
@@ -115,9 +148,16 @@ public class GameController {
         return new UserResponse(users);
     }
 
+    /**
+     * Trigger for starting the game
+     *
+     * @param pin       of the game
+     * @param principal of who started it
+     * @return to the game page
+     */
     @MessageMapping("/start")
     @SendTo("/topic/start")
-    public StartTrigger startGame(String pin, Principal principal) {
+    public StartTrigger startTrigger(String pin, Principal principal) {
         // this is triggered by the game moderator
         logger.info("On to startGame :" + pin);
         logger.info("On to startGame : user : " + principal.getName());

@@ -35,6 +35,14 @@ public class ChallengeService {
     @Autowired
     private QuestionSetRepository questionSetRepository;
 
+    /**
+     * Read the excel, process it, extract data and save it to the database
+     *
+     * @param upload      the excel file
+     * @param title       challenge name
+     * @param description challenge desc
+     * @throws ChallengeException on error
+     */
     public void readProcessAndSaveChallenge(MultipartFile upload, String title, String description)
             throws ChallengeException {
         List<QuestionSet> questionSets = readAndProcessChallenge(upload);
