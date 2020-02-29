@@ -94,4 +94,8 @@ public class GameService {
     public void updateQuestionNo(String pin) {
         currentGame.incrementQuestionCount(pin);
     }
+
+    public void saveCurrentScore(String name, String name1) {
+
+    }
 }

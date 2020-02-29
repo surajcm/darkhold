@@ -19,6 +19,7 @@ import java.util.List;
 @Service
 public class SecurityServiceImpl implements SecurityService {
     private static final String UNREGISTERED_USER = "UNREGISTERED_USER";
+    private static final String ROLE_MODERATOR = "ROLE_MODERATOR";
     @Autowired
     private AuthenticationManager authenticationManager;
 
@@ -49,7 +50,7 @@ public class SecurityServiceImpl implements SecurityService {
             // this is real user
             if (userDetails.getAuthorities() == null || userDetails.getAuthorities().isEmpty()) {
                 logger.info("empty authorities found, adding moderator role");
-                authorities.add(new SimpleGrantedAuthority("ROLE_MODERATOR"));
+                authorities.add(new SimpleGrantedAuthority(ROLE_MODERATOR));
                 userDetails = new User(userDetails.getUsername(), userDetails.getPassword(), authorities);
             } else {
                 authorities = (List<GrantedAuthority>) userDetails.getAuthorities();

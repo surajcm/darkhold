@@ -16,6 +16,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -101,7 +102,7 @@ public class GameController {
      * @return to the answer show page
      */
     @PostMapping("/answer")
-    public String timed(Model model, @RequestParam("selectedOptions") String selectedOptions) {
+    public String timed(Model model, @RequestParam("selectedOptions") String selectedOptions,Principal principal) {
         logger.info("On to the answer :" + selectedOptions);
         ExamStatus status;
         CurrentStatus currentStatus = new CurrentStatus();
@@ -117,6 +118,7 @@ public class GameController {
             status = ExamStatus.TIME_OUT;
         }
         currentStatus.setStatus(status.name());
+        gameService.saveCurrentScore(principal.getName(), status.name());
         model.addAttribute("currentStatus", currentStatus);
         return "answer";
     }
@@ -161,6 +163,9 @@ public class GameController {
         // this is triggered by the game moderator
         logger.info("On to startGame :" + pin);
         logger.info("On to startGame : user : " + principal.getName());
+        // add additional temporary role to the user
+        //principal.
+        ((UsernamePasswordAuthenticationToken) principal).setDetails("hhhh");
         return new StartTrigger(pin);
     }
 }
