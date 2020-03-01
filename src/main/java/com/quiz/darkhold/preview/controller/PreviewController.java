@@ -49,7 +49,7 @@ public class PreviewController {
         log.info("into publish method : " + challengeId);
         PublishInfo publishInfo = previewService.generateQuizPin(challengeId, principal.getName());
         model.addAttribute("quizPin", publishInfo.getPin());
-        model.addAttribute("user", publishInfo.getUsername());
+        model.addAttribute("user", publishInfo.getModerator());
         log.info("publish method, quizPin : " + publishInfo.getPin());
         return "publish";
     }

@@ -55,7 +55,7 @@ public class OptionsController {
         PublishInfo publishInfo = previewService.getActiveChallenge(principal.getName());
         model.addAttribute("quizPin", publishInfo.getPin());
         //todo : find a way to get all users binded
-        model.addAttribute("user", publishInfo.getUsername());
+        model.addAttribute("user", publishInfo.getModerator());
         log.info("activeChallenges method, quizPin : " + publishInfo.getPin());
         return "publish";
     }

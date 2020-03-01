@@ -23,6 +23,7 @@ public class CurrentGame {
     private static final String USERS = "users";
     private static final String CURRENT_QUESTION_NO = "currentQuestionNo";
     private static final String QUESTIONS = "questions";
+    private static final String MODERATOR = "MODERATOR";
     private final Logger logger = LoggerFactory.getLogger(CurrentGame.class);
 
     @Autowired
@@ -35,9 +36,10 @@ public class CurrentGame {
      */
     public void saveCurrentStatus(PublishInfo publishInfo) {
         List<String> users = new ArrayList<>();
-        users.add(publishInfo.getUsername());
+        users.add(publishInfo.getModerator());
         Document doc = Document.createDocument(PIN, publishInfo.getPin())
                 .put(USERS, users)
+                .put(MODERATOR, publishInfo.getModerator())
                 .put(CURRENT_QUESTION_NO, -1)
                 .put(QUESTIONS, new ArrayList<>());
 

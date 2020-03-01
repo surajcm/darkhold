@@ -76,7 +76,7 @@ public class PreviewService {
         gameRepository.save(game);
         PublishInfo publishInfo = new PublishInfo();
         publishInfo.setPin(generatedString);
-        publishInfo.setUsername(currentUser);
+        publishInfo.setModerator(currentUser);
         currentGame.saveCurrentStatus(publishInfo);
         return publishInfo;
     }
@@ -94,7 +94,7 @@ public class PreviewService {
         //currently, we are taking the first one, may need optimization if we run multiple games in parallel
         PublishInfo publishInfo = new PublishInfo();
         publishInfo.setPin(activeGame.getPin());
-        publishInfo.setUsername(name);
+        publishInfo.setModerator(name);
         return publishInfo;
     }
 }

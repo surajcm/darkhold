@@ -68,9 +68,7 @@ public class GameService {
      */
     public QuestionOnGame fetchAnotherQuestion(String pin, int currentQuestionNumber) {
         List<QuestionSet> questionSets = currentGame.getQuestionsOnAPin(pin);
-
         QuestionSet questionSet = questionSets.get(currentQuestionNumber + 1);
-
         QuestionOnGame questionOnGame = new QuestionOnGame();
         questionOnGame.setCurrentQuestionNumber(currentQuestionNumber + 1);
         questionOnGame.setQuestion(questionSet.getQuestion());
