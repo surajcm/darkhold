@@ -8,18 +8,27 @@
     <link href="styles/error-styles.css" rel="stylesheet" />
     <script type="text/javascript">
         function loading() {
+            fetchQuestions();
             setTimeout(function(){ startGame(); }, 3000);
         }
         function startGame() {
             document.forms[0].action="/game";
             document.forms[0].submit();
         }
+        function fetchQuestions() {
+            var div_body = document.getElementById('div_body');
+            div_body.innerHTML = "";
+            var para = document.createElement("p");
+            var node = document.createTextNode("This is new.");
+            para.appendChild(node);
+            div_body.appendChild(para);
+        }
     </script>
 </head>
 <body onload="loading()">
     <form action="#" th:object="${QuestionOnGame}" method="post">
         <div class="container">
-            <div class="body-style">
+            <div class="body-style" id="div_body">
                 <p th:inline="text" >
                     [[${QuestionOnGame.currentQuestionNumber}]] [[${QuestionOnGame.question}]]
                 </p>

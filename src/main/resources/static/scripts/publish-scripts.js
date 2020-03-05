@@ -39,7 +39,6 @@ function connect() {
 }
 function showGreeting(message) {
     console.log(message);
-    var new_tbody = document.createElement('tbody');
     var tableRef = document.getElementById('conversation').getElementsByTagName('tbody')[0];
     tableRef.innerHTML = "";
     for (i = 0; i < message.length; i++) {

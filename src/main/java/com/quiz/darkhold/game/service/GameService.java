@@ -62,7 +62,7 @@ public class GameService {
     /**
      * Fetch the next question and it's options
      *
-     * @param pin                   game pin
+     * @param pin                   game pinPowerMockRunner
      * @param currentQuestionNumber current one
      * @return question
      */
