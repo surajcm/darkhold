@@ -52,7 +52,7 @@ public class OptionsController {
     @PostMapping("/activeChallenge")
     public String activeChallenges(Model model, Principal principal) {
         log.info("into the activeChallenge method");
-        PublishInfo publishInfo = previewService.getActiveChallenge(principal.getName());
+        PublishInfo publishInfo = previewService.getActiveChallenge();
         model.addAttribute("quizPin", publishInfo.getPin());
         //todo : find a way to get all users binded
         model.addAttribute("user", publishInfo.getModerator());

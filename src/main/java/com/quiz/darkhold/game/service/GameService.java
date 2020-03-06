@@ -21,8 +21,8 @@ public class GameService {
     private PreviewService previewService;
 
 
-    public PublishInfo getActiveChallenge(String name) {
-        return previewService.getActiveChallenge(name);
+    public PublishInfo getActiveChallenge() {
+        return previewService.getActiveChallenge();
     }
 
     public List<String> saveAndGetAllParticipants(String pin, String userName) {

@@ -16,22 +16,33 @@
             document.forms[0].submit();
         }
         function fetchQuestions() {
-            var div_body = document.getElementById('div_body');
-            div_body.innerHTML = "";
-            var para = document.createElement("p");
-            var node = document.createTextNode("This is new.");
-            para.appendChild(node);
-            div_body.appendChild(para);
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST', '/question_on_game', true);
+            xhr.onload = function (e) {
+                if (xhr.status === 200) {
+                    console.log(xhr.responseText);
+
+                    var div_body = document.getElementById('div_body');
+                    div_body.innerHTML = "";
+                    var para = document.createElement("p");
+                    var node = document.createTextNode(xhr.responseText);
+                    para.appendChild(node);
+                    div_body.appendChild(para);
+                } else {
+                    alert('An error occurred!');
+                }
+            };
+            xhr.send();
+
+
         }
     </script>
 </head>
 <body onload="loading()">
-    <form action="#" th:object="${QuestionOnGame}" method="post">
+    <form action="#" method="post">
         <div class="container">
             <div class="body-style" id="div_body">
-                <p th:inline="text" >
-                    [[${QuestionOnGame.currentQuestionNumber}]] [[${QuestionOnGame.question}]]
-                </p>
+
             </div>
         </div>
     </form>

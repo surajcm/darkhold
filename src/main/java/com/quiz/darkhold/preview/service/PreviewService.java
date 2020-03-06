@@ -85,16 +85,14 @@ public class PreviewService {
     /**
      * get the current running game
      *
-     * @param name of user
      * @return game info
      */
-    public PublishInfo getActiveChallenge(String name) {
+    public PublishInfo getActiveChallenge() {
         List<Game> activeGames = gameRepository.findByGameStatusNot(GameStatus.FINISHED.name());
         Game activeGame = activeGames.get(0);
         //currently, we are taking the first one, may need optimization if we run multiple games in parallel
         PublishInfo publishInfo = new PublishInfo();
         publishInfo.setPin(activeGame.getPin());
-        publishInfo.setModerator(name);
         return publishInfo;
     }
 }

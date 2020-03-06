@@ -20,6 +20,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.security.Principal;
 import java.util.List;
@@ -48,7 +50,15 @@ public class GameController {
     @PostMapping("/question")
     public String question(Model model, Principal principal) {
         logger.info("On to question :");
-        PublishInfo publishInfo = gameService.getActiveChallenge(principal.getName());
+
+        return "question";
+    }
+
+    @PostMapping("/question_on_game")
+    public @ResponseBody
+    String questionOnGame(String title, String description,
+                            RedirectAttributes redirectAttributes) {
+        PublishInfo publishInfo = gameService.getActiveChallenge();
         int currentQuestionNumber = gameService.getCurrentQuestionNo(publishInfo.getPin());
         QuestionOnGame questionOnGame;
         if (currentQuestionNumber == -1) {
@@ -60,18 +70,14 @@ public class GameController {
             if (questionSets.size() - 1 > currentQuestionNumber) {
                 questionOnGame = gameService.fetchAnotherQuestion(publishInfo.getPin(), currentQuestionNumber);
             } else {
-                return finalScore(model);
+                return "END_GAME";
             }
         }
         questionOnGame.setCurrentQuestionNumber(questionOnGame.getCurrentQuestionNumber() + 1);
-        model.addAttribute("QuestionOnGame", questionOnGame);
-        return "question";
+        return questionOnGame.getCurrentQuestionNumber() + " : " + questionOnGame.getQuestion();
     }
 
-    private String finalScore(Model model) {
-        logger.info("On to the finalScore :");
-        return "finalscore";
-    }
+
 
     /**
      * On to the game
@@ -83,7 +89,7 @@ public class GameController {
     @PostMapping("/game")
     public String startGame(Model model, Principal principal) {
         logger.info("On to game :");
-        PublishInfo publishInfo = gameService.getActiveChallenge(principal.getName());
+        PublishInfo publishInfo = gameService.getActiveChallenge();
         int currentQuestionNumber = gameService.getCurrentQuestionNo(publishInfo.getPin());
         Challenge challenge = gameService.getCurrentQuestionSet(publishInfo.getPin(),
                 currentQuestionNumber + 1);
