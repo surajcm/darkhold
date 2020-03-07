@@ -16,6 +16,9 @@
             document.forms[0].submit();
         }
         function fetchQuestions() {
+            var formData = new FormData();
+            var name = document.getElementById('name').value;
+            formData.append('user', name);
             var xhr = new XMLHttpRequest();
             xhr.open('POST', '/question_on_game', true);
             xhr.onload = function (e) {
@@ -32,13 +35,12 @@
                     alert('An error occurred!');
                 }
             };
-            xhr.send();
-
-
+            xhr.send(formData);
         }
     </script>
 </head>
 <body onload="loading()">
+    <input type="hidden" th:value="${#authentication.getPrincipal().getUsername()}" id="name"/>
     <form action="#" method="post">
         <div class="container">
             <div class="body-style" id="div_body">

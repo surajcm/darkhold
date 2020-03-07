@@ -56,8 +56,8 @@ public class GameController {
 
     @PostMapping("/question_on_game")
     public @ResponseBody
-    String questionOnGame(String title, String description,
-                            RedirectAttributes redirectAttributes) {
+    String questionOnGame(String user,RedirectAttributes redirectAttributes) {
+        logger.info("question_on_game : user : "+ user);
         PublishInfo publishInfo = gameService.getActiveChallenge();
         int currentQuestionNumber = gameService.getCurrentQuestionNo(publishInfo.getPin());
         QuestionOnGame questionOnGame;
