@@ -56,8 +56,8 @@ public class GameController {
 
     @PostMapping("/question_on_game")
     public @ResponseBody
-    String questionOnGame(String user,RedirectAttributes redirectAttributes) {
-        logger.info("question_on_game : user : "+ user);
+    String questionOnGame(String user, RedirectAttributes redirectAttributes) {
+        logger.info("question_on_game : user : " + user);
         PublishInfo publishInfo = gameService.getActiveChallenge();
         int currentQuestionNumber = gameService.getCurrentQuestionNo(publishInfo.getPin());
         QuestionOnGame questionOnGame;
@@ -65,8 +65,12 @@ public class GameController {
             questionOnGame = gameService.initialFetchAndUpdateNitrate(publishInfo.getPin());
         } else {
             List<QuestionSet> questionSets = gameService.getQuestionsOnAPin(publishInfo.getPin());
+            String moderator = gameService.findModerator(publishInfo.getPin());
             logger.info("Size of question set is" + questionSets.size()
                     + ", and current question # is " + currentQuestionNumber);
+            if (user.equalsIgnoreCase(moderator)) {
+                currentQuestionNumber++;
+            }
             if (questionSets.size() - 1 > currentQuestionNumber) {
                 questionOnGame = gameService.fetchAnotherQuestion(publishInfo.getPin(), currentQuestionNumber);
             } else {
@@ -76,7 +80,6 @@ public class GameController {
         questionOnGame.setCurrentQuestionNumber(questionOnGame.getCurrentQuestionNumber() + 1);
         return questionOnGame.getCurrentQuestionNumber() + " : " + questionOnGame.getQuestion();
     }
-
 
 
     /**
@@ -91,10 +94,16 @@ public class GameController {
         logger.info("On to game :");
         PublishInfo publishInfo = gameService.getActiveChallenge();
         int currentQuestionNumber = gameService.getCurrentQuestionNo(publishInfo.getPin());
+        String moderator = gameService.findModerator(publishInfo.getPin());
+        if (principal.getName().equalsIgnoreCase(moderator)) {
+            currentQuestionNumber++;
+        }
         Challenge challenge = gameService.getCurrentQuestionSet(publishInfo.getPin(),
-                currentQuestionNumber + 1);
+                currentQuestionNumber);
         challenge.setQuestionNumber(challenge.getQuestionNumber() + 1);
-        gameService.updateQuestionNo(publishInfo.getPin());
+        if (principal.getName().equalsIgnoreCase(moderator)) {
+            gameService.updateQuestionNo(publishInfo.getPin());
+        }
         model.addAttribute("challenge", challenge);
         return "game";
     }
@@ -107,7 +116,7 @@ public class GameController {
      * @return to the answer show page
      */
     @PostMapping("/answer")
-    public String timed(Model model, @RequestParam("selectedOptions") String selectedOptions,Principal principal) {
+    public String timed(Model model, @RequestParam("selectedOptions") String selectedOptions, Principal principal) {
         logger.info("On to the answer :" + selectedOptions);
         ExamStatus status;
         CurrentStatus currentStatus = new CurrentStatus();

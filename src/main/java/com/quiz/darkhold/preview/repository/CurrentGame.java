@@ -126,4 +126,9 @@ public class CurrentGame {
         doc.put(CURRENT_QUESTION_NO, questionNo);
         collection.update(doc);
     }
+
+    public String findModerator(String pin) {
+        Cursor cursor = collection.find(Filters.and(eq(PIN, pin)));
+        return (String) cursor.toList().get(0).get(MODERATOR);
+    }
 }

@@ -68,9 +68,9 @@ public class GameService {
      */
     public QuestionOnGame fetchAnotherQuestion(String pin, int currentQuestionNumber) {
         List<QuestionSet> questionSets = currentGame.getQuestionsOnAPin(pin);
-        QuestionSet questionSet = questionSets.get(currentQuestionNumber + 1);
+        QuestionSet questionSet = questionSets.get(currentQuestionNumber);
         QuestionOnGame questionOnGame = new QuestionOnGame();
-        questionOnGame.setCurrentQuestionNumber(currentQuestionNumber + 1);
+        questionOnGame.setCurrentQuestionNumber(currentQuestionNumber);
         questionOnGame.setQuestion(questionSet.getQuestion());
         return questionOnGame;
     }
@@ -95,5 +95,9 @@ public class GameService {
 
     public void saveCurrentScore(String name, String name1) {
 
+    }
+
+    public String findModerator(String pin) {
+        return currentGame.findModerator(pin);
     }
 }
