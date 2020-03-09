@@ -24,7 +24,10 @@
             xhr.onload = function (e) {
                 if (xhr.status === 200) {
                     console.log(xhr.responseText);
-
+                    if(xhr.responseText == "END_GAME" ) {
+                        // lets end the game
+                        endGame();
+                    }
                     var div_body = document.getElementById('div_body');
                     div_body.innerHTML = "";
                     var para = document.createElement("p");
@@ -36,6 +39,11 @@
                 }
             };
             xhr.send(formData);
+        }
+
+        function endGame() {
+            document.forms[0].action="/final";
+            document.forms[0].submit();
         }
     </script>
 </head>

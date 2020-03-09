@@ -50,7 +50,6 @@ public class GameController {
     @PostMapping("/question")
     public String question(Model model, Principal principal) {
         logger.info("On to question :");
-
         return "question";
     }
 
@@ -81,6 +80,11 @@ public class GameController {
         return questionOnGame.getCurrentQuestionNumber() + " : " + questionOnGame.getQuestion();
     }
 
+    @PostMapping("/final")
+    private String finalScore(Model model) {
+        logger.info("On to the finalScore :");
+        return "finalscore";
+    }
 
     /**
      * On to the game
@@ -95,7 +99,7 @@ public class GameController {
         PublishInfo publishInfo = gameService.getActiveChallenge();
         int currentQuestionNumber = gameService.getCurrentQuestionNo(publishInfo.getPin());
         String moderator = gameService.findModerator(publishInfo.getPin());
-        if (principal.getName().equalsIgnoreCase(moderator)) {
+        if (currentQuestionNumber < 0 || principal.getName().equalsIgnoreCase(moderator)) {
             currentQuestionNumber++;
         }
         Challenge challenge = gameService.getCurrentQuestionSet(publishInfo.getPin(),
