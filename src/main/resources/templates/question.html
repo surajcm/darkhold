@@ -10,7 +10,7 @@
     <script type="text/javascript" src="scripts/stomp.min.js"></script>
     <script type="text/javascript" src="scripts/question-scripts.js"></script>
 </head>
-<body onload="loading()">
+<body onload="connect()">
     <input type="hidden" th:value="${#authentication.getPrincipal().getUsername()}" id="name"/>
     <form action="#" method="post">
         <div class="container">

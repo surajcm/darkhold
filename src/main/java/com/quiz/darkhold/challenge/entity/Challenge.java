@@ -1,7 +1,9 @@
 package com.quiz.darkhold.challenge.entity;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -42,7 +44,7 @@ public class Challenge implements Serializable {
     @Column(name = "modifiedOn")
     private OffsetDateTime modifiedOn;
 
-    @OneToMany(mappedBy = "challenge")
+    @OneToMany(mappedBy = "challenge", cascade = CascadeType.ALL, fetch= FetchType.EAGER)
     @OrderBy("id")
     private List<QuestionSet> questionSets;
 

@@ -1,35 +1,35 @@
-function loading() {
-    fetchQuestions();
-    setTimeout(function(){ startGame(); }, 3000);
-}
+
 function startGame() {
     document.forms[0].action="/game";
     document.forms[0].submit();
 }
-function fetchQuestions() {
-    var formData = new FormData();
+
+function updateTextOrEndGame(message) {
+    console.log(message);
+    if(message == "END_GAME" ) {
+        // lets end the game
+        endGame();
+    }
+    var div_body = document.getElementById('div_body');
+    div_body.innerHTML = "";
+    var para = document.createElement("p");
+    var node = document.createTextNode(message);
+    para.appendChild(node);
+    div_body.appendChild(para);
+    setTimeout(function(){ startGame(); }, 3000);
+}
+
+function connect() {
     var name = document.getElementById('name').value;
-    formData.append('user', name);
-    var xhr = new XMLHttpRequest();
-    xhr.open('POST', '/question_on_game', true);
-    xhr.onload = function (e) {
-        if (xhr.status === 200) {
-            console.log(xhr.responseText);
-            if(xhr.responseText == "END_GAME" ) {
-                // lets end the game
-                endGame();
-            }
-            var div_body = document.getElementById('div_body');
-            div_body.innerHTML = "";
-            var para = document.createElement("p");
-            var node = document.createTextNode(xhr.responseText);
-            para.appendChild(node);
-            div_body.appendChild(para);
-        } else {
-            alert('An error occurred!');
-        }
-    };
-    xhr.send(formData);
+    var socket = new SockJS('/darkhold-websocket');
+    stompClient = Stomp.over(socket);
+    stompClient.connect({}, function (frame) {
+        console.log('Connected: ' + frame);
+        stompClient.send("/app/question_fetch", {}, name);
+        stompClient.subscribe('/topic/question_read', function (greeting) {
+            updateTextOrEndGame(JSON.parse(greeting.body).startGame);
+        });
+    });
 }
 
 function endGame() {

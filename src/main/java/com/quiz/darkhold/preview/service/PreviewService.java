@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class PreviewService {
@@ -53,9 +54,9 @@ public class PreviewService {
         String challengeId = game.getChallengeId();
         PreviewInfo previewInfo = new PreviewInfo();
         Long challengeOne = Long.valueOf(challengeId);
-        Challenge challenge = challengeRepository.getOne(challengeOne);
-        previewInfo.setQuestionSets(challenge.getQuestionSets());
-        previewInfo.setChallengeName(challenge.getTitle());
+        Optional<Challenge> challenge = challengeRepository.findById(challengeOne);
+        challenge.ifPresent(value -> previewInfo.setQuestionSets(value.getQuestionSets()));
+        challenge.ifPresent(value -> previewInfo.setChallengeName(value.getTitle()));
         previewInfo.setChallengeId(challengeId);
         return previewInfo;
     }

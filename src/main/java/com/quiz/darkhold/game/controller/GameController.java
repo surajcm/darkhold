@@ -20,8 +20,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.security.Principal;
 import java.util.List;
@@ -53,35 +51,8 @@ public class GameController {
         return "question";
     }
 
-    @PostMapping("/question_on_game")
-    public @ResponseBody
-    String questionOnGame(String user, RedirectAttributes redirectAttributes) {
-        logger.info("question_on_game : user : " + user);
-        PublishInfo publishInfo = gameService.getActiveChallenge();
-        int currentQuestionNumber = gameService.getCurrentQuestionNo(publishInfo.getPin());
-        QuestionOnGame questionOnGame;
-        if (currentQuestionNumber == -1) {
-            questionOnGame = gameService.initialFetchAndUpdateNitrate(publishInfo.getPin());
-        } else {
-            List<QuestionSet> questionSets = gameService.getQuestionsOnAPin(publishInfo.getPin());
-            String moderator = gameService.findModerator(publishInfo.getPin());
-            logger.info("Size of question set is" + questionSets.size()
-                    + ", and current question # is " + currentQuestionNumber);
-            if (user.equalsIgnoreCase(moderator)) {
-                currentQuestionNumber++;
-            }
-            if (questionSets.size() - 1 > currentQuestionNumber) {
-                questionOnGame = gameService.fetchAnotherQuestion(publishInfo.getPin(), currentQuestionNumber);
-            } else {
-                return "END_GAME";
-            }
-        }
-        questionOnGame.setCurrentQuestionNumber(questionOnGame.getCurrentQuestionNumber() + 1);
-        return questionOnGame.getCurrentQuestionNumber() + " : " + questionOnGame.getQuestion();
-    }
-
     @PostMapping("/final")
-    private String finalScore(Model model) {
+    public String finalScore(Model model) {
         logger.info("On to the finalScore :");
         return "finalscore";
     }
@@ -183,5 +154,33 @@ public class GameController {
         logger.info("On to startGame : user : " + principal.getName());
         // who started the game is already in nitrate
         return new StartTrigger(pin);
+    }
+
+    @MessageMapping("/question_fetch")
+    @SendTo("/topic/question_read")
+    public StartTrigger questionFetch(String name) {
+        logger.info("On to questionFetch :" + name);
+        logger.info("question_on_game : questionFetch : " + name);
+        PublishInfo publishInfo = gameService.getActiveChallenge();
+        int currentQuestionNumber = gameService.getCurrentQuestionNo(publishInfo.getPin());
+        QuestionOnGame questionOnGame;
+        if (currentQuestionNumber == -1) {
+            questionOnGame = gameService.initialFetchAndUpdateNitrate(publishInfo.getPin());
+        } else {
+            List<QuestionSet> questionSets = gameService.getQuestionsOnAPin(publishInfo.getPin());
+            String moderator = gameService.findModerator(publishInfo.getPin());
+            logger.info("Size of question set is" + questionSets.size()
+                    + ", and current question # is " + currentQuestionNumber);
+            if (name.equalsIgnoreCase(moderator)) {
+                currentQuestionNumber++;
+            }
+            if (questionSets.size() - 1 > currentQuestionNumber) {
+                questionOnGame = gameService.fetchAnotherQuestion(publishInfo.getPin(), currentQuestionNumber);
+            } else {
+                return new StartTrigger("END_GAME");
+            }
+        }
+        questionOnGame.setCurrentQuestionNumber(questionOnGame.getCurrentQuestionNumber() + 1);
+        return new StartTrigger(questionOnGame.getCurrentQuestionNumber() + " : " + questionOnGame.getQuestion());
     }
 }
