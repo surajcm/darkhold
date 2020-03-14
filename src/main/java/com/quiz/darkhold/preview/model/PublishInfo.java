@@ -11,7 +11,7 @@ public class PublishInfo {
         return moderator;
     }
 
-    public void setModerator(String moderator) {
+    public void setModerator(final String moderator) {
         this.moderator = moderator;
     }
 
@@ -19,7 +19,7 @@ public class PublishInfo {
         return pin;
     }
 
-    public void setPin(String pin) {
+    public void setPin(final String pin) {
         this.pin = pin;
     }
 
@@ -27,7 +27,7 @@ public class PublishInfo {
         return users;
     }
 
-    public void setUsers(List<String> users) {
+    public void setUsers(final List<String> users) {
         this.users = users;
     }
 }

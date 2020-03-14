@@ -32,7 +32,7 @@ public class User {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(final Long id) {
         this.id = id;
     }
 
@@ -40,7 +40,7 @@ public class User {
         return username;
     }
 
-    public void setUsername(String username) {
+    public void setUsername(final String username) {
         this.username = username;
     }
 
@@ -48,7 +48,7 @@ public class User {
         return password;
     }
 
-    public void setPassword(String password) {
+    public void setPassword(final String password) {
         this.password = password;
     }
 
@@ -56,7 +56,7 @@ public class User {
         return passwordConfirm;
     }
 
-    public void setPasswordConfirm(String passwordConfirm) {
+    public void setPasswordConfirm(final String passwordConfirm) {
         this.passwordConfirm = passwordConfirm;
     }
 
@@ -64,7 +64,7 @@ public class User {
         return roles;
     }
 
-    public void setRoles(Set<Role> roles) {
+    public void setRoles(final Set<Role> roles) {
         this.roles = roles;
     }
 

@@ -29,7 +29,8 @@ public class LoginController {
     private UserValidator userValidator;
 
     /**
-     * log me in
+     * log me in.
+     *
      * @param model model
      * @param userForm user info
      * @param error if present
@@ -37,7 +38,8 @@ public class LoginController {
      * @return to the home options screen
      */
     @PostMapping("/logme")
-    public String loginGet(Model model, @ModelAttribute("userForm") User userForm, String error, String logout) {
+    public String loginGet(final Model model, @ModelAttribute("userForm") final User userForm,
+                           final String error, final String logout) {
         log.info("inside the login method");
         log.info("model is : " + model.asMap().keySet().toString());
         log.info("userForm is : " + userForm.getUsername());
@@ -56,26 +58,29 @@ public class LoginController {
     }
 
     /**
-     * Registration page
+     * Registration page.
+     *
      * @param model model
      * @return registration page
      */
     @GetMapping("/registration")
-    public String registration(Model model) {
+    public String registration(final Model model) {
         model.addAttribute("userForm", new User());
         log.info("inside the registration get method");
         return "registration";
     }
 
     /**
-     * Register a new user
+     * Register a new user.
+     *
      * @param model model
      * @param userForm user info
      * @param bindingResult validation binding
      * @return go to the index page after login
      */
     @PostMapping("/registration")
-    public String registration(Model model, @ModelAttribute("userForm") User userForm, BindingResult bindingResult) {
+    public String registration(final Model model, @ModelAttribute("userForm") final User userForm,
+                               final BindingResult bindingResult) {
         log.info("inside the registration post method");
         userValidator.validate(userForm, bindingResult);
 
@@ -92,23 +97,23 @@ public class LoginController {
     }
 
     /**
-     * on to login page via post
+     * on to login page via post.
      * @param model model
      * @return login
      */
     @PostMapping("/logmein")
-    public String loginMe(Model model) {
+    public String loginMe(final Model model) {
         log.info("into loginMe");
         return "login";
     }
 
     /**
-     * on to login page via get
+     * on to login page via get.
      * @param model model
      * @return login
      */
     @GetMapping("/logmein")
-    public String loginMe2(Model model) {
+    public String loginMe2(final Model model) {
         log.info("into GET loginMe");
         return "login";
     }

@@ -5,15 +5,15 @@ import com.quiz.darkhold.challenge.entity.QuestionSet;
 import java.util.List;
 
 public class PreviewInfo {
-    String challengeId;
-    String challengeName;
-    List<QuestionSet> questionSets;
+    private String challengeId;
+    private String challengeName;
+    private List<QuestionSet> questionSets;
 
     public String getChallengeId() {
         return challengeId;
     }
 
-    public void setChallengeId(String challengeId) {
+    public void setChallengeId(final String challengeId) {
         this.challengeId = challengeId;
     }
 
@@ -21,7 +21,7 @@ public class PreviewInfo {
         return challengeName;
     }
 
-    public void setChallengeName(String challengeName) {
+    public void setChallengeName(final String challengeName) {
         this.challengeName = challengeName;
     }
 
@@ -29,7 +29,7 @@ public class PreviewInfo {
         return questionSets;
     }
 
-    public void setQuestionSets(List<QuestionSet> questionSets) {
+    public void setQuestionSets(final List<QuestionSet> questionSets) {
         this.questionSets = questionSets;
     }
 }

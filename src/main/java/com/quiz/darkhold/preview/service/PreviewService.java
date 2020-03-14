@@ -28,7 +28,7 @@ public class PreviewService {
     private CurrentGame currentGame;
 
     /**
-     * fetch the questions of a challenge id
+     * fetch the questions of a challenge id.
      *
      * @param challengeId challenge id
      * @return preview info with questions
@@ -44,12 +44,12 @@ public class PreviewService {
     }
 
     /**
-     * fetch questions from a pin
+     * fetch questions from a pin.
      *
      * @param pin of the game
      * @return all questions binded to preview info
      */
-    public PreviewInfo fetchQuestionsFromPin(String pin) {
+    public PreviewInfo fetchQuestionsFromPin(final String pin) {
         Game game = gameRepository.findByPin(pin);
         String challengeId = game.getChallengeId();
         PreviewInfo previewInfo = new PreviewInfo();
@@ -62,13 +62,13 @@ public class PreviewService {
     }
 
     /**
-     * Indicating the start of the game, generate a pin
+     * Indicating the start of the game, generate a pin.
      *
      * @param challengeId of game
      * @param currentUser who starts it
      * @return game info
      */
-    public PublishInfo generateQuizPin(String challengeId, String currentUser) {
+    public PublishInfo generateQuizPin(final String challengeId, final String currentUser) {
         String generatedString = RandomStringUtils.random(5, false, true);
         Game game = new Game();
         game.setPin(generatedString);
@@ -84,7 +84,7 @@ public class PreviewService {
 
 
     /**
-     * get the current running game
+     * get the current running game.
      *
      * @return game info
      */

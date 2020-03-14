@@ -9,7 +9,7 @@ public class ChallengeSummary {
         return challengeId;
     }
 
-    public void setChallengeId(int challengeId) {
+    public void setChallengeId(final int challengeId) {
         this.challengeId = challengeId;
     }
 
@@ -17,7 +17,7 @@ public class ChallengeSummary {
         return challengeName;
     }
 
-    public void setChallengeName(String challengeName) {
+    public void setChallengeName(final String challengeName) {
         this.challengeName = challengeName;
     }
 }

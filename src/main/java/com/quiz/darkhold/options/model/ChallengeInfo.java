@@ -9,7 +9,7 @@ public class ChallengeInfo {
         return challengeSummaryList;
     }
 
-    public void setChallengeSummaryList(List<ChallengeSummary> challengeSummaryList) {
+    public void setChallengeSummaryList(final List<ChallengeSummary> challengeSummaryList) {
         this.challengeSummaryList = challengeSummaryList;
     }
 }

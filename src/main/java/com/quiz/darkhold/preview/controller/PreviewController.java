@@ -22,14 +22,14 @@ public class PreviewController {
     private PreviewService previewService;
 
     /**
-     * on to the preview page with the selected challenge
+     * on to the preview page with the selected challenge.
      *
      * @param model      model
      * @param challenges selected one
      * @return preview page
      */
     @PostMapping("/preconfigure")
-    public String preconfigure(Model model, @RequestParam("challenges") String challenges) {
+    public String preconfigure(final Model model, @RequestParam("challenges") final String challenges) {
         log.info("into the preconfigure method : " + challenges);
         PreviewInfo previewInfo = previewService.fetchQuestions(challenges);
         model.addAttribute("previewInfo", previewInfo);
@@ -37,7 +37,7 @@ public class PreviewController {
     }
 
     /**
-     * publish the game
+     * publish the game.
      *
      * @param model       model
      * @param challengeId of game
@@ -45,7 +45,8 @@ public class PreviewController {
      * @return publish page
      */
     @PostMapping("/publish")
-    public String publish(Model model, @RequestParam("challenge_id") String challengeId, Principal principal) {
+    public String publish(final Model model, @RequestParam("challenge_id") final String challengeId,
+                          final Principal principal) {
         log.info("into publish method : " + challengeId);
         PublishInfo publishInfo = previewService.generateQuizPin(challengeId, principal.getName());
         model.addAttribute("quizPin", publishInfo.getPin());

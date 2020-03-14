@@ -12,7 +12,7 @@ public class UserVO {
         return userName;
     }
 
-    public void setUserName(String userName) {
+    public void setUserName(final String userName) {
         this.userName = userName;
     }
 
@@ -20,7 +20,7 @@ public class UserVO {
         return email;
     }
 
-    public void setEmail(String email) {
+    public void setEmail(final String email) {
         this.email = email;
     }
 
@@ -28,7 +28,7 @@ public class UserVO {
         return password;
     }
 
-    public void setPassword(String password) {
+    public void setPassword(final String password) {
         this.password = password;
     }
 
@@ -36,7 +36,7 @@ public class UserVO {
         return role;
     }
 
-    public void setRole(ROLE role) {
+    public void setRole(final ROLE role) {
         this.role = role;
     }
 

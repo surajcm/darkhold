@@ -4,10 +4,16 @@ apply plugin: 'jacoco'
 //apply plugin: 'com.github.spotbugs'
 
 checkstyle {
-    toolVersion = '8.12'
+    toolVersion = '8.29'
     ignoreFailures = false
-    configFile = file("gradle/static-code-analysis/checkstyle/checkstyle.xml")
     maxWarnings = 0
+    checkstyleMain {
+        configFile = file("gradle/static-code-analysis/checkstyle/checkstyle.xml")
+    }
+
+    checkstyleTest {
+        configFile = file("gradle/static-code-analysis/checkstyle/checkstyleTest.xml")
+    }
 }
 
 //spotbugs {

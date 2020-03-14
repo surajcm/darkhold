@@ -39,7 +39,7 @@ public class SecurityServiceImpl implements SecurityService {
     }
 
     @Override
-    public void autoLogin(String username, String password) {
+    public void autoLogin(final String username, final String password) {
         UserDetails userDetails;
         boolean unRegistered = password.equalsIgnoreCase(UNREGISTERED_USER);
         List<GrantedAuthority> authorities = new ArrayList<>();

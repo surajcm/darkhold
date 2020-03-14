@@ -22,7 +22,8 @@ public class OptionsController {
     private PreviewService previewService;
 
     /**
-     * on to create challenge page
+     * on to create challenge page.
+     *
      * @return create challenge page
      */
     @PostMapping("/createChallenge")
@@ -32,25 +33,27 @@ public class OptionsController {
     }
 
     /**
-     * on to view challenge page, with a view of challenges
+     * on to view challenge page, with a view of challenges.
+     *
      * @param model model
      * @return view challenge page
      */
     @PostMapping("/viewChallenge")
-    public String viewChallenges(Model model) {
+    public String viewChallenges(final Model model) {
         log.info("into the viewChallenge method");
         model.addAttribute("challengeInfo", optionsService.populateChallengeInfo());
         return "viewchallenges";
     }
 
     /**
-     * show the currently running challenge
+     * show the currently running challenge.
+     *
      * @param model model
      * @param principal auth
      * @return publish page
      */
     @PostMapping("/activeChallenge")
-    public String activeChallenges(Model model, Principal principal) {
+    public String activeChallenges(final Model model, final Principal principal) {
         log.info("into the activeChallenge method");
         PublishInfo publishInfo = previewService.getActiveChallenge();
         model.addAttribute("quizPin", publishInfo.getPin());

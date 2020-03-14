@@ -30,11 +30,11 @@ public class CurrentGame {
     private NitriteCollection collection;
 
     /**
-     * save the game info to nitrate before we start the game
+     * save the game info to nitrate before we start the game.
      *
      * @param publishInfo publish info
      */
-    public void saveCurrentStatus(PublishInfo publishInfo) {
+    public void saveCurrentStatus(final PublishInfo publishInfo) {
         List<String> users = new ArrayList<>();
         users.add(publishInfo.getModerator());
         Document doc = Document.createDocument(PIN, publishInfo.getPin())
@@ -47,12 +47,12 @@ public class CurrentGame {
     }
 
     /**
-     * get the active users in the gme
+     * get the active users in the gme.
      *
      * @param pin of the game
      * @return users
      */
-    public List<String> getActiveUsersInGame(String pin) {
+    public List<String> getActiveUsersInGame(final String pin) {
         Cursor cursor = collection.find(Filters.and(eq(PIN, pin)));
         List<String> users = (List<String>) cursor.toList().get(0).get(USERS);
         logger.info("Participants are :" + users);
@@ -60,12 +60,12 @@ public class CurrentGame {
     }
 
     /**
-     * save user to active game
+     * save user to active game.
      *
      * @param pin      of the game
      * @param userName of user
      */
-    public void saveUserToActiveGame(String pin, String userName) {
+    public void saveUserToActiveGame(final String pin, final String userName) {
         Cursor cursor = collection.find(Filters.and(eq(PIN, pin)));
         Document doc = cursor.toList().get(0);
         List<String> users = (List<String>) doc.get(USERS);
@@ -74,12 +74,12 @@ public class CurrentGame {
     }
 
     /**
-     * save questions to active game
+     * save questions to active game.
      *
      * @param pin          of the game
      * @param questionSets of the game
      */
-    public void saveQuestionsToActiveGame(String pin, List<QuestionSet> questionSets) {
+    public void saveQuestionsToActiveGame(final String pin, final List<QuestionSet> questionSets) {
         Cursor cursor = collection.find(Filters.and(eq(PIN, pin)));
         Document doc = cursor.toList().get(0);
         List<QuestionSet> questions = (List<QuestionSet>) doc.get(QUESTIONS);
@@ -88,12 +88,12 @@ public class CurrentGame {
     }
 
     /**
-     * current question no
+     * current question no.
      *
      * @param pin of game
      * @return question no
      */
-    public int getCurrentQuestionNo(String pin) {
+    public int getCurrentQuestionNo(final String pin) {
         Cursor cursor = collection.find(Filters.and(eq(PIN, pin)));
         Integer questionNo = (Integer) cursor.toList().get(0).get(CURRENT_QUESTION_NO);
         logger.info("questionNo :" + questionNo);
@@ -101,12 +101,12 @@ public class CurrentGame {
     }
 
     /**
-     * get all questions of the pin
+     * get all questions of the pin.
      *
      * @param pin of game
      * @return question list
      */
-    public List<QuestionSet> getQuestionsOnAPin(String pin) {
+    public List<QuestionSet> getQuestionsOnAPin(final String pin) {
         Cursor cursor = collection.find(Filters.and(eq(PIN, pin)));
         List<QuestionSet> questions = (List<QuestionSet>) cursor.toList().get(0).get(QUESTIONS);
         logger.info("question count :" + questions.size());
@@ -114,11 +114,11 @@ public class CurrentGame {
     }
 
     /**
-     * points to the next question
+     * points to the next question.
      *
      * @param pin of game
      */
-    public void incrementQuestionCount(String pin) {
+    public void incrementQuestionCount(final String pin) {
         Cursor cursor = collection.find(Filters.and(eq(PIN, pin)));
         Integer questionNo = (Integer) cursor.toList().get(0).get(CURRENT_QUESTION_NO);
         questionNo++;
@@ -127,7 +127,12 @@ public class CurrentGame {
         collection.update(doc);
     }
 
-    public String findModerator(String pin) {
+    /**
+     * find the moderator.
+     * @param pin pin
+     * @return moderator
+     */
+    public String findModerator(final String pin) {
         Cursor cursor = collection.find(Filters.and(eq(PIN, pin)));
         return (String) cursor.toList().get(0).get(MODERATOR);
     }

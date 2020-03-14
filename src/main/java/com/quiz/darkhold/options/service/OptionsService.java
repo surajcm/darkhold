@@ -17,7 +17,7 @@ public class OptionsService {
     private ChallengeRepository challengeRepository;
 
     /**
-     * get all challenges and display it there
+     * get all challenges and display it there.
      * @return challenges
      */
     public ChallengeInfo populateChallengeInfo() {
