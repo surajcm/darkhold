@@ -41,7 +41,6 @@ public class LoginController {
     public String loginGet(final Model model, @ModelAttribute("userForm") final User userForm,
                            final String error, final String logout) {
         log.info("inside the login method");
-        log.info("model is : " + model.asMap().keySet().toString());
         log.info("userForm is : " + userForm.getUsername());
         securityService.autoLogin(userForm.getUsername(), userForm.getPassword());
         log.info("autoLogin done !!!");
@@ -49,7 +48,6 @@ public class LoginController {
             log.info("inside the login method, error : " + error);
             model.addAttribute("error", "Your username and password is invalid.");
         }
-
         if (logout != null) {
             model.addAttribute("message", "You have been logged out successfully.");
         }

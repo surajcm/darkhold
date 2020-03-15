@@ -12,7 +12,7 @@ public class ChallengeServiceTest {
     @Test
     public void verifyReadProcessAndSaveChallengeWithException() {
         Assertions.assertThrows(ChallengeException.class, () -> {
-            challengeService.readProcessAndSaveChallenge(mockMultipartFile(),"Test1","Super test");
+            challengeService.readProcessAndSaveChallenge(mockMultipartFile(), "Test1", "Super test");
         });
     }
 

@@ -96,7 +96,7 @@ public class CurrentGame {
     public int getCurrentQuestionNo(final String pin) {
         Cursor cursor = collection.find(Filters.and(eq(PIN, pin)));
         Integer questionNo = (Integer) cursor.toList().get(0).get(CURRENT_QUESTION_NO);
-        logger.info("questionNo :" + questionNo);
+        logger.info(String.format("questionNo : %d", questionNo));
         return questionNo;
     }
 

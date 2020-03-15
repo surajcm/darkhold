@@ -8,7 +8,7 @@ public class QuestionOnGame {
         return currentQuestionNumber;
     }
 
-    public void setCurrentQuestionNumber(int currentQuestionNumber) {
+    public void setCurrentQuestionNumber(final int currentQuestionNumber) {
         this.currentQuestionNumber = currentQuestionNumber;
     }
 
@@ -16,7 +16,7 @@ public class QuestionOnGame {
         return question;
     }
 
-    public void setQuestion(String question) {
+    public void setQuestion(final String question) {
         this.question = question;
     }
 }

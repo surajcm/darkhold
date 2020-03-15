@@ -33,7 +33,7 @@ public class PreviewService {
      * @param challengeId challenge id
      * @return preview info with questions
      */
-    public PreviewInfo fetchQuestions(String challengeId) {
+    public PreviewInfo fetchQuestions(final String challengeId) {
         PreviewInfo previewInfo = new PreviewInfo();
         Long challengeOne = Long.valueOf(challengeId);
         Challenge challenge = challengeRepository.getOne(challengeOne);

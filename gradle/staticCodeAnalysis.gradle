@@ -22,7 +22,7 @@ checkstyle {
 //}
 
 pmd {
-    toolVersion = '6.17.0'
+    toolVersion = '6.21.0'
     ignoreFailures = false
     ruleSetFiles = files("gradle/static-code-analysis/pmd/ruleset.xml")
     ruleSets = []
@@ -47,4 +47,16 @@ tasks.withType(Pmd) {
         xml.enabled false
         html.enabled true
     }
+}
+cpd {
+    toolVersion = '6.21.0'
+    minimumTokenCount = 40
+}
+
+cpdCheck {
+    reports {
+        text.enabled = true
+        xml.enabled = false
+    }
+    source = sourceSets.main.allJava
 }

@@ -18,11 +18,12 @@ public class HomeService {
     private CurrentGame currentGame;
 
     /**
-     * Verifies whether the entered pin is valid or not
+     * Verifies whether the entered pin is valid or not.
+     *
      * @param pin pin
      * @return true or false
      */
-    public Boolean validateGamePin(String pin) {
+    public Boolean validateGamePin(final String pin) {
         Game game = gameRepository.findByPin(pin);
         if (game != null && (game.getGameStatus().equalsIgnoreCase(GameStatus.WAITING.name())
                 || game.getGameStatus().equalsIgnoreCase(GameStatus.STARTED.name()))) {
@@ -31,7 +32,7 @@ public class HomeService {
         return Boolean.FALSE;
     }
 
-    public List<String> participantsInActiveQuiz(String pin) {
+    public List<String> participantsInActiveQuiz(final String pin) {
         return currentGame.getActiveUsersInGame(pin);
     }
 

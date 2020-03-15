@@ -36,14 +36,15 @@ public class ChallengeService {
     private QuestionSetRepository questionSetRepository;
 
     /**
-     * Read the excel, process it, extract data and save it to the database
+     * Read the excel, process it, extract data and save it to the database.
      *
      * @param upload      the excel file
      * @param title       challenge name
      * @param description challenge desc
      * @throws ChallengeException on error
      */
-    public void readProcessAndSaveChallenge(MultipartFile upload, String title, String description)
+    public void readProcessAndSaveChallenge(final MultipartFile upload, final String title,
+                                            final String description)
             throws ChallengeException {
         List<QuestionSet> questionSets = readAndProcessChallenge(upload);
         Challenge challenge = new Challenge();
@@ -55,33 +56,21 @@ public class ChallengeService {
         questionSets.forEach(questionSet -> questionSetRepository.save(questionSet));
     }
 
-    private List<QuestionSet> readAndProcessChallenge(MultipartFile upload) throws ChallengeException {
+    private List<QuestionSet> readAndProcessChallenge(final MultipartFile upload) throws ChallengeException {
         List<QuestionSet> questionSets = new LinkedList<>();
-        Workbook workbook = null;
-        try {
-            workbook = new XSSFWorkbook(upload.getInputStream());
+        try (Workbook workbook = new XSSFWorkbook(upload.getInputStream());) {
             Sheet datatypeSheet = workbook.getSheetAt(0);
-
             for (Row currentRow : datatypeSheet) {
                 questionSets.add(populateQuestionSet(currentRow));
             }
-        } catch (IOException | NotOfficeXmlFileException e) {
-            logger.error(e.getMessage());
+        } catch (IOException | NotOfficeXmlFileException exception) {
+            logger.error(exception.getMessage());
             throw new ChallengeException("Unable to process the file..");
-        } finally {
-            if (workbook != null) {
-                try {
-                    workbook.close();
-                } catch (IOException e) {
-                    logger.error(e.getMessage());
-                }
-            }
         }
-
         return questionSets;
     }
 
-    private QuestionSet populateQuestionSet(Row currentRow) {
+    private QuestionSet populateQuestionSet(final Row currentRow) {
         Iterator<Cell> cellIterator = currentRow.iterator();
         QuestionSet questionSet = new QuestionSet();
         while (cellIterator.hasNext()) {
@@ -116,7 +105,7 @@ public class ChallengeService {
         return questionSet;
     }
 
-    private String fetchCurrentCellValue(Cell currentCell) {
+    private String fetchCurrentCellValue(final Cell currentCell) {
         String result = null;
         if (currentCell.getCellType() == CellType.STRING) {
             result = currentCell.getStringCellValue();
@@ -131,7 +120,7 @@ public class ChallengeService {
         return result;
     }
 
-    private String populateOptionsFromString(String options) {
+    private String populateOptionsFromString(final String options) {
         if (!options.contains(",")) {
             return Options.valueOf(options).name();
         } else {

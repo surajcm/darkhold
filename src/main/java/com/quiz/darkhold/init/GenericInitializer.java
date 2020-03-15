@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Configuration;
 public class GenericInitializer {
 
     /**
-     * Create the bean for in memory nitrate db
+     * Create the bean for in memory nitrate db.
      *
      * @return bean of nitrate
      */

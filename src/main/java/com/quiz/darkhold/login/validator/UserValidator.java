@@ -21,7 +21,11 @@ public class UserValidator implements Validator {
     @Override
     public void validate(final Object obj, final Errors errors) {
         User user = (User) obj;
+        validateUserName(errors, user);
+        validatePassword(errors, user);
+    }
 
+    private void validateUserName(final Errors errors, final User user) {
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "username", "NotEmpty");
         if (user.getUsername().length() < 6 || user.getUsername().length() > 32) {
             errors.rejectValue("username", "Size.userForm.username");
@@ -29,12 +33,13 @@ public class UserValidator implements Validator {
         if (userService.findByUsername(user.getUsername()) != null) {
             errors.rejectValue("username", "Duplicate.userForm.username");
         }
+    }
 
+    private void validatePassword(final Errors errors, final User user) {
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "password", "NotEmpty");
         if (user.getPassword().length() < 8 || user.getPassword().length() > 32) {
             errors.rejectValue("password", "Size.userForm.password");
         }
-
         if (!user.getPasswordConfirm().equals(user.getPassword())) {
             errors.rejectValue("passwordConfirm", "Diff.userForm.passwordConfirm");
         }

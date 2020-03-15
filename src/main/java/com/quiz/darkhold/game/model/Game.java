@@ -10,7 +10,7 @@ public class Game {
     public Game() {
     }
 
-    public Game(String name) {
+    public Game(final String name) {
         this.name = name;
     }
 
@@ -22,7 +22,7 @@ public class Game {
         return pin;
     }
 
-    public void setPin(String pin) {
+    public void setPin(final String pin) {
         this.pin = pin;
     }
 

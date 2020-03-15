@@ -44,7 +44,7 @@ public class Challenge implements Serializable {
     @Column(name = "modifiedOn")
     private OffsetDateTime modifiedOn;
 
-    @OneToMany(mappedBy = "challenge", cascade = CascadeType.ALL, fetch= FetchType.EAGER)
+    @OneToMany(mappedBy = "challenge", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @OrderBy("id")
     private List<QuestionSet> questionSets;
 
@@ -52,7 +52,7 @@ public class Challenge implements Serializable {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(final Long id) {
         this.id = id;
     }
 
@@ -60,7 +60,7 @@ public class Challenge implements Serializable {
         return title;
     }
 
-    public void setTitle(String title) {
+    public void setTitle(final String title) {
         this.title = title;
     }
 
@@ -68,7 +68,7 @@ public class Challenge implements Serializable {
         return description;
     }
 
-    public void setDescription(String description) {
+    public void setDescription(final String description) {
         this.description = description;
     }
 
@@ -76,7 +76,7 @@ public class Challenge implements Serializable {
         return createdOn;
     }
 
-    public void setCreatedOn(OffsetDateTime createdOn) {
+    public void setCreatedOn(final OffsetDateTime createdOn) {
         this.createdOn = createdOn;
     }
 
@@ -84,7 +84,7 @@ public class Challenge implements Serializable {
         return modifiedOn;
     }
 
-    public void setModifiedOn(OffsetDateTime modifiedOn) {
+    public void setModifiedOn(final OffsetDateTime modifiedOn) {
         this.modifiedOn = modifiedOn;
     }
 
@@ -92,12 +92,12 @@ public class Challenge implements Serializable {
         return questionSets;
     }
 
-    public void setQuestionSets(List<QuestionSet> questionSets) {
+    public void setQuestionSets(final List<QuestionSet> questionSets) {
         this.questionSets = questionSets;
     }
 
     /**
-     * initialize / update date fields
+     * initialize / update date fields.
      */
     @PrePersist
     @PreUpdate

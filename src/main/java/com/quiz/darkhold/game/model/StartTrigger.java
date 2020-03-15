@@ -3,7 +3,7 @@ package com.quiz.darkhold.game.model;
 public class StartTrigger {
     private String startGame;
 
-    public StartTrigger(String startGame) {
+    public StartTrigger(final String startGame) {
         this.startGame = startGame;
     }
 
@@ -11,7 +11,7 @@ public class StartTrigger {
         return startGame;
     }
 
-    public void setStartGame(String startGame) {
+    public void setStartGame(final String startGame) {
         this.startGame = startGame;
     }
 }

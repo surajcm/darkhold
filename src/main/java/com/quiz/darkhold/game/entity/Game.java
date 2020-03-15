@@ -20,13 +20,13 @@ public class Game {
     private Long id;
 
     @Column
-    String pin;
+    private String pin;
 
     @Column
-    String gameStatus;
+    private String gameStatus;
 
     @Column
-    String challengeId;
+    private String challengeId;
 
     @Column(name = "createdOn")
     private OffsetDateTime createdOn;
@@ -38,7 +38,7 @@ public class Game {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(final Long id) {
         this.id = id;
     }
 
@@ -46,7 +46,7 @@ public class Game {
         return pin;
     }
 
-    public void setPin(String pin) {
+    public void setPin(final String pin) {
         this.pin = pin;
     }
 
@@ -54,7 +54,7 @@ public class Game {
         return gameStatus;
     }
 
-    public void setGameStatus(String gameStatus) {
+    public void setGameStatus(final String gameStatus) {
         this.gameStatus = gameStatus;
     }
 
@@ -62,7 +62,7 @@ public class Game {
         return challengeId;
     }
 
-    public void setChallengeId(String challengeId) {
+    public void setChallengeId(final String challengeId) {
         this.challengeId = challengeId;
     }
 
@@ -70,7 +70,7 @@ public class Game {
         return createdOn;
     }
 
-    public void setCreatedOn(OffsetDateTime createdOn) {
+    public void setCreatedOn(final OffsetDateTime createdOn) {
         this.createdOn = createdOn;
     }
 
@@ -78,12 +78,12 @@ public class Game {
         return modifiedOn;
     }
 
-    public void setModifiedOn(OffsetDateTime modifiedOn) {
+    public void setModifiedOn(final OffsetDateTime modifiedOn) {
         this.modifiedOn = modifiedOn;
     }
 
     /**
-     * initialize / update date fields
+     * initialize / update date fields.
      */
     @PrePersist
     @PreUpdate

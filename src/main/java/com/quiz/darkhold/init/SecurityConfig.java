@@ -24,27 +24,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Override
-    protected void configure(HttpSecurity http) throws Exception {
+    protected void configure(final HttpSecurity http) throws Exception {
         //todo : we need to enable CSRF
-        http.csrf().disable()
-                .httpBasic()
+        http.csrf().disable().httpBasic()
                 .and()
-                .authorizeRequests().antMatchers("/options","/createChallenge","/viewChallenge")
-                    .authenticated()
+                .authorizeRequests().antMatchers("/options", "/createChallenge", "/viewChallenge").authenticated()
                 .and()
-                .authorizeRequests().antMatchers("/", "/home","/resources/**","/registration",
-                    "/images/*","/logmein","/logme").permitAll()
+                .authorizeRequests().antMatchers("/", "/home", "/resources/**", "/registration",
+                "/images/*", "/logmein", "/logme").permitAll()
                 .and()
-                .logout()
-                .logoutSuccessUrl("/")
-                .invalidateHttpSession(true)
-                .deleteCookies("JSESSIONID");
-        /*http.authorizeRequests()
-                    .antMatchers("/", "/home","/resources/**","/registration","/images/*",
-                        "/logmein","/logme").permitAll()
-                    .and().antMatcher("/viewChallenge").authorizeRequests();*/
-        //http.authorizeRequests().antMatchers("/options","/createChallenge",
-        //  "viewChallenge").authenticated();
+                .logout().logoutSuccessUrl("/").invalidateHttpSession(true).deleteCookies("JSESSIONID");
     }
 
     @Bean
@@ -53,7 +42,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Autowired
-    public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
+    public void configureGlobal(final AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
     }
 }

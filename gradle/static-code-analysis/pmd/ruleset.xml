@@ -23,8 +23,6 @@
 
     <rule ref="category/java/bestpractices.xml">
         <exclude name="GuardLogStatement"/>
-        <exclude name="JUnitTestContainsTooManyAsserts"/>
-        <exclude name="AvoidPrintStackTrace"/>
     </rule>
 
     <rule ref="category/java/codestyle.xml">
@@ -57,8 +55,6 @@
     </rule>
 
     <rule ref="category/java/errorprone.xml">
-        <exclude name="NullAssignment"/>
-        <exclude name="AssignmentInOperand"/>
         <exclude name="BeanMembersShouldSerialize"/>
         <exclude name="UseLocaleWithCaseConversions"/>
     </rule>
@@ -68,14 +64,10 @@
         <exclude name="UseConcurrentHashMap"/>
     </rule>
 
-    <rule ref="category/java/performance.xml">
-        <exclude name="UseStringBufferForStringAppends"/>
-    </rule>
+    <rule ref="category/java/performance.xml"/>
 
     <rule ref="category/java/design.xml">
         <exclude name="LawOfDemeter"/>
-        <exclude name="ExcessiveImports"/>
-        <exclude name="LoosePackageCoupling"/>
     </rule>
     <rule ref="category/java/design.xml/TooManyMethods">
         <properties>
@@ -85,6 +77,12 @@
     <rule ref="category/java/design.xml/SignatureDeclareThrowsException">
         <properties>
             <property name="IgnoreJUnitCompletely" value="true"/>
+        </properties>
+    </rule>
+
+    <rule ref="category/java/design.xml/UseUtilityClass">
+        <properties>
+            <property name="ignoredAnnotations" value="org.springframework.boot.autoconfigure.SpringBootApplication"/>
         </properties>
     </rule>
 

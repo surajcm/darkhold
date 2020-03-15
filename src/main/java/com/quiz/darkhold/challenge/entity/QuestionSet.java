@@ -46,7 +46,7 @@ public class QuestionSet implements Serializable {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(final Long id) {
         this.id = id;
     }
 
@@ -54,7 +54,7 @@ public class QuestionSet implements Serializable {
         return question;
     }
 
-    public void setQuestion(String question) {
+    public void setQuestion(final String question) {
         this.question = question;
     }
 
@@ -62,7 +62,7 @@ public class QuestionSet implements Serializable {
         return answer1;
     }
 
-    public void setAnswer1(String answer1) {
+    public void setAnswer1(final String answer1) {
         this.answer1 = answer1;
     }
 
@@ -70,7 +70,7 @@ public class QuestionSet implements Serializable {
         return answer2;
     }
 
-    public void setAnswer2(String answer2) {
+    public void setAnswer2(final String answer2) {
         this.answer2 = answer2;
     }
 
@@ -78,7 +78,7 @@ public class QuestionSet implements Serializable {
         return answer3;
     }
 
-    public void setAnswer3(String answer3) {
+    public void setAnswer3(final String answer3) {
         this.answer3 = answer3;
     }
 
@@ -86,7 +86,7 @@ public class QuestionSet implements Serializable {
         return answer4;
     }
 
-    public void setAnswer4(String answer4) {
+    public void setAnswer4(final String answer4) {
         this.answer4 = answer4;
     }
 
@@ -94,7 +94,7 @@ public class QuestionSet implements Serializable {
         return correctOptions;
     }
 
-    public void setCorrectOptions(String correctOptions) {
+    public void setCorrectOptions(final String correctOptions) {
         this.correctOptions = correctOptions;
     }
 
@@ -102,7 +102,7 @@ public class QuestionSet implements Serializable {
         return challenge;
     }
 
-    public void setChallenge(Challenge challenge) {
+    public void setChallenge(final Challenge challenge) {
         this.challenge = challenge;
     }
 

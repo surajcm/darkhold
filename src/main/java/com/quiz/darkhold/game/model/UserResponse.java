@@ -3,7 +3,7 @@ package com.quiz.darkhold.game.model;
 import java.util.List;
 
 public class UserResponse {
-    List<String> users;
+    private List<String> users;
 
     public UserResponse() {
     }
@@ -12,7 +12,7 @@ public class UserResponse {
         return users;
     }
 
-    public UserResponse(List<String> users) {
+    public UserResponse(final List<String> users) {
         this.users = users;
     }
 }

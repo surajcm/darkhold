@@ -1,5 +1,6 @@
 package com.quiz.darkhold.challenge.controller;
 
+import com.quiz.darkhold.challenge.exception.ChallengeException;
 import com.quiz.darkhold.challenge.service.ChallengeService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,7 +24,7 @@ public class ChallengeController {
     }
 
     /**
-     * Upload the challenge as a predefined excel sheet
+     * Upload the challenge as a predefined excel sheet.
      *
      * @param upload             excel file
      * @param title              game title
@@ -33,19 +34,18 @@ public class ChallengeController {
      */
     @PostMapping("/upload_challenge")
     public @ResponseBody
-    String handleFileUpload(MultipartFile upload, String title, String description,
-                            RedirectAttributes redirectAttributes) {
+    String handleFileUpload(final MultipartFile upload, final String title, final String description,
+                            final RedirectAttributes redirectAttributes) {
         String responseText;
         logger.info("received incoming traffic and redirected to upload_pdf");
-        logger.info("title : " + title);
-        logger.info("description : " + description);
-        logger.info("File details getOriginalFilename : " + upload.getOriginalFilename());
-        logger.info("File details getSize : " + upload.getSize());
+        logger.info(String.format("title : %s, description : %s " , title, description));
+        logger.info(String.format("File details getOriginalFilename : %s, getSize : %s ",
+                upload.getOriginalFilename(), upload.getSize()));
         try {
             challengeService.readProcessAndSaveChallenge(upload, title, description);
             responseText = "Successfully created " + title + " !!!";
-        } catch (Exception e) {
-            logger.error(e.getMessage());
+        } catch (ChallengeException challengeException) {
+            logger.error(challengeException.getMessage());
             //todo: change the http status code and give this as an error message
             responseText = "Unable to process, huge file";
         }

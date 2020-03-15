@@ -4,16 +4,16 @@ import java.util.List;
 import java.util.StringJoiner;
 
 public class GameInfo {
-    String gamePin;
-    String name;
-    String message;
-    List<String> users;
+    private String gamePin;
+    private String name;
+    private String message;
+    private List<String> users;
 
     public String getGamePin() {
         return gamePin;
     }
 
-    public void setGamePin(String gamePin) {
+    public void setGamePin(final String gamePin) {
         this.gamePin = gamePin;
     }
 
@@ -21,7 +21,7 @@ public class GameInfo {
         return name;
     }
 
-    public void setName(String name) {
+    public void setName(final String name) {
         this.name = name;
     }
 
@@ -29,7 +29,7 @@ public class GameInfo {
         return message;
     }
 
-    public void setMessage(String message) {
+    public void setMessage(final String message) {
         this.message = message;
     }
 
@@ -37,7 +37,7 @@ public class GameInfo {
         return users;
     }
 
-    public void setUsers(List<String> users) {
+    public void setUsers(final List<String> users) {
         this.users = users;
     }
 

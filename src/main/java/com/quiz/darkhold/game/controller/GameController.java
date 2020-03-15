@@ -9,7 +9,6 @@ import com.quiz.darkhold.game.model.QuestionOnGame;
 import com.quiz.darkhold.game.model.StartTrigger;
 import com.quiz.darkhold.game.model.UserResponse;
 import com.quiz.darkhold.game.service.GameService;
-import com.quiz.darkhold.preview.model.PublishInfo;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,68 +32,75 @@ public class GameController {
     private GameService gameService;
 
     @PostMapping("/interstitial")
-    public String startInterstitial(Model model, @RequestParam("quiz_pin") String quizPin) {
+    public String startInterstitial(final Model model, @RequestParam("quiz_pin") final String quizPin) {
         logger.info("On to interstitial :" + quizPin);
         return "interstitial";
     }
 
     /**
-     * On to the page where the only question is getting displayed for few seconds
+     * On to the page where the only question is getting displayed for few seconds.
      *
      * @param model     model
      * @param principal auth
      * @return question page
      */
     @PostMapping("/question")
-    public String question(Model model, Principal principal) {
+    public String question(final Model model, final Principal principal) {
         logger.info("On to question :");
         return "question";
     }
 
     @PostMapping("/final")
-    public String finalScore(Model model) {
+    public String finalScore(final Model model) {
         logger.info("On to the finalScore :");
         return "finalscore";
     }
 
     /**
-     * On to the game
+     * On to the game.
      *
      * @param model     model
      * @param principal auth
      * @return game page
      */
     @PostMapping("/game")
-    public String startGame(Model model, Principal principal) {
+    public String startGame(final Model model, final Principal principal) {
         logger.info("On to game :");
-        PublishInfo publishInfo = gameService.getActiveChallenge();
-        int currentQuestionNumber = gameService.getCurrentQuestionNo(publishInfo.getPin());
-        String moderator = gameService.findModerator(publishInfo.getPin());
+        int currentQuestionNumber = gameService.getCurrentQuestionNo();
+        String moderator = gameService.findModerator();
         if (currentQuestionNumber < 0 || principal.getName().equalsIgnoreCase(moderator)) {
             currentQuestionNumber++;
         }
-        Challenge challenge = gameService.getCurrentQuestionSet(publishInfo.getPin(),
-                currentQuestionNumber);
+        Challenge challenge = gameService.getCurrentQuestionSet(currentQuestionNumber);
         challenge.setQuestionNumber(challenge.getQuestionNumber() + 1);
         if (principal.getName().equalsIgnoreCase(moderator)) {
-            gameService.updateQuestionNo(publishInfo.getPin());
+            gameService.updateQuestionNo();
         }
         model.addAttribute("challenge", challenge);
         return "game";
     }
 
     /**
-     * Answer the question with correct/incorrect options or time out
+     * Answer the question with correct/incorrect options or time out.
      *
      * @param model           model
      * @param selectedOptions answer
      * @return to the answer show page
      */
     @PostMapping("/answer")
-    public String timed(Model model, @RequestParam("selectedOptions") String selectedOptions, Principal principal) {
+    public String timed(final Model model, @RequestParam("selectedOptions") final String selectedOptions,
+                        final Principal principal) {
         logger.info("On to the answer :" + selectedOptions);
-        ExamStatus status;
         CurrentStatus currentStatus = new CurrentStatus();
+        ExamStatus status = getExamStatus(selectedOptions);
+        currentStatus.setStatus(status.name());
+        gameService.saveCurrentScore(principal.getName(), status.name());
+        model.addAttribute("currentStatus", currentStatus);
+        return "answer";
+    }
+
+    private ExamStatus getExamStatus(@RequestParam("selectedOptions") final String selectedOptions) {
+        ExamStatus status;
         if (StringUtils.isNotEmpty(selectedOptions)) {
             if (selectedOptions.equalsIgnoreCase("correct")) {
                 status = ExamStatus.SUCCESS;
@@ -106,41 +112,38 @@ public class GameController {
         } else {
             status = ExamStatus.TIME_OUT;
         }
-        currentStatus.setStatus(status.name());
-        gameService.saveCurrentScore(principal.getName(), status.name());
-        model.addAttribute("currentStatus", currentStatus);
-        return "answer";
+        return status;
     }
 
     /**
-     * show the till now score and display who are the top 3 players
+     * show the till now score and display who are the top 3 players.
      *
      * @param model model
      * @return to scoreboard
      */
     @PostMapping("/check_score")
-    public String scoreCheck(Model model) {
+    public String scoreCheck(final Model model) {
         logger.info("On to the check_score :");
         //todo: load the score
         return "scoreboard";
     }
 
     /**
-     * Always active, will add the new user and give it back in response
+     * Always active, will add the new user and give it back in response.
      *
      * @param game game
      * @return ajax
      */
     @MessageMapping("/user")
     @SendTo("/topic/user")
-    public UserResponse getGame(Game game) {
+    public UserResponse getGame(final Game game) {
         logger.info("On to getGame :" + game);
         List<String> users = gameService.getAllParticipants(game.getPin());
         return new UserResponse(users);
     }
 
     /**
-     * Trigger for starting the game
+     * Trigger for starting the game.
      *
      * @param pin       of the game
      * @param principal of who started it
@@ -148,7 +151,7 @@ public class GameController {
      */
     @MessageMapping("/start")
     @SendTo("/topic/start")
-    public StartTrigger startTrigger(String pin, Principal principal) {
+    public StartTrigger startTrigger(final String pin, final Principal principal) {
         // this is triggered by the game moderator
         logger.info("On to startGame :" + pin);
         logger.info("On to startGame : user : " + principal.getName());
@@ -158,29 +161,26 @@ public class GameController {
 
     @MessageMapping("/question_fetch")
     @SendTo("/topic/question_read")
-    public StartTrigger questionFetch(String name) {
-        logger.info("On to questionFetch :" + name);
-        logger.info("question_on_game : questionFetch : " + name);
-        PublishInfo publishInfo = gameService.getActiveChallenge();
-        int currentQuestionNumber = gameService.getCurrentQuestionNo(publishInfo.getPin());
+    public StartTrigger questionFetch(final String name) {
+        logger.info(String.format("On to questionFetch : %s", name));
+        int currentQuestionNumber = gameService.getCurrentQuestionNo();
         QuestionOnGame questionOnGame;
         if (currentQuestionNumber == -1) {
-            questionOnGame = gameService.initialFetchAndUpdateNitrate(publishInfo.getPin());
+            questionOnGame = gameService.initialFetchAndUpdateNitrate();
         } else {
-            List<QuestionSet> questionSets = gameService.getQuestionsOnAPin(publishInfo.getPin());
-            String moderator = gameService.findModerator(publishInfo.getPin());
-            logger.info("Size of question set is" + questionSets.size()
-                    + ", and current question # is " + currentQuestionNumber);
+            List<QuestionSet> questionSets = gameService.getQuestionsOnAPin();
+            String moderator = gameService.findModerator();
             if (name.equalsIgnoreCase(moderator)) {
                 currentQuestionNumber++;
             }
             if (questionSets.size() - 1 > currentQuestionNumber) {
-                questionOnGame = gameService.fetchAnotherQuestion(publishInfo.getPin(), currentQuestionNumber);
+                questionOnGame = gameService.fetchAnotherQuestion(currentQuestionNumber);
             } else {
                 return new StartTrigger("END_GAME");
             }
         }
         questionOnGame.setCurrentQuestionNumber(questionOnGame.getCurrentQuestionNumber() + 1);
-        return new StartTrigger(questionOnGame.getCurrentQuestionNumber() + " : " + questionOnGame.getQuestion());
+        return new StartTrigger(questionOnGame.getCurrentQuestionNumber()
+                + " : " + questionOnGame.getQuestion());
     }
 }

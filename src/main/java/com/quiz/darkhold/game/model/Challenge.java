@@ -10,7 +10,7 @@ public class Challenge {
         return questionNumber;
     }
 
-    public void setQuestionNumber(int questionNumber) {
+    public void setQuestionNumber(final int questionNumber) {
         this.questionNumber = questionNumber;
     }
 
@@ -18,7 +18,7 @@ public class Challenge {
         return questionSet;
     }
 
-    public void setQuestionSet(QuestionSet questionSet) {
+    public void setQuestionSet(final QuestionSet questionSet) {
         this.questionSet = questionSet;
     }
 }
