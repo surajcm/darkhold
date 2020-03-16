@@ -1,5 +1,7 @@
 package com.quiz.darkhold.game.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.quiz.darkhold.challenge.entity.QuestionSet;
 import com.quiz.darkhold.game.model.Challenge;
 import com.quiz.darkhold.game.model.CurrentStatus;
@@ -22,6 +24,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import java.security.Principal;
 import java.util.List;
+import java.util.Map;
 
 @SuppressWarnings("unused")
 @Controller
@@ -94,9 +97,14 @@ public class GameController {
         CurrentStatus currentStatus = new CurrentStatus();
         ExamStatus status = getExamStatus(selectedOptions);
         currentStatus.setStatus(status.name());
-        gameService.saveCurrentScore(principal.getName(), status.name());
+        Integer scoreOnStatus = findScoreOnStatus(status);
+        gameService.saveCurrentScore(principal.getName(), scoreOnStatus);
         model.addAttribute("currentStatus", currentStatus);
         return "answer";
+    }
+
+    private Integer findScoreOnStatus(final ExamStatus status) {
+        return status == ExamStatus.SUCCESS ? 1 : 0;
     }
 
     private ExamStatus getExamStatus(@RequestParam("selectedOptions") final String selectedOptions) {
@@ -182,5 +190,20 @@ public class GameController {
         questionOnGame.setCurrentQuestionNumber(questionOnGame.getCurrentQuestionNumber() + 1);
         return new StartTrigger(questionOnGame.getCurrentQuestionNumber()
                 + " : " + questionOnGame.getQuestion());
+    }
+
+    @MessageMapping("/fetch_scores")
+    @SendTo("/topic/read_scores")
+    public StartTrigger scoresFetch() {
+        Map<String, Integer> scores = gameService.getCurrentScore();
+        ObjectMapper mapper = new ObjectMapper();
+        //Converting the Object to JSONString
+        String jsonString ="";
+        try {
+            jsonString = mapper.writeValueAsString(scores);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        return new StartTrigger(jsonString);
     }
 }

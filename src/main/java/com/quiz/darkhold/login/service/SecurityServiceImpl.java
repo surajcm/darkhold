@@ -14,19 +14,18 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 @Service
 public class SecurityServiceImpl implements SecurityService {
     private static final String UNREGISTERED_USER = "UNREGISTERED_USER";
     private static final String ROLE_MODERATOR = "ROLE_MODERATOR";
+    private static final Logger logger = LoggerFactory.getLogger(SecurityServiceImpl.class);
     @Autowired
     private AuthenticationManager authenticationManager;
-
     @Autowired
     private UserDetailsService userDetailsService;
-
-    private static final Logger logger = LoggerFactory.getLogger(SecurityServiceImpl.class);
 
     @Override
     public String findLoggedInUsername() {
@@ -40,32 +39,35 @@ public class SecurityServiceImpl implements SecurityService {
 
     @Override
     public void autoLogin(final String username, final String password) {
-        UserDetails userDetails;
         boolean unRegistered = password.equalsIgnoreCase(UNREGISTERED_USER);
-        List<GrantedAuthority> authorities = new ArrayList<>();
-        if (unRegistered) {
-            userDetails = new User(username, UNREGISTERED_USER, authorities);
-        } else {
-            userDetails = userDetailsService.loadUserByUsername(username);
-            // this is real user
-            if (userDetails.getAuthorities() == null || userDetails.getAuthorities().isEmpty()) {
-                logger.info("empty authorities found, adding moderator role");
-                authorities.add(new SimpleGrantedAuthority(ROLE_MODERATOR));
-                userDetails = new User(userDetails.getUsername(), userDetails.getPassword(), authorities);
-            } else {
-                authorities = (List<GrantedAuthority>) userDetails.getAuthorities();
-            }
-        }
+        UserDetails userDetails = getUserDetails(username, unRegistered);
+        Set<GrantedAuthority> authorities = (Set<GrantedAuthority>) userDetails.getAuthorities();
         logger.info("Successfully fetched user details : " + userDetails);
         UsernamePasswordAuthenticationToken token =
                 new UsernamePasswordAuthenticationToken(userDetails, password, authorities);
         if (!unRegistered) {
             authenticationManager.authenticate(token);
         }
-
         if (token.isAuthenticated()) {
             SecurityContextHolder.getContext().setAuthentication(token);
             logger.info(String.format("Auto login %s successfully!", username));
         }
+    }
+
+    private UserDetails getUserDetails(final String username, final boolean unRegistered) {
+        UserDetails userDetails;
+        if (unRegistered) {
+            userDetails = new User(username, UNREGISTERED_USER, new ArrayList<>());
+        } else {
+            userDetails = userDetailsService.loadUserByUsername(username);
+            // this is real user
+            if (userDetails.getAuthorities() == null || userDetails.getAuthorities().isEmpty()) {
+                logger.info("empty authorities found, adding moderator role");
+                Set<GrantedAuthority> authorities = new HashSet<>();
+                authorities.add(new SimpleGrantedAuthority(ROLE_MODERATOR));
+                userDetails = new User(userDetails.getUsername(), userDetails.getPassword(), authorities);
+            }
+        }
+        return userDetails;
     }
 }

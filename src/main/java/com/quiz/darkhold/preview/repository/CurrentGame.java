@@ -12,7 +12,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static org.dizitart.no2.filters.Filters.eq;
 
@@ -24,6 +26,7 @@ public class CurrentGame {
     private static final String CURRENT_QUESTION_NO = "currentQuestionNo";
     private static final String QUESTIONS = "questions";
     private static final String MODERATOR = "MODERATOR";
+    private static final String SCORES = "SCORES";
     private final Logger logger = LoggerFactory.getLogger(CurrentGame.class);
 
     @Autowired
@@ -41,7 +44,8 @@ public class CurrentGame {
                 .put(USERS, users)
                 .put(MODERATOR, publishInfo.getModerator())
                 .put(CURRENT_QUESTION_NO, -1)
-                .put(QUESTIONS, new ArrayList<>());
+                .put(QUESTIONS, new ArrayList<>())
+                .put(SCORES, new HashMap<String, Integer>());
 
         collection.insert(doc);
     }
@@ -135,5 +139,31 @@ public class CurrentGame {
     public String findModerator(final String pin) {
         Cursor cursor = collection.find(Filters.and(eq(PIN, pin)));
         return (String) cursor.toList().get(0).get(MODERATOR);
+    }
+
+    /**
+     * save current score to nitrate.
+     *
+     * @param pin pin of game
+     * @param name of user
+     * @param status success or not
+     */
+    public void saveCurrentScore(final String pin, final String name, final Integer status) {
+        Cursor cursor = collection.find(Filters.and(eq(PIN, pin)));
+        Map<String, Integer> scores = (Map<String, Integer>) cursor.toList().get(0).get(SCORES);
+        if (scores.containsKey(name)) {
+            Integer currentValue = scores.get(name);
+            scores.put(name, currentValue + status);
+        } else {
+            scores.put(name, status);
+        }
+        Document doc = cursor.toList().get(0);
+        doc.put(SCORES, scores);
+        collection.update(doc);
+    }
+
+    public Map<String, Integer> getCurrentScore(String pin) {
+        Cursor cursor = collection.find(Filters.and(eq(PIN, pin)));
+        return (Map<String, Integer>) cursor.toList().get(0).get(SCORES);
     }
 }

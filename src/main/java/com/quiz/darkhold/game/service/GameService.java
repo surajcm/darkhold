@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class GameService {
@@ -110,13 +111,27 @@ public class GameService {
         currentGame.incrementQuestionCount(pin);
     }
 
-    public void saveCurrentScore(final String name, final String name1) {
-
+    /**
+     * save current score.
+     *
+     * @param name of user
+     * @param status of user
+     */
+    public void saveCurrentScore(final String name, final Integer status) {
+        PublishInfo publishInfo = previewService.getActiveChallenge();
+        String pin = publishInfo.getPin();
+        currentGame.saveCurrentScore(pin, name, status);
     }
 
     public String findModerator() {
         PublishInfo publishInfo = previewService.getActiveChallenge();
         String pin = publishInfo.getPin();
         return currentGame.findModerator(pin);
+    }
+
+    public Map<String, Integer> getCurrentScore() {
+        PublishInfo publishInfo = previewService.getActiveChallenge();
+        String pin = publishInfo.getPin();
+        return currentGame.getCurrentScore(pin);
     }
 }

@@ -28,6 +28,7 @@ function toOptions() {
     document.forms[0].action="/options";
     document.forms[0].submit();
 }
+
 function connect() {
     var socket = new SockJS('/darkhold-websocket');
     stompClient = Stomp.over(socket);
