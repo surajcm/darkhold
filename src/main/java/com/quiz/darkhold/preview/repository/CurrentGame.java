@@ -162,7 +162,7 @@ public class CurrentGame {
         collection.update(doc);
     }
 
-    public Map<String, Integer> getCurrentScore(String pin) {
+    public Map<String, Integer> getCurrentScore(final String pin) {
         Cursor cursor = collection.find(Filters.and(eq(PIN, pin)));
         return (Map<String, Integer>) cursor.toList().get(0).get(SCORES);
     }

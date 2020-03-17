@@ -197,12 +197,11 @@ public class GameController {
     public StartTrigger scoresFetch() {
         Map<String, Integer> scores = gameService.getCurrentScore();
         ObjectMapper mapper = new ObjectMapper();
-        //Converting the Object to JSONString
-        String jsonString ="";
+        String jsonString = "";
         try {
             jsonString = mapper.writeValueAsString(scores);
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
+        } catch (JsonProcessingException exception) {
+            logger.error(exception.getMessage());
         }
         return new StartTrigger(jsonString);
     }
