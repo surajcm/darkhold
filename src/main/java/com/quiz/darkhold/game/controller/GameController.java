@@ -172,24 +172,30 @@ public class GameController {
     public StartTrigger questionFetch(final String name) {
         logger.info(String.format("On to questionFetch : %s", name));
         int currentQuestionNumber = gameService.getCurrentQuestionNo();
-        QuestionOnGame questionOnGame;
-        if (currentQuestionNumber == -1) {
+        String moderator = gameService.findModerator();
+        if (name.equalsIgnoreCase(moderator)) {
+            currentQuestionNumber++;
+        }
+        QuestionOnGame questionOnGame = getQuestionOnGame(currentQuestionNumber);
+        if (questionOnGame == null) {
+            return new StartTrigger("END_GAME");
+        }
+        questionOnGame.setCurrentQuestionNumber(currentQuestionNumber);
+        return new StartTrigger(currentQuestionNumber + 1
+                + " : " + questionOnGame.getQuestion());
+    }
+
+    private QuestionOnGame getQuestionOnGame(final int currentQuestionNumber) {
+        QuestionOnGame questionOnGame = null;
+        if (currentQuestionNumber == 0) {
             questionOnGame = gameService.initialFetchAndUpdateNitrate();
         } else {
             List<QuestionSet> questionSets = gameService.getQuestionsOnAPin();
-            String moderator = gameService.findModerator();
-            if (name.equalsIgnoreCase(moderator)) {
-                currentQuestionNumber++;
-            }
-            if (questionSets.size() - 1 > currentQuestionNumber) {
+            if (questionSets.size() > currentQuestionNumber) {
                 questionOnGame = gameService.fetchAnotherQuestion(currentQuestionNumber);
-            } else {
-                return new StartTrigger("END_GAME");
             }
         }
-        questionOnGame.setCurrentQuestionNumber(questionOnGame.getCurrentQuestionNumber() + 1);
-        return new StartTrigger(questionOnGame.getCurrentQuestionNumber()
-                + " : " + questionOnGame.getQuestion());
+        return questionOnGame;
     }
 
     @MessageMapping("/fetch_scores")
