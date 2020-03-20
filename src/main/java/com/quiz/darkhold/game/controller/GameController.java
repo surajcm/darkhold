@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.quiz.darkhold.challenge.entity.QuestionSet;
 import com.quiz.darkhold.game.model.Challenge;
+import com.quiz.darkhold.game.model.CurrentScore;
 import com.quiz.darkhold.game.model.CurrentStatus;
 import com.quiz.darkhold.game.model.ExamStatus;
 import com.quiz.darkhold.game.model.Game;
@@ -132,7 +133,10 @@ public class GameController {
     @PostMapping("/check_score")
     public String scoreCheck(final Model model) {
         logger.info("On to the check_score :");
-        //todo: load the score
+        CurrentScore score = new CurrentScore();
+        Map<String, Integer> scores = gameService.getCurrentScore();
+        score.setScore(scores);
+        model.addAttribute("score", score);
         return "scoreboard";
     }
 

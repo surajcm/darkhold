@@ -14,13 +14,17 @@
     </script>
 </head>
 <body>
-<form action="#" method="post">
+<form action="#" th:object="${score}" method="post">
     <div class="container">
         <div class="body-style">
             <div style="width:45%;float:left;margin-left:50px;">
                 <h1 style="font-weight:bold;font-size:34px;">Scores !!!!</h1>
             </div>
             <div>
+                <tr th:each="eachScore : ${score.score}">
+                    <td th:text="${eachScore.key}">keyvalue</td>
+                    <td th:text="${eachScore.value}">value</td>
+                </tr>
                 <br/>
                 <button class="button-style" onclick="javascript:askQuestion();">Next Question</button>
             </div>
