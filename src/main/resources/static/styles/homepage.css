@@ -1,11 +1,4 @@
-@import url('audiowide.css');
-body {
-    background-image: url("../images/funky-lines.png");
-    font-family: 'Audiowide', cursive;
-    font-weight: 400;
-    font-size: 26px;
-    text-decoration :none;
-}
+@import url('darkhold-styles.css');
 .navbar.transparent.navbar-inverse .navbar-inner {
     border-width: 0px;
     -webkit-box-shadow: 0px 0px;

@@ -21,10 +21,9 @@
                 <h1 style="font-weight:bold;font-size:34px;">Scores !!!!</h1>
             </div>
             <div>
-                <tr th:each="eachScore : ${score.score}">
-                    <td th:text="${eachScore.key}">keyvalue</td>
-                    <td th:text="${eachScore.value}">value</td>
-                </tr>
+                <div th:each="eachScore : ${score.score}">
+                    [[${eachScore.key}]] [[${eachScore.value}]]
+                </div>
                 <br/>
                 <button class="button-style" onclick="javascript:askQuestion();">Next Question</button>
             </div>

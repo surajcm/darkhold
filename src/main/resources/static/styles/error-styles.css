@@ -1,9 +1,5 @@
-@import url('audiowide.css');
-body {
-    background-image: url("../images/funky-lines.png");
-    font-family: 'Audiowide', cursive;
-    font-size: 26px;
-}
+@import url('darkhold-styles.css');
+
 .body-style {
     display: -webkit-flex;
     display: flex;

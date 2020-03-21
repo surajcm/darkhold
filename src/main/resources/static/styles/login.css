@@ -1,11 +1,5 @@
-@import url('audiowide.css');
-body {
-    background-image: url("../images/funky-lines.png");
-    font-family: 'Audiowide', cursive;
-    font-weight: 400;
-    font-size: 26px;
-    text-decoration :none;
-}
+@import url('darkhold-styles.css');
+
 .login-container{
     margin-top: 5%;
     margin-bottom: 5%;
@@ -31,8 +25,7 @@ body {
 .login-container form{
     padding: 10%;
 }
-.btnSubmit
-{
+.btnSubmit{
     width: 50%;
     border-radius: 1rem;
     padding: 1.5%;
