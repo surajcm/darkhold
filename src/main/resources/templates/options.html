@@ -54,39 +54,11 @@
         <div class="row justify-content-center align-items-center d-flex text-center h-100">
             <div class="col-12 col-md-8  h-50">
                 <div class="jumbotron min-vh-100 text-center m-0 d-flex justify-content-center">
-                    <div class="col-lg-6 mbr-col-md-10">
-                        <div class="wrap" onclick="javascript:createChallenge()">
-                            <div class="ico-wrap">
-                                <span class="mbr-iconfont fa-calendar fas"></span>
-                            </div>
-                            <div class="text-wrap vcenter">
-                                <h2 class="mbr-fonts-style mbr-bold mbr-section-title3 display-5">Set up new <span>Challenge</span></h2>
-                                <p class="mbr-fonts-style text1 mbr-text display-6">Create a new challenge</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-6 mbr-col-md-10">
-                        <div class="wrap" onclick="javascript:viewChallenge()">
-                            <div class="ico-wrap">
-                                <span class="mbr-iconfont fa-trophy fas"></span>
-                            </div>
-                            <div class="text-wrap vcenter">
-                                <h2 class="mbr-fonts-style mbr-bold mbr-section-title3 display-5">View existing <span>Challenge</span></h2>
-                                <p class="mbr-fonts-style text1 mbr-text display-6">See the existing challenges, edit them and start the challenges</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-6 mbr-col-md-10">
-                        <div class="wrap" onclick="javascript:activeChallenge()">
-                            <div class="ico-wrap">
-                                <span class="mbr-iconfont fa-space-shuttle fas"></span>
-                            </div>
-                            <div class="text-wrap vcenter">
-                                <h2 class="mbr-fonts-style mbr-bold mbr-section-title3 display-5">View active <span>Challenge</span></h2>
-                                <p class="mbr-fonts-style text1 mbr-text display-6">See the currently running challenges</p>
-                            </div>
-                        </div>
-                    </div>
+                    <ul>
+                        <li onclick="javascript:createChallenge()">Create a new challenge</li>
+                        <li onclick="javascript:viewChallenge()">View existing Challenge</li>
+                        <li onclick="javascript:activeChallenge()">View active Challenge</li>
+                    </ul>
                 </div>
             </div>
         </div>
