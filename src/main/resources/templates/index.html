@@ -4,7 +4,6 @@
     <title>Getting Started: Darkhold classroom quiz experience</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <link href="styles/bootstrap.4.0.0.min.css" rel="stylesheet" />
     <link href="styles/homepage.css" rel="stylesheet" />
     <script type="text/javascript" src="scripts/home-scripts.js"></script>
 </head>
@@ -20,7 +19,7 @@
         <div class="container-fluid">
             <div class="row justify-content-center align-items-center d-flex text-center h-100">
                 <div class="col-12 col-md-8  h-50">
-                    <div class="jumbotron min-vh-100 text-center m-0 d-flex flex-column justify-content-center">
+                    <div class="jumbotron vertical-center min-vh-100 text-center m-0 d-flex flex-column justify-content-center">
                         <span th:if="${gameinfo != null && gameinfo.message != null}">
                             <div class="alert alert-success alert-dismissible" id="logMessage">
                                 <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
