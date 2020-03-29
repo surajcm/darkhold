@@ -49,14 +49,20 @@
 <form action="#" method="post">
     <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
     <div class="container-fluid">
-        <div class="row justify-content-center align-items-center d-flex text-center h-100">
-            <div class="col-12 col-md-8  h-50">
-                <div class="jumbotron min-vh-100 text-center m-0 d-flex justify-content-center">
-                    <ul>
-                        <li onclick="javascript:createChallenge()">Create a new challenge</li>
-                        <li onclick="javascript:viewChallenge()">View existing Challenge</li>
-                        <li onclick="javascript:activeChallenge()">View active Challenge</li>
-                    </ul>
+        <div class="card-deck vertical-center">
+            <div class="card bg-primary" style="cursor:pointer" onclick="javascript:createChallenge()">
+                <div class="card-body text-center">
+                    <p class="card-text">Create a new challenge</p>
+                </div>
+            </div>
+            <div class="card bg-warning" style="cursor:pointer" onclick="javascript:viewChallenge()">
+                <div class="card-body text-center">
+                    <p class="card-text">View existing Challenge</p>
+                </div>
+            </div>
+            <div class="card bg-success" style="cursor:pointer" onclick="javascript:activeChallenge()">
+                <div class="card-body text-center">
+                    <p class="card-text">View active Challenge</p>
                 </div>
             </div>
         </div>

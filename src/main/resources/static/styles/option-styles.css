@@ -4,6 +4,12 @@ section {
     padding-bottom: 5rem;
     background-color: #f1f4fa;
 }
+body {
+    height: 100vh;
+    align-items: center;
+    justify-content: center;
+}
+
 .wrap {
     display: flex;
     background: white;
@@ -12,10 +18,6 @@ section {
     box-shadow: 7px 7px 30px -5px rgba(0,0,0,0.1);
     margin-bottom: 2rem;
     cursor: pointer;
-}
-
-.jumbotron {
-    background: none
 }
 
 .ico-wrap {
@@ -46,11 +48,6 @@ h2 {
     font-weight: 700;
 }
 
-p {
-    padding-top: 0.5rem;
-    padding-bottom: 0.5rem;
-    line-height: 25px;
-}
 .display-6 {
     font-size: 1re
 }
@@ -64,54 +61,12 @@ p {
     transition: all 0.3s ease;
     font-size: 36px;
 }
+.vertical-center {
+  min-height: 100%;  /* Fallback for browsers do NOT support vh unit */
+  min-height: 100vh; /* These two lines are counted as one :-)       */
 
-body {
-    height: 100vh;
-    //display: flex;
-    align-items: center;
-    justify-content: center;
+  display: flex;
+  align-items: center;
 }
 
-ul {
-    padding: 0;
-    list-style-type: none;
-}
 
-ul li {
-    box-sizing: border-box;
-    width: 25em;
-    height: 3em;
-    font-size: 20px;
-    border-radius: 0.5em;
-    margin: 0.5em;
-    box-shadow: 0 0 1em rgba(0,0,0,0.2);
-    color: white;
-    text-transform: capitalize;
-    line-height: 3em;
-    transition: 0.3s;
-    cursor: pointer;
-}
-
-ul li:nth-child(odd) {
-    background: linear-gradient(to right, orange, tomato);
-    text-align: left;
-    padding-left: 10%;
-    transform: perspective(500px) rotateY(45deg);
-}
-
-ul li:nth-child(even) {
-    background: linear-gradient(to left, orange, tomato);
-    text-align: right;
-    padding-right: 10%;
-    transform: perspective(500px) rotateY(-45deg);
-}
-
-ul li:nth-child(odd):hover {
-    transform: perspective(200px) rotateY(45deg);
-    padding-left: 5%;
-}
-
-ul li:nth-child(even):hover {
-    transform: perspective(200px) rotateY(-45deg);
-    padding-right: 5%;
-}
