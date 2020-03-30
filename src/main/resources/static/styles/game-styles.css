@@ -16,6 +16,13 @@ a {
     margin:20px 0px;
     cursor: pointer;
 }
+.box-part.background-block {
+    float: left;
+    width: 100%;
+    height: 200px;
+    overflow: hidden;
+}
+
 .text {
     margin:20px 0px;
 }
