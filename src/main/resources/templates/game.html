@@ -22,61 +22,69 @@
     </button>
 </nav>
 <form action="#" th:object="${challenge}" method="post">
-    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-    <input type="hidden" th:value="${challenge.QuestionSet.correctOptions}" id="correctOptions"/>
-    <input type="hidden" th:name="selectedOptions" id="selectedOptions"/>
-    <div class="container">
-        <div class="row pt-1 pb-1">
-            <div class="col-lg-12">
-                <div class="non-semantic-protector">
-                    <h5 class="ribbon">
-                        <strong class="ribbon-content">[[${challenge.questionNumber}]].[[${challenge.QuestionSet.question}]]</strong>
-                    </h5>
+    <div id="wrapper" class="toggled">
+        <!-- Sidebar -->
+        <div id="sidebar-wrapper">
+            <div class="sidebar-nav">
+                <div class="clock2" style="margin:2em;"></div>
+                <div class="message"></div>
+            </div>
+        </div>
+        <div id="page-content-wrapper">
+            <div class="container-fluid">
+                <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+                <input type="hidden" th:value="${challenge.QuestionSet.correctOptions}" id="correctOptions"/>
+                <input type="hidden" th:name="selectedOptions" id="selectedOptions"/>
+                <div class="col-lg-12">
+                    <div class="non-semantic-protector">
+                        <h5 class="ribbon">
+                            <strong class="ribbon-content">[[${challenge.questionNumber}]].[[${challenge.QuestionSet.question}]]</strong>
+                        </h5>
+                    </div>
+                </div>
+                </div>
+                <div class="box">
+                    <div class="container">
+                        <div class="row" id="answerSpace">
+                            <div id="optionA" class="col-lg-6 col-md-6 col-sm-6 col-xs-12" onclick="waitAndShowAnswer(this)">
+                                <div class="box-part text-center">
+                                    <i class="fab fa-instagram fa-3x" aria-hidden="true"></i>
+                                    <div class="title">
+                                        <h4>[[${challenge.QuestionSet.answer1}]]</h4>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="optionB" class="col-lg-6 col-md-6 col-sm-6 col-xs-12" onclick="waitAndShowAnswer(this)">
+                                <div class="box-part text-center">
+                                    <i class="fab fa-twitter fa-3x" aria-hidden="true"></i>
+                                    <div class="title">
+                                        <h4>[[${challenge.QuestionSet.answer2}]]</h4>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="optionC"  th:if="${not #strings.isEmpty(challenge.QuestionSet.answer3)}"
+                                 class="col-lg-6 col-md-6 col-sm-6 col-xs-12" onclick="waitAndShowAnswer(this)">
+                                <div class="box-part text-center">
+                                    <i class="fab fa-facebook fa-3x" aria-hidden="true"></i>
+                                    <div class="title">
+                                        <h4>[[${challenge.QuestionSet.answer3}]]</h4>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="optionD" th:if="${not #strings.isEmpty(challenge.QuestionSet.answer4)}"
+                                 class="col-lg-6 col-md-6 col-sm-6 col-xs-12" onclick="waitAndShowAnswer(this)">
+                                <div class="box-part text-center">
+                                    <i class="fab fa-pinterest-p fa-3x" aria-hidden="true"></i>
+                                    <div class="title">
+                                        <h4>[[${challenge.QuestionSet.answer4}]]</h4>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
-        <div class="box">
-            <div class="container">
-                <div class="row" id="answerSpace">
-                    <div id="optionA" class="col-lg-6 col-md-6 col-sm-6 col-xs-12" onclick="waitAndShowAnswer(this)">
-                        <div class="box-part text-center">
-                            <i class="fab fa-instagram fa-3x" aria-hidden="true"></i>
-                            <div class="title">
-                                <h4>[[${challenge.QuestionSet.answer1}]]</h4>
-                            </div>
-                        </div>
-                    </div>
-                    <div id="optionB" class="col-lg-6 col-md-6 col-sm-6 col-xs-12" onclick="waitAndShowAnswer(this)">
-                        <div class="box-part text-center">
-                            <i class="fab fa-twitter fa-3x" aria-hidden="true"></i>
-                            <div class="title">
-                                <h4>[[${challenge.QuestionSet.answer2}]]</h4>
-                            </div>
-                        </div>
-                    </div>
-                    <div id="optionC"  th:if="${not #strings.isEmpty(challenge.QuestionSet.answer3)}"
-                         class="col-lg-6 col-md-6 col-sm-6 col-xs-12" onclick="waitAndShowAnswer(this)">
-                        <div class="box-part text-center">
-                            <i class="fab fa-facebook fa-3x" aria-hidden="true"></i>
-                            <div class="title">
-                                <h4>[[${challenge.QuestionSet.answer3}]]</h4>
-                            </div>
-                        </div>
-                    </div>
-                    <div id="optionD" th:if="${not #strings.isEmpty(challenge.QuestionSet.answer4)}"
-                         class="col-lg-6 col-md-6 col-sm-6 col-xs-12" onclick="waitAndShowAnswer(this)">
-                        <div class="box-part text-center">
-                            <i class="fab fa-pinterest-p fa-3x" aria-hidden="true"></i>
-                            <div class="title">
-                                <h4>[[${challenge.QuestionSet.answer4}]]</h4>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="clock2" style="margin:2em;"></div>
-        <div class="message"></div>
     </div>
 </form>
 <script type="text/javascript" src="scripts/core/jquery-3.2.1.slim.min.js"></script>

@@ -12,9 +12,13 @@
 <body onload="connect()">
     <input type="hidden" th:value="${#authentication.getPrincipal().getUsername()}" id="name"/>
     <form action="#" method="post">
-        <div class="container">
-            <div class="vertical-center">
-                <div class="paper" id="div_body"></div>
+        <div class="container-fluid">
+            <div class="card-deck vertical-center">
+                <div class="card bg-light text-dark">
+                    <div class="card-body text-center">
+                        <p id="div_body" class="card-text"></p>
+                    </div>
+                </div>
             </div>
         </div>
     </form>
