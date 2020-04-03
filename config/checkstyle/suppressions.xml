@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE suppressions PUBLIC
+        "-//Checkstyle//DTD SuppressionFilter Configuration 1.2//EN"
+        "https://checkstyle.org/dtds/suppressions_1_2.dtd">
+
+<!--
+NOTES:
+Refer to Checkstyle Filters page given below to learn more abour suppression filter.
+http://checkstyle.sourceforge.net/config_filters.html#SuppressionFilter
+WHAT AND WHY CHECKS SUPPRESSED
+==============================
+ - Indentation: Google style guide uses 2 spaces for identation, we use 4
+ - LineLength: Google style guice states to limit lines to 100, we prefer 120
+ - JavadocParagraph: IDEs cannot put <p> immediately before the first word of the new paragraph
+-->
+
+<suppressions>
+    <suppress files="ChallengeService.java" checks="MethodLength"/>
+</suppressions>

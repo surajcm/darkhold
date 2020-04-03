@@ -4,15 +4,15 @@ apply plugin: 'jacoco'
 //apply plugin: 'com.github.spotbugs'
 
 checkstyle {
-    toolVersion = '8.29'
+    toolVersion = '8.31'
     ignoreFailures = false
     maxWarnings = 0
     checkstyleMain {
-        configFile = file("gradle/static-code-analysis/checkstyle/checkstyle.xml")
+        configFile = file("config/checkstyle/checkstyle.xml")
     }
 
     checkstyleTest {
-        configFile = file("gradle/static-code-analysis/checkstyle/checkstyleTest.xml")
+        configFile = file("config/checkstyle/checkstyleTest.xml")
     }
 }
 
@@ -39,6 +39,7 @@ tasks.withType(Checkstyle) {
     reports {
         xml.enabled false
         html.enabled true
+        html.stylesheet resources.text.fromFile('config/checkstyle/xsl/checkstyle-simple.xsl')
     }
 }
 
@@ -51,6 +52,7 @@ tasks.withType(Pmd) {
 cpd {
     toolVersion = '6.21.0'
     minimumTokenCount = 40
+    ignoreFailures = true
 }
 
 cpdCheck {

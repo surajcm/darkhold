@@ -10,7 +10,7 @@ public class CurrentScore {
         return score;
     }
 
-    public void setScore(Map<String, Integer> score) {
+    public void setScore(final Map<String, Integer> score) {
         this.score = score;
     }
 }
