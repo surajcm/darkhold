@@ -48,21 +48,21 @@
 
 <form action="#" method="post">
     <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-    <div class="container-fluid">
-        <div class="card-deck vertical-center">
-            <div class="card bg-light text-dark" style="cursor:pointer" onclick="javascript:createChallenge()">
+    <div class="container">
+        <div class="d-flex flex-row flex-wrap">
+            <div class="card card-block col-md-4 bg-light text-dark card-custom" style="cursor:pointer" onclick="javascript:createChallenge()">
                 <div class="card-body text-center">
-                    <p class="card-text">Create a new challenge</p>
+                    <p class="card-title">Create a new challenge</p>
                 </div>
             </div>
-            <div class="card bg-light text-dark" style="cursor:pointer" onclick="javascript:viewChallenge()">
+            <div class="card card-block col-md-4 bg-light text-dark card-custom" style="cursor:pointer" onclick="javascript:viewChallenge()">
                 <div class="card-body text-center">
-                    <p class="card-text">View existing Challenge</p>
+                    <p class="card-title">View existing Challenge</p>
                 </div>
             </div>
-            <div class="card bg-light text-dark" style="cursor:pointer" onclick="javascript:activeChallenge()">
+            <div class="card card-block col-md-4 bg-light text-dark card-custom" style="cursor:pointer" onclick="javascript:activeChallenge()">
                 <div class="card-body text-center">
-                    <p class="card-text">View active Challenge</p>
+                    <p class="card-title">View active Challenge</p>
                 </div>
             </div>
         </div>

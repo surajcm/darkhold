@@ -1,14 +1,4 @@
 @import url('darkhold-styles.css');
-section {
-    padding-top: 4rem;
-    padding-bottom: 5rem;
-    background-color: #f1f4fa;
-}
-body {
-    height: 100vh;
-    align-items: center;
-    justify-content: center;
-}
 
 .wrap {
     display: flex;
@@ -51,9 +41,7 @@ h2 {
 .display-6 {
     font-size: 1re
 }
-.section {
-    background: none
-}
+
 .icon-bar a {
     display: block;
     text-align: center;
@@ -68,11 +56,12 @@ h2 {
   display: flex;
   align-items: center;
 }
-.card.background-block {
-    float: left;
-    width: 100%;
-    height: 200px;
-    overflow: hidden;
+
+card-custom {
+    padding-top: 4rem;
+    padding-left: 4rem;
+    padding-bottom: 5rem;
+    background-color: #f1f4fa;
 }
 
 

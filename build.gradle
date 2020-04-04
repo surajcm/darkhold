@@ -39,4 +39,8 @@ apply from: 'gradle/staticCodeAnalysis.gradle'
 test {
 	useJUnitPlatform()
 }
+
+test.dependsOn checkstyleMain
+bootRun.dependsOn checkstyleMain
+
 check.dependsOn(cpdCheck, pmdMain)

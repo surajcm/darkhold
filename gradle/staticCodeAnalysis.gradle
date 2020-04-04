@@ -24,7 +24,7 @@ checkstyle {
 pmd {
     toolVersion = '6.21.0'
     ignoreFailures = false
-    ruleSetFiles = files("gradle/static-code-analysis/pmd/ruleset.xml")
+    ruleSetFiles = files("config/pmd/ruleset.xml")
     ruleSets = []
     rulePriority = 2
     incrementalAnalysis = true

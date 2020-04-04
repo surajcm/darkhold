@@ -56,10 +56,12 @@ public class OptionsController {
     public String activeChallenges(final Model model, final Principal principal) {
         log.info("into the activeChallenge method");
         PublishInfo publishInfo = previewService.getActiveChallenge();
-        model.addAttribute("quizPin", publishInfo.getPin());
-        //todo : find a way to get all users binded
-        model.addAttribute("user", publishInfo.getModerator());
-        log.info("activeChallenges method, quizPin : " + publishInfo.getPin());
+        if (publishInfo != null) {
+            model.addAttribute("quizPin", publishInfo.getPin());
+            //todo : find a way to get all users binded
+            model.addAttribute("user", publishInfo.getModerator());
+            log.info("activeChallenges method, quizPin : " + publishInfo.getPin());
+        }
         return "publish";
     }
 }
