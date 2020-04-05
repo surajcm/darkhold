@@ -1,9 +1,8 @@
-package com.quiz.darkhold;
+package com.quiz.darkhold.preview;
 
 import com.quiz.darkhold.challenge.repository.ChallengeRepository;
 import com.quiz.darkhold.game.repository.GameRepository;
-import com.quiz.darkhold.options.controller.OptionsController;
-import com.quiz.darkhold.options.service.OptionsService;
+import com.quiz.darkhold.preview.controller.PreviewController;
 import com.quiz.darkhold.preview.repository.CurrentGame;
 import com.quiz.darkhold.preview.service.PreviewService;
 import org.dizitart.no2.NitriteCollection;
@@ -12,15 +11,10 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.test.context.ContextConfiguration;
 
 @ContextConfiguration
-public class CommonConfigurations {
+public class PreviewConfigurations {
     @Bean
-    public OptionsController optionsController() {
-        return new OptionsController();
-    }
-
-    @Bean
-    public OptionsService optionsService() {
-        return Mockito.mock(OptionsService.class);
+    public PreviewController previewController() {
+        return new PreviewController();
     }
 
     @Bean
