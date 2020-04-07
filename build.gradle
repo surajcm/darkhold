@@ -41,6 +41,7 @@ test {
 }
 
 test.dependsOn checkstyleMain
+test.dependsOn checkstyleTest
 bootRun.dependsOn checkstyleMain
 
 check.dependsOn(cpdCheck, pmdMain)
