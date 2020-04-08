@@ -3,11 +3,14 @@ package com.quiz.darkhold.challenge.service;
 import com.quiz.darkhold.challenge.exception.ChallengeException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.web.multipart.MultipartFile;
 
+@ExtendWith(SpringExtension.class)
 public class ChallengeServiceTest {
-    private ChallengeService challengeService = new ChallengeService();
+    private final ChallengeService challengeService = new ChallengeService();
 
     @Test
     public void verifyReadProcessAndSaveChallengeWithException() {
