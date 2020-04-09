@@ -32,7 +32,9 @@ create table challenge (
     title varchar(225),
     description varchar(225),
     createdOn datetime,
-    modifiedOn datetime
+    modifiedOn datetime,
+    createdBy varchar(45),
+    modifiedBy varchar(45)
 );
 
 create table question_set (
