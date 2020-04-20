@@ -34,7 +34,6 @@ jacoco {
     toolVersion = "0.8.3+"
 }
 
-
 tasks.withType(Checkstyle) {
     reports {
         xml.enabled false
