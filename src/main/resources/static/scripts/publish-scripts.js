@@ -15,7 +15,9 @@ function startGame() {
 
 
 function gotoMyGame() {
-    document.forms[0].action="/interstitial";
+    // temporarily disabling the interstitial page
+    //document.forms[0].action="/interstitial";
+    document.forms[0].action="/question";
     document.forms[0].submit();
 }
 

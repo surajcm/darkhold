@@ -23,7 +23,6 @@ public class OptionsServiceTest {
 
     @BeforeEach
     public void setup() {
-
         Whitebox.setInternalState(optionsService, "challengeRepository", challengeRepository);
     }
 
