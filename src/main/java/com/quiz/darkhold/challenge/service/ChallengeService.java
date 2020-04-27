@@ -97,8 +97,8 @@ public class ChallengeService {
                     questionSet.setCorrectOptions(optionsList);
                     break;
                 default:
-                    logger.error("Unknown option at " + currentCell.getColumnIndex()
-                            + ", Text is : " + currentCell.getStringCellValue());
+                    logger.error(String.format("Unknown option at %s , Text is : %s",
+                            currentCell.getColumnIndex(), currentCell.getStringCellValue()));
             }
         }
         logger.info("Current questions : " + questionSet);
