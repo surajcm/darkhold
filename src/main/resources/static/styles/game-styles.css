@@ -40,8 +40,10 @@ a {
 
  width: 50%;
  position: relative;
- background: #ba89b6;
- color: #fff;
+ //background: #ba89b6;
+ //color: #fff;
+ background:#FFF;
+ border: .5em solid #000;
  text-align: center;
  padding: 1em 2em; /* Adjust to suit */
  margin: 2em auto 3em;
@@ -54,7 +56,7 @@ a {
  position: absolute;
  display: block;
  bottom: -1em;
- border: 1.5em solid #986794;
+ border: 1.5em solid #FFF;
  z-index: -1;
 }
 .ribbon:before {
@@ -72,7 +74,7 @@ a {
  position: absolute;
  display: block;
  border-style: solid;
- border-color: #804f7c transparent transparent transparent;
+ border-color: #FFF transparent transparent transparent;
  bottom: -1em;
 }
 .ribbon .ribbon-content:before {

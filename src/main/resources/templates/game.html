@@ -23,15 +23,15 @@
 </nav>
 <form action="#" th:object="${challenge}" method="post">
     <div id="wrapper">
-        <div class="sidebar-nav">
-            <div class="clock2" style="margin:2em;"></div>
-            <div class="message"></div>
-        </div>
         <div id="page-content-wrapper">
             <div class="container-fluid">
                 <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
                 <input type="hidden" th:value="${challenge.QuestionSet.correctOptions}" id="correctOptions"/>
                 <input type="hidden" th:name="selectedOptions" id="selectedOptions"/>
+                <div class="sidebar-nav">
+                    <div class="clock2" style="margin:2em;"></div>
+                    <div class="message"></div>
+                </div>
                 <div class="non-semantic-protector">
                     <h5 class="ribbon">
                         <strong class="ribbon-content">[[${challenge.questionNumber}]].[[${challenge.QuestionSet.question}]]</strong>

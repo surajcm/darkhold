@@ -53,16 +53,28 @@ function waitAndShowAnswer(elem) {
 
 function hideOptions() {
     var optionA = document.getElementById("optionA");
-    optionA.setAttribute('style','display:none');
+    //optionA.setAttribute('style','display:none');
+    optionA.setAttribute('style','opacity: 0.7');
+    optionA.children[0].setAttribute('style','background: #CCC');
+    optionA.children[0].setAttribute('style','cursor:default');
     var optionB = document.getElementById("optionB");
-    optionB.setAttribute('style','display:none');
+    //optionB.setAttribute('style','display:none');
+    optionB.setAttribute('style','opacity: 0.7');
+    optionB.children[0].setAttribute('style','background: #CCC');
+    optionB.children[0].setAttribute('style','cursor:default');
     var optionC = document.getElementById("optionC");
     if (optionC != null) {
-        optionC.setAttribute('style','display:none');
+        //optionC.setAttribute('style','display:none');
+        optionC.setAttribute('style','opacity: 0.7');
+        optionC.children[0].setAttribute('style','background: #CCC');
+        optionC.children[0].setAttribute('style','cursor:default');
     }
     var optionD = document.getElementById("optionD");
     if(optionD != null) {
-        optionD.setAttribute('style','display:none');
+        //optionD.setAttribute('style','display:none');
+        optionD.setAttribute('style','opacity: 0.7');
+        optionD.children[0].setAttribute('style','background: #CCC');
+        optionD.children[0].setAttribute('style','cursor:default');
     }
     var answerSpace = document.getElementById("answerSpace");
     //<div class="spinner-grow" style="width: 3rem; height: 3rem;" role="status">
