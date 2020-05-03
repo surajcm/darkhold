@@ -22,14 +22,29 @@ $(document).ready(function() {
 });
 
 function callTimeOut() {
+    isAnswerSelected = true;
     //alert(document.getElementById('selectedOptions').value);
     //document.forms[0].action="/answer";
     //document.forms[0].submit();
 }
 
+var isAnswerSelected = false;
+
 function waitAndShowAnswer(elem) {
+    if (!isAnswerSelected) {
+        realWaitAndShowAnswer(elem);
+        if (!isAnswerSelected) {
+            isAnswerSelected = true;
+        }
+    } else {
+        console.log('answer already selected !!!');
+    }
+}
+
+function realWaitAndShowAnswer(elem) {
     var correctAnswer = document.getElementById('correctOptions').value;
     console.log('correctAnswer '+correctAnswer);
+    elem.children[0].setAttribute('class','card text-white bg-dark');
     var selectedAnswer = elem.id.charAt(elem.id.length -1);
     console.log('selectedAnswer '+selectedAnswer);
     // split with comma

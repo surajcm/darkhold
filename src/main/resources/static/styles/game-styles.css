@@ -9,14 +9,14 @@ a {
   border-bottom:2px solid #0062cc;
 }
 
-.box-part {
+.card {
     background:#FFF;
     border-radius:0;
     padding:20px 10px;
     margin:20px 0px;
     cursor: pointer;
 }
-.box-part.background-block {
+.card.background-block {
     float: left;
     width: 100%;
     height: 200px;

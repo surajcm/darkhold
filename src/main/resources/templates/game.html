@@ -41,41 +41,49 @@
                 <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
                 <input type="hidden" th:value="${challenge.QuestionSet.correctOptions}" id="correctOptions"/>
                 <input type="hidden" th:name="selectedOptions" id="selectedOptions"/>
-                <div class="box">
-                    <div class="container">
+                <div class="container">
+
                         <div class="row" id="answerSpace">
                             <div id="optionA" class="col-lg-6 col-md-6 col-sm-6 col-xs-12" onclick="waitAndShowAnswer(this)">
-                                <div class="box-part text-center">
-                                    <div class="title">
-                                        <h4>[[${challenge.QuestionSet.answer1}]]</h4>
+                                <div class="card">
+                                    <div class="card-body text-center">
+                                        <div class="title">
+                                            <h4>[[${challenge.QuestionSet.answer1}]]</h4>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                             <div id="optionB" class="col-lg-6 col-md-6 col-sm-6 col-xs-12" onclick="waitAndShowAnswer(this)">
-                                <div class="box-part text-center">
-                                    <div class="title">
-                                        <h4>[[${challenge.QuestionSet.answer2}]]</h4>
-                                    </div>
+                                <div class="card">
+                                    <div class="card-body text-center">
+                                        <div class="title">
+                                            <h4>[[${challenge.QuestionSet.answer2}]]</h4>
+                                        </div>
+                                     </div>
                                 </div>
                             </div>
                             <div id="optionC"  th:if="${not #strings.isEmpty(challenge.QuestionSet.answer3)}"
                                  class="col-lg-6 col-md-6 col-sm-6 col-xs-12" onclick="waitAndShowAnswer(this)">
-                                <div class="box-part text-center">
-                                    <div class="title">
-                                        <h4>[[${challenge.QuestionSet.answer3}]]</h4>
+                                <div class="card">
+                                    <div class="card-body text-center">
+                                        <div class="title">
+                                            <h4>[[${challenge.QuestionSet.answer3}]]</h4>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                             <div id="optionD" th:if="${not #strings.isEmpty(challenge.QuestionSet.answer4)}"
                                  class="col-lg-6 col-md-6 col-sm-6 col-xs-12" onclick="waitAndShowAnswer(this)">
-                                <div class="box-part text-center">
-                                    <div class="title">
-                                        <h4>[[${challenge.QuestionSet.answer4}]]</h4>
+                                <div class="card">
+                                    <div class="card-body text-center">
+                                        <div class="title">
+                                            <h4>[[${challenge.QuestionSet.answer4}]]</h4>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
+
                 </div>
             </div>
         </div>
