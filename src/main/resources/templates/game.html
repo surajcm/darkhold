@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="styles/core/flipclock.css" />
     <link rel="stylesheet" href="styles/game-flipclock-custom.css" />
 </head>
-<body>
+<body onload="connect()">
 <nav class="navbar transparent navbar-inverse">
     <div class="icon-bar" onclick="javascript:toHome()">
         <a class="active" href="#"><i class="fas fa-home"></i></a>
@@ -30,9 +30,13 @@
     </div>
     <ul class="navbar-nav mx-auto">
         <li class="nav-item">
-        <strong>[[${challenge.questionNumber}]].[[${challenge.QuestionSet.question}]]</strong>
+            <strong>[[${challenge.questionNumber}]].[[${challenge.QuestionSet.question}]]</strong>
         </li>
     </ul>
+    <span th:if="${not #sets.isEmpty(#authentication.getPrincipal().getAuthorities())}">
+        <button id="nextButton" class="btn btn-lg btn-rised align-middle btn-primary ml-auto mr-3 order-lg-last" type="button"
+                style="display:none" onclick="javascript:showScoreboard();" >Next</button>
+    </span>
 </nav>
 <form action="#" th:object="${challenge}" method="post">
     <div id="wrapper">
@@ -41,6 +45,8 @@
                 <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
                 <input type="hidden" th:value="${challenge.QuestionSet.correctOptions}" id="correctOptions"/>
                 <input type="hidden" th:name="selectedOptions" id="selectedOptions"/>
+                <input type="hidden" th:name="selectedAnswer" id="selectedAnswer"/>
+                <input type="hidden" th:value="${#authentication.getPrincipal().getUsername()}" id="user"/>
                 <div class="container">
 
                         <div class="row" id="answerSpace">
@@ -94,5 +100,7 @@
 <script type="text/javascript" src="scripts/core/bootstrap.min.js"></script>
 <script type="text/javascript" src="scripts/core/flipclock.js"></script>
 <script type="text/javascript" src="scripts/game-scripts.js"></script>
+<script type="text/javascript" src="scripts/core/sockjs.min.js"></script>
+<script type="text/javascript" src="scripts/core/stomp.min.js"></script>
 </body>
 </html>

@@ -1,7 +1,5 @@
 package com.quiz.darkhold.game.controller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.quiz.darkhold.challenge.entity.QuestionSet;
 import com.quiz.darkhold.game.model.Challenge;
 import com.quiz.darkhold.game.model.CurrentScore;
@@ -20,8 +18,10 @@ import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.security.Principal;
 import java.util.List;
@@ -51,12 +51,23 @@ public class GameController {
     @PostMapping("/question")
     public String question(final Model model, final Principal principal) {
         logger.info("On to question :");
+        int currentQuestionNumber = gameService.getCurrentQuestionNo();
+        if (currentQuestionNumber != -1) {
+            QuestionOnGame questionOnGame = getQuestionOnGame(currentQuestionNumber + 1);
+            if (questionOnGame == null) {
+                return finalScore(model);
+            }
+        }
         return "question";
     }
 
     @PostMapping("/final")
     public String finalScore(final Model model) {
         logger.info("On to the finalScore :");
+        CurrentScore score = new CurrentScore();
+        Map<String, Integer> scores = gameService.getCurrentScore();
+        score.setScore(scores);
+        model.addAttribute("score", score);
         return "finalscore";
     }
 
@@ -84,28 +95,22 @@ public class GameController {
         return "game";
     }
 
-    /**
-     * Answer the question with correct/incorrect options or time out.
-     *
-     * @param model           model
-     * @param selectedOptions answer
-     * @return to the answer show page
-     */
-    @PostMapping("/answer")
-    public String timed(final Model model, @RequestParam("selectedOptions") final String selectedOptions,
-                        final Principal principal) {
-        logger.info("On to the answer :" + selectedOptions);
+    @PostMapping("/answer/")
+    public @ResponseBody
+    Boolean enterGame(@ModelAttribute("selectedOptions") final String selectedOptions,
+                      @ModelAttribute("user") final String user) {
+        logger.info("selectedOptions is " + selectedOptions);
+        logger.info("user is " + user);
         CurrentStatus currentStatus = new CurrentStatus();
         ExamStatus status = getExamStatus(selectedOptions);
         currentStatus.setStatus(status.name());
         Integer scoreOnStatus = findScoreOnStatus(status);
-        gameService.saveCurrentScore(principal.getName(), scoreOnStatus);
-        model.addAttribute("currentStatus", currentStatus);
-        return "answer";
+        gameService.saveCurrentScore(user, scoreOnStatus);
+        return true;
     }
 
     private Integer findScoreOnStatus(final ExamStatus status) {
-        return status == ExamStatus.SUCCESS ? 1 : 0;
+        return status == ExamStatus.SUCCESS ? 1000 : 0;
     }
 
     private ExamStatus getExamStatus(@RequestParam("selectedOptions") final String selectedOptions) {
@@ -130,9 +135,9 @@ public class GameController {
      * @param model model
      * @return to scoreboard
      */
-    @PostMapping("/check_score")
+    @PostMapping("/scoreboard")
     public String scoreCheck(final Model model) {
-        logger.info("On to the check_score :");
+        logger.info("On to the scoreboard :");
         CurrentScore score = new CurrentScore();
         Map<String, Integer> scores = gameService.getCurrentScore();
         score.setScore(scores);
@@ -202,7 +207,7 @@ public class GameController {
         return questionOnGame;
     }
 
-    @MessageMapping("/fetch_scores")
+    /*@MessageMapping("/fetch_scores")
     @SendTo("/topic/read_scores")
     public StartTrigger scoresFetch() {
         Map<String, Integer> scores = gameService.getCurrentScore();
@@ -214,5 +219,12 @@ public class GameController {
             logger.error(exception.getMessage());
         }
         return new StartTrigger(jsonString);
+    }*/
+
+    @MessageMapping("/fetch_scores")
+    @SendTo("/topic/read_scores")
+    public Boolean scoresFetch() {
+        logger.info("On to scoresFetch");
+        return Boolean.TRUE;
     }
 }
