@@ -48,24 +48,27 @@
 
 <form action="#" method="post">
     <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-    <div class="container">
-        <div class="d-flex flex-row flex-wrap">
-            <div class="card card-block col-md-4 bg-light text-dark card-custom" style="cursor:pointer" onclick="javascript:createChallenge()">
-                <div class="card-body text-center">
-                    <p class="card-title">Create a new challenge</p>
+    <div class="container mt-5">
+        <div class="row">
+            <div class="col-lg-4 col-md-8 col-xs-12 pl-1 pr-1">
+                <div class="card" style="cursor:pointer" onclick="javascript:createChallenge()">
+                    <h3>Create a new challenge</h3>
+                    <p> </p>
                 </div>
             </div>
-            <div class="card card-block col-md-4 bg-light text-dark card-custom" style="cursor:pointer" onclick="javascript:viewChallenge()">
-                <div class="card-body text-center">
-                    <p class="card-title">View existing Challenge</p>
+            <div class="col-lg-4 col-md-8 col-xs-12 pl-1 pr-1">
+                <div class="card" style="cursor:pointer" onclick="javascript:viewChallenge()">
+                    <h3>View existing Challenge</h3>
+                    <p>  </p>
                 </div>
             </div>
-            <div class="card card-block col-md-4 bg-light text-dark card-custom" style="cursor:pointer" onclick="javascript:activeChallenge()">
-                <div class="card-body text-center">
-                    <p class="card-title">View active Challenge</p>
+            <div class="col-lg-4 col-md-8 col-xs-12 pl-1 pr-1">
+                <div class="card" style="cursor:pointer" onclick="javascript:activeChallenge()">
+                    <h3>View active Challenge</h3>
+                    <p>  </p>
                 </div>
             </div>
-        </div>
+        </div>         
     </div>
 </form>
 <script type="text/javascript" src="scripts/core/jquery-3.2.1.slim.min.js"></script>
