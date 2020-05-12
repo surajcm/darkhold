@@ -1,29 +1,29 @@
-# Darkhold [Alpha version ready]
+# Darkhold [Beta version ready]
 
 An online portal, which has provision to create and host quiz, inspired by `kahoot`. Additional feature is the provision of remote users to participate in the quiz.
 
-Screenshots
------------
 
-Click to view.
+## Author
 
-### Home
-[![Home screen](https://github.com/surajcm/darkhold/raw/master/screens/Darkhold_classroom_quiz_home_th.png)](https://github.com/surajcm/darkhold/raw/master/screens/Darkhold_classroom_quiz_home.png)
+👤 **Suraj Muraleedharan**
 
-### Login
-[![Login](https://github.com/surajcm/darkhold/raw/master/screens/Darkhold_classroom_quiz_login_th.png)](https://github.com/surajcm/darkhold/raw/master/screens/Darkhold_classroom_quiz_login.png)
+* Github: [@surajcm](https://github.com/surajcm)
 
-### Options
-[![Login](https://github.com/surajcm/darkhold/raw/master/screens/Darkhold_classroom_quiz_options_th.png)](https://github.com/surajcm/darkhold/raw/master/screens/Darkhold_classroom_quiz_options.png)
+## 🤝 Contributing
 
-### Create challenge
-[![Login](https://github.com/surajcm/darkhold/raw/master/screens/Darkhold_classroom_quiz_create_th.png)](https://github.com/surajcm/darkhold/raw/master/screens/Darkhold_classroom_quiz_create.png)
+Contributions, issues and feature requests are welcome!<br />Feel free to check [issues page](https://github.com/surajcm/darkhold/issues).
+If you contribute please commit to a new branch and explain details in your pull request not in your commit.
 
-### List challenge
-[![Login](https://github.com/surajcm/darkhold/raw/master/screens/Darkhold_classroom_quiz_view_th.png)](https://github.com/surajcm/darkhold/raw/master/screens/Darkhold_classroom_quiz_view.png)
+## Show your support
 
-### Preview challenge
-[![Login](https://github.com/surajcm/darkhold/raw/master/screens/Darkhold_classroom_quiz_preview_th.png)](https://github.com/surajcm/darkhold/raw/master/screens/Darkhold_classroom_quiz_preview.png)
+Give a ⭐️ if this project helped you!
 
-### Publish challenge
-[![Login](https://github.com/surajcm/darkhold/raw/master/screens/Darkhold_classroom_quiz_publish_th.png)](https://github.com/surajcm/darkhold/raw/master/screens/Darkhold_classroom_quiz_publish.png)
+## Screenshots
+Please head over to [Wiki](https://github.com/surajcm/darkhold/wiki/Screenshots)
+
+## Features
+* Provide a functionality to create a service ticket and a workflow based on it
+* Provides a final invoice to customer
+* Various reports to gain insights on improving the business
+
+For system requirements, installation guides, as well as other documentation, please head over to [Wiki](https://github.com/surajcm/darkhold/wiki).

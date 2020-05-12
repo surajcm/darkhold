@@ -1,8 +1,10 @@
 @import url('darkhold-styles.css');
 
 .card{
-    padding: 15px;
-    margin: 10px;
+    background: rgba(255, 255, 255, 0.37);
+    flex: 0 0 23.55%;
+    margin: 8px;
+    padding: 30px;
     box-shadow: 0 3px 5px 0 rgba(0, 0, 0, 0.01);
     transition: box-shadow 0.3s ease-in-out;
     border:1px solid #ddd;
