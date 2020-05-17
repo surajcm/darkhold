@@ -34,7 +34,7 @@ public class CurrentGameTest {
         PublishInfo publishInfo = new PublishInfo();
         publishInfo.setPin("1234");
         publishInfo.setModerator("admin");
-        Assertions.assertAll(() -> currentGame.saveCurrentStatus(publishInfo));
+        Assertions.assertAll(() -> currentGame.saveCurrentStatus(publishInfo, new ArrayList<>()));
     }
 
     @Test

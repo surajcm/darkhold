@@ -1,6 +1,7 @@
 package com.quiz.darkhold.preview.service;
 
 import com.quiz.darkhold.challenge.entity.Challenge;
+import com.quiz.darkhold.challenge.entity.QuestionSet;
 import com.quiz.darkhold.challenge.repository.ChallengeRepository;
 import com.quiz.darkhold.game.entity.Game;
 import com.quiz.darkhold.game.entity.GameStatus;
@@ -78,7 +79,9 @@ public class PreviewService {
         PublishInfo publishInfo = new PublishInfo();
         publishInfo.setPin(generatedString);
         publishInfo.setModerator(currentUser);
-        currentGame.saveCurrentStatus(publishInfo);
+        PreviewInfo previewInfo = fetchQuestionsFromPin(generatedString);
+        List<QuestionSet> questionSets = previewInfo.getQuestionSets();
+        currentGame.saveCurrentStatus(publishInfo, questionSets);
         return publishInfo;
     }
 

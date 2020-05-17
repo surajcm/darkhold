@@ -1,9 +1,7 @@
 package com.quiz.darkhold.game.service;
 
-import com.quiz.darkhold.challenge.entity.QuestionSet;
-import com.quiz.darkhold.game.model.Challenge;
 import com.quiz.darkhold.game.model.QuestionOnGame;
-import com.quiz.darkhold.preview.model.PreviewInfo;
+import com.quiz.darkhold.game.model.QuestionPointer;
 import com.quiz.darkhold.preview.model.PublishInfo;
 import com.quiz.darkhold.preview.repository.CurrentGame;
 import com.quiz.darkhold.preview.service.PreviewService;
@@ -47,67 +45,22 @@ public class GameService {
         return currentQuestionNo;
     }
 
-    /**
-     * During start of the game, get the first question.
-     *
-     * @return question
-     */
-    public QuestionOnGame initialFetchAndUpdateNitrate() {
+    public QuestionPointer getCurrentQuestionPointer() {
         PublishInfo publishInfo = previewService.getActiveChallenge();
-        String pin = publishInfo.getPin();
-        PreviewInfo previewInfo = previewService.fetchQuestionsFromPin(pin);
-        List<QuestionSet> questionSets = previewInfo.getQuestionSets();
-        // fetch the questions and load it to nitrate
-        currentGame.saveQuestionsToActiveGame(pin, questionSets);
+        return currentGame.getCurrentQuestionPointer(publishInfo.getPin());
+    }
+
+    public QuestionOnGame fetchQuestion() {
+        String pin = currentPin();
+        QuestionPointer pointer = currentGame.getCurrentQuestionPointer(pin);
         QuestionOnGame questionOnGame = new QuestionOnGame();
-        questionOnGame.setCurrentQuestionNumber(0);
-        questionSets.stream().findFirst().ifPresent(e -> questionOnGame.setQuestion(e.getQuestion()));
+        questionOnGame.setCurrentQuestionNumber(pointer.getCurrentQuestionNumber());
+        questionOnGame.setQuestion(pointer.getCurrentQuestion().getQuestion());
         return questionOnGame;
     }
 
-    public List<QuestionSet> getQuestionsOnAPin() {
-        PublishInfo publishInfo = previewService.getActiveChallenge();
-        String pin = publishInfo.getPin();
-        List<QuestionSet> questionSets = currentGame.getQuestionsOnAPin(pin);
-        logger.info("Size of question set is" + questionSets.size());
-        return questionSets;
-    }
-
-    /**
-     * Fetch the next question, and it's options.
-     *
-     * @param currentQuestionNumber current one
-     * @return question
-     */
-    public QuestionOnGame fetchAnotherQuestion(final int currentQuestionNumber) {
-        PublishInfo publishInfo = previewService.getActiveChallenge();
-        String pin = publishInfo.getPin();
-        List<QuestionSet> questionSets = currentGame.getQuestionsOnAPin(pin);
-        QuestionSet questionSet = questionSets.get(currentQuestionNumber);
-        QuestionOnGame questionOnGame = new QuestionOnGame();
-        questionOnGame.setCurrentQuestionNumber(currentQuestionNumber);
-        questionOnGame.setQuestion(questionSet.getQuestion());
-        return questionOnGame;
-    }
-
-    /**
-     * Once we have the question number, get the questions from nitrate.
-     *
-     * @param currentQuestionNumber yes it is
-     * @return challenge
-     */
-    public Challenge getCurrentQuestionSet(final int currentQuestionNumber) {
-        PublishInfo publishInfo = previewService.getActiveChallenge();
-        String pin = publishInfo.getPin();
-        Challenge challenge = new Challenge();
-        challenge.setQuestionNumber(currentQuestionNumber);
-        challenge.setQuestionSet(currentGame.getQuestionsOnAPin(pin).get(currentQuestionNumber));
-        return challenge;
-    }
-
-    public void updateQuestionNo() {
-        PublishInfo publishInfo = previewService.getActiveChallenge();
-        String pin = publishInfo.getPin();
+    public void incrementQuestionNo() {
+        String pin = currentPin();
         currentGame.incrementQuestionCount(pin);
     }
 
@@ -118,20 +71,22 @@ public class GameService {
      * @param status of user
      */
     public void saveCurrentScore(final String name, final Integer status) {
-        PublishInfo publishInfo = previewService.getActiveChallenge();
-        String pin = publishInfo.getPin();
+        String pin = currentPin();
         currentGame.saveCurrentScore(pin, name, status);
     }
 
     public String findModerator() {
-        PublishInfo publishInfo = previewService.getActiveChallenge();
-        String pin = publishInfo.getPin();
+        String pin = currentPin();
         return currentGame.findModerator(pin);
     }
 
     public Map<String, Integer> getCurrentScore() {
-        PublishInfo publishInfo = previewService.getActiveChallenge();
-        String pin = publishInfo.getPin();
+        String pin = currentPin();
         return currentGame.getCurrentScore(pin);
+    }
+
+    private String currentPin() {
+        PublishInfo publishInfo = previewService.getActiveChallenge();
+        return publishInfo.getPin();
     }
 }

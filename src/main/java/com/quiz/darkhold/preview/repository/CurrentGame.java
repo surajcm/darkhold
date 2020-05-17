@@ -1,6 +1,7 @@
 package com.quiz.darkhold.preview.repository;
 
 import com.quiz.darkhold.challenge.entity.QuestionSet;
+import com.quiz.darkhold.game.model.QuestionPointer;
 import com.quiz.darkhold.preview.model.PublishInfo;
 import org.dizitart.no2.Cursor;
 import org.dizitart.no2.Document;
@@ -37,14 +38,14 @@ public class CurrentGame {
      *
      * @param publishInfo publish info
      */
-    public void saveCurrentStatus(final PublishInfo publishInfo) {
+    public void saveCurrentStatus(final PublishInfo publishInfo, final List<QuestionSet> questionSets) {
         List<String> users = new ArrayList<>();
         users.add(publishInfo.getModerator());
         Document doc = Document.createDocument(PIN, publishInfo.getPin())
                 .put(USERS, users)
                 .put(MODERATOR, publishInfo.getModerator())
-                .put(CURRENT_QUESTION_NO, -1)
-                .put(QUESTIONS, new ArrayList<>())
+                .put(CURRENT_QUESTION_NO, 0)
+                .put(QUESTIONS, questionSets)
                 .put(SCORES, new HashMap<String, Integer>());
 
         collection.insert(doc);
@@ -100,7 +101,7 @@ public class CurrentGame {
     public int getCurrentQuestionNo(final String pin) {
         Cursor cursor = collection.find(Filters.and(eq(PIN, pin)));
         Integer questionNo = (Integer) cursor.toList().get(0).get(CURRENT_QUESTION_NO);
-        logger.info(String.format("questionNo : %d", questionNo));
+        logger.info(String.format("getCurrentQuestionNo : questionNo : %d", questionNo));
         return questionNo;
     }
 
@@ -165,5 +166,21 @@ public class CurrentGame {
     public Map<String, Integer> getCurrentScore(final String pin) {
         Cursor cursor = collection.find(Filters.and(eq(PIN, pin)));
         return (Map<String, Integer>) cursor.toList().get(0).get(SCORES);
+    }
+
+    public QuestionPointer getCurrentQuestionPointer(final String pin) {
+        Cursor cursor = collection.find(Filters.and(eq(PIN, pin)));
+        Document doc = cursor.toList().get(0);
+        Integer questionNo = (Integer) doc.get(CURRENT_QUESTION_NO);
+        logger.info(String.format("questionNo : %d", questionNo));
+        List<QuestionSet> questions = (List<QuestionSet>) doc.get(QUESTIONS);
+        logger.info(String.format("questions size : %d", questions.size()));
+        QuestionPointer questionPointer = new QuestionPointer();
+        questionPointer.setCurrentQuestionNumber(questionNo);
+        questionPointer.setTotalQuestionCount(questions.size());
+        if (questionNo < questions.size()) {
+            questionPointer.setCurrentQuestion(questions.get(questionNo));
+        }
+        return questionPointer;
     }
 }

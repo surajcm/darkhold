@@ -1,12 +1,12 @@
 package com.quiz.darkhold.game.controller;
 
-import com.quiz.darkhold.challenge.entity.QuestionSet;
 import com.quiz.darkhold.game.model.Challenge;
 import com.quiz.darkhold.game.model.CurrentScore;
 import com.quiz.darkhold.game.model.CurrentStatus;
 import com.quiz.darkhold.game.model.ExamStatus;
 import com.quiz.darkhold.game.model.Game;
 import com.quiz.darkhold.game.model.QuestionOnGame;
+import com.quiz.darkhold.game.model.QuestionPointer;
 import com.quiz.darkhold.game.model.StartTrigger;
 import com.quiz.darkhold.game.model.UserResponse;
 import com.quiz.darkhold.game.service.GameService;
@@ -51,13 +51,11 @@ public class GameController {
     @PostMapping("/question")
     public String question(final Model model, final Principal principal) {
         logger.info("On to question :");
-        int currentQuestionNumber = gameService.getCurrentQuestionNo();
-        if (currentQuestionNumber != -1) {
-            QuestionOnGame questionOnGame = getQuestionOnGame(currentQuestionNumber + 1);
-            if (questionOnGame == null) {
-                return finalScore(model);
-            }
+        QuestionPointer questionPointer = gameService.getCurrentQuestionPointer();
+        if (questionPointer.getCurrentQuestionNumber() == questionPointer.getTotalQuestionCount()) {
+            return finalScore(model);
         }
+        logger.info("going to question page");
         return "question";
     }
 
@@ -81,15 +79,15 @@ public class GameController {
     @PostMapping("/game")
     public String startGame(final Model model, final Principal principal) {
         logger.info("On to game :");
-        int currentQuestionNumber = gameService.getCurrentQuestionNo();
-        String moderator = gameService.findModerator();
-        if (currentQuestionNumber < 0 || principal.getName().equalsIgnoreCase(moderator)) {
-            currentQuestionNumber++;
-        }
-        Challenge challenge = gameService.getCurrentQuestionSet(currentQuestionNumber);
+        QuestionPointer questionPointer = gameService.getCurrentQuestionPointer();
+        Challenge challenge = new Challenge();
+        challenge.setQuestionNumber(questionPointer.getCurrentQuestionNumber());
+        challenge.setQuestionSet(questionPointer.getCurrentQuestion());
         challenge.setQuestionNumber(challenge.getQuestionNumber() + 1);
+
+        String moderator = gameService.findModerator();
         if (principal.getName().equalsIgnoreCase(moderator)) {
-            gameService.updateQuestionNo();
+            gameService.incrementQuestionNo();
         }
         model.addAttribute("challenge", challenge);
         return "game";
@@ -181,45 +179,19 @@ public class GameController {
     public StartTrigger questionFetch(final String name) {
         logger.info(String.format("On to questionFetch : %s", name));
         int currentQuestionNumber = gameService.getCurrentQuestionNo();
-        String moderator = gameService.findModerator();
-        if (name.equalsIgnoreCase(moderator)) {
-            currentQuestionNumber++;
-        }
         QuestionOnGame questionOnGame = getQuestionOnGame(currentQuestionNumber);
         if (questionOnGame == null) {
             return new StartTrigger("END_GAME");
         }
         questionOnGame.setCurrentQuestionNumber(currentQuestionNumber);
-        return new StartTrigger(currentQuestionNumber + 1
-                + " : " + questionOnGame.getQuestion());
+        return new StartTrigger(currentQuestionNumber + 1 + " : " + questionOnGame.getQuestion());
     }
 
     private QuestionOnGame getQuestionOnGame(final int currentQuestionNumber) {
-        QuestionOnGame questionOnGame = null;
-        if (currentQuestionNumber == 0) {
-            questionOnGame = gameService.initialFetchAndUpdateNitrate();
-        } else {
-            List<QuestionSet> questionSets = gameService.getQuestionsOnAPin();
-            if (questionSets.size() > currentQuestionNumber) {
-                questionOnGame = gameService.fetchAnotherQuestion(currentQuestionNumber);
-            }
-        }
-        return questionOnGame;
+        logger.info("On getQuestionOnGame : currentQuestionNumber : " + currentQuestionNumber);
+        return gameService.fetchQuestion();
     }
 
-    /*@MessageMapping("/fetch_scores")
-    @SendTo("/topic/read_scores")
-    public StartTrigger scoresFetch() {
-        Map<String, Integer> scores = gameService.getCurrentScore();
-        ObjectMapper mapper = new ObjectMapper();
-        String jsonString = "";
-        try {
-            jsonString = mapper.writeValueAsString(scores);
-        } catch (JsonProcessingException exception) {
-            logger.error(exception.getMessage());
-        }
-        return new StartTrigger(jsonString);
-    }*/
 
     @MessageMapping("/fetch_scores")
     @SendTo("/topic/read_scores")
