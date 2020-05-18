@@ -5,7 +5,6 @@ import com.quiz.darkhold.game.model.CurrentScore;
 import com.quiz.darkhold.game.model.CurrentStatus;
 import com.quiz.darkhold.game.model.ExamStatus;
 import com.quiz.darkhold.game.model.Game;
-import com.quiz.darkhold.game.model.QuestionOnGame;
 import com.quiz.darkhold.game.model.QuestionPointer;
 import com.quiz.darkhold.game.model.StartTrigger;
 import com.quiz.darkhold.game.model.UserResponse;
@@ -127,21 +126,7 @@ public class GameController {
         return status;
     }
 
-    /**
-     * show the till now score and display who are the top 3 players.
-     *
-     * @param model model
-     * @return to scoreboard
-     */
-    @PostMapping("/scoreboard")
-    public String scoreCheck(final Model model) {
-        logger.info("On to the scoreboard :");
-        CurrentScore score = new CurrentScore();
-        Map<String, Integer> scores = gameService.getCurrentScore();
-        score.setScore(scores);
-        model.addAttribute("score", score);
-        return "scoreboard";
-    }
+
 
     /**
      * Always active, will add the new user and give it back in response.
@@ -178,20 +163,14 @@ public class GameController {
     @SendTo("/topic/question_read")
     public StartTrigger questionFetch(final String name) {
         logger.info(String.format("On to questionFetch : %s", name));
-        int currentQuestionNumber = gameService.getCurrentQuestionNo();
-        QuestionOnGame questionOnGame = getQuestionOnGame(currentQuestionNumber);
-        if (questionOnGame == null) {
+        QuestionPointer questionPointer = gameService.getCurrentQuestionPointer();
+        if(questionPointer.getCurrentQuestionNumber() > questionPointer.getTotalQuestionCount()) {
             return new StartTrigger("END_GAME");
         }
-        questionOnGame.setCurrentQuestionNumber(currentQuestionNumber);
-        return new StartTrigger(currentQuestionNumber + 1 + " : " + questionOnGame.getQuestion());
+        logger.info("On questionPointer.getCurrentQuestionNumber() : " + questionPointer.getCurrentQuestionNumber());
+        return new StartTrigger(questionPointer.getCurrentQuestionNumber() + " : "
+                + questionPointer.getCurrentQuestion().getQuestion());
     }
-
-    private QuestionOnGame getQuestionOnGame(final int currentQuestionNumber) {
-        logger.info("On getQuestionOnGame : currentQuestionNumber : " + currentQuestionNumber);
-        return gameService.fetchQuestion();
-    }
-
 
     @MessageMapping("/fetch_scores")
     @SendTo("/topic/read_scores")

@@ -5,14 +5,11 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link href="styles/homepage.css" rel="stylesheet" />
-    <script type="text/javascript">
-        function askQuestion() {
-            document.forms[0].action="/question";
-            document.forms[0].submit();
-        }
-    </script>
+    <script type="text/javascript" src="scripts/core/sockjs.min.js"></script>
+    <script type="text/javascript" src="scripts/core/stomp.min.js"></script>
+    <script type="text/javascript" src="scripts/scoreboard-scripts.js"></script>
 </head>
-<body>
+<body onload="connect()">
     <nav class="navbar transparent navbar-inverse">
         <div class="icon-bar" onclick="javascript:toHome()">
             <a class="active" href="#"><i class="fas fa-home"></i></a>
@@ -28,7 +25,7 @@
     <nav class="navbar transparent">
         <ul class="navbar-nav mx-auto">
             <li class="nav-item">
-                <strong>ScoreBoard</strong>
+                <span class="badge badge-pill badge-primary">ScoreBoard</span>
             </li>
         </ul>
         <span th:if="${not #sets.isEmpty(#authentication.getPrincipal().getAuthorities())}">
