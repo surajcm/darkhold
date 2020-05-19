@@ -178,7 +178,7 @@ public class CurrentGame {
         QuestionPointer questionPointer = new QuestionPointer();
         questionPointer.setCurrentQuestionNumber(questionNo);
         questionPointer.setTotalQuestionCount(questions.size());
-        if (questionNo <= questions.size()) {
+        if (questionNo < questions.size()) {
             questionPointer.setCurrentQuestion(questions.get(questionNo));
         }
         return questionPointer;

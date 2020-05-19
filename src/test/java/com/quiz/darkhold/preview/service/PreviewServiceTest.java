@@ -57,6 +57,7 @@ public class PreviewServiceTest {
     @Test
     public void generateQuizPin() {
         String user = "USER";
+        when(gameRepository.findByPin(anyString())).thenReturn(mockGame("1234"));
         PublishInfo publishInfo = previewService.generateQuizPin("1234", user);
         Assertions.assertEquals(user, publishInfo.getModerator());
     }

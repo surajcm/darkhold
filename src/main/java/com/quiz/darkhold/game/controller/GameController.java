@@ -83,11 +83,6 @@ public class GameController {
         challenge.setQuestionNumber(questionPointer.getCurrentQuestionNumber());
         challenge.setQuestionSet(questionPointer.getCurrentQuestion());
         challenge.setQuestionNumber(challenge.getQuestionNumber() + 1);
-
-        String moderator = gameService.findModerator();
-        if (principal.getName().equalsIgnoreCase(moderator)) {
-            gameService.incrementQuestionNo();
-        }
         model.addAttribute("challenge", challenge);
         return "game";
     }
@@ -103,6 +98,10 @@ public class GameController {
         currentStatus.setStatus(status.name());
         Integer scoreOnStatus = findScoreOnStatus(status);
         gameService.saveCurrentScore(user, scoreOnStatus);
+        String moderator = gameService.findModerator();
+        if (user.equalsIgnoreCase(moderator)) {
+            gameService.incrementQuestionNo();
+        }
         return true;
     }
 
@@ -125,7 +124,6 @@ public class GameController {
         }
         return status;
     }
-
 
 
     /**
@@ -164,11 +162,11 @@ public class GameController {
     public StartTrigger questionFetch(final String name) {
         logger.info(String.format("On to questionFetch : %s", name));
         QuestionPointer questionPointer = gameService.getCurrentQuestionPointer();
-        if(questionPointer.getCurrentQuestionNumber() > questionPointer.getTotalQuestionCount()) {
+        if (questionPointer.getCurrentQuestionNumber() == questionPointer.getTotalQuestionCount()) {
             return new StartTrigger("END_GAME");
         }
         logger.info("On questionPointer.getCurrentQuestionNumber() : " + questionPointer.getCurrentQuestionNumber());
-        return new StartTrigger(questionPointer.getCurrentQuestionNumber() + " : "
+        return new StartTrigger(questionPointer.getCurrentQuestionNumber() + 1 + " : "
                 + questionPointer.getCurrentQuestion().getQuestion());
     }
 
