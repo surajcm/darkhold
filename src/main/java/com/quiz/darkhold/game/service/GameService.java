@@ -68,4 +68,11 @@ public class GameService {
         PublishInfo publishInfo = previewService.getActiveChallenge();
         return publishInfo.getPin();
     }
+
+    public void cleanUpCurrentGame() {
+        PublishInfo publishInfo = previewService.getActiveChallenge();
+        // make it inactive
+        // save scores to a db
+        currentGame.stopTheGame(publishInfo.getPin());
+    }
 }

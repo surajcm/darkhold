@@ -65,6 +65,8 @@ public class GameController {
         Map<String, Integer> scores = gameService.getCurrentScore();
         score.setScore(scores);
         model.addAttribute("score", score);
+        // todo :clean up everything
+        gameService.cleanUpCurrentGame();
         return "finalscore";
     }
 

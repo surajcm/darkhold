@@ -183,4 +183,16 @@ public class CurrentGame {
         }
         return questionPointer;
     }
+
+    public void stopTheGame(final String pin) {
+        Cursor cursor = collection.find(Filters.and(eq(PIN, pin)));
+        Document doc = cursor.toList().get(0);
+        doc.remove(PIN);
+        doc.remove(USERS);
+        doc.remove(MODERATOR);
+        doc.remove(CURRENT_QUESTION_NO);
+        doc.remove(QUESTIONS);
+        doc.remove(SCORES);
+        collection.update(doc);
+    }
 }
