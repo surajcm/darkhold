@@ -16,6 +16,11 @@ checkstyle {
     }
 }
 
+jacocoTestReport {
+    reports {
+        xml.enabled true
+    }
+}
 //spotbugs {
     //toolVersion = '3.1.12'
     //ignoreFailures = true
@@ -60,4 +65,26 @@ cpdCheck {
         xml.enabled = false
     }
     source = sourceSets.main.allJava
+}
+
+jacocoTestCoverageVerification {
+    violationRules {
+        rule {
+            limit {
+                minimum = 0.42
+            }
+        }
+    }
+}
+
+check.dependsOn jacocoTestCoverageVerification
+
+sonarqube {
+    properties {
+        property "sonar.projectKey", "surajcm_darkhold"
+        property "sonar.organization", "surajcm"
+        property "sonar.host.url", "https://sonarcloud.io"
+        property "sonar.login", "0c8baf470e3c2eb956994cddcf77739cf32beb03"
+        property "sonar.coverage.jacoco.xmlReportPaths", "build/reports/jacoco/test/jacocoTestReport.xml"
+    }
 }
