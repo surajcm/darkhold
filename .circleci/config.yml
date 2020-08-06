@@ -7,7 +7,7 @@ jobs:
   build:
     docker:
       # specify the version you desire here
-      - image: circleci/openjdk:14-jdk-buster
+      - image: circleci/openjdk:8-jdk
 
       # Specify service dependencies here if necessary
       # CircleCI maintains a library of pre-built images
@@ -40,7 +40,3 @@ jobs:
 
       # run tests!
       - run: gradle test
-      - run: gradle build jacocoTestReport
-      - run:
-          name: Analyze on SonarCloud
-          command: gradle build sonarqube
