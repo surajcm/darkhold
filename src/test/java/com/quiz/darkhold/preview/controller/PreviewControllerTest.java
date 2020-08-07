@@ -20,7 +20,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ExtendWith(SpringExtension.class)
 @WebMvcTest(PreviewController.class)
 @ContextConfiguration(classes = {PreviewConfigurations.class})
-public class PreviewControllerTest {
+class PreviewControllerTest {
     private MockMvc mvc;
 
     @Autowired
@@ -35,13 +35,13 @@ public class PreviewControllerTest {
     }
 
     @Test
-    public void verifyPreconfigure() throws Exception {
+    void verifyPreconfigure() throws Exception {
         mvc.perform(post("/preconfigure"))
                 .andExpect(status().is(400));
     }
 
     @Test
-    public void verifyPreconfigureWithValues() throws Exception {
+    void verifyPreconfigureWithValues() throws Exception {
         Model model = Mockito.mock(Model.class);
         mvc.perform(post("/preconfigure", model, "challenge"))
                 .andExpect(status().is(400));

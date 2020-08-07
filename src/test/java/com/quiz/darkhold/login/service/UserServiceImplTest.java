@@ -20,7 +20,7 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(SpringExtension.class)
-public class UserServiceImplTest {
+class UserServiceImplTest {
     private final UserServiceImpl userService = new UserServiceImpl();
     private final UserRepository userRepository = Mockito.mock(UserRepository.class);
     private final RoleRepository roleRepository = Mockito.mock(RoleRepository.class);
@@ -34,7 +34,7 @@ public class UserServiceImplTest {
     }
 
     @Test
-    public void save() {
+    void save() {
         when(encoder.encode(anyString())).thenReturn("MockedPassword");
         when(roleRepository.findAll()).thenReturn(mockRoles());
         User user = new User();
@@ -42,7 +42,7 @@ public class UserServiceImplTest {
     }
 
     @Test
-    public void findByUsername() {
+    void findByUsername() {
         String username = "superman";
         when(userRepository.findByUsername(anyString())).thenReturn(mockUser(username));
         User user = userService.findByUsername(username);

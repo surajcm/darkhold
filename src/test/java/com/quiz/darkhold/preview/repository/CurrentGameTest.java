@@ -20,7 +20,7 @@ import java.util.Map;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(SpringExtension.class)
-public class CurrentGameTest {
+class CurrentGameTest {
     private final CurrentGame currentGame = new CurrentGame();
     private final NitriteCollection collection = Mockito.mock(NitriteCollection.class);
 
@@ -30,7 +30,7 @@ public class CurrentGameTest {
     }
 
     @Test
-    public void saveCurrentStatus() {
+    void saveCurrentStatus() {
         PublishInfo publishInfo = new PublishInfo();
         publishInfo.setPin("1234");
         publishInfo.setModerator("admin");
@@ -38,7 +38,7 @@ public class CurrentGameTest {
     }
 
     @Test
-    public void getActiveUsersInGame() {
+    void getActiveUsersInGame() {
         when(collection.find(ArgumentMatchers.any(Filter.class))).thenReturn(new MockCursor());
         List<String> users = currentGame.getActiveUsersInGame("1234");
         Assertions.assertAll("name",
@@ -52,52 +52,52 @@ public class CurrentGameTest {
     }
 
     @Test
-    public void saveUserToActiveGame() {
+    void saveUserToActiveGame() {
         when(collection.find(ArgumentMatchers.any(Filter.class))).thenReturn(new MockCursor());
         Assertions.assertAll(() -> currentGame.saveUserToActiveGame("1234", "admin"));
     }
 
     @Test
-    public void saveQuestionsToActiveGame() {
+    void saveQuestionsToActiveGame() {
         when(collection.find(ArgumentMatchers.any(Filter.class))).thenReturn(new MockCursor());
         List<QuestionSet> questionSets = new ArrayList<>();
         Assertions.assertAll(() -> currentGame.saveQuestionsToActiveGame("1234", questionSets));
     }
 
     @Test
-    public void getCurrentQuestionNo() {
+    void getCurrentQuestionNo() {
         when(collection.find(ArgumentMatchers.any(Filter.class))).thenReturn(new MockCursor());
         Assertions.assertEquals(5, currentGame.getCurrentQuestionNo("1234"));
     }
 
     @Test
-    public void getQuestionsOnAPin() {
+    void getQuestionsOnAPin() {
         when(collection.find(ArgumentMatchers.any(Filter.class))).thenReturn(new MockCursor());
         List<QuestionSet> questionSets = currentGame.getQuestionsOnAPin("1234");
         Assertions.assertEquals("Q1", questionSets.get(0).getQuestion());
     }
 
     @Test
-    public void incrementQuestionCount() {
+    void incrementQuestionCount() {
         when(collection.find(ArgumentMatchers.any(Filter.class))).thenReturn(new MockCursor());
         Assertions.assertAll(() -> currentGame.incrementQuestionCount("1234"));
     }
 
     @Test
-    public void findModerator() {
+    void findModerator() {
         when(collection.find(ArgumentMatchers.any(Filter.class))).thenReturn(new MockCursor());
         Assertions.assertEquals("admin", currentGame.findModerator("1234"));
     }
 
     @Test
-    public void saveCurrentScore() {
+    void saveCurrentScore() {
         when(collection.find(ArgumentMatchers.any(Filter.class))).thenReturn(new MockCursor());
         Assertions.assertAll(() -> currentGame.saveCurrentScore("1234", "admin", 1));
         Assertions.assertAll(() -> currentGame.saveCurrentScore("1234", "test", 1));
     }
 
     @Test
-    public void getCurrentScore() {
+    void getCurrentScore() {
         when(collection.find(ArgumentMatchers.any(Filter.class))).thenReturn(new MockCursor());
         Map<String, Integer> scores = currentGame.getCurrentScore("1234");
         Assertions.assertEquals(5, scores.get("admin"));

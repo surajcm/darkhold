@@ -22,7 +22,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ExtendWith(SpringExtension.class)
 @WebMvcTest(OptionsController.class)
 @ContextConfiguration(classes = {OptionsConfigurations.class})
-public class OptionsControllerTest {
+class OptionsControllerTest {
     private MockMvc mvc;
 
     @Autowired
@@ -40,25 +40,25 @@ public class OptionsControllerTest {
     }
 
     @Test
-    public void testCreateChallenge() throws Exception {
+    void testCreateChallenge() throws Exception {
         mvc.perform(post("/createChallenge"))
                 .andExpect(status().is(200));
     }
 
     @Test
-    public void testViewChallenge() throws Exception {
+    void testViewChallenge() throws Exception {
         mvc.perform(post("/viewChallenge"))
                 .andExpect(status().is(200));
     }
 
     @Test
-    public void testActiveChallenge() throws Exception {
+    void testActiveChallenge() throws Exception {
         mvc.perform(post("/activeChallenge"))
                 .andExpect(status().is(200));
     }
 
     @Test
-    public void validActiveChallenge() throws Exception {
+    void validActiveChallenge() throws Exception {
         when(previewService.getActiveChallenge()).thenReturn(new PublishInfo());
         mvc.perform(post("/activeChallenge"))
                 .andExpect(status().is(200));

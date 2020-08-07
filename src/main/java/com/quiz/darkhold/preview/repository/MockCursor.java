@@ -8,6 +8,7 @@ import org.dizitart.no2.NitriteId;
 import org.dizitart.no2.RecordIterable;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -15,6 +16,9 @@ import java.util.Map;
 import java.util.Set;
 
 public class MockCursor implements Cursor {
+
+    private static final String ADMIN = "admin";
+
     @Override
     public RecordIterable<Document> project(final Document projection) {
         return null;
@@ -27,7 +31,7 @@ public class MockCursor implements Cursor {
 
     @Override
     public Set<NitriteId> idSet() {
-        return null;
+        return Collections.emptySet();
     }
 
     @Override
@@ -56,7 +60,7 @@ public class MockCursor implements Cursor {
         document.put("users", getUsers());
         document.put("questions", getQuestions());
         document.put("currentQuestionNo", 5);
-        document.put("MODERATOR", "admin");
+        document.put("MODERATOR", ADMIN);
         document.put("SCORES", getScores());
         List<Document> documents = new ArrayList<>();
         documents.add(document);
@@ -65,7 +69,7 @@ public class MockCursor implements Cursor {
 
     private List<String> getUsers() {
         List<String> users = new ArrayList<>();
-        users.add("admin");
+        users.add(ADMIN);
         users.add("tester");
         return users;
     }
@@ -85,7 +89,7 @@ public class MockCursor implements Cursor {
 
     private Map<String, Integer> getScores() {
         Map<String, Integer> scores = new HashMap<>();
-        scores.put("admin", 5);
+        scores.put(ADMIN, 5);
         return scores;
     }
 

@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 @Controller
 public class LoginController {
+    private static final String LOGIN = "login";
     private final Log log = LogFactory.getLog(LoginController.class);
 
     @Autowired
@@ -84,7 +85,7 @@ public class LoginController {
 
         if (bindingResult.hasErrors()) {
             log.info(bindingResult.getAllErrors().get(0));
-            return "login";
+            return LOGIN;
         }
         userService.save(userForm);
 
@@ -102,7 +103,7 @@ public class LoginController {
     @PostMapping("/logmein")
     public String loginMe(final Model model) {
         log.info("into loginMe");
-        return "login";
+        return LOGIN;
     }
 
     /**
@@ -113,6 +114,6 @@ public class LoginController {
     @GetMapping("/logmein")
     public String loginMe2(final Model model) {
         log.info("into GET loginMe");
-        return "login";
+        return LOGIN;
     }
 }

@@ -10,6 +10,7 @@ import org.springframework.validation.Validator;
 
 @Component
 public class UserValidator implements Validator {
+    private static final String USER_NAME = "username";
     @Autowired
     private UserService userService;
 
@@ -26,12 +27,12 @@ public class UserValidator implements Validator {
     }
 
     private void validateUserName(final Errors errors, final User user) {
-        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "username", "NotEmpty");
+        ValidationUtils.rejectIfEmptyOrWhitespace(errors, USER_NAME, "NotEmpty");
         if (user.getUsername().length() < 6 || user.getUsername().length() > 32) {
-            errors.rejectValue("username", "Size.userForm.username");
+            errors.rejectValue(USER_NAME, "Size.userForm.username");
         }
         if (userService.findByUsername(user.getUsername()) != null) {
-            errors.rejectValue("username", "Duplicate.userForm.username");
+            errors.rejectValue(USER_NAME, "Duplicate.userForm.username");
         }
     }
 

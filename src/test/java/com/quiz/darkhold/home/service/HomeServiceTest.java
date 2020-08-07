@@ -16,7 +16,7 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(SpringExtension.class)
-public class HomeServiceTest {
+class HomeServiceTest {
     private final HomeService homeService = new HomeService();
     private final GameRepository gameRepository = Mockito.mock(GameRepository.class);
     private final CurrentGame currentGame = Mockito.mock(CurrentGame.class);
@@ -28,19 +28,19 @@ public class HomeServiceTest {
     }
 
     @Test
-    public void validateGamePinSuccess() {
+    void validateGamePinSuccess() {
         when(gameRepository.findByPin(anyString())).thenReturn(mockGame());
         Assertions.assertTrue(homeService.validateGamePin("1234"));
     }
 
     @Test
-    public void validateGamePinFailure() {
+    void validateGamePinFailure() {
         when(gameRepository.findByPin(anyString())).thenReturn(null);
         Assertions.assertFalse(homeService.validateGamePin("1234"));
     }
 
     @Test
-    public void verifyParticipantsInActiveQuiz() {
+    void verifyParticipantsInActiveQuiz() {
         Assertions.assertNotNull(homeService.participantsInActiveQuiz("1234"));
     }
 

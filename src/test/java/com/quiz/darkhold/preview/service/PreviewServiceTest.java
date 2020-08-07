@@ -24,7 +24,7 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(SpringExtension.class)
-public class PreviewServiceTest {
+class PreviewServiceTest {
     private final PreviewService previewService = new PreviewService();
     private final ChallengeRepository challengeRepository = Mockito.mock(ChallengeRepository.class);
     private final GameRepository gameRepository = Mockito.mock(GameRepository.class);
@@ -38,7 +38,7 @@ public class PreviewServiceTest {
     }
 
     @Test
-    public void fetchQuestions() {
+    void fetchQuestions() {
         when(challengeRepository.getOne(anyLong())).thenReturn(mockChallenge());
         String challengeId = "1234";
         PreviewInfo previewInfo = previewService.fetchQuestions(challengeId);
@@ -46,7 +46,7 @@ public class PreviewServiceTest {
     }
 
     @Test
-    public void fetchQuestionsFromPin() {
+    void fetchQuestionsFromPin() {
         String challengeId = "1234";
         when(gameRepository.findByPin(anyString())).thenReturn(mockGame(challengeId));
         when(challengeRepository.findById(anyLong())).thenReturn(mockOptionalChallenge());
@@ -55,7 +55,7 @@ public class PreviewServiceTest {
     }
 
     @Test
-    public void generateQuizPin() {
+    void generateQuizPin() {
         String user = "USER";
         when(gameRepository.findByPin(anyString())).thenReturn(mockGame("1234"));
         PublishInfo publishInfo = previewService.generateQuizPin("1234", user);
@@ -63,7 +63,7 @@ public class PreviewServiceTest {
     }
 
     @Test
-    public void getActiveChallenge() {
+    void getActiveChallenge() {
         String challengeId = "1234";
         when(gameRepository.findByGameStatusNot(anyString())).thenReturn(mockGames(challengeId));
         PublishInfo publishInfo = previewService.getActiveChallenge();

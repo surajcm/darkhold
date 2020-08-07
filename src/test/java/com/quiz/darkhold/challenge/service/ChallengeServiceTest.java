@@ -20,7 +20,7 @@ import java.io.InputStream;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(SpringExtension.class)
-public class ChallengeServiceTest {
+class ChallengeServiceTest {
     private final ChallengeService challengeService = new ChallengeService();
     private final ChallengeRepository challengeRepository = Mockito.mock(ChallengeRepository.class);
     private final QuestionSetRepository questionSetRepository = Mockito.mock(QuestionSetRepository.class);
@@ -32,7 +32,7 @@ public class ChallengeServiceTest {
     }
 
     @Test
-    public void readProcessAndSaveChallengeSuccess() throws IOException {
+    void readProcessAndSaveChallengeSuccess() throws IOException {
         InputStream anyInputStream = new ByteArrayInputStream("test data".getBytes());
         MultipartFile file = Mockito.mock(MultipartFile.class);
         when(file.getInputStream()).thenReturn(anyInputStream);
@@ -44,7 +44,7 @@ public class ChallengeServiceTest {
     }
 
     @Test
-    public void verifyReadProcessAndSaveChallengeWithException() {
+    void verifyReadProcessAndSaveChallengeWithException() {
         Assertions.assertThrows(ChallengeException.class, () -> {
             challengeService.readProcessAndSaveChallenge(mockMultipartFile(), "Test1", "Super test");
         });

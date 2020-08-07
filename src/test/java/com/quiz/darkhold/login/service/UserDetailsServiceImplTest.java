@@ -20,7 +20,7 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(SpringExtension.class)
-public class UserDetailsServiceImplTest {
+class UserDetailsServiceImplTest {
     private final UserDetailsServiceImpl userDetailsService = new UserDetailsServiceImpl();
     private final UserRepository userRepository = Mockito.mock(UserRepository.class);
 
@@ -30,14 +30,14 @@ public class UserDetailsServiceImplTest {
     }
 
     @Test
-    public void loadUserByNullUsername() {
+    void loadUserByNullUsername() {
         when(userRepository.findByUsername(anyString())).thenReturn(null);
         Assertions.assertThrows(UsernameNotFoundException.class,
                 () -> userDetailsService.loadUserByUsername("admin"));
     }
 
     @Test
-    public void loadUserByValidUsername() {
+    void loadUserByValidUsername() {
         String userName = "admin";
         when(userRepository.findByUsername(anyString())).thenReturn(mockUser(userName));
         UserDetails userDetails = userDetailsService.loadUserByUsername("admin");

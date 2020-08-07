@@ -17,7 +17,7 @@ import java.util.List;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(SpringExtension.class)
-public class OptionsServiceTest {
+class OptionsServiceTest {
     private final OptionsService optionsService = new OptionsService();
     private final ChallengeRepository challengeRepository = Mockito.mock(ChallengeRepository.class);
 
@@ -27,7 +27,7 @@ public class OptionsServiceTest {
     }
 
     @Test
-    public void populate() {
+    void populate() {
         when(challengeRepository.findAll()).thenReturn(mockChallenges());
         ChallengeInfo challengeInfo = optionsService.populateChallengeInfo();
         Assertions.assertNotNull(challengeInfo);
