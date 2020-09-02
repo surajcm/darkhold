@@ -1,7 +1,7 @@
 package com.quiz.darkhold.login.service;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -21,7 +21,7 @@ import java.util.Set;
 public class SecurityServiceImpl implements SecurityService {
     private static final String UNREGISTERED_USER = "UNREGISTERED_USER";
     private static final String ROLE_MODERATOR = "ROLE_MODERATOR";
-    private static final Logger logger = LoggerFactory.getLogger(SecurityServiceImpl.class);
+    private final Logger logger = LogManager.getLogger(SecurityServiceImpl.class);
     @Autowired
     private AuthenticationManager authenticationManager;
     @Autowired

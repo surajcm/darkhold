@@ -17,9 +17,11 @@ public class Initializer {
      */
     @PostConstruct
     public void init() {
-        System.setProperty("java.awt.headless", "false");
-        DatabaseManagerSwing.main(
-                new String[]{"--url", "jdbc:hsqldb:mem:testdb", "--user", "sa", "--password", ""});
+        if (false) {
+            System.setProperty("java.awt.headless", "false");
+            DatabaseManagerSwing.main(
+                    new String[]{"--url", "jdbc:hsqldb:mem:testdb", "--user", "sa", "--password", ""});
+        }
     }
 
 }

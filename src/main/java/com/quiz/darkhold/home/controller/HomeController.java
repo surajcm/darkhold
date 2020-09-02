@@ -3,8 +3,8 @@ package com.quiz.darkhold.home.controller;
 import com.quiz.darkhold.home.model.GameInfo;
 import com.quiz.darkhold.home.service.HomeService;
 import com.quiz.darkhold.login.service.SecurityService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -19,7 +19,7 @@ import java.util.List;
 public class HomeController {
     public static final String GAME_INFO = "gameinfo";
     private static final String UNREGISTERED_USER = "UNREGISTERED_USER";
-    private final Logger logger = LoggerFactory.getLogger(HomeController.class);
+    private final Logger logger = LogManager.getLogger(HomeController.class);
 
     @Autowired
     private HomeService homeService;

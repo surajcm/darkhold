@@ -2,8 +2,8 @@ package com.quiz.darkhold.score.controller;
 
 import com.quiz.darkhold.game.model.CurrentScore;
 import com.quiz.darkhold.game.service.GameService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
@@ -16,7 +16,7 @@ import java.util.Map;
 @Controller
 public class ScoreController {
 
-    private final Logger logger = LoggerFactory.getLogger(ScoreController.class);
+    private final Logger logger = LogManager.getLogger(ScoreController.class);
 
     @Autowired
     private GameService gameService;

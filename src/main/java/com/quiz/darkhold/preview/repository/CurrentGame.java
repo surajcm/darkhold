@@ -3,12 +3,12 @@ package com.quiz.darkhold.preview.repository;
 import com.quiz.darkhold.challenge.entity.QuestionSet;
 import com.quiz.darkhold.game.model.QuestionPointer;
 import com.quiz.darkhold.preview.model.PublishInfo;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.dizitart.no2.Cursor;
 import org.dizitart.no2.Document;
 import org.dizitart.no2.NitriteCollection;
 import org.dizitart.no2.filters.Filters;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -28,7 +28,7 @@ public class CurrentGame {
     private static final String QUESTIONS = "questions";
     private static final String MODERATOR = "MODERATOR";
     private static final String SCORES = "SCORES";
-    private final Logger logger = LoggerFactory.getLogger(CurrentGame.class);
+    private final Logger logger = LogManager.getLogger(CurrentGame.class);
 
     @Autowired
     private NitriteCollection collection;

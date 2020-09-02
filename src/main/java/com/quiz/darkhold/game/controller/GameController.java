@@ -10,8 +10,8 @@ import com.quiz.darkhold.game.model.StartTrigger;
 import com.quiz.darkhold.game.model.UserResponse;
 import com.quiz.darkhold.game.service.GameService;
 import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
@@ -29,7 +29,7 @@ import java.util.Map;
 @SuppressWarnings("unused")
 @Controller
 public class GameController {
-    private final Logger logger = LoggerFactory.getLogger(GameController.class);
+    private final Logger logger = LogManager.getLogger(GameController.class);
 
     @Autowired
     private GameService gameService;
