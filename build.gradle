@@ -18,7 +18,7 @@ buildscript {
 plugins {
 	id 'java'
 	id 'idea'
-	id 'org.springframework.boot' version '2.3.3.RELEASE'
+	id 'org.springframework.boot' version '2.4.0'
 	id 'io.spring.dependency-management' version '1.0.8.RELEASE'
 	//id 'net.ltgt.errorprone' version '0.8.1'
 	id 'com.github.spotbugs' version '1.6.8' apply false
@@ -28,7 +28,6 @@ plugins {
 
 group = 'com.quiz.darkhold'
 version = '0.0.1-SNAPSHOT'
-sourceCompatibility = JavaVersion.VERSION_14
 
 repositories {
 	mavenCentral()
