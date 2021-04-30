@@ -31,12 +31,12 @@ pmd {
     ignoreFailures = false
     ruleSetFiles = files("config/pmd/ruleset.xml")
     ruleSets = []
-    rulePriority = 2
+    rulesMinimumPriority = 2
     incrementalAnalysis = true
 }
 
 jacoco {
-    toolVersion = "0.8.5+"
+    toolVersion = "0.8.6+"
 }
 
 tasks.withType(Checkstyle) {

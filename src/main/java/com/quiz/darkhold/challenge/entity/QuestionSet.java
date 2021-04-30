@@ -39,7 +39,7 @@ public class QuestionSet implements Serializable {
     private String correctOptions;
 
     @ManyToOne
-    @JoinColumn(name = "challenge_id", nullable = false)
+    @JoinColumn(name = "challenge_id", nullable = true)
     private Challenge challenge;
 
     public Long getId() {

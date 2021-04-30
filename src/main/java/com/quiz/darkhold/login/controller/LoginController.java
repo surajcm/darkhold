@@ -32,18 +32,19 @@ public class LoginController {
     /**
      * log me in.
      *
-     * @param model model
+     * @param model    model
      * @param userForm user info
-     * @param error if present
-     * @param logout if triggered logout
+     * @param error    if present
+     * @param logout   if triggered logout
      * @return to the home options screen
      */
     @PostMapping("/logme")
-    public String loginGet(final Model model, @ModelAttribute("userForm") final User userForm,
+    public String loginGet(final Model model, @ModelAttribute("username") final String userName,
+                           @ModelAttribute("password") final String password,
                            final String error, final String logout) {
         log.info("inside the login method");
-        log.info("userForm is : " + userForm.getUsername());
-        securityService.autoLogin(userForm.getUsername(), userForm.getPassword());
+        log.info("userForm is : " + userName);
+        securityService.autoLogin(userName, password);
         log.info("autoLogin done !!!");
         if (error != null) {
             log.info("inside the login method, error : " + error);
@@ -72,8 +73,8 @@ public class LoginController {
     /**
      * Register a new user.
      *
-     * @param model model
-     * @param userForm user info
+     * @param model         model
+     * @param userForm      user info
      * @param bindingResult validation binding
      * @return go to the index page after login
      */
@@ -97,6 +98,7 @@ public class LoginController {
 
     /**
      * on to login page via post.
+     *
      * @param model model
      * @return login
      */
@@ -108,6 +110,7 @@ public class LoginController {
 
     /**
      * on to login page via get.
+     *
      * @param model model
      * @return login
      */
