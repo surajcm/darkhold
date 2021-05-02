@@ -7,8 +7,8 @@
     <link href="styles/challenge-styles.css" rel="stylesheet" />
     <script type="text/javascript">
         function selectQuiz(elem) {
-            console.log('triggering quiz of '+elem.id);
-            document.getElementById('challenges').value = elem.id;
+            console.log('triggering quiz of '+elem.parentElement.parentElement.id);
+            document.getElementById('challenges').value = elem.parentElement.parentElement.id;
             document.forms[0].action="/preconfigure";
             document.forms[0].submit();
         }
@@ -20,6 +20,9 @@
         function toOptions() {
             document.forms[0].action="/options";
             document.forms[0].submit();
+        }
+        function deleteQuiz(elem) {
+            console.log('deleting quiz of '+elem.parentElement.parentElement.id);
         }
     </script>
 </head>
@@ -66,15 +69,18 @@
         <br>
         <h4>Recent challenges</h4>
         <hr>
-        <div th:each="ch: ${challengeInfo.challengeSummaryList}">
-            <div class="border-card" th:id="${ch.challengeId}" onclick="javascript:selectQuiz(this);">
-                <div class="card-type-icon with-border"><p th:text="${ch.challengeId}" /></div>
-                <div class="content-wrapper">
+        <div th:each="ch: ${challengeInfo.challengeSummaryList}" th:id="${ch.challengeId}">
+            <div class="border-card">
+                <div class="card-type-icon with-border" onclick="javascript:selectQuiz(this);"><p th:text="${ch.challengeId}" /></div>
+                <div class="content-wrapper" onclick="javascript:selectQuiz(this);">
                     <div class="label-group fixed">
                         <p class="title" th:text="${ch.challengeName}" />
                     </div>
                 </div>
-                <i class="material-icons end-icon">more_vert</i>
+                <div class="card-type-icon with-border" onclick="javascript:deleteQuiz(this);"><p>X</p></div>
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="black" class="bi bi-three-dots-vertical" viewBox="0 0 16 16">
+                    <path d="M9.5 13a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z"/>
+                </svg>
             </div>
         </div>
     </div>
