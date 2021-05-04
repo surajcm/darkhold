@@ -23,6 +23,28 @@
         }
         function deleteQuiz(elem) {
             console.log('deleting quiz of '+elem.parentElement.parentElement.id);
+            var challenge = elem.parentElement.parentElement.id;
+            var formData = new FormData();
+            formData.append('challenge', challenge);
+            var xhr = new XMLHttpRequest();
+            xhr.open('DELETE', '/delete_challenge', true);
+            xhr.onload = function (e) {
+                if (xhr.status === 200) {
+                    console.log(xhr.responseText);
+                    if (xhr.responseText == 'true') {
+                        deleteChallengeCard(elem.parentElement.parentElement);
+                    } else {
+                        alert('An error occurred!');
+                    }
+                } else {
+                    alert('An error occurred!');
+                }
+            };
+            xhr.send(formData);
+        }
+
+        function deleteChallengeCard(elem) {
+            elem.innerHTML = "";
         }
     </script>
 </head>

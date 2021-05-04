@@ -24,6 +24,7 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -54,6 +55,19 @@ public class ChallengeService {
         final Challenge savedChallenge = challengeRepository.save(challenge);
         questionSets.forEach(q -> q.setChallenge(savedChallenge));
         questionSets.forEach(questionSet -> questionSetRepository.save(questionSet));
+    }
+
+    public Boolean deleteChallenge(final Long challengeId) throws ChallengeException {
+        Boolean response = Boolean.FALSE;
+        Optional<Challenge> challenge = challengeRepository.findById(challengeId);
+        if (challenge.isPresent()) {
+            logger.info("Challenge present in database");
+            List<QuestionSet> questionSets = challenge.get().getQuestionSets();
+            questionSetRepository.deleteAll(questionSets);
+            challengeRepository.delete(challenge.get());
+            response = Boolean.TRUE;
+        }
+        return response;
     }
 
     private List<QuestionSet> readAndProcessChallenge(final MultipartFile upload) throws ChallengeException {
