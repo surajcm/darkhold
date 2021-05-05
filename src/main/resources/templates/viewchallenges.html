@@ -3,8 +3,6 @@
 <head>
     <title>Getting Started: Darkhold classroom quiz experience</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <link href="styles/challenge-styles.css" rel="stylesheet" />
     <script type="text/javascript">
         function selectQuiz(elem) {
             console.log('triggering quiz of '+elem.parentElement.parentElement.id);
@@ -21,9 +19,15 @@
             document.forms[0].action="/options";
             document.forms[0].submit();
         }
-        function deleteQuiz(elem) {
-            console.log('deleting quiz of '+elem.parentElement.parentElement.id);
-            var challenge = elem.parentElement.parentElement.id;
+
+        function markQuizForDeletion(elem) {
+            console.log('triggering quiz of '+elem.parentElement.parentElement.id);
+            document.getElementById('challenges').value = elem.parentElement.parentElement.id;
+        }
+
+        function deleteQuiz() {
+            var challenge = document.getElementById('challenges').value;
+            console.log('deleting quiz of '+challenge);
             var formData = new FormData();
             formData.append('challenge', challenge);
             var xhr = new XMLHttpRequest();
@@ -32,7 +36,8 @@
                 if (xhr.status === 200) {
                     console.log(xhr.responseText);
                     if (xhr.responseText == 'true') {
-                        deleteChallengeCard(elem.parentElement.parentElement);
+                        var challengeRow = document.getElementById(challenge);
+                        deleteChallengeCard(challengeRow);
                     } else {
                         alert('An error occurred!');
                     }
@@ -45,8 +50,12 @@
 
         function deleteChallengeCard(elem) {
             elem.innerHTML = "";
+            $('#confirmModal').modal('hide');
         }
     </script>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link href="styles/challenge-styles.css" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 </head>
 <body>
 <nav class="navbar transparent navbar-inverse">
@@ -99,10 +108,30 @@
                         <p class="title" th:text="${ch.challengeName}" />
                     </div>
                 </div>
-                <div class="card-type-icon with-border" onclick="javascript:deleteQuiz(this);"><p>X</p></div>
+                <a class="card-type-icon with-border" href="#confirmModal" data-toggle="modal" onclick="javascript:markQuizForDeletion(this);">X</a>
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="black" class="bi bi-three-dots-vertical" viewBox="0 0 16 16">
                     <path d="M9.5 13a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z"/>
                 </svg>
+            </div>
+        </div>
+        <div id="confirmModal" class="modal fade">
+            <div class="modal-dialog modal-confirm">
+                <div class="modal-content">
+                    <div class="modal-header flex-column">
+                        <div class="icon-box">
+                            <i class="material-icons">&#xE5CD;</i>
+                        </div>
+                        <h4 class="modal-title w-100">Are you sure?</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        <p>Do you really want to delete this challenge? This process cannot be undone.</p>
+                    </div>
+                    <div class="modal-footer justify-content-center">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                        <button type="button" class="btn btn-danger" onclick="javascript:deleteQuiz();">Delete</button>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
