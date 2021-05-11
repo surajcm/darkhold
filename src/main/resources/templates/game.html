@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <html lang="en">
 <head>
-    <title>Getting Started: Darkhold classroom quiz experience</title>
+    <title>Darkhold classroom quiz experience</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link href="styles/game-styles.css" rel="stylesheet" />
@@ -10,7 +10,7 @@
 </head>
 <body onload="connect()">
 <nav class="navbar transparent navbar-inverse">
-    <div class="icon-bar" onclick="javascript:toHome()">
+    <div class="icon-bar" onclick="toHome()">
         <a class="active" href="#"><i class="fas fa-home"></i></a>
     </div>
     <span class="ml-auto mr-3 order-lg-last" th:text="${#authentication.getPrincipal().getUsername()}"></span>
@@ -35,7 +35,7 @@
     </ul>
     <span th:if="${not #sets.isEmpty(#authentication.getPrincipal().getAuthorities())}">
         <button id="nextButton" class="btn btn-lg btn-rised align-middle btn-primary ml-auto mr-3 order-lg-last" type="button"
-                style="display:none" onclick="javascript:showScoreboard();" >Next</button>
+                style="display:none" onclick="showScoreboard();" >Next</button>
     </span>
 </nav>
 <form action="#" th:object="${challenge}" method="post">
@@ -48,48 +48,46 @@
                 <input type="hidden" th:name="selectedAnswer" id="selectedAnswer"/>
                 <input type="hidden" th:value="${#authentication.getPrincipal().getUsername()}" id="user"/>
                 <div class="container">
-
-                        <div class="row" id="answerSpace">
-                            <div id="optionA" class="col-lg-6 col-md-6 col-sm-6 col-xs-12" onclick="waitAndShowAnswer(this)">
-                                <div class="card">
-                                    <div class="card-body text-center">
-                                        <div class="title">
-                                            <h4>[[${challenge.QuestionSet.answer1}]]</h4>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div id="optionB" class="col-lg-6 col-md-6 col-sm-6 col-xs-12" onclick="waitAndShowAnswer(this)">
-                                <div class="card">
-                                    <div class="card-body text-center">
-                                        <div class="title">
-                                            <h4>[[${challenge.QuestionSet.answer2}]]</h4>
-                                        </div>
-                                     </div>
-                                </div>
-                            </div>
-                            <div id="optionC"  th:if="${not #strings.isEmpty(challenge.QuestionSet.answer3)}"
-                                 class="col-lg-6 col-md-6 col-sm-6 col-xs-12" onclick="waitAndShowAnswer(this)">
-                                <div class="card">
-                                    <div class="card-body text-center">
-                                        <div class="title">
-                                            <h4>[[${challenge.QuestionSet.answer3}]]</h4>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div id="optionD" th:if="${not #strings.isEmpty(challenge.QuestionSet.answer4)}"
-                                 class="col-lg-6 col-md-6 col-sm-6 col-xs-12" onclick="waitAndShowAnswer(this)">
-                                <div class="card">
-                                    <div class="card-body text-center">
-                                        <div class="title">
-                                            <h4>[[${challenge.QuestionSet.answer4}]]</h4>
-                                        </div>
+                    <div class="row" id="answerSpace">
+                        <div id="optionA" class="col-lg-6 col-md-6 col-sm-6 col-xs-12" onclick="waitAndShowAnswer(this)">
+                            <div class="card">
+                                <div class="card-body text-center">
+                                    <div class="title">
+                                        <h4>[[${challenge.QuestionSet.answer1}]]</h4>
                                     </div>
                                 </div>
                             </div>
                         </div>
-
+                        <div id="optionB" class="col-lg-6 col-md-6 col-sm-6 col-xs-12" onclick="waitAndShowAnswer(this)">
+                            <div class="card">
+                                <div class="card-body text-center">
+                                    <div class="title">
+                                        <h4>[[${challenge.QuestionSet.answer2}]]</h4>
+                                    </div>
+                                 </div>
+                            </div>
+                        </div>
+                        <div id="optionC"  th:if="${not #strings.isEmpty(challenge.QuestionSet.answer3)}"
+                             class="col-lg-6 col-md-6 col-sm-6 col-xs-12" onclick="waitAndShowAnswer(this)">
+                            <div class="card">
+                                <div class="card-body text-center">
+                                    <div class="title">
+                                        <h4>[[${challenge.QuestionSet.answer3}]]</h4>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="optionD" th:if="${not #strings.isEmpty(challenge.QuestionSet.answer4)}"
+                             class="col-lg-6 col-md-6 col-sm-6 col-xs-12" onclick="waitAndShowAnswer(this)">
+                            <div class="card">
+                                <div class="card-body text-center">
+                                    <div class="title">
+                                        <h4>[[${challenge.QuestionSet.answer4}]]</h4>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

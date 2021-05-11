@@ -21,10 +21,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.Arrays;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -47,22 +45,22 @@ public class ChallengeService {
     public void readProcessAndSaveChallenge(final MultipartFile upload, final String title,
                                             final String description)
             throws ChallengeException {
-        List<QuestionSet> questionSets = readAndProcessChallenge(upload);
-        Challenge challenge = new Challenge();
+        var questionSets = readAndProcessChallenge(upload);
+        var challenge = new Challenge();
         challenge.setTitle(title);
         challenge.setDescription(description);
         challenge.setQuestionSets(questionSets);
-        final Challenge savedChallenge = challengeRepository.save(challenge);
+        final var savedChallenge = challengeRepository.save(challenge);
         questionSets.forEach(q -> q.setChallenge(savedChallenge));
         questionSets.forEach(questionSet -> questionSetRepository.save(questionSet));
     }
 
     public Boolean deleteChallenge(final Long challengeId) throws ChallengeException {
         Boolean response = Boolean.FALSE;
-        Optional<Challenge> challenge = challengeRepository.findById(challengeId);
+        var challenge = challengeRepository.findById(challengeId);
         if (challenge.isPresent()) {
             logger.info("Challenge present in database");
-            List<QuestionSet> questionSets = challenge.get().getQuestionSets();
+            var questionSets = challenge.get().getQuestionSets();
             questionSetRepository.deleteAll(questionSets);
             challengeRepository.delete(challenge.get());
             response = Boolean.TRUE;
@@ -85,7 +83,7 @@ public class ChallengeService {
     }
 
     private QuestionSet populateQuestionSet(final Row currentRow) {
-        Iterator<Cell> cellIterator = currentRow.iterator();
+        var cellIterator = currentRow.iterator();
         QuestionSet questionSet = new QuestionSet();
         while (cellIterator.hasNext()) {
             Cell currentCell = cellIterator.next();

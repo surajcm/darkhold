@@ -34,12 +34,12 @@ public class GameService {
     }
 
     public QuestionPointer getCurrentQuestionPointer() {
-        PublishInfo publishInfo = previewService.getActiveChallenge();
+        var publishInfo = previewService.getActiveChallenge();
         return currentGame.getCurrentQuestionPointer(publishInfo.getPin());
     }
 
     public void incrementQuestionNo() {
-        String pin = currentPin();
+        var pin = currentPin();
         currentGame.incrementQuestionCount(pin);
     }
 
@@ -50,27 +50,27 @@ public class GameService {
      * @param status of user
      */
     public void saveCurrentScore(final String name, final Integer status) {
-        String pin = currentPin();
+        var pin = currentPin();
         currentGame.saveCurrentScore(pin, name, status);
     }
 
     public String findModerator() {
-        String pin = currentPin();
+        var pin = currentPin();
         return currentGame.findModerator(pin);
     }
 
     public Map<String, Integer> getCurrentScore() {
-        String pin = currentPin();
+        var pin = currentPin();
         return currentGame.getCurrentScore(pin);
     }
 
     private String currentPin() {
-        PublishInfo publishInfo = previewService.getActiveChallenge();
+        var publishInfo = previewService.getActiveChallenge();
         return publishInfo.getPin();
     }
 
     public void cleanUpCurrentGame() {
-        PublishInfo publishInfo = previewService.getActiveChallenge();
+        var publishInfo = previewService.getActiveChallenge();
         // make it inactive
         // save scores to a db
         currentGame.stopTheGame(publishInfo.getPin());

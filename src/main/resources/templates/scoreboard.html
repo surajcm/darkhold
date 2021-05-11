@@ -11,12 +11,12 @@
 </head>
 <body onload="connect()">
     <nav class="navbar transparent navbar-inverse">
-        <div class="icon-bar" onclick="javascript:toHome()">
+        <div class="icon-bar" onclick="oHome()">
             <a class="active" href="#"><i class="fas fa-home"></i></a>
         </div>
         <span class="ml-auto mr-3 order-lg-last" th:text="${#authentication.getPrincipal().getUsername()}"></span>
         <span class="ml-auto mr-3 order-lg-last" th:text="${#authentication.getPrincipal().getAuthorities()}"></span>
-        <button class="btn btn-lg btn-rised align-middle btn-primary ml-auto mr-3 order-lg-last" type="button" onclick="javascript:logOut()" >Logout</button>
+        <button class="btn btn-lg btn-rised align-middle btn-primary ml-auto mr-3 order-lg-last" type="button" onclick="logOut();" >Logout</button>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown"
                 aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -30,12 +30,12 @@
         </ul>
         <span th:if="${not #sets.isEmpty(#authentication.getPrincipal().getAuthorities())}">
             <button id="nextButton" class="btn btn-lg btn-rised align-middle btn-primary ml-auto mr-3 order-lg-last" type="button"
-                    onclick="javascript:askQuestion();" >Next</button>
+                    onclick="askQuestion();" >Next</button>
         </span>
     </nav>
     <form action="#" th:object="${score}" method="post">
         <div id="wrapper">
-            <div id="page-content-wrapper">
+            <div id="page-content-wrappCustomerDAOImpler">
                 <div class="container-fluid">
                     <div class="row justify-content-center align-items-center d-flex text-center h-100">
                         <div class="col-12 col-md-8  h-50">

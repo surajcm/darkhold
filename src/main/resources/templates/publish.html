@@ -11,7 +11,7 @@
 </head>
 <body onload="connect()">
 <nav class="navbar transparent navbar-inverse">
-    <div class="icon-bar" onclick="javascript:toOptions()">
+    <div class="icon-bar" onclick="toOptions()">
         <a class="active" href="#"><i class="fas fa-home"></i></a>
     </div>
     <span class="ml-auto mr-3 order-lg-last" th:text="${#authentication.getPrincipal().getUsername()}"></span>
@@ -27,30 +27,39 @@
     <div class="container-fluid">
         <div class="row justify-content-center align-items-center d-flex text-center h-100">
             <div class="col-12 col-md-8  h-50">
-                <div class="jumbotron min-vh-100 text-center m-0 d-flex flex-column justify-content-center">
-                    <h1 class="display-2 text-dark mb-2 mt-5" id="head_msg">Your Quiz PIN is : <strong>[[${quizPin}]]</strong> </h1>
-                    <div id="messenger">
-                        <p id="message_disp"></p>
+                <div th:if="${quizPin != null}">
+                    <div class="jumbotron min-vh-100 text-center m-0 d-flex flex-column justify-content-center">
+                        <h1 class="display-2 text-dark mb-2 mt-5" id="head_msg">Your Quiz PIN is : <strong>[[${quizPin}]]</strong> </h1>
+                        <div id="messenger">
+                            <p id="message_disp"></p>
+                        </div>
+                        <p><a class="btn bg-danger shadow-lg btn-round text-light btn-lg btn-rised" onclick="startGame()">Start Game</a></p>
                     </div>
-                    <p><a class="btn bg-danger shadow-lg btn-round text-light btn-lg btn-rised" onclick="javascript:startGame()">Start Game</a></p>
+                </div>
+                <div th:unless="${quizPin != null}">
+                    <div class="jumbotron min-vh-100 text-center m-0 d-flex flex-column justify-content-center">
+                        <h1 class="display-2 text-dark mb-2 mt-5" id="head_msg">There are no active challenges !!!</h1>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-    <div class="row">
-        <div class="col-md-12">
-            <table id="conversation" class="table table-striped">
-                <thead>
-                <tr>
-                    <th>Participants:</th>
-                </tr>
-                </thead>
-                <tbody id="players">
+    <div th:if="${quizPin != null}">
+        <div class="row">
+            <div class="col-md-12">
+                <table id="conversation" class="table table-striped">
+                    <thead>
                     <tr>
-                        <td>[[${user}]]</td>
+                        <th>Participants:</th>
                     </tr>
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody id="players">
+                        <tr>
+                            <td>[[${user}]]</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 </form>

@@ -2,14 +2,12 @@
 #
 # Check https://circleci.com/docs/2.0/language-java/ for more details
 #
-version: 2.1
-orbs:
-  gradle: circleci/gradle@7.0
+version: 2
 jobs:
   build:
     docker:
       # specify the version you desire here
-      - image: circleci/openjdk:16-jdk-buster
+      - image: circleci/openjdk:15-jdk-buster
 
       # Specify service dependencies here if necessary
       # CircleCI maintains a library of pre-built images
@@ -27,12 +25,12 @@ jobs:
       - checkout
 
       # Download and cache dependencies
-      - restore_cache:
-          keys:
-            - v1-dependencies-{{ checksum "build.gradle" }}
+      #- restore_cache:
+          #keys:
+            #- v1-dependencies-{{ checksum "build.gradle" }}
             # fallback to using the latest cache if no exact match is found
-            - v1-dependencies-
-      - run: gradle wrapper --gradle-version=7.0
+            #- v1-dependencies-
+      #- run: gradle wrapper --gradle-version=7.0
       - run: gradle dependencies
 
       - save_cache:

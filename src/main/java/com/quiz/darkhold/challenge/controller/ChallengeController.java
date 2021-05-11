@@ -35,10 +35,11 @@ public class ChallengeController {
      */
     @PostMapping("/upload_challenge")
     public @ResponseBody
-    String handleFileUpload(final MultipartFile upload, final String title, final String description,
+    String handleFileUpload(final MultipartFile upload, final String title,
+                            final String description,
                             final RedirectAttributes redirectAttributes) {
         String responseText;
-        logger.info("received incoming traffic and redirected to upload_pdf");
+        logger.info("Received incoming traffic and redirected to upload_pdf");
         logger.info(String.format("title : %s, description : %s ", title, description));
         logger.info(String.format("File details getOriginalFilename : %s, getSize : %s ",
                 upload.getOriginalFilename(), upload.getSize()));

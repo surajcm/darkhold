@@ -31,7 +31,7 @@ pmd {
     ignoreFailures = false
     ruleSetFiles = files("config/pmd/ruleset.xml")
     ruleSets = []
-    rulesMinimumPriority = 2
+    //rulesMinimumPriority = 2
     incrementalAnalysis = true
 }
 

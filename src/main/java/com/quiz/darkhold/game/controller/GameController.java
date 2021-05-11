@@ -5,7 +5,6 @@ import com.quiz.darkhold.game.model.CurrentScore;
 import com.quiz.darkhold.game.model.CurrentStatus;
 import com.quiz.darkhold.game.model.ExamStatus;
 import com.quiz.darkhold.game.model.Game;
-import com.quiz.darkhold.game.model.QuestionPointer;
 import com.quiz.darkhold.game.model.StartTrigger;
 import com.quiz.darkhold.game.model.UserResponse;
 import com.quiz.darkhold.game.service.GameService;
@@ -23,8 +22,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.security.Principal;
-import java.util.List;
-import java.util.Map;
 
 @SuppressWarnings("unused")
 @Controller
@@ -50,7 +47,7 @@ public class GameController {
     @PostMapping("/question")
     public String question(final Model model, final Principal principal) {
         logger.info("On to question :");
-        QuestionPointer questionPointer = gameService.getCurrentQuestionPointer();
+        var questionPointer = gameService.getCurrentQuestionPointer();
         if (questionPointer.getCurrentQuestionNumber() == questionPointer.getTotalQuestionCount()) {
             return finalScore(model);
         }
@@ -62,7 +59,7 @@ public class GameController {
     public String finalScore(final Model model) {
         logger.info("On to the finalScore :");
         CurrentScore score = new CurrentScore();
-        Map<String, Integer> scores = gameService.getCurrentScore();
+        var scores = gameService.getCurrentScore();
         score.setScore(scores);
         model.addAttribute("score", score);
         // todo :clean up everything
@@ -80,8 +77,8 @@ public class GameController {
     @PostMapping("/game")
     public String startGame(final Model model, final Principal principal) {
         logger.info("On to game :");
-        QuestionPointer questionPointer = gameService.getCurrentQuestionPointer();
-        Challenge challenge = new Challenge();
+        var questionPointer = gameService.getCurrentQuestionPointer();
+        var challenge = new Challenge();
         challenge.setQuestionNumber(questionPointer.getCurrentQuestionNumber());
         challenge.setQuestionSet(questionPointer.getCurrentQuestion());
         challenge.setQuestionNumber(challenge.getQuestionNumber() + 1);
@@ -95,12 +92,12 @@ public class GameController {
                       @ModelAttribute("user") final String user) {
         logger.info("selectedOptions is " + selectedOptions);
         logger.info("user is " + user);
-        CurrentStatus currentStatus = new CurrentStatus();
-        ExamStatus status = getExamStatus(selectedOptions);
+        var currentStatus = new CurrentStatus();
+        var status = getExamStatus(selectedOptions);
         currentStatus.setStatus(status.name());
-        Integer scoreOnStatus = findScoreOnStatus(status);
+        var scoreOnStatus = findScoreOnStatus(status);
         gameService.saveCurrentScore(user, scoreOnStatus);
-        String moderator = gameService.findModerator();
+        var moderator = gameService.findModerator();
         if (user.equalsIgnoreCase(moderator)) {
             gameService.incrementQuestionNo();
         }
@@ -138,7 +135,7 @@ public class GameController {
     @SendTo("/topic/user")
     public UserResponse getGame(final Game game) {
         logger.info("On to getGame :" + game);
-        List<String> users = gameService.getAllParticipants(game.getPin());
+        var users = gameService.getAllParticipants(game.getPin());
         return new UserResponse(users);
     }
 
@@ -163,7 +160,7 @@ public class GameController {
     @SendTo("/topic/question_read")
     public StartTrigger questionFetch(final String name) {
         logger.info(String.format("On to questionFetch : %s", name));
-        QuestionPointer questionPointer = gameService.getCurrentQuestionPointer();
+        var questionPointer = gameService.getCurrentQuestionPointer();
         if (questionPointer.getCurrentQuestionNumber() == questionPointer.getTotalQuestionCount()) {
             return new StartTrigger("END_GAME");
         }

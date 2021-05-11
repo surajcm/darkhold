@@ -13,8 +13,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import java.util.List;
-
 @Controller
 public class HomeController {
     public static final String GAME_INFO = "gameinfo";
@@ -77,7 +75,7 @@ public class HomeController {
         logger.info("joinGame : gameInfo is " + gameInfo);
         securityService.autoLogin(gameInfo.getName(), UNREGISTERED_USER);
         logger.info("autoLogin done !!!");
-        List<String> activeUsers = homeService.participantsInActiveQuiz(gameInfo.getGamePin());
+        var activeUsers = homeService.participantsInActiveQuiz(gameInfo.getGamePin());
         activeUsers.add(gameInfo.getName());
         gameInfo.setUsers(activeUsers);
         model.addAttribute(GAME_INFO, gameInfo);
