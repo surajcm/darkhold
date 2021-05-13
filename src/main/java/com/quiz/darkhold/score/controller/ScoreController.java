@@ -11,8 +11,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PostMapping;
 
-import java.util.Map;
-
 @Controller
 public class ScoreController {
 
@@ -30,8 +28,8 @@ public class ScoreController {
     @PostMapping("/scoreboard")
     public String scoreCheck(final Model model) {
         logger.info("On to the scoreboard :");
-        CurrentScore score = new CurrentScore();
-        Map<String, Integer> scores = gameService.getCurrentScore();
+        var score = new CurrentScore();
+        var scores = gameService.getCurrentScore();
         score.setScore(scores);
         model.addAttribute("score", score);
         return "scoreboard";

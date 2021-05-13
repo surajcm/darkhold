@@ -9,11 +9,9 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
 import org.powermock.reflect.Whitebox;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import java.util.HashSet;
 import java.util.Set;
 
 import static org.mockito.ArgumentMatchers.anyString;
@@ -38,14 +36,14 @@ class UserDetailsServiceImplTest {
 
     @Test
     void loadUserByValidUsername() {
-        String userName = "admin";
+        var userName = "admin";
         when(userRepository.findByUsername(anyString())).thenReturn(mockUser(userName));
-        UserDetails userDetails = userDetailsService.loadUserByUsername("admin");
+        var userDetails = userDetailsService.loadUserByUsername("admin");
         Assertions.assertEquals(userName, userDetails.getUsername());
     }
 
     private User mockUser(final String userName) {
-        User user = new User();
+        var user = new User();
         user.setUsername(userName);
         user.setRoles(mockRoles());
         user.setPassword("pass");
@@ -53,10 +51,8 @@ class UserDetailsServiceImplTest {
     }
 
     private Set<Role> mockRoles() {
-        Role role = new Role();
+        var role = new Role();
         role.setName("admin");
-        Set<Role> roles = new HashSet<>();
-        roles.add(role);
-        return roles;
+        return Set.of(role);
     }
 }

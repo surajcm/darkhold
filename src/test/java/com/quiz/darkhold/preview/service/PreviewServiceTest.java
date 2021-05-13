@@ -4,8 +4,6 @@ import com.quiz.darkhold.challenge.entity.Challenge;
 import com.quiz.darkhold.challenge.repository.ChallengeRepository;
 import com.quiz.darkhold.game.entity.Game;
 import com.quiz.darkhold.game.repository.GameRepository;
-import com.quiz.darkhold.preview.model.PreviewInfo;
-import com.quiz.darkhold.preview.model.PublishInfo;
 import com.quiz.darkhold.preview.repository.CurrentGame;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -40,33 +38,33 @@ class PreviewServiceTest {
     @Test
     void fetchQuestions() {
         when(challengeRepository.getOne(anyLong())).thenReturn(mockChallenge());
-        String challengeId = "1234";
-        PreviewInfo previewInfo = previewService.fetchQuestions(challengeId);
+        var challengeId = "1234";
+        var previewInfo = previewService.fetchQuestions(challengeId);
         Assertions.assertEquals(challengeId, previewInfo.getChallengeId());
     }
 
     @Test
     void fetchQuestionsFromPin() {
-        String challengeId = "1234";
+        var challengeId = "1234";
         when(gameRepository.findByPin(anyString())).thenReturn(mockGame(challengeId));
         when(challengeRepository.findById(anyLong())).thenReturn(mockOptionalChallenge());
-        PreviewInfo previewInfo = previewService.fetchQuestionsFromPin(challengeId);
+        var previewInfo = previewService.fetchQuestionsFromPin(challengeId);
         Assertions.assertEquals(challengeId, previewInfo.getChallengeId());
     }
 
     @Test
     void generateQuizPin() {
-        String user = "USER";
+        var user = "USER";
         when(gameRepository.findByPin(anyString())).thenReturn(mockGame("1234"));
-        PublishInfo publishInfo = previewService.generateQuizPin("1234", user);
+        var publishInfo = previewService.generateQuizPin("1234", user);
         Assertions.assertEquals(user, publishInfo.getModerator());
     }
 
     @Test
     void getActiveChallenge() {
-        String challengeId = "1234";
+        var challengeId = "1234";
         when(gameRepository.findByGameStatusNot(anyString())).thenReturn(mockGames(challengeId));
-        PublishInfo publishInfo = previewService.getActiveChallenge();
+        var publishInfo = previewService.getActiveChallenge();
         Assertions.assertEquals(challengeId, publishInfo.getPin());
     }
 
@@ -75,23 +73,21 @@ class PreviewServiceTest {
     }
 
     private Challenge mockChallenge() {
-        Challenge challenge = new Challenge();
+        var challenge = new Challenge();
         challenge.setQuestionSets(new ArrayList<>());
         challenge.setTitle("hello");
         return challenge;
     }
 
     private Game mockGame(final String challengeId) {
-        Game game = new Game();
+        var game = new Game();
         game.setChallengeId(challengeId);
         return game;
     }
 
     private List<Game> mockGames(final String challengeId) {
-        Game game = new Game();
+        var game = new Game();
         game.setPin(challengeId);
-        List<Game> games = new ArrayList<>();
-        games.add(game);
-        return games;
+        return List.of(game);
     }
 }

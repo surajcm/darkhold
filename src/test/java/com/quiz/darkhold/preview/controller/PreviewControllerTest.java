@@ -42,7 +42,7 @@ class PreviewControllerTest {
 
     @Test
     void verifyPreconfigureWithValues() throws Exception {
-        Model model = Mockito.mock(Model.class);
+        var model = Mockito.mock(Model.class);
         mvc.perform(post("/preconfigure", model, "challenge"))
                 .andExpect(status().is(400));
     }

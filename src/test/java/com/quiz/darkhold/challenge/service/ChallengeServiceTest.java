@@ -15,7 +15,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 
 import static org.mockito.Mockito.when;
 
@@ -33,8 +32,8 @@ class ChallengeServiceTest {
 
     @Test
     void readProcessAndSaveChallengeSuccess() throws IOException {
-        InputStream anyInputStream = new ByteArrayInputStream("test data".getBytes());
-        MultipartFile file = Mockito.mock(MultipartFile.class);
+        var anyInputStream = new ByteArrayInputStream("test data".getBytes());
+        var file = Mockito.mock(MultipartFile.class);
         when(file.getInputStream()).thenReturn(anyInputStream);
         /*Assertions.assertAll(() ->
                 challengeService.readProcessAndSaveChallenge(file, "Test1", "Super test"));*/

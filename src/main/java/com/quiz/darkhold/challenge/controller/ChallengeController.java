@@ -35,7 +35,8 @@ public class ChallengeController {
      */
     @PostMapping("/upload_challenge")
     public @ResponseBody
-    String handleFileUpload(final MultipartFile upload, final String title,
+    String handleFileUpload(final MultipartFile upload,
+                            final String title,
                             final String description,
                             final RedirectAttributes redirectAttributes) {
         String responseText;
@@ -65,7 +66,7 @@ public class ChallengeController {
     public @ResponseBody
     Boolean deleteChallenge(final Long challenge,
                            final RedirectAttributes redirectAttributes) {
-        Boolean responseText = Boolean.FALSE;
+        var responseText = Boolean.FALSE;
         logger.info("received incoming request to delete_challenge : " + challenge);
         try {
             responseText = challengeService.deleteChallenge(challenge);

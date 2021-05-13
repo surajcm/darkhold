@@ -7,8 +7,8 @@ import com.quiz.darkhold.options.model.ChallengeSummary;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class OptionsService {
@@ -21,17 +21,19 @@ public class OptionsService {
      * @return challenges
      */
     public ChallengeInfo populateChallengeInfo() {
-        ChallengeInfo challengeInfo = new ChallengeInfo();
-        List<ChallengeSummary> summaries = new ArrayList<>();
-        List<Challenge>  challenges = challengeRepository.findAll();
-        //todo : use streams
-        for (Challenge challenge:challenges) {
-            ChallengeSummary summary = new ChallengeSummary();
-            summary.setChallengeId(challenge.getId().intValue());
-            summary.setChallengeName(challenge.getTitle());
-            summaries.add(summary);
-        }
+        var challengeInfo = new ChallengeInfo();
+        List<ChallengeSummary> summaries;
+        var challenges = challengeRepository.findAll();
+        summaries = challenges.stream()
+                .map(this::getChallengeSummary).collect(Collectors.toList());
         challengeInfo.setChallengeSummaryList(summaries);
         return challengeInfo;
+    }
+
+    private ChallengeSummary getChallengeSummary(final Challenge challenge) {
+        var summary = new ChallengeSummary();
+        summary.setChallengeId(challenge.getId().intValue());
+        summary.setChallengeName(challenge.getTitle());
+        return summary;
     }
 }

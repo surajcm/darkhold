@@ -15,7 +15,6 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import static org.mockito.Mockito.when;
 
@@ -31,7 +30,7 @@ class CurrentGameTest {
 
     @Test
     void saveCurrentStatus() {
-        PublishInfo publishInfo = new PublishInfo();
+        var publishInfo = new PublishInfo();
         publishInfo.setPin("1234");
         publishInfo.setModerator("admin");
         Assertions.assertAll(() -> currentGame.saveCurrentStatus(publishInfo, new ArrayList<>()));
@@ -40,7 +39,7 @@ class CurrentGameTest {
     @Test
     void getActiveUsersInGame() {
         when(collection.find(ArgumentMatchers.any(Filter.class))).thenReturn(new MockCursor());
-        List<String> users = currentGame.getActiveUsersInGame("1234");
+        var users = currentGame.getActiveUsersInGame("1234");
         Assertions.assertAll("name",
                 () -> Assertions.assertEquals("admin",
                         users.get(0)
@@ -73,7 +72,7 @@ class CurrentGameTest {
     @Test
     void getQuestionsOnAPin() {
         when(collection.find(ArgumentMatchers.any(Filter.class))).thenReturn(new MockCursor());
-        List<QuestionSet> questionSets = currentGame.getQuestionsOnAPin("1234");
+        var questionSets = currentGame.getQuestionsOnAPin("1234");
         Assertions.assertEquals("Q1", questionSets.get(0).getQuestion());
     }
 
@@ -99,7 +98,7 @@ class CurrentGameTest {
     @Test
     void getCurrentScore() {
         when(collection.find(ArgumentMatchers.any(Filter.class))).thenReturn(new MockCursor());
-        Map<String, Integer> scores = currentGame.getCurrentScore("1234");
+        var scores = currentGame.getCurrentScore("1234");
         Assertions.assertEquals(5, scores.get("admin"));
     }
 

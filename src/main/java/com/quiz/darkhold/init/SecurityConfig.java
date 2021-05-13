@@ -31,9 +31,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests().antMatchers("/options", "/createChallenge", "/viewChallenge").authenticated()
                 .and()
                 .authorizeRequests().antMatchers("/", "/home", "/resources/**", "/registration",
-                "/images/*", "/logmein", "/logme").permitAll()
+                "/images/*", "/logmein", "/logme", "/h2-console/*").permitAll()
                 .and()
                 .logout().logoutSuccessUrl("/").invalidateHttpSession(true).deleteCookies("JSESSIONID");
+        http.headers().frameOptions().sameOrigin();
     }
 
     @Bean

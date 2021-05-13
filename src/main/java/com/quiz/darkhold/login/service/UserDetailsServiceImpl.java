@@ -1,6 +1,5 @@
 package com.quiz.darkhold.login.service;
 
-import com.quiz.darkhold.login.entity.User;
 import com.quiz.darkhold.login.repository.UserRepository;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -19,13 +18,14 @@ import java.util.stream.Collectors;
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
     private final Logger logger = LogManager.getLogger(UserDetailsServiceImpl.class);
+
     @Autowired
     private UserRepository userRepository;
 
     @Override
     @Transactional(readOnly = true)
     public UserDetails loadUserByUsername(final String username) {
-        User user = userRepository.findByUsername(username);
+        var user = userRepository.findByUsername(username);
         if (user == null) {
             throw new UsernameNotFoundException(username);
         }

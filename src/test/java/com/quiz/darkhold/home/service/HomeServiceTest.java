@@ -45,7 +45,7 @@ class HomeServiceTest {
     }
 
     private Game mockGame() {
-        Game game = new Game();
+        var game = new Game();
         game.setGameStatus(GameStatus.STARTED.name());
         return game;
     }

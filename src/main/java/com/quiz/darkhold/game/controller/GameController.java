@@ -58,11 +58,10 @@ public class GameController {
     @PostMapping("/final")
     public String finalScore(final Model model) {
         logger.info("On to the finalScore :");
-        CurrentScore score = new CurrentScore();
+        var score = new CurrentScore();
         var scores = gameService.getCurrentScore();
         score.setScore(scores);
         model.addAttribute("score", score);
-        // todo :clean up everything
         gameService.cleanUpCurrentGame();
         return "finalscore";
     }
@@ -90,8 +89,7 @@ public class GameController {
     public @ResponseBody
     Boolean enterGame(@ModelAttribute("selectedOptions") final String selectedOptions,
                       @ModelAttribute("user") final String user) {
-        logger.info("selectedOptions is " + selectedOptions);
-        logger.info("user is " + user);
+        logger.info("selectedOptions are {} and user is {}", selectedOptions, user);
         var currentStatus = new CurrentStatus();
         var status = getExamStatus(selectedOptions);
         currentStatus.setStatus(status.name());

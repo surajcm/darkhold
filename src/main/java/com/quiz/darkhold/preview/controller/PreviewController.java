@@ -1,7 +1,5 @@
 package com.quiz.darkhold.preview.controller;
 
-import com.quiz.darkhold.preview.model.PreviewInfo;
-import com.quiz.darkhold.preview.model.PublishInfo;
 import com.quiz.darkhold.preview.service.PreviewService;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -30,8 +28,8 @@ public class PreviewController {
      */
     @PostMapping("/preconfigure")
     public String preconfigure(final Model model, @RequestParam("challenges") final String challenges) {
-        log.info("into the preconfigure method : " + challenges);
-        PreviewInfo previewInfo = previewService.fetchQuestions(challenges);
+        log.info("Into the preconfigure method : " + challenges);
+        var previewInfo = previewService.fetchQuestions(challenges);
         model.addAttribute("previewInfo", previewInfo);
         return "preview";
     }
@@ -45,10 +43,11 @@ public class PreviewController {
      * @return publish page
      */
     @PostMapping("/publish")
-    public String publish(final Model model, @RequestParam("challenge_id") final String challengeId,
+    public String publish(final Model model,
+                          @RequestParam("challenge_id") final String challengeId,
                           final Principal principal) {
-        log.info("into publish method : " + challengeId);
-        PublishInfo publishInfo = previewService.generateQuizPin(challengeId, principal.getName());
+        log.info("Into publish method : " + challengeId);
+        var publishInfo = previewService.generateQuizPin(challengeId, principal.getName());
         model.addAttribute("quizPin", publishInfo.getPin());
         model.addAttribute("user", publishInfo.getModerator());
         log.info("publish method, quizPin : " + publishInfo.getPin());

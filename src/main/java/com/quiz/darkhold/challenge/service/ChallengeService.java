@@ -12,8 +12,6 @@ import org.apache.poi.openxml4j.exceptions.NotOfficeXmlFileException;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -56,7 +54,7 @@ public class ChallengeService {
     }
 
     public Boolean deleteChallenge(final Long challengeId) throws ChallengeException {
-        Boolean response = Boolean.FALSE;
+        var response = Boolean.FALSE;
         var challenge = challengeRepository.findById(challengeId);
         if (challenge.isPresent()) {
             logger.info("Challenge present in database");
@@ -70,8 +68,8 @@ public class ChallengeService {
 
     private List<QuestionSet> readAndProcessChallenge(final MultipartFile upload) throws ChallengeException {
         List<QuestionSet> questionSets = new LinkedList<>();
-        try (Workbook workbook = new XSSFWorkbook(upload.getInputStream());) {
-            Sheet datatypeSheet = workbook.getSheetAt(0);
+        try (var workbook = new XSSFWorkbook(upload.getInputStream());) {
+            var datatypeSheet = workbook.getSheetAt(0);
             for (Row currentRow : datatypeSheet) {
                 questionSets.add(populateQuestionSet(currentRow));
             }
@@ -84,33 +82,22 @@ public class ChallengeService {
 
     private QuestionSet populateQuestionSet(final Row currentRow) {
         var cellIterator = currentRow.iterator();
-        QuestionSet questionSet = new QuestionSet();
+        var questionSet = new QuestionSet();
         while (cellIterator.hasNext()) {
-            Cell currentCell = cellIterator.next();
+            var currentCell = cellIterator.next();
             switch (currentCell.getColumnIndex()) {
-                case 0:
-                    questionSet.setQuestion(currentCell.getStringCellValue());
-                    break;
-                case 1:
-                    questionSet.setAnswer1(fetchCurrentCellValue(currentCell));
-                    break;
-                case 2:
-                    questionSet.setAnswer2(fetchCurrentCellValue(currentCell));
-                    break;
-                case 3:
-                    questionSet.setAnswer3(fetchCurrentCellValue(currentCell));
-                    break;
-                case 4:
-                    questionSet.setAnswer4(fetchCurrentCellValue(currentCell));
-                    break;
-                case 5:
-                    String options = currentCell.getStringCellValue();
-                    String optionsList = populateOptionsFromString(options);
+                case 0 -> questionSet.setQuestion(currentCell.getStringCellValue());
+                case 1 -> questionSet.setAnswer1(fetchCurrentCellValue(currentCell));
+                case 2 -> questionSet.setAnswer2(fetchCurrentCellValue(currentCell));
+                case 3 -> questionSet.setAnswer3(fetchCurrentCellValue(currentCell));
+                case 4 -> questionSet.setAnswer4(fetchCurrentCellValue(currentCell));
+                case 5 -> {
+                    var options = currentCell.getStringCellValue();
+                    var optionsList = populateOptionsFromString(options);
                     questionSet.setCorrectOptions(optionsList);
-                    break;
-                default:
-                    logger.error(String.format("Unknown option at %s , Text is : %s",
-                            currentCell.getColumnIndex(), currentCell.getStringCellValue()));
+                }
+                default -> logger.error(String.format("Unknown option at %s , Text is : %s",
+                        currentCell.getColumnIndex(), currentCell.getStringCellValue()));
             }
         }
         logger.info("Current questions : " + questionSet);

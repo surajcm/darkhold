@@ -33,18 +33,16 @@ public class SecurityServiceImpl implements SecurityService {
         if (userDetails instanceof UserDetails) {
             return ((UserDetails) userDetails).getUsername();
         }
-
         return null;
     }
 
     @Override
     public void autoLogin(final String username, final String password) {
         boolean unRegistered = password.equalsIgnoreCase(UNREGISTERED_USER);
-        UserDetails userDetails = getUserDetails(username, unRegistered);
+        var userDetails = getUserDetails(username, unRegistered);
         Set<GrantedAuthority> authorities = (Set<GrantedAuthority>) userDetails.getAuthorities();
         logger.info("Successfully fetched user details : " + userDetails);
-        UsernamePasswordAuthenticationToken token =
-                new UsernamePasswordAuthenticationToken(userDetails, password, authorities);
+        var token = new UsernamePasswordAuthenticationToken(userDetails, password, authorities);
         if (!unRegistered) {
             authenticationManager.authenticate(token);
         }

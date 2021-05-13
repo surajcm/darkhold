@@ -33,21 +33,22 @@ public class LoginController {
      * log me in.
      *
      * @param model    model
-     * @param userForm user info
+     * @param userName userName
+     * @param password password
      * @param error    if present
      * @param logout   if triggered logout
      * @return to the home options screen
      */
     @PostMapping("/logme")
-    public String loginGet(final Model model, @ModelAttribute("username") final String userName,
+    public String loginGet(final Model model,
+                           @ModelAttribute("username") final String userName,
                            @ModelAttribute("password") final String password,
                            final String error, final String logout) {
-        log.info("inside the login method");
-        log.info("userForm is : " + userName);
+        log.info("Inside the login method : user name is " + userName);
         securityService.autoLogin(userName, password);
-        log.info("autoLogin done !!!");
+        log.info("AutoLogin done !!!");
         if (error != null) {
-            log.info("inside the login method, error : " + error);
+            log.info("Inside the login method, error : " + error);
             model.addAttribute("error", "Your username and password is invalid.");
         }
         if (logout != null) {
@@ -66,7 +67,7 @@ public class LoginController {
     @GetMapping("/registration")
     public String registration(final Model model) {
         model.addAttribute("userForm", new User());
-        log.info("inside the registration get method");
+        log.info("Inside the registration get method");
         return "registration";
     }
 
@@ -79,18 +80,17 @@ public class LoginController {
      * @return go to the index page after login
      */
     @PostMapping("/registration")
-    public String registration(final Model model, @ModelAttribute("userForm") final User userForm,
+    public String registration(final Model model,
+                               @ModelAttribute("userForm") final User userForm,
                                final BindingResult bindingResult) {
-        log.info("inside the registration post method");
+        log.info("Inside the registration post method");
         userValidator.validate(userForm, bindingResult);
-
         if (bindingResult.hasErrors()) {
             log.info(bindingResult.getAllErrors().get(0));
             return LOGIN;
         }
         userService.save(userForm);
-
-        GameInfo gameInfo = new GameInfo();
+        var gameInfo = new GameInfo();
         gameInfo.setMessage("Successfully created the account !!!");
         model.addAttribute("gameinfo", gameInfo);
         return "index";

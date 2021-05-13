@@ -1,6 +1,5 @@
 package com.quiz.darkhold.home.service;
 
-import com.quiz.darkhold.game.entity.Game;
 import com.quiz.darkhold.game.entity.GameStatus;
 import com.quiz.darkhold.game.repository.GameRepository;
 import com.quiz.darkhold.preview.repository.CurrentGame;
@@ -24,7 +23,7 @@ public class HomeService {
      * @return true or false
      */
     public Boolean validateGamePin(final String pin) {
-        Game game = gameRepository.findByPin(pin);
+        var game = gameRepository.findByPin(pin);
         if (game != null && (game.getGameStatus().equalsIgnoreCase(GameStatus.WAITING.name())
                 || game.getGameStatus().equalsIgnoreCase(GameStatus.STARTED.name()))) {
             return Boolean.TRUE;

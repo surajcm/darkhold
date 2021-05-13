@@ -2,7 +2,6 @@ package com.quiz.darkhold.options.service;
 
 import com.quiz.darkhold.challenge.entity.Challenge;
 import com.quiz.darkhold.challenge.repository.ChallengeRepository;
-import com.quiz.darkhold.options.model.ChallengeInfo;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -29,12 +28,12 @@ class OptionsServiceTest {
     @Test
     void populate() {
         when(challengeRepository.findAll()).thenReturn(mockChallenges());
-        ChallengeInfo challengeInfo = optionsService.populateChallengeInfo();
+        var challengeInfo = optionsService.populateChallengeInfo();
         Assertions.assertNotNull(challengeInfo);
     }
 
     private List<Challenge> mockChallenges() {
-        Challenge challenge1 = new Challenge();
+        var challenge1 = new Challenge();
         challenge1.setId(1234L);
         challenge1.setTitle("Hello");
         Challenge challenge2 = new Challenge();

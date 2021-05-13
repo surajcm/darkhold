@@ -1,7 +1,6 @@
 package com.quiz.darkhold.options.controller;
 
 import com.quiz.darkhold.options.service.OptionsService;
-import com.quiz.darkhold.preview.model.PublishInfo;
 import com.quiz.darkhold.preview.service.PreviewService;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -28,7 +27,7 @@ public class OptionsController {
      */
     @PostMapping("/createChallenge")
     public String createChallenge() {
-        log.info("into the createChallenge method");
+        log.info("Into the createChallenge method");
         return "createchallenge";
     }
 
@@ -40,7 +39,7 @@ public class OptionsController {
      */
     @PostMapping("/viewChallenge")
     public String viewChallenges(final Model model) {
-        log.info("into the viewChallenge method");
+        log.info("Into the viewChallenge method");
         model.addAttribute("challengeInfo", optionsService.populateChallengeInfo());
         return "viewchallenges";
     }
@@ -54,8 +53,8 @@ public class OptionsController {
      */
     @PostMapping("/activeChallenge")
     public String activeChallenges(final Model model, final Principal principal) {
-        log.info("into the activeChallenge method");
-        PublishInfo publishInfo = previewService.getActiveChallenge();
+        log.info("Into the activeChallenge method");
+        var publishInfo = previewService.getActiveChallenge();
         if (publishInfo != null) {
             model.addAttribute("quizPin", publishInfo.getPin());
             //todo : find a way to get all users binded

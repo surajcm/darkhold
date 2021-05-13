@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
 public class HomeController {
-    public static final String GAME_INFO = "gameinfo";
+    private static final String GAME_INFO = "gameinfo";
     private static final String UNREGISTERED_USER = "UNREGISTERED_USER";
     private final Logger logger = LogManager.getLogger(HomeController.class);
 

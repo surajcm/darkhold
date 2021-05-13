@@ -37,15 +37,15 @@ class UserServiceImplTest {
     void save() {
         when(encoder.encode(anyString())).thenReturn("MockedPassword");
         when(roleRepository.findAll()).thenReturn(mockRoles());
-        User user = new User();
+        var user = new User();
         Assertions.assertAll(() -> userService.save(user));
     }
 
     @Test
     void findByUsername() {
-        String username = "superman";
+        var username = "superman";
         when(userRepository.findByUsername(anyString())).thenReturn(mockUser(username));
-        User user = userService.findByUsername(username);
+        var user = userService.findByUsername(username);
         Assertions.assertEquals(username, user.getUsername());
     }
 
@@ -56,7 +56,7 @@ class UserServiceImplTest {
     }
 
     private User mockUser(final String userName) {
-        User user = new User();
+        var user = new User();
         user.setUsername(userName);
         return user;
     }
