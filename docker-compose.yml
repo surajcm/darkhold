@@ -1,0 +1,10 @@
+version: '2'
+services:
+  darkhold:
+    image: surajcm/darkhold
+    container_name: darkhold
+    volumes:
+      - ./Darkhold/:/tmp/db #Optional, Darkhold database
+    ports:
+      - 8181:8181/tcp
+    restart: unless-stopped
