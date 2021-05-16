@@ -17,7 +17,7 @@
             document.forms[0].submit();
        }
        function publish() {
-            var challengeId = document.getElementById('challengeId').value;
+            let challengeId = document.getElementById('challengeId').value;
             console.log('triggering quiz of '+challengeId);
             document.getElementById('challenge_id').value = challengeId;
             document.forms[0].action="/publish";

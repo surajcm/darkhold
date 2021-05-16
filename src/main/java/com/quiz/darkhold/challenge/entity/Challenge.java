@@ -1,5 +1,7 @@
 package com.quiz.darkhold.challenge.entity;
 
+import com.quiz.darkhold.login.entity.User;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -7,6 +9,8 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OrderBy;
 import javax.persistence.PrePersist;
@@ -37,6 +41,8 @@ public class Challenge implements Serializable {
     @Column
     private String description;
 
+    @Column(name = "challengeowner")
+    private Long challengeOwner;
 
     @Column(name = "createdOn")
     private OffsetDateTime createdOn;
@@ -47,6 +53,10 @@ public class Challenge implements Serializable {
     @OneToMany(mappedBy = "challenge", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @OrderBy("id")
     private List<QuestionSet> questionSets;
+
+    @ManyToOne
+    @JoinColumn(name = "challengeOwner", referencedColumnName = "id", insertable = false, updatable = false)
+    private User owner;
 
     public Long getId() {
         return id;
@@ -72,6 +82,14 @@ public class Challenge implements Serializable {
         this.description = description;
     }
 
+    public Long getChallengeOwner() {
+        return challengeOwner;
+    }
+
+    public void setChallengeOwner(final Long challengeOwner) {
+        this.challengeOwner = challengeOwner;
+    }
+
     public OffsetDateTime getCreatedOn() {
         return createdOn;
     }
@@ -94,6 +112,14 @@ public class Challenge implements Serializable {
 
     public void setQuestionSets(final List<QuestionSet> questionSets) {
         this.questionSets = questionSets;
+    }
+
+    public User getOwner() {
+        return owner;
+    }
+
+    public void setOwner(final User owner) {
+        this.owner = owner;
     }
 
     /**

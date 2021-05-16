@@ -6,6 +6,8 @@ import com.quiz.darkhold.challenge.entity.QuestionSet;
 import com.quiz.darkhold.challenge.exception.ChallengeException;
 import com.quiz.darkhold.challenge.repository.ChallengeRepository;
 import com.quiz.darkhold.challenge.repository.QuestionSetRepository;
+import com.quiz.darkhold.login.entity.User;
+import com.quiz.darkhold.login.repository.UserRepository;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.poi.openxml4j.exceptions.NotOfficeXmlFileException;
@@ -14,6 +16,7 @@ import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -31,6 +34,8 @@ public class ChallengeService {
     private ChallengeRepository challengeRepository;
     @Autowired
     private QuestionSetRepository questionSetRepository;
+    @Autowired
+    private UserRepository userRepository;
 
     /**
      * Read the excel, process it, extract data and save it to the database.
@@ -48,9 +53,17 @@ public class ChallengeService {
         challenge.setTitle(title);
         challenge.setDescription(description);
         challenge.setQuestionSets(questionSets);
+        challenge.setChallengeOwner(currentUserId());
         final var savedChallenge = challengeRepository.save(challenge);
         questionSets.forEach(q -> q.setChallenge(savedChallenge));
         questionSets.forEach(questionSet -> questionSetRepository.save(questionSet));
+    }
+
+    private Long currentUserId() {
+        var auth = SecurityContextHolder.getContext().getAuthentication();
+        String username = auth.getName();
+        User user = userRepository.findByUsername(username);
+        return user.getId();
     }
 
     public Boolean deleteChallenge(final Long challengeId) throws ChallengeException {

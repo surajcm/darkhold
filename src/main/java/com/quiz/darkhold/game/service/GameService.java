@@ -4,6 +4,8 @@ import com.quiz.darkhold.game.model.QuestionPointer;
 import com.quiz.darkhold.preview.model.PublishInfo;
 import com.quiz.darkhold.preview.repository.CurrentGame;
 import com.quiz.darkhold.preview.service.PreviewService;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,6 +14,7 @@ import java.util.Map;
 
 @Service
 public class GameService {
+    private final Logger logger = LogManager.getLogger(GameService.class);
 
     @Autowired
     private CurrentGame currentGame;
@@ -35,7 +38,9 @@ public class GameService {
 
     public QuestionPointer getCurrentQuestionPointer() {
         var publishInfo = previewService.getActiveChallenge();
-        return currentGame.getCurrentQuestionPointer(publishInfo.getPin());
+        var pin = publishInfo.getPin();
+        logger.info("Current pin is ");
+        return currentGame.getCurrentQuestionPointer(pin);
     }
 
     public void incrementQuestionNo() {

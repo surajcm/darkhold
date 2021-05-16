@@ -1,24 +1,24 @@
-function uploadPDF() {
 
-    var uploadButton = document.getElementById('btnSubmit');
-    var progress = document.getElementById('progress');
-    var progressdiv = document.getElementById('progressdiv');
+function uploadPDF() {
+    let uploadButton = document.getElementById('btnSubmit');
+    let progress = document.getElementById('progress');
+    let progressdiv = document.getElementById('progressdiv');
     progress.style.display = "block";
     uploadButton.innerHTML = 'Uploading...';
 
-    var fileSelect = document.getElementById('upload');
-    var title = document.getElementById('title').value;
-    var description = document.getElementById('description').value;
+    let fileSelect = document.getElementById('upload');
+    let title = document.getElementById('title').value;
+    let description = document.getElementById('description').value;
 
-    var files = fileSelect.files;
-    var formData = new FormData();
-    var file = files[0];
+    let files = fileSelect.files;
+    let formData = new FormData();
+    let file = files[0];
 
     formData.append('upload', file, file.name);
     formData.append('title', title);
     formData.append('description', description);
 
-    var xhr = new XMLHttpRequest();
+    let xhr = new XMLHttpRequest();
     xhr.open('POST', '/upload_challenge', true);
     xhr.upload.onprogress = function (e) {
         update_progress(e);
@@ -37,10 +37,10 @@ function uploadPDF() {
 }
 
 function update_progress(e) {
-    var uploadButton = document.getElementById('btnSubmit');
-    var progress = document.getElementById('progress');
+    let uploadButton = document.getElementById('btnSubmit');
+    let progress = document.getElementById('progress');
     if (e.lengthComputable) {
-        var percentage = Math.round((e.loaded/e.total)*100);
+        let percentage = Math.round((e.loaded/e.total)*100);
         progress.value = percentage;
         uploadButton.innerHTML = 'Upload '+percentage+'%';
         console.log("percent " + percentage + '%' );

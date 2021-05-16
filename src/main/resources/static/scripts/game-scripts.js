@@ -158,7 +158,7 @@ function showScoreboard() {
     //var pin = document.getElementById('quizPin').value;
     //console.log('triggering quiz with pin '+pin);
     //document.getElementById('quiz_pin').value = pin;
-    var socket = new SockJS('/darkhold-websocket');
+    let socket = new SockJS('/darkhold-websocket');
     stompClient = Stomp.over(socket);
     stompClient.connect({}, function (frame) {
         console.log('Connected: ' + frame);

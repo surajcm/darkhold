@@ -90,8 +90,9 @@ public class PreviewService {
         var activeGames = gameRepository.findByGameStatusNot(GameStatus.FINISHED.name());
         var publishInfo = new PublishInfo();
         if (!activeGames.isEmpty()) {
-            var activeGame = activeGames.get(0);
-            //currently, we are taking the first one, may need optimization if we run multiple games in parallel
+            var size = activeGames.size();
+            var activeGame = activeGames.get(size - 1);
+            //currently, we are taking the latest one, may need optimization if we run multiple games in parallel
             publishInfo.setPin(activeGame.getPin());
         }
         return publishInfo;
