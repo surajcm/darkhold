@@ -1,10 +1,10 @@
 $(document).ready(function() {
-    var clock2;
+    let clock2;
     clock2 = new FlipClock($('.clock2'), 20, {
             clockFace: 'Counter'
     });
 
-    var timer = new FlipClock.Timer(clock2, {
+    let timer = new FlipClock.Timer(clock2, {
         callbacks: {
             interval: function() {
                 if (clock2.getTime().time <= 0) {
@@ -24,7 +24,7 @@ $(document).ready(function() {
 function callTimeOut() {
     isAnswerSelected = true;
     saveAnswerOnAjax();
-    var nextButton = document.getElementById('nextButton');
+    let nextButton = document.getElementById('nextButton');
     if (nextButton) {
         nextButton.setAttribute('style','display:block');
     }
@@ -34,22 +34,23 @@ function callTimeOut() {
 }
 
 function highlightGreen() {
-    var correctAnswer = document.getElementById('correctOptions').value;
-    var correctDiv = "option" + correctAnswer;
-    var toGreenChild = document.getElementById(correctDiv);
+    let correctAnswer = document.getElementById('correctOptions').value;
+    let correctDiv = "option" + correctAnswer;
+    let toGreenChild = document.getElementById(correctDiv);
     if (toGreenChild) {
         toGreenChild.children[0].setAttribute('class','card text-white bg-success');
     }
 }
 
 function highlightRedOnIncorrectSelection() {
-    if (document.getElementById('selectedOptions').value == "correct") {
+    let selectedOptions = document.getElementById('selectedOptions').value;
+    if (selectedOptions === "correct") {
         // nothing to do
     } else {
-        var selectedAnswer = document.getElementById('selectedAnswer').value;
+        let selectedAnswer = document.getElementById('selectedAnswer').value;
         if (selectedAnswer) {
-            var inCorrectDiv = "option" + selectedAnswer;
-            var toRedChild = document.getElementById(inCorrectDiv);
+            let inCorrectDiv = "option" + selectedAnswer;
+            let toRedChild = document.getElementById(inCorrectDiv);
             if (toRedChild) {
                 toRedChild.children[0].setAttribute('class','card text-white bg-danger');
             }
@@ -57,7 +58,9 @@ function highlightRedOnIncorrectSelection() {
     }
 }
 
-var isAnswerSelected = false;
+let isAnswerSelected = false;
+let startTime;
+let endTime;
 
 function waitAndShowAnswer(elem) {
     if (!isAnswerSelected) {
@@ -71,17 +74,17 @@ function waitAndShowAnswer(elem) {
 }
 
 function realWaitAndShowAnswer(elem) {
-    var correctAnswer = document.getElementById('correctOptions').value;
+    let correctAnswer = document.getElementById('correctOptions').value;
     console.log('correctAnswer '+correctAnswer);
     elem.children[0].setAttribute('class','card text-white bg-dark');
-    var selectedAnswer = elem.id.charAt(elem.id.length -1);
+    let selectedAnswer = elem.id.charAt(elem.id.length -1);
     console.log('selectedAnswer '+selectedAnswer);
     document.getElementById('selectedAnswer').value = selectedAnswer;
     // split with comma
-    var answers = correctAnswer.split(",");
-    var correct = false;
-    for (i = 0; i < answers.length; i++) {
-        if ( selectedAnswer == answers[i] ) {
+    let answers = correctAnswer.split(",");
+    let correct = false;
+    for (let i = 0; i < answers.length; i++) {
+        if (selectedAnswer === answers[i] ) {
             correct = true;
         }
     }
@@ -94,43 +97,48 @@ function realWaitAndShowAnswer(elem) {
         document.getElementById('selectedOptions').value = "incorrect";
         hideOptions();
     }
+    endTime = new Date().getTime();
+    let timeTookForFirstClick = endTime - startTime;
+    console.log('Execution time: ' + timeTookForFirstClick);
+    //calculate the time taken to hit
+    //save it in a hidden field
 }
 
 function hideOptions() {
-    var optionA = document.getElementById("optionA");
+    let optionA = document.getElementById("optionA");
     //optionA.setAttribute('style','display:none');
     optionA.setAttribute('style','opacity: 0.7');
     optionA.children[0].setAttribute('style','background: #CCC');
     optionA.children[0].setAttribute('style','cursor:default');
-    var optionB = document.getElementById("optionB");
+    let optionB = document.getElementById("optionB");
     //optionB.setAttribute('style','display:none');
     optionB.setAttribute('style','opacity: 0.7');
     optionB.children[0].setAttribute('style','background: #CCC');
     optionB.children[0].setAttribute('style','cursor:default');
-    var optionC = document.getElementById("optionC");
+    let optionC = document.getElementById("optionC");
     if (optionC != null) {
         //optionC.setAttribute('style','display:none');
         optionC.setAttribute('style','opacity: 0.7');
         optionC.children[0].setAttribute('style','background: #CCC');
         optionC.children[0].setAttribute('style','cursor:default');
     }
-    var optionD = document.getElementById("optionD");
+    let optionD = document.getElementById("optionD");
     if(optionD != null) {
         //optionD.setAttribute('style','display:none');
         optionD.setAttribute('style','opacity: 0.7');
         optionD.children[0].setAttribute('style','background: #CCC');
         optionD.children[0].setAttribute('style','cursor:default');
     }
-    var answerSpace = document.getElementById("answerSpace");
+    let answerSpace = document.getElementById("answerSpace");
     //<div class="spinner-grow" style="width: 3rem; height: 3rem;" role="status">
     //  <span class="sr-only">Loading...</span>
     //</div>
-    var spinner = document.createElement('div');
+    let spinner = document.createElement('div');
     spinner.id = 'spinner';
     spinner.class = 'spinner-grow';
     spinner.style="width: 3rem; height: 3rem;"
     spinner.role="status"
-    var loader = document.createElement('span');
+    let loader = document.createElement('span');
     loader.class ="sr-only";
     spinner.appendChild(loader);
     answerSpace.appendChild(spinner);
@@ -138,9 +146,11 @@ function hideOptions() {
 }
 
 function saveAnswerOnAjax() {
-    var selectedOptions = document.getElementById("selectedOptions").value;
+    let selectedOptions = document.getElementById("selectedOptions").value;
     console.log("selectedOptions is "+selectedOptions);
-    var username = document.getElementById("user").value;
+    let timeTookForFirstClick = endTime - startTime;
+    console.log('Execution time: ' + timeTookForFirstClick);
+    let username = document.getElementById("user").value;
     xhr = new XMLHttpRequest();
     xhr.open('POST', "/answer/");
     xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
@@ -151,7 +161,8 @@ function saveAnswerOnAjax() {
             console.log('Request failed.  Returned status of ' + xhr.status);
         }
     };
-    xhr.send(encodeURI('selectedOptions=' + selectedOptions + "&user=" + username));
+    xhr.send(encodeURI('selectedOptions=' + selectedOptions
+        + "&user=" + username + "&timeTook=" + timeTookForFirstClick));
 }
 
 function showScoreboard() {
@@ -168,7 +179,7 @@ function showScoreboard() {
 }
 
 function connect() {
-    var socket = new SockJS('/darkhold-websocket');
+    let socket = new SockJS('/darkhold-websocket');
     stompClient = Stomp.over(socket);
     stompClient.connect({}, function (frame) {
         console.log('Connected: ' + frame);
@@ -178,6 +189,8 @@ function connect() {
             gotoScoreBoard();
         });
     });
+    startTime = new Date().getTime();
+    endTime = new Date().getTime();
 }
 
 function gotoScoreBoard() {

@@ -88,12 +88,14 @@ public class GameController {
     @PostMapping("/answer/")
     public @ResponseBody
     Boolean enterGame(@ModelAttribute("selectedOptions") final String selectedOptions,
-                      @ModelAttribute("user") final String user) {
-        logger.info("selectedOptions are {} and user is {}", selectedOptions, user);
+                      @ModelAttribute("user") final String user,
+                      @ModelAttribute("timeTook") final String timeTook) {
+        logger.info("selectedOptions are {}, user is {}, and timeTook is {}", selectedOptions, user, timeTook);
         var currentStatus = new CurrentStatus();
         var status = getExamStatus(selectedOptions);
         currentStatus.setStatus(status.name());
-        var scoreOnStatus = findScoreOnStatus(status);
+        var scoreOnStatus = findScoreOnStatus(status, timeTook);
+        logger.info("score is {}", scoreOnStatus);
         gameService.saveCurrentScore(user, scoreOnStatus);
         var moderator = gameService.findModerator();
         if (user.equalsIgnoreCase(moderator)) {
@@ -102,8 +104,19 @@ public class GameController {
         return true;
     }
 
-    private Integer findScoreOnStatus(final ExamStatus status) {
-        return status == ExamStatus.SUCCESS ? 1000 : 0;
+    private Integer findScoreOnStatus(final ExamStatus status, final String timeTook) {
+        int timeForAnswer = 0;
+        if (status == ExamStatus.SUCCESS) {
+            try {
+                int inTwentySeconds = Integer.parseInt(timeTook);
+                if (inTwentySeconds > 0L) {
+                    timeForAnswer = (20_000 - inTwentySeconds) / 20;
+                }
+            } catch (NumberFormatException exception) {
+                logger.info(exception.getMessage());
+            }
+        }
+        return timeForAnswer;
     }
 
     private ExamStatus getExamStatus(@RequestParam("selectedOptions") final String selectedOptions) {
