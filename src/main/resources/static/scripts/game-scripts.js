@@ -63,13 +63,19 @@ let startTime;
 let endTime;
 
 function waitAndShowAnswer(elem) {
-    if (!isAnswerSelected) {
-        realWaitAndShowAnswer(elem);
+    let roles = document.getElementById("roles").value;
+    console.log("roles is "+roles);
+    if(! roles.includes("ROLE_MODERATOR")) {
         if (!isAnswerSelected) {
-            isAnswerSelected = true;
+            realWaitAndShowAnswer(elem);
+            if (!isAnswerSelected) {
+                isAnswerSelected = true;
+            }
+        } else {
+            console.log('answer already selected !!!');
         }
     } else {
-        console.log('answer already selected !!!');
+        console.log('This is ROLE_MODERATOR who cannot play');
     }
 }
 
@@ -100,8 +106,6 @@ function realWaitAndShowAnswer(elem) {
     endTime = new Date().getTime();
     let timeTookForFirstClick = endTime - startTime;
     console.log('Execution time: ' + timeTookForFirstClick);
-    //calculate the time taken to hit
-    //save it in a hidden field
 }
 
 function hideOptions() {

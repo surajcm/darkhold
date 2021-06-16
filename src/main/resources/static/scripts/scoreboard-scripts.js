@@ -1,6 +1,5 @@
 function askQuestion() {
-
-    var socket = new SockJS('/darkhold-websocket');
+    let socket = new SockJS('/darkhold-websocket');
     stompClient = Stomp.over(socket);
     stompClient.connect({}, function (frame) {
         console.log('Connected: ' + frame);
@@ -9,7 +8,7 @@ function askQuestion() {
 }
 
 function connect() {
-    var socket = new SockJS('/darkhold-websocket');
+    let socket = new SockJS('/darkhold-websocket');
     stompClient = Stomp.over(socket);
     stompClient.connect({}, function (frame) {
         console.log('Connected: ' + frame);
@@ -22,5 +21,15 @@ function connect() {
 
 function gotoQuestionsPage() {
     document.forms[0].action="/question";
+    document.forms[0].submit();
+}
+
+function logOut() {
+    document.forms[0].action="/logout";
+    document.forms[0].submit();
+}
+
+function toHome() {
+    document.forms[0].action="/home";
     document.forms[0].submit();
 }

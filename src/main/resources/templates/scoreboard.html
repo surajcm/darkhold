@@ -11,7 +11,7 @@
 </head>
 <body onload="connect()">
     <nav class="navbar transparent navbar-inverse">
-        <div class="icon-bar" onclick="oHome()">
+        <div class="icon-bar" onclick="toHome();">
             <a class="active" href="#"><i class="fas fa-home"></i></a>
         </div>
         <span class="ml-auto mr-3 order-lg-last" th:text="${#authentication.getPrincipal().getUsername()}"></span>
