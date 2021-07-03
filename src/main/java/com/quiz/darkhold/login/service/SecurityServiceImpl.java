@@ -1,5 +1,6 @@
 package com.quiz.darkhold.login.service;
 
+import com.quiz.darkhold.util.CommonUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,7 +41,7 @@ public class SecurityServiceImpl implements SecurityService {
     public void autoLogin(final String username, final String password) {
         boolean unRegistered = password.equalsIgnoreCase(UNREGISTERED_USER);
         var userDetails = getUserDetails(username, unRegistered);
-        Set<GrantedAuthority> authorities = (Set<GrantedAuthority>) userDetails.getAuthorities();
+        var authorities = (Set<GrantedAuthority>) userDetails.getAuthorities();
         logger.info("Successfully fetched user details : " + userDetails);
         var token = new UsernamePasswordAuthenticationToken(userDetails, password, authorities);
         if (!unRegistered) {
@@ -48,7 +49,8 @@ public class SecurityServiceImpl implements SecurityService {
         }
         if (token.isAuthenticated()) {
             SecurityContextHolder.getContext().setAuthentication(token);
-            logger.info(String.format("Auto login %s successfully!", username));
+            logger.info(String.format("Auto login %s successfully! : {}",
+                    CommonUtils.sanitizedString(username)));
         }
     }
 

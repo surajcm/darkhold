@@ -66,7 +66,7 @@ public class ChallengeService {
         return user.getId();
     }
 
-    public Boolean deleteChallenge(final Long challengeId) throws ChallengeException {
+    public Boolean deleteChallenge(final Long challengeId) {
         var response = Boolean.FALSE;
         var challenge = challengeRepository.findById(challengeId);
         if (challenge.isPresent()) {

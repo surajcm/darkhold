@@ -27,9 +27,11 @@ public class ScoreController {
      */
     @PostMapping("/scoreboard")
     public String scoreCheck(final Model model) {
-        logger.info("On to the scoreboard :");
+        logger.info("On to the scoreboard screen");
         var score = new CurrentScore();
         var scores = gameService.getCurrentScore();
+        scores.forEach((key, value) ->
+                logger.info("key is:" + key + ", and value is :" + value));
         score.setScore(scores);
         model.addAttribute("score", score);
         return "scoreboard";

@@ -2,6 +2,7 @@ package com.quiz.darkhold.challenge.controller;
 
 import com.quiz.darkhold.challenge.exception.ChallengeException;
 import com.quiz.darkhold.challenge.service.ChallengeService;
+import com.quiz.darkhold.util.CommonUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,19 +41,26 @@ public class ChallengeController {
                             final String description,
                             final RedirectAttributes redirectAttributes) {
         String responseText;
-        logger.info("Received incoming traffic and redirected to upload_pdf");
-        logger.info(String.format("title : %s, description : %s ", title, description));
-        logger.info(String.format("File details getOriginalFilename : %s, getSize : %s ",
-                upload.getOriginalFilename(), upload.getSize()));
+        logParams(upload, title, description);
         try {
             challengeService.readProcessAndSaveChallenge(upload, title, description);
-            responseText = "Successfully created " + title + " !!!";
+            responseText = "Successfully created " + CommonUtils.sanitizedString(title) + " !!!";
         } catch (ChallengeException challengeException) {
             logger.error(challengeException.getMessage());
             //todo: change the http status code and give this as an error message
             responseText = "Unable to process, huge file";
         }
         return responseText;
+    }
+
+    private void logParams(final MultipartFile upload,
+                           final String title, final String description) {
+        logger.info("Received incoming traffic and redirected to upload_pdf");
+        logger.info("title : {}, description : {} ",
+                CommonUtils.sanitizedString(title), CommonUtils.sanitizedString(description));
+        logger.info("File details getOriginalFilename : {}, getSize : {}} ",
+                CommonUtils.sanitizedString(upload.getOriginalFilename()),
+                CommonUtils.sanitizedString(String.valueOf(upload.getSize())));
     }
 
     /**
@@ -65,14 +73,9 @@ public class ChallengeController {
     @DeleteMapping("/delete_challenge")
     public @ResponseBody
     Boolean deleteChallenge(final Long challenge,
-                           final RedirectAttributes redirectAttributes) {
-        var responseText = Boolean.FALSE;
-        logger.info("received incoming request to delete_challenge : " + challenge);
-        try {
-            responseText = challengeService.deleteChallenge(challenge);
-        } catch (ChallengeException challengeException) {
-            logger.error(challengeException.getMessage());
-        }
-        return responseText;
+                            final RedirectAttributes redirectAttributes) {
+        logger.info("received incoming request to delete_challenge : {}",
+                CommonUtils.sanitizedString(String.valueOf(challenge)));
+        return challengeService.deleteChallenge(challenge);
     }
 }

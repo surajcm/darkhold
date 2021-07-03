@@ -5,8 +5,9 @@ import com.quiz.darkhold.login.entity.User;
 import com.quiz.darkhold.login.service.SecurityService;
 import com.quiz.darkhold.login.service.UserService;
 import com.quiz.darkhold.login.validator.UserValidator;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import com.quiz.darkhold.util.CommonUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -18,7 +19,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 @Controller
 public class LoginController {
     private static final String LOGIN = "login";
-    private final Log log = LogFactory.getLog(LoginController.class);
+    private final Logger logger = LogManager.getLogger(LoginController.class);
 
     @Autowired
     private UserService userService;
@@ -44,11 +45,11 @@ public class LoginController {
                            @ModelAttribute("username") final String userName,
                            @ModelAttribute("password") final String password,
                            final String error, final String logout) {
-        log.info("Inside the login method : user name is " + userName);
+        logger.info("Login method : user name is {}" , CommonUtils.sanitizedString(userName));
         securityService.autoLogin(userName, password);
-        log.info("AutoLogin done !!!");
+        logger.info("AutoLogin done !!!");
         if (error != null) {
-            log.info("Inside the login method, error : " + error);
+            logger.info("Login method, error : {}" , CommonUtils.sanitizedString(error));
             model.addAttribute("error", "Your username and password is invalid.");
         }
         if (logout != null) {
@@ -67,7 +68,7 @@ public class LoginController {
     @GetMapping("/registration")
     public String registration(final Model model) {
         model.addAttribute("userForm", new User());
-        log.info("Inside the registration get method");
+        logger.info("Inside the registration get method");
         return "registration";
     }
 
@@ -83,10 +84,10 @@ public class LoginController {
     public String registration(final Model model,
                                @ModelAttribute("userForm") final User userForm,
                                final BindingResult bindingResult) {
-        log.info("Inside the registration post method");
+        logger.info("Inside the registration post method");
         userValidator.validate(userForm, bindingResult);
         if (bindingResult.hasErrors()) {
-            log.info(bindingResult.getAllErrors().get(0));
+            logger.info(bindingResult.getAllErrors().get(0));
             return LOGIN;
         }
         userService.save(userForm);
@@ -104,7 +105,7 @@ public class LoginController {
      */
     @PostMapping("/logmein")
     public String loginMe(final Model model) {
-        log.info("into loginMe");
+        logger.info("into loginMe");
         return LOGIN;
     }
 
@@ -116,7 +117,7 @@ public class LoginController {
      */
     @GetMapping("/logmein")
     public String loginMe2(final Model model) {
-        log.info("into GET loginMe");
+        logger.info("into GET loginMe");
         return LOGIN;
     }
 }

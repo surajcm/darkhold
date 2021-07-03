@@ -2,12 +2,12 @@ package com.quiz.darkhold.game.controller;
 
 import com.quiz.darkhold.game.model.Challenge;
 import com.quiz.darkhold.game.model.CurrentScore;
-import com.quiz.darkhold.game.model.CurrentStatus;
 import com.quiz.darkhold.game.model.ExamStatus;
 import com.quiz.darkhold.game.model.Game;
 import com.quiz.darkhold.game.model.StartTrigger;
 import com.quiz.darkhold.game.model.UserResponse;
 import com.quiz.darkhold.game.service.GameService;
+import com.quiz.darkhold.util.CommonUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -33,7 +33,7 @@ public class GameController {
 
     @PostMapping("/interstitial")
     public String startInterstitial(final Model model, @RequestParam("quiz_pin") final String quizPin) {
-        logger.info("On to interstitial :" + quizPin);
+        logger.info("On to interstitial :" + CommonUtils.sanitizedString(quizPin));
         return "interstitial";
     }
 
@@ -90,25 +90,32 @@ public class GameController {
     Boolean enterGame(@ModelAttribute("selectedOptions") final String selectedOptions,
                       @ModelAttribute("user") final String user,
                       @ModelAttribute("timeTook") final String timeTook) {
-        logger.info("selectedOptions are {}, user is {}, and timeTook is {}", selectedOptions, user, timeTook);
-        var currentStatus = new CurrentStatus();
+        logParams(selectedOptions, user, timeTook);
         var status = getExamStatus(selectedOptions);
-        currentStatus.setStatus(status.name());
+        //var currentStatus = new CurrentStatus(status.name());
         var scoreOnStatus = findScoreOnStatus(status, timeTook);
         logger.info("score is {}", scoreOnStatus);
-        gameService.saveCurrentScore(user, scoreOnStatus);
         var moderator = gameService.findModerator();
         if (user.equalsIgnoreCase(moderator)) {
             gameService.incrementQuestionNo();
+        } else {
+            // save score only if it is not a moderator, moderator scores are not saved
+            gameService.saveCurrentScore(user, scoreOnStatus);
         }
         return true;
+    }
+
+    private void logParams(final String selectedOptions, final String user, final String timeTook) {
+        logger.info("selectedOptions are {}, user is {}, and timeTook is {}",
+                CommonUtils.sanitizedString(selectedOptions),
+                CommonUtils.sanitizedString(user), CommonUtils.sanitizedString(timeTook));
     }
 
     private Integer findScoreOnStatus(final ExamStatus status, final String timeTook) {
         int timeForAnswer = 0;
         if (status == ExamStatus.SUCCESS) {
             try {
-                int inTwentySeconds = Integer.parseInt(timeTook);
+                var inTwentySeconds = Integer.parseInt(timeTook);
                 if (inTwentySeconds > 0L) {
                     timeForAnswer = (20_000 - inTwentySeconds) / 20;
                 }
@@ -186,4 +193,6 @@ public class GameController {
         logger.info("On to scoresFetch");
         return Boolean.TRUE;
     }
+
+
 }

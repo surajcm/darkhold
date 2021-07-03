@@ -3,6 +3,7 @@ package com.quiz.darkhold.home.controller;
 import com.quiz.darkhold.home.model.GameInfo;
 import com.quiz.darkhold.home.service.HomeService;
 import com.quiz.darkhold.login.service.SecurityService;
+import com.quiz.darkhold.util.CommonUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,7 +61,7 @@ public class HomeController {
     @PostMapping("/enterGame/")
     public @ResponseBody
     Boolean enterGame(@ModelAttribute("gamePin") final String gamePin) {
-        logger.info("Game pin is " + gamePin);
+        logger.info("Game pin is : {}" , CommonUtils.sanitizedString(gamePin));
         return homeService.validateGamePin(gamePin);
     }
 

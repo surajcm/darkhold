@@ -36,7 +36,8 @@ pmd {
 }
 
 jacoco {
-    toolVersion = "0.8.6+"
+    toolVersion = "0.8.7+"
+    reportsDir = file("build/reports/jacoco/")
 }
 
 tasks.withType(Checkstyle) {
@@ -71,7 +72,7 @@ jacocoTestCoverageVerification {
     violationRules {
         rule {
             limit {
-                minimum = 0.41
+                minimum = 0.40
             }
         }
     }
@@ -87,4 +88,11 @@ sonarqube {
         property "sonar.login", "0c8baf470e3c2eb956994cddcf77739cf32beb03"
         property "sonar.coverage.jacoco.xmlReportPaths", "build/reports/jacoco/test/jacocoTestReport.xml"
     }
+}
+test {
+    finalizedBy jacocoTestReport
+}
+
+jacocoTestReport {
+    dependsOn test
 }
