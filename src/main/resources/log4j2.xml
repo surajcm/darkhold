@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Configuration>
     <Appenders>
-        <Console name="Console" target="SYSTEM_OUT">
+        <Console name="Console" target="SYSTEM_OUT" ignoreExceptions="true">
             <PatternLayout
-                    pattern="%style{%d{ISO8601}}{black} %highlight{%-5level }[%style{%t}{bright,blue}] %style{%C{1.}}{bright,yellow}: %msg%n%throwable" />
+                    pattern="%style{%d{yyyy-MM-dd HH:mm:ss.SSS}}{black} %highlight{%-5level }[%style{%t}{bright,blue}] %clr{%X}{faint} %clr{:}{faint} %style{%C{1.}}{bright,yellow}: %msg%n%xwEx" />
+            <!--<PatternLayout pattern="%clr{%d{yyyy-MM-dd HH:mm:ss.SSS}}{faint} %clr{%5p} %clr{${sys:PID}}{magenta} %clr{-&#45;&#45;}{faint} %clr{[%15.15t]}{faint} %clr{%-40.40c{1.}}{cyan} %clr{%X}{faint} %clr{:}{faint} %m%n%xwEx"> </PatternLayout>-->
         </Console>
 
         <RollingFile name="RollingFile"

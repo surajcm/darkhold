@@ -26,11 +26,11 @@
         }
 
         function deleteQuiz() {
-            var challenge = document.getElementById('challenges').value;
+            let challenge = document.getElementById('challenges').value;
             console.log('deleting quiz of '+challenge);
-            var formData = new FormData();
+            let formData = new FormData();
             formData.append('challenge', challenge);
-            var xhr = new XMLHttpRequest();
+            let xhr = new XMLHttpRequest();
             xhr.open('DELETE', '/delete_challenge', true);
             xhr.onload = function (e) {
                 if (xhr.status === 200) {
@@ -54,12 +54,12 @@
         }
     </script>
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <link href="styles/challenge-styles.css" rel="stylesheet" />
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="styles/challenge-styles.css" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" >
 </head>
 <body>
 <nav class="navbar transparent navbar-inverse">
-    <div class="icon-bar" onclick="javascript:toOptions()">
+    <div class="icon-bar" onclick="toOptions()">
         <a class="active" href="#"><i class="fas fa-home"></i></a>
     </div>
     <span class="ml-auto mr-3 order-lg-last" th:text="${#authentication.getPrincipal().getUsername()}"></span>
@@ -94,7 +94,6 @@
                         </div>
                     </div>
                 </div>
-
             </div>
         </div>
         <br>
@@ -129,7 +128,7 @@
                     </div>
                     <div class="modal-footer justify-content-center">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                        <button type="button" class="btn btn-danger" onclick="javascript:deleteQuiz();">Delete</button>
+                        <button type="button" class="btn btn-danger" onclick="deleteQuiz();">Delete</button>
                     </div>
                 </div>
             </div>

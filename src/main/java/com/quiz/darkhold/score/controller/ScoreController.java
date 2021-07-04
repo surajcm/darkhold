@@ -31,7 +31,9 @@ public class ScoreController {
         var score = new CurrentScore();
         var scores = gameService.getCurrentScore();
         scores.forEach((key, value) ->
-                logger.info("key is:" + key + ", and value is :" + value));
+                logger.info(new StringBuilder()
+                        .append("key is:").append(key)
+                        .append(", and value is :").append(value).toString()));
         score.setScore(scores);
         model.addAttribute("score", score);
         return "scoreboard";
