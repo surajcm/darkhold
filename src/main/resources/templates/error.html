@@ -1,4 +1,4 @@
-    <!DOCTYPE HTML>
+<!DOCTYPE HTML>
 <html lang="en">
 <head>
     <title>Getting Started: Darkhold classroom quiz experience</title>
@@ -7,12 +7,23 @@
     <link href="styles/error-styles.css" rel="stylesheet" />
     <script type="text/javascript">
         function visitHome() {
-            document.forms[0].action="/";
+            document.forms[0].action="/options";
             document.forms[0].submit();
         }
     </script>
 </head>
 <body>
+    <nav class="navbar transparent navbar-inverse">
+        <div class="icon-bar" onclick="toOptions()">
+            <a class="active" href="#"><i class="fas fa-home"></i></a>
+        </div>
+        <span class="ml-auto mr-3 order-lg-last" th:text="${#authentication.getPrincipal().getUsername()}"></span>
+        <button class="btn btn-lg btn-rised align-middle btn-primary ml-auto mr-3 order-lg-last" type="button" onclick="javascript:logOut()" >Logout</button>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown"
+                aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+    </nav>
     <form>
         <div class="container">
             <div class="body-style">
@@ -26,7 +37,7 @@
                     </div>
                     <div>
                         <br/>
-                        <button class="button-style" onclick="javascript:visitHome();">Visit Homepage</button>
+                        <button class="button-style" onclick="visitHome();">Visit Homepage</button>
                     </div>
                 </div>
             </div>

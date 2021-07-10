@@ -63,4 +63,26 @@ public class OptionsController {
         }
         return "publish";
     }
+
+    /**
+     * on to create challenge page.
+     *
+     * @return create challenge page
+     */
+    @PostMapping("/userManagement")
+    public String manageUsers() {
+        log.info("Into the manageUsers method");
+        return "usermanagement";
+    }
+
+    /**
+     * on to create challenge page.
+     *
+     * @return create challenge page
+     */
+    @PostMapping("/gameManagement")
+    public String manageGame() {
+        log.info("Into the manageGame method");
+        return "gameManagement";
+    }
 }
