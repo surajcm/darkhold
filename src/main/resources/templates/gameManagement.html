@@ -14,7 +14,7 @@
 </head>
 <body>
 <nav class="navbar transparent navbar-inverse">
-    <div class="icon-bar" onclick="toOptions()">
+    <div class="icon-bar" onclick="visitHome()">
         <a class="active" href="#"><i class="fas fa-home"></i></a>
     </div>
     <span class="ml-auto mr-3 order-lg-last" th:text="${#authentication.getPrincipal().getUsername()}"></span>
@@ -24,7 +24,7 @@
         <span class="navbar-toggler-icon"></span>
     </button>
 </nav>
-<form>
+<form action="#" method="post">
     <div class="container">
         <div class="body-style">
             <div style="width:45%;float:left;margin-left:50px;">

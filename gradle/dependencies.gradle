@@ -1,6 +1,6 @@
 dependencies {
-    //errorprone("com.google.errorprone:error_prone_core:2.3.4")
-    //errorproneJavac("com.google.errorprone:javac:9+181-r4173-1")
+    errorprone("com.google.errorprone:error_prone_core:2.7.1")
+    errorproneJavac("com.google.errorprone:javac:9-dev-r4023-3")
 
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-thymeleaf")
