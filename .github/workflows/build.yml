@@ -13,15 +13,16 @@ jobs:
         with:
           java-version: '16'
           distribution: 'adopt'
-          fetch-depth: 0
       - name: Validate Gradle wrapper
         uses: gradle/wrapper-validation-action@v1
       - name: Test with Gradle
         run: ./gradlew test
       - name: Generate reports
         run: ./gradlew build jacocoTestReport
-      - name: SonarCloud Scan
-        uses: sonarsource/sonarcloud-github-action@master
+        # Gradle project detected.
+        #You should use the SonarQube plugin for Gradle during build rather than using this GitHub Action.
+      - name: Analyze on SonarCloud
+        run: ./gradlew build sonarqube
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
