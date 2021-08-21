@@ -2,7 +2,6 @@ package com.quiz.darkhold.options.service;
 
 import com.quiz.darkhold.challenge.entity.Challenge;
 import com.quiz.darkhold.challenge.repository.ChallengeRepository;
-import com.quiz.darkhold.login.entity.User;
 import com.quiz.darkhold.login.repository.UserRepository;
 import com.quiz.darkhold.options.model.ChallengeInfo;
 import com.quiz.darkhold.options.model.ChallengeSummary;
@@ -11,9 +10,6 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class OptionsService {
@@ -27,17 +23,16 @@ public class OptionsService {
 
     /**
      * get all challenges and display it there.
+     *
      * @return challenges
      */
     public ChallengeInfo populateChallengeInfo() {
         var auth = SecurityContextHolder.getContext().getAuthentication();
-        String username = auth.getName();
-        User user = userRepository.findByUsername(username);
+        var username = auth.getName();
+        var user = userRepository.findByUsername(username);
         log.info(user.getId());
         var challenges = challengeRepository.findByChallengeOwner(user.getId());
-        //var challenges = challengeRepository.findAll();
-        List<ChallengeSummary> summaries = challenges.stream()
-                .map(this::getChallengeSummary).collect(Collectors.toList());
+        var summaries = challenges.stream().map(this::getChallengeSummary).toList();
         var challengeInfo = new ChallengeInfo();
         challengeInfo.setChallengeSummaryList(summaries);
         return challengeInfo;

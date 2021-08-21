@@ -32,7 +32,7 @@ public class PreviewService {
     public PreviewInfo fetchQuestions(final String challengeId) {
         var previewInfo = new PreviewInfo();
         var challengeOne = Long.valueOf(challengeId);
-        var challenge = challengeRepository.getOne(challengeOne);
+        var challenge = challengeRepository.getById(challengeOne);
         previewInfo.setQuestionSets(challenge.getQuestionSets());
         previewInfo.setChallengeName(challenge.getTitle());
         previewInfo.setChallengeId(challengeId);

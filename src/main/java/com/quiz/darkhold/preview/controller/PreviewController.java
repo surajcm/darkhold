@@ -2,6 +2,7 @@ package com.quiz.darkhold.preview.controller;
 
 import com.quiz.darkhold.preview.service.PreviewService;
 import com.quiz.darkhold.util.CommonUtils;
+import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +30,7 @@ public class PreviewController {
      */
     @PostMapping("/preconfigure")
     public String preconfigure(final Model model, @RequestParam("challenges") final String challenges) {
-        log.info("Into the preconfigure method : {}",
+        log.log(Level.INFO, "Into the preconfigure method : {}",
                 CommonUtils.sanitizedString(challenges));
         var previewInfo = previewService.fetchQuestions(challenges);
         model.addAttribute("previewInfo", previewInfo);
@@ -48,11 +49,11 @@ public class PreviewController {
     public String publish(final Model model,
                           @RequestParam("challenge_id") final String challengeId,
                           final Principal principal) {
-        log.info("Into publish method : {}", CommonUtils.sanitizedString(challengeId));
+        log.log(Level.INFO, "Into publish method : {}", CommonUtils.sanitizedString(challengeId));
         var publishInfo = previewService.generateQuizPin(challengeId, principal.getName());
         model.addAttribute("quizPin", publishInfo.getPin());
         model.addAttribute("user", publishInfo.getModerator());
-        log.info("publish method, quizPin : " + publishInfo.getPin());
+        log.info("publish method, quizPin : {}", publishInfo.getPin());
         return "publish";
     }
 }

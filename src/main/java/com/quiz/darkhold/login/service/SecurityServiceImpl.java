@@ -1,6 +1,7 @@
 package com.quiz.darkhold.login.service;
 
 import com.quiz.darkhold.util.CommonUtils;
+import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,8 +32,8 @@ public class SecurityServiceImpl implements SecurityService {
     @Override
     public String findLoggedInUsername() {
         Object userDetails = SecurityContextHolder.getContext().getAuthentication().getDetails();
-        if (userDetails instanceof UserDetails) {
-            return ((UserDetails) userDetails).getUsername();
+        if (userDetails instanceof UserDetails details) {
+            return details.getUsername();
         }
         return null;
     }
@@ -42,15 +43,15 @@ public class SecurityServiceImpl implements SecurityService {
         boolean unRegistered = password.equalsIgnoreCase(UNREGISTERED_USER);
         var userDetails = getUserDetails(username, unRegistered);
         var authorities = (Set<GrantedAuthority>) userDetails.getAuthorities();
-        logger.info("Successfully fetched user details : " + userDetails);
+        logger.info("Successfully fetched user details : {} ", userDetails);
         var token = new UsernamePasswordAuthenticationToken(userDetails, password, authorities);
         if (!unRegistered) {
             authenticationManager.authenticate(token);
         }
         if (token.isAuthenticated()) {
             SecurityContextHolder.getContext().setAuthentication(token);
-            logger.info(String.format("Auto login %s successfully! : {}",
-                    CommonUtils.sanitizedString(username)));
+            logger.log(Level.INFO, "Auto login %s successfully! : {}",
+                    CommonUtils.sanitizedString(username));
         }
     }
 

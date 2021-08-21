@@ -3,6 +3,7 @@ package com.quiz.darkhold.preview.repository;
 import com.quiz.darkhold.challenge.entity.QuestionSet;
 import com.quiz.darkhold.game.model.QuestionPointer;
 import com.quiz.darkhold.preview.model.PublishInfo;
+import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.dizitart.no2.Cursor;
@@ -60,7 +61,7 @@ public class CurrentGame {
     public List<String> getActiveUsersInGame(final String pin) {
         Cursor cursor = collection.find(Filters.and(eq(PIN, pin)));
         List<String> users = (List<String>) cursor.toList().get(0).get(USERS);
-        logger.info("Participants are :" + users);
+        logger.info("Participants are : {}", users);
         return users;
     }
 
@@ -101,7 +102,7 @@ public class CurrentGame {
     public int getCurrentQuestionNo(final String pin) {
         Cursor cursor = collection.find(Filters.and(eq(PIN, pin)));
         Integer questionNo = (Integer) cursor.toList().get(0).get(CURRENT_QUESTION_NO);
-        logger.info(String.format("getCurrentQuestionNo : questionNo : %d", questionNo));
+        logger.log(Level.INFO, "getCurrentQuestionNo : questionNo : {}}", questionNo);
         return questionNo;
     }
 
@@ -114,7 +115,7 @@ public class CurrentGame {
     public List<QuestionSet> getQuestionsOnAPin(final String pin) {
         Cursor cursor = collection.find(Filters.and(eq(PIN, pin)));
         List<QuestionSet> questions = (List<QuestionSet>) cursor.toList().get(0).get(QUESTIONS);
-        logger.info("question count :" + questions.size());
+        logger.info("question count : {}", questions.size());
         return questions;
     }
 
@@ -134,6 +135,7 @@ public class CurrentGame {
 
     /**
      * find the moderator.
+     *
      * @param pin pin
      * @return moderator
      */
@@ -145,8 +147,8 @@ public class CurrentGame {
     /**
      * save current score to nitrate.
      *
-     * @param pin pin of game
-     * @param name of user
+     * @param pin    pin of game
+     * @param name   of user
      * @param status success or not
      */
     public void saveCurrentScore(final String pin, final String name, final Integer status) {
@@ -172,9 +174,9 @@ public class CurrentGame {
         Cursor cursor = collection.find(Filters.and(eq(PIN, pin)));
         Document doc = cursor.toList().get(0);
         Integer questionNo = (Integer) doc.get(CURRENT_QUESTION_NO);
-        logger.info(String.format("questionNo : %d", questionNo));
+        logger.log(Level.INFO, "questionNo : {}", questionNo);
         List<QuestionSet> questions = (List<QuestionSet>) doc.get(QUESTIONS);
-        logger.info(String.format("questions size : %d", questions.size()));
+        logger.log(Level.INFO, "questions size : {}}", questions.size());
         QuestionPointer questionPointer = new QuestionPointer();
         questionPointer.setCurrentQuestionNumber(questionNo);
         questionPointer.setTotalQuestionCount(questions.size());

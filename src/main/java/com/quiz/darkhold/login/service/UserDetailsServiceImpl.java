@@ -29,7 +29,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         if (user == null) {
             throw new UsernameNotFoundException(username);
         }
-        logger.info("current user ->" + user);
+        logger.info("current user -> {}", user);
 
         Set<GrantedAuthority> grantedAuthorities =
                 user.getRoles().stream().map(role -> new SimpleGrantedAuthority(role.getName()))

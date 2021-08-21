@@ -5,6 +5,7 @@
 <p align="center">
     <a href="https://github.com/surajcm/darkhold/commits/" title="Last Commit"><img src="https://img.shields.io/github/last-commit/surajcm/darkhold?style=flat"></a>
     <a href="https://github.com/surajcm/darkhold/issues" title="Open Issues"><img src="https://img.shields.io/github/issues/surajcm/darkhold?style=flat"></a>
+    <a href="https://github.com/surajcm/darkhold/actions/workflows/build.yml" title="Java CI"><img src="https://github.com/surajcm/darkhold/actions/workflows/build.yml/badge.svg"></a>
     <a href="https://github.com/surajcm/darkhold/blob/master/LICENSE" title="License"><img src="https://img.shields.io/badge/License-Apache%202.0-green.svg?style=flat"></a>
 </p>
 An online portal, which has provision to create and host quiz, inspired by `kahoot`. Additional feature is the provision of remote users to participate in the quiz.
