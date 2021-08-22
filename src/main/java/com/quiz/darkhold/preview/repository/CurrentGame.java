@@ -3,10 +3,8 @@ package com.quiz.darkhold.preview.repository;
 import com.quiz.darkhold.challenge.entity.QuestionSet;
 import com.quiz.darkhold.game.model.QuestionPointer;
 import com.quiz.darkhold.preview.model.PublishInfo;
-import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.dizitart.no2.Cursor;
 import org.dizitart.no2.Document;
 import org.dizitart.no2.NitriteCollection;
 import org.dizitart.no2.filters.Filters;
@@ -59,8 +57,8 @@ public class CurrentGame {
      * @return users
      */
     public List<String> getActiveUsersInGame(final String pin) {
-        Cursor cursor = collection.find(Filters.and(eq(PIN, pin)));
-        List<String> users = (List<String>) cursor.toList().get(0).get(USERS);
+        var cursor = collection.find(Filters.and(eq(PIN, pin)));
+        var users = (List<String>) cursor.toList().get(0).get(USERS);
         logger.info("Participants are : {}", users);
         return users;
     }
@@ -72,9 +70,9 @@ public class CurrentGame {
      * @param userName of user
      */
     public void saveUserToActiveGame(final String pin, final String userName) {
-        Cursor cursor = collection.find(Filters.and(eq(PIN, pin)));
-        Document doc = cursor.toList().get(0);
-        List<String> users = (List<String>) doc.get(USERS);
+        var cursor = collection.find(Filters.and(eq(PIN, pin)));
+        var doc = cursor.toList().get(0);
+        var users = (List<String>) doc.get(USERS);
         users.add(userName);
         collection.update(doc);
     }
@@ -86,9 +84,9 @@ public class CurrentGame {
      * @param questionSets of the game
      */
     public void saveQuestionsToActiveGame(final String pin, final List<QuestionSet> questionSets) {
-        Cursor cursor = collection.find(Filters.and(eq(PIN, pin)));
-        Document doc = cursor.toList().get(0);
-        List<QuestionSet> questions = (List<QuestionSet>) doc.get(QUESTIONS);
+        var cursor = collection.find(Filters.and(eq(PIN, pin)));
+        var doc = cursor.toList().get(0);
+        var questions = (List<QuestionSet>) doc.get(QUESTIONS);
         questions.addAll(questionSets);
         collection.update(doc);
     }
@@ -100,9 +98,9 @@ public class CurrentGame {
      * @return question no
      */
     public int getCurrentQuestionNo(final String pin) {
-        Cursor cursor = collection.find(Filters.and(eq(PIN, pin)));
-        Integer questionNo = (Integer) cursor.toList().get(0).get(CURRENT_QUESTION_NO);
-        logger.log(Level.INFO, "getCurrentQuestionNo : questionNo : {}}", questionNo);
+        var cursor = collection.find(Filters.and(eq(PIN, pin)));
+        var questionNo = (Integer) cursor.toList().get(0).get(CURRENT_QUESTION_NO);
+        logger.info("getCurrentQuestionNo : questionNo : {}}", questionNo);
         return questionNo;
     }
 
@@ -113,8 +111,8 @@ public class CurrentGame {
      * @return question list
      */
     public List<QuestionSet> getQuestionsOnAPin(final String pin) {
-        Cursor cursor = collection.find(Filters.and(eq(PIN, pin)));
-        List<QuestionSet> questions = (List<QuestionSet>) cursor.toList().get(0).get(QUESTIONS);
+        var cursor = collection.find(Filters.and(eq(PIN, pin)));
+        var questions = (List<QuestionSet>) cursor.toList().get(0).get(QUESTIONS);
         logger.info("question count : {}", questions.size());
         return questions;
     }
@@ -125,10 +123,10 @@ public class CurrentGame {
      * @param pin of game
      */
     public void incrementQuestionCount(final String pin) {
-        Cursor cursor = collection.find(Filters.and(eq(PIN, pin)));
-        Integer questionNo = (Integer) cursor.toList().get(0).get(CURRENT_QUESTION_NO);
+        var cursor = collection.find(Filters.and(eq(PIN, pin)));
+        var questionNo = (Integer) cursor.toList().get(0).get(CURRENT_QUESTION_NO);
         questionNo++;
-        Document doc = cursor.toList().get(0);
+        var doc = cursor.toList().get(0);
         doc.put(CURRENT_QUESTION_NO, questionNo);
         collection.update(doc);
     }
@@ -140,7 +138,7 @@ public class CurrentGame {
      * @return moderator
      */
     public String findModerator(final String pin) {
-        Cursor cursor = collection.find(Filters.and(eq(PIN, pin)));
+        var cursor = collection.find(Filters.and(eq(PIN, pin)));
         return (String) cursor.toList().get(0).get(MODERATOR);
     }
 
@@ -152,32 +150,32 @@ public class CurrentGame {
      * @param status success or not
      */
     public void saveCurrentScore(final String pin, final String name, final Integer status) {
-        Cursor cursor = collection.find(Filters.and(eq(PIN, pin)));
-        Map<String, Integer> scores = (Map<String, Integer>) cursor.toList().get(0).get(SCORES);
+        var cursor = collection.find(Filters.and(eq(PIN, pin)));
+        var scores = (Map<String, Integer>) cursor.toList().get(0).get(SCORES);
         if (scores.containsKey(name)) {
-            Integer currentValue = scores.get(name);
+            var currentValue = scores.get(name);
             scores.put(name, currentValue + status);
         } else {
             scores.put(name, status);
         }
-        Document doc = cursor.toList().get(0);
+        var doc = cursor.toList().get(0);
         doc.put(SCORES, scores);
         collection.update(doc);
     }
 
     public Map<String, Integer> getCurrentScore(final String pin) {
-        Cursor cursor = collection.find(Filters.and(eq(PIN, pin)));
+        var cursor = collection.find(Filters.and(eq(PIN, pin)));
         return (Map<String, Integer>) cursor.toList().get(0).get(SCORES);
     }
 
     public QuestionPointer getCurrentQuestionPointer(final String pin) {
-        Cursor cursor = collection.find(Filters.and(eq(PIN, pin)));
-        Document doc = cursor.toList().get(0);
-        Integer questionNo = (Integer) doc.get(CURRENT_QUESTION_NO);
-        logger.log(Level.INFO, "questionNo : {}", questionNo);
-        List<QuestionSet> questions = (List<QuestionSet>) doc.get(QUESTIONS);
-        logger.log(Level.INFO, "questions size : {}}", questions.size());
-        QuestionPointer questionPointer = new QuestionPointer();
+        var cursor = collection.find(Filters.and(eq(PIN, pin)));
+        var doc = cursor.toList().get(0);
+        var questionNo = (Integer) doc.get(CURRENT_QUESTION_NO);
+        logger.info("questionNo : {}", questionNo);
+        var questions = (List<QuestionSet>) doc.get(QUESTIONS);
+        logger.info("questions size : {}}", questions.size());
+        var questionPointer = new QuestionPointer();
         questionPointer.setCurrentQuestionNumber(questionNo);
         questionPointer.setTotalQuestionCount(questions.size());
         if (questionNo < questions.size()) {
@@ -187,8 +185,8 @@ public class CurrentGame {
     }
 
     public void stopTheGame(final String pin) {
-        Cursor cursor = collection.find(Filters.and(eq(PIN, pin)));
-        Document doc = cursor.toList().get(0);
+        var cursor = collection.find(Filters.and(eq(PIN, pin)));
+        var doc = cursor.toList().get(0);
         doc.remove(PIN);
         doc.remove(USERS);
         doc.remove(MODERATOR);

@@ -37,7 +37,7 @@ class PreviewServiceTest {
 
     @Test
     void fetchQuestions() {
-        when(challengeRepository.getOne(anyLong())).thenReturn(mockChallenge());
+        when(challengeRepository.getById(anyLong())).thenReturn(mockChallenge());
         var challengeId = "1234";
         var previewInfo = previewService.fetchQuestions(challengeId);
         Assertions.assertEquals(challengeId, previewInfo.getChallengeId());

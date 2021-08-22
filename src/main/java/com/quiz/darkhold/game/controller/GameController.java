@@ -33,7 +33,8 @@ public class GameController {
 
     @PostMapping("/interstitial")
     public String startInterstitial(final Model model, @RequestParam("quiz_pin") final String quizPin) {
-        logger.info("On to interstitial :" + CommonUtils.sanitizedString(quizPin));
+        var sanitizedPin = CommonUtils.sanitizedString(quizPin);
+        logger.info("On to interstitial : {}", sanitizedPin);
         return "interstitial";
     }
 
@@ -51,7 +52,7 @@ public class GameController {
         if (questionPointer.getCurrentQuestionNumber() == questionPointer.getTotalQuestionCount()) {
             return finalScore(model);
         }
-        logger.info("going to question page");
+        logger.info("Going to question page");
         return "question";
     }
 
@@ -106,9 +107,11 @@ public class GameController {
     }
 
     private void logParams(final String selectedOptions, final String user, final String timeTook) {
+        var sanitizedOptions = CommonUtils.sanitizedString(selectedOptions);
+        var sanitizedUser = CommonUtils.sanitizedString(user);
+        var sanitizedTime = CommonUtils.sanitizedString(timeTook);
         logger.info("selectedOptions are {}, user is {}, and timeTook is {}",
-                CommonUtils.sanitizedString(selectedOptions),
-                CommonUtils.sanitizedString(user), CommonUtils.sanitizedString(timeTook));
+                sanitizedOptions, sanitizedUser, sanitizedTime);
     }
 
     private Integer findScoreOnStatus(final ExamStatus status, final String timeTook) {
@@ -152,7 +155,7 @@ public class GameController {
     @MessageMapping("/user")
     @SendTo("/topic/user")
     public UserResponse getGame(final Game game) {
-        logger.info("On to getGame :" + game);
+        logger.info("On to getGame : {}", game);
         var users = gameService.getAllParticipants(game.getPin());
         return new UserResponse(users);
     }
@@ -168,8 +171,8 @@ public class GameController {
     @SendTo("/topic/start")
     public StartTrigger startTrigger(final String pin, final Principal principal) {
         // this is triggered by the game moderator
-        logger.info("On to startGame :" + pin);
-        logger.info("On to startGame : user : " + principal.getName());
+        logger.info("On to startGame : {}", pin);
+        logger.info("On to startGame : user : {}", principal.getName());
         // who started the game is already in nitrate
         return new StartTrigger(pin);
     }
@@ -177,12 +180,13 @@ public class GameController {
     @MessageMapping("/question_fetch")
     @SendTo("/topic/question_read")
     public StartTrigger questionFetch(final String name) {
-        logger.info(String.format("On to questionFetch : %s", name));
+        logger.info("On to questionFetch : {}}", name);
         var questionPointer = gameService.getCurrentQuestionPointer();
         if (questionPointer.getCurrentQuestionNumber() == questionPointer.getTotalQuestionCount()) {
             return new StartTrigger("END_GAME");
         }
-        logger.info("On questionPointer.getCurrentQuestionNumber() : " + questionPointer.getCurrentQuestionNumber());
+        logger.info("On questionPointer.getCurrentQuestionNumber() : {}",
+                questionPointer.getCurrentQuestionNumber());
         return new StartTrigger(questionPointer.getCurrentQuestionNumber() + 1 + " : "
                 + questionPointer.getCurrentQuestion().getQuestion());
     }
@@ -193,6 +197,4 @@ public class GameController {
         logger.info("On to scoresFetch");
         return Boolean.TRUE;
     }
-
-
 }

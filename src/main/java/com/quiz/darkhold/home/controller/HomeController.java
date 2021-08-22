@@ -34,7 +34,7 @@ public class HomeController {
      */
     @GetMapping("/")
     public String home(final Model model) {
-        logger.info("Going home page ");
+        logger.info("Going home page");
         model.addAttribute(GAME_INFO, new GameInfo());
         return "index";
     }
@@ -47,7 +47,7 @@ public class HomeController {
      */
     @PostMapping("/home")
     public String toHome(final Model model) {
-        logger.info("Going to toHome page ");
+        logger.info("Going to toHome page");
         model.addAttribute(GAME_INFO, new GameInfo());
         return "index";
     }
@@ -61,19 +61,21 @@ public class HomeController {
     @PostMapping("/enterGame/")
     public @ResponseBody
     Boolean enterGame(@ModelAttribute("gamePin") final String gamePin) {
-        logger.info("Game pin is : {}" , CommonUtils.sanitizedString(gamePin));
+        var sanitizedPin = CommonUtils.sanitizedString(gamePin);
+        logger.info("Game pin is : {}", sanitizedPin);
         return homeService.validateGamePin(gamePin);
     }
 
     /**
      * If the user entered pin is correct, go to the page where everyone waits for the game to start.
+     *
      * @param gameInfo user info
-     * @param model model
+     * @param model    model
      * @return wait screen
      */
     @PostMapping("/joinGame")
     public String joinGame(@ModelAttribute final GameInfo gameInfo, final Model model) {
-        logger.info("joinGame : gameInfo is " + gameInfo);
+        logger.info("joinGame : gameInfo is {}", gameInfo);
         securityService.autoLogin(gameInfo.getName(), UNREGISTERED_USER);
         logger.info("autoLogin done !!!");
         var activeUsers = homeService.participantsInActiveQuiz(gameInfo.getGamePin());

@@ -16,6 +16,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import java.util.AbstractMap;
+import java.util.Map;
+
 @Controller
 public class LoginController {
     private static final String LOGIN = "login";
@@ -45,18 +48,37 @@ public class LoginController {
                            @ModelAttribute("username") final String userName,
                            @ModelAttribute("password") final String password,
                            final String error, final String logout) {
-        logger.info("Login method : user name is {}" , CommonUtils.sanitizedString(userName));
+        logUserName(userName);
         securityService.autoLogin(userName, password);
         logger.info("AutoLogin done !!!");
-        if (error != null) {
-            logger.info("Login method, error : {}" , CommonUtils.sanitizedString(error));
-            model.addAttribute("error", "Your username and password is invalid.");
-        }
-        if (logout != null) {
-            model.addAttribute("message", "You have been logged out successfully.");
+        if (error != null || logout != null) {
+            Map.Entry<String, String> tuple = modelAttributes(error, logout);
+            model.addAttribute(tuple.getKey(), tuple.getValue());
         }
         model.addAttribute("userForm", new User());
         return "options";
+    }
+
+    private void logUserName(final String userName) {
+        var sanitizedUserName = CommonUtils.sanitizedString(userName);
+        logger.info("Login method : user name is {}", sanitizedUserName);
+    }
+
+    private Map.Entry<String, String> modelAttributes(final String error, final String logout) {
+        Map.Entry<String, String> tuple = null;
+        if (error != null) {
+            logError(error);
+            tuple = new AbstractMap.SimpleEntry<>("error", "Your username and password is invalid.");
+        }
+        if (logout != null) {
+            tuple = new AbstractMap.SimpleEntry<>("message", "You have been logged out successfully.");
+        }
+        return tuple;
+    }
+
+    private void logError(final String error) {
+        var sanitizedError = CommonUtils.sanitizedString(error);
+        logger.info("Login method, error : {}", sanitizedError);
     }
 
     /**

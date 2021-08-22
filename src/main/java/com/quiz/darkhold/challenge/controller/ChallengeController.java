@@ -56,11 +56,14 @@ public class ChallengeController {
     private void logParams(final MultipartFile upload,
                            final String title, final String description) {
         logger.info("Received incoming traffic and redirected to upload_pdf");
+        var sanitizedTitle = CommonUtils.sanitizedString(title);
+        var sanitizedDescription = CommonUtils.sanitizedString(description);
         logger.info("title : {}, description : {} ",
-                CommonUtils.sanitizedString(title), CommonUtils.sanitizedString(description));
+                sanitizedTitle, sanitizedDescription);
+        var sanitizedOriginalFileName = CommonUtils.sanitizedString(upload.getOriginalFilename());
+        var sanitizedFileSize = CommonUtils.sanitizedString(String.valueOf(upload.getSize()));
         logger.info("File details getOriginalFilename : {}, getSize : {}} ",
-                CommonUtils.sanitizedString(upload.getOriginalFilename()),
-                CommonUtils.sanitizedString(String.valueOf(upload.getSize())));
+                sanitizedOriginalFileName, sanitizedFileSize);
     }
 
     /**
@@ -74,8 +77,9 @@ public class ChallengeController {
     public @ResponseBody
     Boolean deleteChallenge(final Long challenge,
                             final RedirectAttributes redirectAttributes) {
+        var sanitizeChallenge = CommonUtils.sanitizedString(String.valueOf(challenge));
         logger.info("received incoming request to delete_challenge : {}",
-                CommonUtils.sanitizedString(String.valueOf(challenge)));
+                sanitizeChallenge);
         return challengeService.deleteChallenge(challenge);
     }
 }

@@ -6,7 +6,6 @@ import com.quiz.darkhold.challenge.entity.QuestionSet;
 import com.quiz.darkhold.challenge.exception.ChallengeException;
 import com.quiz.darkhold.challenge.repository.ChallengeRepository;
 import com.quiz.darkhold.challenge.repository.QuestionSetRepository;
-import com.quiz.darkhold.login.entity.User;
 import com.quiz.darkhold.login.repository.UserRepository;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -45,7 +44,8 @@ public class ChallengeService {
      * @param description challenge desc
      * @throws ChallengeException on error
      */
-    public void readProcessAndSaveChallenge(final MultipartFile upload, final String title,
+    public void readProcessAndSaveChallenge(final MultipartFile upload,
+                                            final String title,
                                             final String description)
             throws ChallengeException {
         var questionSets = readAndProcessChallenge(upload);
@@ -61,8 +61,8 @@ public class ChallengeService {
 
     private Long currentUserId() {
         var auth = SecurityContextHolder.getContext().getAuthentication();
-        String username = auth.getName();
-        User user = userRepository.findByUsername(username);
+        var username = auth.getName();
+        var user = userRepository.findByUsername(username);
         return user.getId();
     }
 
@@ -109,11 +109,11 @@ public class ChallengeService {
                     var optionsList = populateOptionsFromString(options);
                     questionSet.setCorrectOptions(optionsList);
                 }
-                default -> logger.error(String.format("Unknown option at %s , Text is : %s",
-                        currentCell.getColumnIndex(), currentCell.getStringCellValue()));
+                default -> logger.error("Unknown option at {} , Text is : {}",
+                        currentCell.getColumnIndex(), currentCell.getStringCellValue());
             }
         }
-        logger.info("Current questions : " + questionSet);
+        logger.info("Current questions : {}", questionSet);
         return questionSet;
     }
 
@@ -126,8 +126,9 @@ public class ChallengeService {
         } else if (currentCell.getCellType() == CellType.BOOLEAN) {
             result = String.valueOf(currentCell.getBooleanCellValue());
         } else {
-            logger.error("Invalid cell type on  " + currentCell.getColumnIndex()
-                    + " is " + currentCell.getCellType().name());
+            var cellName = currentCell.getCellType().name();
+            logger.error("Invalid cell type on  {}  is {}", currentCell.getColumnIndex(),
+                    cellName);
         }
         return result;
     }

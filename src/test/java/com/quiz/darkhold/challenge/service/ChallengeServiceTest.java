@@ -16,6 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 
+import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(SpringExtension.class)
@@ -32,7 +33,7 @@ class ChallengeServiceTest {
 
     @Test
     void readProcessAndSaveChallengeSuccess() throws IOException {
-        var anyInputStream = new ByteArrayInputStream("test data".getBytes());
+        var anyInputStream = new ByteArrayInputStream("test data".getBytes(UTF_8));
         var file = Mockito.mock(MultipartFile.class);
         when(file.getInputStream()).thenReturn(anyInputStream);
         /*Assertions.assertAll(() ->
@@ -50,7 +51,7 @@ class ChallengeServiceTest {
     }
 
     private MultipartFile mockMultipartFile() {
-        return new MockMultipartFile("mockfile.xls", "Q1, A1,A2,A3,A4,A1".getBytes());
+        return new MockMultipartFile("mockfile.xls", "Q1, A1,A2,A3,A4,A1".getBytes(UTF_8));
     }
 
 }
