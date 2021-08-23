@@ -1,6 +1,7 @@
 $(document).ready(function() {
     let clock2;
-    clock2 = new FlipClock($('.clock2'), 20, {
+    let time_to_flip = document.getElementById('time_to_flip').value;
+    clock2 = new FlipClock($('.clock2'), time_to_flip, {
             clockFace: 'Counter'
     });
 

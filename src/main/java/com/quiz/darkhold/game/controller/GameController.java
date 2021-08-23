@@ -83,6 +83,7 @@ public class GameController {
         challenge.setQuestionSet(questionPointer.getCurrentQuestion());
         challenge.setQuestionNumber(challenge.getQuestionNumber() + 1);
         model.addAttribute("challenge", challenge);
+        model.addAttribute("game_timer", "25");
         return "game";
     }
 
