@@ -1,6 +1,6 @@
 dependencies {
-    errorprone("com.google.errorprone:error_prone_core:2.7.1")
-    errorproneJavac("com.google.errorprone:javac:9-dev-r4023-3")
+    errorprone('com.google.errorprone:error_prone_core:2.9.0')
+    errorproneJavac('com.google.errorprone:javac:9+181-r4173-1')
 
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-thymeleaf")
@@ -11,13 +11,13 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-security")
     implementation("org.springframework.boot:spring-boot-starter-actuator")
     implementation("org.springframework.boot:spring-boot-starter-log4j2")
-    runtimeOnly("org.springframework.boot:spring-boot-devtools")
+    runtimeOnly('org.springframework.boot:spring-boot-devtools:2.5.4')
 
     implementation("org.apache.poi:poi-ooxml:4.1.1")
     implementation("org.apache.commons:commons-lang3:3.9")
     implementation("com.h2database:h2:1.4.200")
     implementation("org.flywaydb:flyway-core:7.8.2")
-    implementation("org.dizitart:nitrite:3.3.0")
+    implementation('org.dizitart:nitrite:3.4.3')
 
     testImplementation('org.springframework.boot:spring-boot-starter-test') {
         exclude module: "junit"
@@ -29,7 +29,7 @@ dependencies {
     //testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine")
 
     testImplementation("org.mockito:mockito-core")
-    testImplementation("org.powermock:powermock-api-mockito2:2.0.0")
+    testImplementation('org.powermock:powermock-api-mockito2:2.0.9')
 }
 configurations {
     all {

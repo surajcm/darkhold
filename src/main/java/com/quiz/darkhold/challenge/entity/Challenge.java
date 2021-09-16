@@ -1,10 +1,14 @@
 package com.quiz.darkhold.challenge.entity;
 
 import com.quiz.darkhold.login.entity.User;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -13,16 +17,14 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OrderBy;
-import javax.persistence.PrePersist;
-import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
-import java.time.OffsetDateTime;
-import java.time.ZoneId;
+import java.time.LocalDateTime;
 import java.util.List;
 
+@EntityListeners(AuditingEntityListener.class)
 @Entity
 @Table(name = "challenge")
 public class Challenge implements Serializable {
@@ -44,11 +46,13 @@ public class Challenge implements Serializable {
     @Column(name = "challengeowner")
     private Long challengeOwner;
 
+    @CreatedDate
     @Column(name = "createdOn")
-    private OffsetDateTime createdOn;
+    private LocalDateTime createdOn;
 
+    @LastModifiedDate
     @Column(name = "modifiedOn")
-    private OffsetDateTime modifiedOn;
+    private LocalDateTime modifiedOn;
 
     @OneToMany(mappedBy = "challenge", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @OrderBy("id")
@@ -90,19 +94,19 @@ public class Challenge implements Serializable {
         this.challengeOwner = challengeOwner;
     }
 
-    public OffsetDateTime getCreatedOn() {
+    public LocalDateTime getCreatedOn() {
         return createdOn;
     }
 
-    public void setCreatedOn(final OffsetDateTime createdOn) {
+    public void setCreatedOn(final LocalDateTime createdOn) {
         this.createdOn = createdOn;
     }
 
-    public OffsetDateTime getModifiedOn() {
+    public LocalDateTime getModifiedOn() {
         return modifiedOn;
     }
 
-    public void setModifiedOn(final OffsetDateTime modifiedOn) {
+    public void setModifiedOn(final LocalDateTime modifiedOn) {
         this.modifiedOn = modifiedOn;
     }
 
@@ -120,17 +124,5 @@ public class Challenge implements Serializable {
 
     public void setOwner(final User owner) {
         this.owner = owner;
-    }
-
-    /**
-     * initialize / update date fields.
-     */
-    @PrePersist
-    @PreUpdate
-    public void initializeDate() {
-        if (this.id == null) {
-            createdOn = OffsetDateTime.now(ZoneId.systemDefault());
-        }
-        modifiedOn = OffsetDateTime.now(ZoneId.systemDefault());
     }
 }
