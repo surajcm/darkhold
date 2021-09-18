@@ -11,7 +11,6 @@ import com.quiz.darkhold.util.CommonUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Controller;
@@ -28,8 +27,11 @@ import java.security.Principal;
 public class GameController {
     private final Logger logger = LogManager.getLogger(GameController.class);
 
-    @Autowired
-    private GameService gameService;
+    private final GameService gameService;
+
+    public GameController(final GameService gameService) {
+        this.gameService = gameService;
+    }
 
     @PostMapping("/interstitial")
     public String startInterstitial(final Model model, @RequestParam("quiz_pin") final String quizPin) {

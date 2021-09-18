@@ -6,7 +6,6 @@ import com.quiz.darkhold.login.service.SecurityService;
 import com.quiz.darkhold.util.CommonUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,11 +19,14 @@ public class HomeController {
     private static final String UNREGISTERED_USER = "UNREGISTERED_USER";
     private final Logger logger = LogManager.getLogger(HomeController.class);
 
-    @Autowired
-    private HomeService homeService;
+    private final HomeService homeService;
 
-    @Autowired
-    private SecurityService securityService;
+    private final SecurityService securityService;
+
+    public HomeController(final HomeService homeService, final SecurityService securityService) {
+        this.homeService = homeService;
+        this.securityService = securityService;
+    }
 
     /**
      * Initial home redirect.

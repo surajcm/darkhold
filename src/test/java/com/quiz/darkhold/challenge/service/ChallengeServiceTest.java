@@ -3,12 +3,11 @@ package com.quiz.darkhold.challenge.service;
 import com.quiz.darkhold.challenge.exception.ChallengeException;
 import com.quiz.darkhold.challenge.repository.ChallengeRepository;
 import com.quiz.darkhold.challenge.repository.QuestionSetRepository;
+import com.quiz.darkhold.login.repository.UserRepository;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
-import org.powermock.reflect.Whitebox;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.web.multipart.MultipartFile;
@@ -21,23 +20,19 @@ import static org.mockito.Mockito.when;
 
 @ExtendWith(SpringExtension.class)
 class ChallengeServiceTest {
-    private final ChallengeService challengeService = new ChallengeService();
     private final ChallengeRepository challengeRepository = Mockito.mock(ChallengeRepository.class);
     private final QuestionSetRepository questionSetRepository = Mockito.mock(QuestionSetRepository.class);
+    private final UserRepository userRepository = Mockito.mock(UserRepository.class);
+    private final ChallengeService challengeService = new ChallengeService(challengeRepository,
+            questionSetRepository,
+            userRepository);
 
-    @BeforeEach
-    public void setup() {
-        Whitebox.setInternalState(challengeService, "challengeRepository", challengeRepository);
-        Whitebox.setInternalState(challengeService, "questionSetRepository", questionSetRepository);
-    }
 
     @Test
     void readProcessAndSaveChallengeSuccess() throws IOException {
         var anyInputStream = new ByteArrayInputStream("test data".getBytes(UTF_8));
         var file = Mockito.mock(MultipartFile.class);
         when(file.getInputStream()).thenReturn(anyInputStream);
-        /*Assertions.assertAll(() ->
-                challengeService.readProcessAndSaveChallenge(file, "Test1", "Super test"));*/
         Assertions.assertThrows(ChallengeException.class, () -> {
             challengeService.readProcessAndSaveChallenge(file, "Test1", "Super test");
         });

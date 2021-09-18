@@ -6,7 +6,6 @@ import com.quiz.darkhold.preview.repository.CurrentGame;
 import com.quiz.darkhold.preview.service.PreviewService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,11 +15,14 @@ import java.util.Map;
 public class GameService {
     private final Logger logger = LogManager.getLogger(GameService.class);
 
-    @Autowired
-    private CurrentGame currentGame;
+    private final CurrentGame currentGame;
 
-    @Autowired
-    private PreviewService previewService;
+    private final PreviewService previewService;
+
+    public GameService(final CurrentGame currentGame, final PreviewService previewService) {
+        this.currentGame = currentGame;
+        this.previewService = previewService;
+    }
 
     public PublishInfo getActiveChallenge() {
         return previewService.getActiveChallenge();

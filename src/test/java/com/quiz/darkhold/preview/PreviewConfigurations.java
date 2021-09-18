@@ -14,7 +14,7 @@ import org.springframework.test.context.ContextConfiguration;
 public class PreviewConfigurations {
     @Bean
     public PreviewController previewController() {
-        return new PreviewController();
+        return new PreviewController(Mockito.mock(PreviewService.class));
     }
 
     @Bean

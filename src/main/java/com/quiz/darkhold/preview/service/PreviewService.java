@@ -8,20 +8,24 @@ import com.quiz.darkhold.preview.model.PreviewInfo;
 import com.quiz.darkhold.preview.model.PublishInfo;
 import com.quiz.darkhold.preview.repository.CurrentGame;
 import org.apache.commons.lang3.RandomStringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class PreviewService {
 
-    @Autowired
-    private ChallengeRepository challengeRepository;
+    private final ChallengeRepository challengeRepository;
 
-    @Autowired
-    private GameRepository gameRepository;
+    private final GameRepository gameRepository;
 
-    @Autowired
-    private CurrentGame currentGame;
+    private final CurrentGame currentGame;
+
+    public PreviewService(final ChallengeRepository challengeRepository,
+                          final GameRepository gameRepository,
+                          final CurrentGame currentGame) {
+        this.challengeRepository = challengeRepository;
+        this.gameRepository = gameRepository;
+        this.currentGame = currentGame;
+    }
 
     /**
      * fetch the questions of a challenge id.

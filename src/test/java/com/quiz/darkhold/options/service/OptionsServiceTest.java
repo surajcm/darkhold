@@ -9,7 +9,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
-import org.powermock.reflect.Whitebox;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -23,20 +22,18 @@ import static org.mockito.Mockito.when;
 
 @ExtendWith(SpringExtension.class)
 class OptionsServiceTest {
-    private final OptionsService optionsService = new OptionsService();
     private final ChallengeRepository challengeRepository = Mockito.mock(ChallengeRepository.class);
     private final UserRepository userRepository = Mockito.mock(UserRepository.class);
+    private final OptionsService optionsService = new OptionsService(challengeRepository, userRepository);
 
     @BeforeEach
     public void setup() {
-        Authentication authentication = Mockito.mock(Authentication.class);
+        var authentication = Mockito.mock(Authentication.class);
         // Mockito.whens() for your authorization object
-        SecurityContext securityContext = Mockito.mock(SecurityContext.class);
+        var securityContext = Mockito.mock(SecurityContext.class);
         Mockito.when(securityContext.getAuthentication()).thenReturn(authentication);
         Mockito.when(authentication.getName()).thenReturn("admin12345");
         SecurityContextHolder.setContext(securityContext);
-        Whitebox.setInternalState(optionsService, "challengeRepository", challengeRepository);
-        Whitebox.setInternalState(optionsService, "userRepository", userRepository);
     }
 
     @Test

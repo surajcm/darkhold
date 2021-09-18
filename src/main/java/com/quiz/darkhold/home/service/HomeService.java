@@ -3,18 +3,20 @@ package com.quiz.darkhold.home.service;
 import com.quiz.darkhold.game.entity.GameStatus;
 import com.quiz.darkhold.game.repository.GameRepository;
 import com.quiz.darkhold.preview.repository.CurrentGame;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
 public class HomeService {
-    @Autowired
-    private GameRepository gameRepository;
+    private final GameRepository gameRepository;
 
-    @Autowired
-    private CurrentGame currentGame;
+    private final CurrentGame currentGame;
+
+    public HomeService(final GameRepository gameRepository, final CurrentGame currentGame) {
+        this.gameRepository = gameRepository;
+        this.currentGame = currentGame;
+    }
 
     /**
      * Verifies whether the entered pin is valid or not.

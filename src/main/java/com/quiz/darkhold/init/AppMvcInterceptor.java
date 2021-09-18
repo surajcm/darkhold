@@ -18,7 +18,7 @@ public class AppMvcInterceptor implements HandlerInterceptor {
     public boolean preHandle(final HttpServletRequest request,
                              final HttpServletResponse response,
                              final Object handler) throws Exception {
-        String traceID = UUID.randomUUID().toString();
+        var traceID = UUID.randomUUID().toString();
         MDC.put("transactionId", traceID);
         return true;
     }

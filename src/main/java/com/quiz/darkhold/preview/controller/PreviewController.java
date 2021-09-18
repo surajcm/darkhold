@@ -4,7 +4,6 @@ import com.quiz.darkhold.preview.service.PreviewService;
 import com.quiz.darkhold.util.CommonUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -17,8 +16,11 @@ import java.security.Principal;
 public class PreviewController {
     private final Logger log = LogManager.getLogger(PreviewController.class);
 
-    @Autowired
-    private PreviewService previewService;
+    private final PreviewService previewService;
+
+    public PreviewController(final PreviewService previewService) {
+        this.previewService = previewService;
+    }
 
     /**
      * on to the preview page with the selected challenge.

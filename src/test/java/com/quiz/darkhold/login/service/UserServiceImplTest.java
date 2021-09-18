@@ -5,11 +5,9 @@ import com.quiz.darkhold.login.entity.User;
 import com.quiz.darkhold.login.repository.RoleRepository;
 import com.quiz.darkhold.login.repository.UserRepository;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
-import org.powermock.reflect.Whitebox;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
@@ -21,17 +19,10 @@ import static org.mockito.Mockito.when;
 
 @ExtendWith(SpringExtension.class)
 class UserServiceImplTest {
-    private final UserServiceImpl userService = new UserServiceImpl();
     private final UserRepository userRepository = Mockito.mock(UserRepository.class);
     private final RoleRepository roleRepository = Mockito.mock(RoleRepository.class);
     private final BCryptPasswordEncoder encoder = Mockito.mock(BCryptPasswordEncoder.class);
-
-    @BeforeEach
-    public void setup() {
-        Whitebox.setInternalState(userService, "userRepository", userRepository);
-        Whitebox.setInternalState(userService, "roleRepository", roleRepository);
-        Whitebox.setInternalState(userService, "encoder", encoder);
-    }
+    private final UserServiceImpl userService = new UserServiceImpl(userRepository, roleRepository, encoder);
 
     @Test
     void save() {

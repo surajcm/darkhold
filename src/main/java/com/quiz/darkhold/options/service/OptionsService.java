@@ -7,7 +7,6 @@ import com.quiz.darkhold.options.model.ChallengeInfo;
 import com.quiz.darkhold.options.model.ChallengeSummary;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
@@ -15,11 +14,14 @@ import org.springframework.stereotype.Service;
 public class OptionsService {
     private final Log log = LogFactory.getLog(OptionsService.class);
 
-    @Autowired
-    private ChallengeRepository challengeRepository;
+    private final ChallengeRepository challengeRepository;
 
-    @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
+
+    public OptionsService(final ChallengeRepository challengeRepository, final UserRepository userRepository) {
+        this.challengeRepository = challengeRepository;
+        this.userRepository = userRepository;
+    }
 
     /**
      * get all challenges and display it there.

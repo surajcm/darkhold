@@ -14,7 +14,6 @@ import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -29,17 +28,22 @@ import java.util.stream.Stream;
 @Service
 public class ChallengeService {
     private final Logger logger = LogManager.getLogger(ChallengeService.class);
-    @Autowired
-    private ChallengeRepository challengeRepository;
-    @Autowired
-    private QuestionSetRepository questionSetRepository;
-    @Autowired
-    private UserRepository userRepository;
+    private final ChallengeRepository challengeRepository;
+    private final QuestionSetRepository questionSetRepository;
+    private final UserRepository userRepository;
+
+    public ChallengeService(final ChallengeRepository challengeRepository,
+                            final QuestionSetRepository questionSetRepository,
+                            final UserRepository userRepository) {
+        this.challengeRepository = challengeRepository;
+        this.questionSetRepository = questionSetRepository;
+        this.userRepository = userRepository;
+    }
 
     /**
-     * Read the excel, process it, extract data and save it to the database.
+     * Read the Excel, process it, extract data and save it to the database.
      *
-     * @param upload      the excel file
+     * @param upload      the Excel file
      * @param title       challenge name
      * @param description challenge desc
      * @throws ChallengeException on error
@@ -56,14 +60,7 @@ public class ChallengeService {
         challenge.setChallengeOwner(currentUserId());
         final var savedChallenge = challengeRepository.save(challenge);
         questionSets.forEach(q -> q.setChallenge(savedChallenge));
-        questionSets.forEach(questionSet -> questionSetRepository.save(questionSet));
-    }
-
-    private Long currentUserId() {
-        var auth = SecurityContextHolder.getContext().getAuthentication();
-        var username = auth.getName();
-        var user = userRepository.findByUsername(username);
-        return user.getId();
+        questionSets.forEach(questionSetRepository::save);
     }
 
     public Boolean deleteChallenge(final Long challengeId) {
@@ -77,6 +74,13 @@ public class ChallengeService {
             response = Boolean.TRUE;
         }
         return response;
+    }
+
+    private Long currentUserId() {
+        var auth = SecurityContextHolder.getContext().getAuthentication();
+        var username = auth.getName();
+        var user = userRepository.findByUsername(username);
+        return user.getId();
     }
 
     private List<QuestionSet> readAndProcessChallenge(final MultipartFile upload) throws ChallengeException {

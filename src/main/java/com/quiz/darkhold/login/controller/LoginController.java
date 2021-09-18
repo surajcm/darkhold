@@ -8,7 +8,6 @@ import com.quiz.darkhold.login.validator.UserValidator;
 import com.quiz.darkhold.util.CommonUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -24,14 +23,19 @@ public class LoginController {
     private static final String LOGIN = "login";
     private final Logger logger = LogManager.getLogger(LoginController.class);
 
-    @Autowired
-    private UserService userService;
+    private final UserService userService;
 
-    @Autowired
-    private SecurityService securityService;
+    private final SecurityService securityService;
 
-    @Autowired
-    private UserValidator userValidator;
+    private final UserValidator userValidator;
+
+    public LoginController(final UserService userService,
+                           final SecurityService securityService,
+                           final UserValidator userValidator) {
+        this.userService = userService;
+        this.securityService = securityService;
+        this.userValidator = userValidator;
+    }
 
     /**
      * log me in.

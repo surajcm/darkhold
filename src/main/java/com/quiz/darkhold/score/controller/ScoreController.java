@@ -4,7 +4,6 @@ import com.quiz.darkhold.game.model.CurrentScore;
 import com.quiz.darkhold.game.service.GameService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Controller;
@@ -16,8 +15,11 @@ public class ScoreController {
 
     private final Logger logger = LogManager.getLogger(ScoreController.class);
 
-    @Autowired
-    private GameService gameService;
+    private final GameService gameService;
+
+    public ScoreController(final GameService gameService) {
+        this.gameService = gameService;
+    }
 
     /**
      * show the till now score and display who are the top 3 players.

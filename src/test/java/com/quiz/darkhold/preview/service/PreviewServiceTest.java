@@ -6,11 +6,9 @@ import com.quiz.darkhold.game.entity.Game;
 import com.quiz.darkhold.game.repository.GameRepository;
 import com.quiz.darkhold.preview.repository.CurrentGame;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
-import org.powermock.reflect.Whitebox;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.ArrayList;
@@ -23,17 +21,13 @@ import static org.mockito.Mockito.when;
 
 @ExtendWith(SpringExtension.class)
 class PreviewServiceTest {
-    private final PreviewService previewService = new PreviewService();
     private final ChallengeRepository challengeRepository = Mockito.mock(ChallengeRepository.class);
     private final GameRepository gameRepository = Mockito.mock(GameRepository.class);
     private final CurrentGame currentGame = Mockito.mock(CurrentGame.class);
-
-    @BeforeEach
-    public void setup() {
-        Whitebox.setInternalState(previewService, "challengeRepository", challengeRepository);
-        Whitebox.setInternalState(previewService, "gameRepository", gameRepository);
-        Whitebox.setInternalState(previewService, "currentGame", currentGame);
-    }
+    private final PreviewService previewService = new PreviewService(
+            challengeRepository,
+            gameRepository,
+            currentGame);
 
     @Test
     void fetchQuestions() {

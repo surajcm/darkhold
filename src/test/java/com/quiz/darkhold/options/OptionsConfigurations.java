@@ -17,7 +17,9 @@ import org.springframework.test.context.ContextConfiguration;
 public class OptionsConfigurations {
     @Bean
     public OptionsController optionsController() {
-        return new OptionsController();
+        return new OptionsController(
+                Mockito.mock(OptionsService.class),
+                Mockito.mock(PreviewService.class));
     }
 
     @Bean

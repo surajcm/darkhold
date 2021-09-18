@@ -4,7 +4,6 @@ import com.quiz.darkhold.options.service.OptionsService;
 import com.quiz.darkhold.preview.service.PreviewService;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -14,11 +13,14 @@ import java.security.Principal;
 @Controller
 public class OptionsController {
     private final Log log = LogFactory.getLog(OptionsController.class);
-    @Autowired
-    private OptionsService optionsService;
+    private final OptionsService optionsService;
 
-    @Autowired
-    private PreviewService previewService;
+    private final PreviewService previewService;
+
+    public OptionsController(final OptionsService optionsService, final PreviewService previewService) {
+        this.optionsService = optionsService;
+        this.previewService = previewService;
+    }
 
     /**
      * on to create challenge page.
@@ -47,7 +49,7 @@ public class OptionsController {
     /**
      * show the currently running challenge.
      *
-     * @param model model
+     * @param model     model
      * @param principal auth
      * @return publish page
      */
