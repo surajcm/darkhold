@@ -16,11 +16,6 @@ checkstyle {
     }
 }
 
-jacocoTestReport {
-    reports {
-        xml.enabled true
-    }
-}
 //spotbugs {
     //toolVersion = '3.1.12'
     //ignoreFailures = true
@@ -37,21 +32,27 @@ pmd {
 
 jacoco {
     toolVersion = "0.8.7+"
-    reportsDir = file("build/reports/jacoco/")
+    reportsDirectory = file("build/reports/jacoco/")
+}
+
+jacocoTestReport {
+    reports {
+        xml.required = true
+    }
 }
 
 tasks.withType(Checkstyle) {
     reports {
-        xml.enabled false
-        html.enabled true
+        xml.required = false
+        html.required = true
         html.stylesheet resources.text.fromFile('config/checkstyle/xsl/checkstyle-simple.xsl')
     }
 }
 
 tasks.withType(Pmd) {
     reports {
-        xml.enabled false
-        html.enabled true
+        xml.required = false
+        html.required = true
     }
 }
 cpd {
@@ -62,8 +63,8 @@ cpd {
 
 cpdCheck {
     reports {
-        text.enabled = true
-        xml.enabled = false
+        text.required = true
+        xml.required = false
     }
     source = sourceSets.main.allJava
 }
@@ -89,6 +90,7 @@ sonarqube {
         property "sonar.coverage.jacoco.xmlReportPaths", "build/reports/jacoco/test/jacocoTestReport.xml"
     }
 }
+
 test {
     finalizedBy jacocoTestReport
 }

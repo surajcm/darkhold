@@ -96,7 +96,6 @@ public class GameController {
                       @ModelAttribute("timeTook") final String timeTook) {
         logParams(selectedOptions, user, timeTook);
         var status = getExamStatus(selectedOptions);
-        //var currentStatus = new CurrentStatus(status.name());
         var scoreOnStatus = findScoreOnStatus(status, timeTook);
         logger.info("score is {}", scoreOnStatus);
         var moderator = gameService.findModerator();
@@ -117,7 +116,7 @@ public class GameController {
                 sanitizedOptions, sanitizedUser, sanitizedTime);
     }
 
-    private Integer findScoreOnStatus(final ExamStatus status, final String timeTook) {
+    private int findScoreOnStatus(final ExamStatus status, final String timeTook) {
         int timeForAnswer = 0;
         if (status == ExamStatus.SUCCESS) {
             try {

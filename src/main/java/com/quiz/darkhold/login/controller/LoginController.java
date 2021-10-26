@@ -56,7 +56,7 @@ public class LoginController {
         securityService.autoLogin(userName, password);
         logger.info("AutoLogin done !!!");
         if (error != null || logout != null) {
-            Map.Entry<String, String> tuple = modelAttributes(error, logout);
+            var tuple = modelAttributes(error, logout);
             model.addAttribute(tuple.getKey(), tuple.getValue());
         }
         model.addAttribute("userForm", new User());

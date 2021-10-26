@@ -1,6 +1,6 @@
 dependencies {
-    errorprone('com.google.errorprone:error_prone_core:2.9.0')
-    errorproneJavac('com.google.errorprone:javac:9+181-r4173-1')
+    errorprone("com.google.errorprone:error_prone_core:2.9.0")
+    errorproneJavac("com.google.errorprone:javac:9+181-r4173-1")
 
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-thymeleaf")
@@ -11,25 +11,24 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-security")
     implementation("org.springframework.boot:spring-boot-starter-actuator")
     implementation("org.springframework.boot:spring-boot-starter-log4j2")
-    runtimeOnly('org.springframework.boot:spring-boot-devtools:2.5.4')
+    runtimeOnly("org.springframework.boot:spring-boot-devtools")
 
     implementation("org.apache.poi:poi-ooxml:4.1.1")
     implementation("org.apache.commons:commons-lang3:3.9")
     implementation("com.h2database:h2:1.4.200")
     implementation("org.flywaydb:flyway-core:7.8.2")
-    implementation('org.dizitart:nitrite:3.4.3')
+    implementation("org.dizitart:nitrite:3.4.3")
 
-    testImplementation('org.springframework.boot:spring-boot-starter-test') {
+    testImplementation("org.springframework.boot:spring-boot-starter-test") {
         exclude module: "junit"
         exclude group: "org.junit.vintage", module: "junit-vintage-engine"
         exclude group: "com.vaadin.external.google", module: "android-json"
     }
     testImplementation("org.junit.jupiter:junit-jupiter-api")
     testImplementation("org.junit.jupiter:junit-jupiter-params")
-    //testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine")
 
     testImplementation("org.mockito:mockito-core")
-    testImplementation('org.powermock:powermock-api-mockito2:2.0.9')
+    testImplementation("org.powermock:powermock-api-mockito2:2.0.9")
 }
 configurations {
     all {
