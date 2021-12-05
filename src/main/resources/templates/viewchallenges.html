@@ -35,8 +35,8 @@
             xhr.onload = function (e) {
                 if (xhr.status === 200) {
                     console.log(xhr.responseText);
-                    if (xhr.responseText == 'true') {
-                        var challengeRow = document.getElementById(challenge);
+                    if (xhr.responseText === 'true') {
+                        let challengeRow = document.getElementById(challenge);
                         deleteChallengeCard(challengeRow);
                     } else {
                         alert('An error occurred!');
@@ -59,15 +59,17 @@
 </head>
 <body>
 <nav class="navbar transparent navbar-inverse">
-    <div class="icon-bar" onclick="toOptions()">
-        <a class="active" href="#"><i class="fas fa-home"></i></a>
+    <div class="container-fluid">
+        <div class="icon-bar" onclick="toOptions();">
+            <a class="active" href="#"><i class="fas fa-home"></i></a>
+        </div>
+        <span class="ml-auto mr-3 order-lg-last" th:text="${#authentication.getPrincipal().getUsername()}"></span>
+        <button class="btn btn-lg btn-rised align-middle btn-primary ml-auto mr-3 order-lg-last" type="button" onclick="javascript:logOut()" >Logout</button>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown"
+                aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
     </div>
-    <span class="ml-auto mr-3 order-lg-last" th:text="${#authentication.getPrincipal().getUsername()}"></span>
-    <button class="btn btn-lg btn-rised align-middle btn-primary ml-auto mr-3 order-lg-last" type="button" onclick="javascript:logOut()" >Logout</button>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown"
-            aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-    </button>
 </nav>
 <section class="search-banner text-white form-arka-plan" id="search-banner">
     <form action="#" th:object="${challengeInfo}" method="post">

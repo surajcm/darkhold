@@ -7,7 +7,7 @@
     <link href="styles/homepage.css" rel="stylesheet" />
     <script type="text/javascript" src="scripts/home-scripts.js"></script>
 </head>
-<body>
+<body onload="initialize_home();">
     <nav class="navbar transparent navbar-inverse">
         <button class="btn btn-lg btn-rised align-middle btn-primary ml-auto mr-3 order-lg-last" type="button" onclick="javascript:logMeIn()" >LogIn / SignUp</button>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown"
@@ -30,20 +30,19 @@
                         </span>
                         <h1 class="display-2  text-dark mb-2 mt-5" id="head_msg"><strong>Enter Quiz PIN</strong> </h1>
                         <div class="justify-content-center align-items-center d-flex text-center">
-                            <input class="form-control lead text-dark mb-5" th:field="*{gamePin}" id="gamePin" name="gamePin" type="number" onkeypress="return runScript(event)" autofocus />
-                            <input class="form-control lead text-dark mb-5" style="display:none" th:field="*{name}" id="username" name="username" onkeypress="return runScript(event)" type="text"  />
+                            <input type="number" class="form-control lead text-dark mb-5" th:field="*{gamePin}" id="gamePin" name="gamePin" autofocus />
+                            <input type="text" class="form-control lead text-dark mb-5" style="display:none" th:field="*{name}" id="username" name="username" />
                         </div>
                         <div id="messenger">
                             <p id="message_disp"></p>
                         </div>
-                        <p><a class="btn bg-danger shadow-lg btn-round text-light btn-lg btn-rised" onclick="javascript:enterGame()">Submit</a></p>
+                        <p><a class="btn bg-danger shadow-lg btn-round text-light btn-lg btn-rised" onclick="enterGame();">Submit</a></p>
                     </div>
                 </div>
             </div>
         </div>
     </form>
-    <script type="text/javascript" src="/scripts/core/jquery-3.2.1.slim.min.js"></script>
     <script type="text/javascript" src="/scripts/core/popper.min.js"></script>
-    <script type="text/javascript" src="/scripts/core/bootstrap.min.js"></script>
+    <script type="text/javascript" src="/scripts/core/bootstrap-5.min.js"></script>
 </body>
 </html>
