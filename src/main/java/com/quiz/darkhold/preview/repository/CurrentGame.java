@@ -40,6 +40,10 @@ public class CurrentGame {
     public void saveCurrentStatus(final PublishInfo publishInfo, final List<QuestionSet> questionSets) {
         List<String> users = new ArrayList<>();
         users.add(publishInfo.getModerator());
+        // table contents
+        // PIN , List of users, Game moderator, Current question number
+        // table of questions
+        // table of scores
         Document doc = Document.createDocument(PIN, publishInfo.getPin())
                 .put(USERS, users)
                 .put(MODERATOR, publishInfo.getModerator())
