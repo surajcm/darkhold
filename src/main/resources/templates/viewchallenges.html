@@ -1,11 +1,11 @@
 <!DOCTYPE HTML>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
 <head>
     <title>Getting Started: Darkhold classroom quiz experience</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <script type="text/javascript">
         function selectQuiz(elem) {
-            console.log('triggering quiz of '+elem.parentElement.parentElement.id);
+            console.log('triggering quiz of ' + elem.parentElement.parentElement.id);
             document.getElementById('challenges').value = elem.parentElement.parentElement.id;
             document.forms[0].action="/preconfigure";
             document.forms[0].submit();
@@ -138,8 +138,8 @@
     </div>
     </form>
 </section>
-<script type="text/javascript" src="scripts/core/jquery-3.2.1.slim.min.js"></script>
-<script type="text/javascript" src="scripts/core/popper.min.js"></script>
-<script type="text/javascript" src="scripts/core/bootstrap.min.js"></script>
+<script type="text/javascript" src="/scripts/core/jquery-3.2.1.slim.min.js"></script>
+<script type="text/javascript" src="/scripts/core/popper.min.js"></script>
+<script type="text/javascript" src="/scripts/core/bootstrap.min.js"></script>
 </body>
 </html>

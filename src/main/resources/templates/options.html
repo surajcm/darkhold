@@ -4,7 +4,7 @@
     <title>Home: Darkhold classroom quiz experience</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <link rel="stylesheet" href="styles/option-styles.css"  />
+    <link rel="stylesheet" href="/styles/option-styles.css"  />
 
     <script type="text/javascript">
         function createChallenge() {
@@ -46,7 +46,7 @@
 <body>
 <nav class="navbar transparent navbar-inverse">
     <div class="container-fluid">
-        <div class="icon-bar" onclick="toOptions()">
+        <div class="icon-bar" onclick="toOptions();">
             <a class="active" href="#"><i class="fas fa-home"></i></a>
         </div>
         <span class="ml-auto mr-3 order-lg-last" th:text="${#authentication.getPrincipal().getUsername()}"></span>
@@ -63,19 +63,19 @@
     <div class="container mt-5">
         <div class="row">
             <div class="col-lg-4 col-md-8 col-xs-12 pl-1 pr-1">
-                <div class="card" style="cursor:pointer" onclick="createChallenge()">
+                <div class="card" style="cursor:pointer" onclick="createChallenge();">
                     <h3>Create a new challenge</h3>
                     <p> </p>
                 </div>
             </div>
             <div class="col-lg-4 col-md-8 col-xs-12 pl-1 pr-1">
-                <div class="card" style="cursor:pointer" onclick="viewChallenge()">
+                <div class="card" style="cursor:pointer" onclick="viewChallenge();">
                     <h3>View existing Challenge</h3>
                     <p>  </p>
                 </div>
             </div>
             <div class="col-lg-4 col-md-8 col-xs-12 pl-1 pr-1">
-                <div class="card" style="cursor:pointer" onclick="activeChallenge()">
+                <div class="card" style="cursor:pointer" onclick="activeChallenge();">
                     <h3>View active <br/>Challenge</h3>
                     <p>  </p>
                 </div>
@@ -100,8 +100,8 @@
         </div>
     </div>
 </form>
-<script type="text/javascript" src="scripts/core/jquery-3.2.1.slim.min.js"></script>
-<script type="text/javascript" src="scripts/core/popper.min.js"></script>
-<script type="text/javascript" src="scripts/core/bootstrap.min.js"></script>
+<script type="text/javascript" src="/scripts/core/jquery-3.2.1.slim.min.js"></script>
+<script type="text/javascript" src="/scripts/core/popper.min.js"></script>
+<script type="text/javascript" src="/scripts/core/bootstrap.min.js"></script>
 </body>
 </html>

@@ -7,6 +7,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
@@ -23,7 +24,13 @@ public class ChallengeController {
 
     @PostMapping("/options")
     public String options() {
-        logger.info("on to options");
+        logger.info("on post to options");
+        return "options";
+    }
+
+    @GetMapping("/options")
+    public String optionsGet() {
+        logger.info("on get to options");
         return "options";
     }
 

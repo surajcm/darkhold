@@ -4,17 +4,17 @@
     <title>Getting Started: Darkhold classroom quiz experience</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <link href="styles/question-styles.css" rel="stylesheet" />
-    <link href="styles/animate.min.css" rel="stylesheet" />
-    <script type="text/javascript" src="scripts/core/sockjs.min.js"></script>
-    <script type="text/javascript" src="scripts/core/stomp.min.js"></script>
-    <script type="text/javascript" src="scripts/question-scripts.js"></script>
+    <link href="/styles/question-styles.css" rel="stylesheet" />
+    <link href="/styles/animate.min.css" rel="stylesheet" />
+    <script type="text/javascript" src="/scripts/core/sockjs.min.js"></script>
+    <script type="text/javascript" src="/scripts/core/stomp.min.js"></script>
+    <script type="text/javascript" src="/scripts/question-scripts.js"></script>
 </head>
 <body onload="connect()">
     <input type="hidden" th:value="${#authentication.getPrincipal().getUsername()}" id="name"/>
     <form action="#" method="post">
         <div class="container-fluid">
-            <div class="card-deck vertical-center">
+            <div class="card-group vertical-center">
                 <div class="card bg-light text-dark">
                     <div class="card-body text-center animated bounceIn slow">
                         <p id="div_body" class="card-text"></p>
@@ -24,8 +24,8 @@
         </div>
     </form>
 
-    <script type="text/javascript" src="scripts/core/jquery-3.2.1.slim.min.js"></script>
-    <script type="text/javascript" src="scripts/core/popper.min.js"></script>
-    <script type="text/javascript" src="scripts/core/bootstrap-5.min.js"></script>
+    <script type="text/javascript" src="/scripts/core/jquery-3.2.1.slim.min.js"></script>
+    <script type="text/javascript" src="/scripts/core/popper.min.js"></script>
+    <script type="text/javascript" src="/scripts/core/bootstrap-5.min.js"></script>
 </body>
 </html>

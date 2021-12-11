@@ -6,8 +6,8 @@
     <meta name="_csrf" content="${_csrf.token}"/>
     <meta name="_csrf_header" content="${_csrf.headerName}"/>
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <link href="styles/create-challenge-styles.css" rel="stylesheet" />
-    <script type="text/javascript" src="scripts/create-challenge-scripts.js"></script>
+    <link href="/styles/create-challenge-styles.css" rel="stylesheet" />
+    <script type="text/javascript" src="/scripts/create-challenge-scripts.js"></script>
 </head>
 <body>
 <nav class="navbar transparent navbar-inverse">
@@ -16,7 +16,7 @@
             <a class="active" href="#"><i class="fas fa-home"></i></a>
         </div>
         <span class="ml-auto mr-3 order-lg-last" th:text="${#authentication.getPrincipal().getUsername()}"></span>
-        <button class="btn btn-lg btn-rised align-middle btn-primary ml-auto mr-3 order-lg-last" type="button" onclick="javascript:logOut()" >Logout</button>
+        <button class="btn btn-lg btn-rised align-middle btn-primary ml-auto mr-3 order-lg-last" type="button" onclick="logOut()" >Logout</button>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown"
                 aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -85,8 +85,8 @@
         </div>
     </main>
 </form>
-<script type="text/javascript" src="scripts/core/jquery-3.2.1.slim.min.js"></script>
-<script type="text/javascript" src="scripts/core/popper.min.js"></script>
-<script type="text/javascript" src="scripts/core/bootstrap.min.js"></script>
+<script type="text/javascript" src="/scripts/core/jquery-3.2.1.slim.min.js"></script>
+<script type="text/javascript" src="/scripts/core/popper.min.js"></script>
+<script type="text/javascript" src="/scripts/core/bootstrap.min.js"></script>
 </body>
 </html>
