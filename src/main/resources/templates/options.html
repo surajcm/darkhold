@@ -5,43 +5,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="stylesheet" href="/styles/option-styles.css"  />
-
-    <script type="text/javascript">
-        function createChallenge() {
-            document.forms[0].action="/createChallenge";
-            document.forms[0].submit();
-        }
-
-        function viewChallenge() {
-            document.forms[0].action="/viewChallenge";
-            document.forms[0].submit();
-        }
-
-        function activeChallenge() {
-            document.forms[0].action="/activeChallenge";
-            document.forms[0].submit();
-        }
-
-        function logOut() {
-            document.forms[0].action="/logout";
-            document.forms[0].submit();
-        }
-
-        function toOptions() {
-            document.forms[0].action="/options";
-            document.forms[0].submit();
-        }
-
-        function manageUsers() {
-            document.forms[0].action="/userManagement";
-            document.forms[0].submit();
-        }
-
-        function manageGame() {
-            document.forms[0].action="/gameManagement";
-            document.forms[0].submit();
-        }
-    </script>
+    <script type="text/javascript" src="/scripts/options-scripts.js"></script>
 </head>
 <body>
 <nav class="navbar transparent navbar-inverse">
@@ -100,8 +64,7 @@
         </div>
     </div>
 </form>
-<script type="text/javascript" src="/scripts/core/jquery-3.2.1.slim.min.js"></script>
 <script type="text/javascript" src="/scripts/core/popper.min.js"></script>
-<script type="text/javascript" src="/scripts/core/bootstrap.min.js"></script>
+<script type="text/javascript" src="/scripts/core/bootstrap-5.min.js"></script>
 </body>
 </html>

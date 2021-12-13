@@ -1,27 +1,28 @@
-
 function startGame() {
-    document.forms[0].action="/game";
+    document.forms[0].action = "/game";
     document.forms[0].submit();
 }
 
 function updateTextOrEndGame(message) {
     console.log(message);
-    if(message == "END_GAME" ) {
+    if (message === "END_GAME") {
         // lets end the game
         endGame();
     }
-    var div_body = document.getElementById('div_body');
+    let div_body = document.getElementById('div_body');
     div_body.innerHTML = "";
-    var para = document.createElement("p");
-    var node = document.createTextNode(message);
+    let para = document.createElement("p");
+    let node = document.createTextNode(message);
     para.appendChild(node);
     div_body.appendChild(para);
-    setTimeout(function(){ startGame(); }, 3000);
+    setTimeout(function () {
+        startGame();
+    }, 3000);
 }
 
 function connect() {
-    var name = document.getElementById('name').value;
-    var socket = new SockJS('/darkhold-websocket');
+    let name = document.getElementById('name').value;
+    let socket = new SockJS('/darkhold-websocket');
     stompClient = Stomp.over(socket);
     stompClient.connect({}, function (frame) {
         console.log('Connected: ' + frame);
@@ -33,6 +34,6 @@ function connect() {
 }
 
 function endGame() {
-    document.forms[0].action="/final";
+    document.forms[0].action = "/final";
     document.forms[0].submit();
 }

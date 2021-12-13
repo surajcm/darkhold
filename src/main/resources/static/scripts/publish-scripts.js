@@ -1,8 +1,8 @@
 function startGame() {
-    var pin = document.getElementById('quizPin').value;
-    console.log('triggering quiz with pin '+pin);
+    let pin = document.getElementById('quizPin').value;
+    console.log('triggering quiz with pin ' + pin);
     document.getElementById('quiz_pin').value = pin;
-    var socket = new SockJS('/darkhold-websocket');
+    let socket = new SockJS('/darkhold-websocket');
     stompClient = Stomp.over(socket);
     stompClient.connect({}, function (frame) {
         console.log('Connected: ' + frame);
@@ -15,22 +15,22 @@ function startGame() {
 
 
 function gotoMyGame() {
-    document.forms[0].action="/interstitial";
+    document.forms[0].action = "/interstitial";
     document.forms[0].submit();
 }
 
 function logOut() {
-    document.forms[0].action="/logout";
+    document.forms[0].action = "/logout";
     document.forms[0].submit();
 }
 
 function toOptions() {
-    document.forms[0].action="/options";
+    document.forms[0].action = "/options";
     document.forms[0].submit();
 }
 
 function connect() {
-    var socket = new SockJS('/darkhold-websocket');
+    let socket = new SockJS('/darkhold-websocket');
     stompClient = Stomp.over(socket);
     stompClient.connect({}, function (frame) {
         stompClient.subscribe('/topic/user', function (greeting) {
@@ -38,12 +38,13 @@ function connect() {
         });
     });
 }
+
 function showGreeting(message) {
     console.log(message);
-    var tableRef = document.getElementById('conversation').getElementsByTagName('tbody')[0];
+    let tableRef = document.getElementById('conversation').getElementsByTagName('tbody')[0];
     tableRef.innerHTML = "";
-    for (i = 0; i < message.length; i++) {
-        var newRow = tableRef.insertRow(tableRef.rows.length);
+    for (let i = 0; i < message.length; i++) {
+        let newRow = tableRef.insertRow(tableRef.rows.length);
         newRow.innerHTML = message[i];
     }
 }

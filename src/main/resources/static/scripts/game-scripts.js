@@ -1,13 +1,13 @@
-$(document).ready(function() {
+$(document).ready(function () {
     let clock2;
     let time_to_flip = document.getElementById('time_to_flip').value;
     clock2 = new FlipClock($('.clock2'), time_to_flip, {
-            clockFace: 'Counter'
+        clockFace: 'Counter'
     });
 
     let timer = new FlipClock.Timer(clock2, {
         callbacks: {
-            interval: function() {
+            interval: function () {
                 if (clock2.getTime().time <= 0) {
                     clock2.stop();
                     timer.stop();
@@ -19,7 +19,7 @@ $(document).ready(function() {
     });
     timer.start();
 
-    $( "span.flip-clock-divider" ).remove();
+    $("span.flip-clock-divider").remove();
 });
 
 function callTimeOut() {
@@ -27,7 +27,7 @@ function callTimeOut() {
     saveAnswerOnAjax();
     let nextButton = document.getElementById('nextButton');
     if (nextButton) {
-        nextButton.setAttribute('style','display:block');
+        nextButton.setAttribute('style', 'display:block');
     }
     highlightGreen();
     highlightRedOnIncorrectSelection();
@@ -39,7 +39,7 @@ function highlightGreen() {
     let correctDiv = "option" + correctAnswer;
     let toGreenChild = document.getElementById(correctDiv);
     if (toGreenChild) {
-        toGreenChild.children[0].setAttribute('class','card text-white bg-success');
+        toGreenChild.children[0].setAttribute('class', 'card text-white bg-success');
     }
 }
 
@@ -53,7 +53,7 @@ function highlightRedOnIncorrectSelection() {
             let inCorrectDiv = "option" + selectedAnswer;
             let toRedChild = document.getElementById(inCorrectDiv);
             if (toRedChild) {
-                toRedChild.children[0].setAttribute('class','card text-white bg-danger');
+                toRedChild.children[0].setAttribute('class', 'card text-white bg-danger');
             }
         }
     }
@@ -65,8 +65,8 @@ let endTime;
 
 function waitAndShowAnswer(elem) {
     let roles = document.getElementById("roles").value;
-    console.log("roles is "+roles);
-    if(! roles.includes("ROLE_MODERATOR")) {
+    console.log("roles is " + roles);
+    if (!roles.includes("ROLE_MODERATOR")) {
         if (!isAnswerSelected) {
             realWaitAndShowAnswer(elem);
             if (!isAnswerSelected) {
@@ -82,16 +82,16 @@ function waitAndShowAnswer(elem) {
 
 function realWaitAndShowAnswer(elem) {
     let correctAnswer = document.getElementById('correctOptions').value;
-    console.log('correctAnswer '+correctAnswer);
-    elem.children[0].setAttribute('class','card text-white bg-dark');
-    let selectedAnswer = elem.id.charAt(elem.id.length -1);
-    console.log('selectedAnswer '+selectedAnswer);
+    console.log('correctAnswer ' + correctAnswer);
+    elem.children[0].setAttribute('class', 'card text-white bg-dark');
+    let selectedAnswer = elem.id.charAt(elem.id.length - 1);
+    console.log('selectedAnswer ' + selectedAnswer);
     document.getElementById('selectedAnswer').value = selectedAnswer;
     // split with comma
     let answers = correctAnswer.split(",");
     let correct = false;
     for (let i = 0; i < answers.length; i++) {
-        if (selectedAnswer === answers[i] ) {
+        if (selectedAnswer === answers[i]) {
             correct = true;
         }
     }
@@ -112,27 +112,27 @@ function realWaitAndShowAnswer(elem) {
 function hideOptions() {
     let optionA = document.getElementById("optionA");
     //optionA.setAttribute('style','display:none');
-    optionA.setAttribute('style','opacity: 0.7');
-    optionA.children[0].setAttribute('style','background: #CCC');
-    optionA.children[0].setAttribute('style','cursor:default');
+    optionA.setAttribute('style', 'opacity: 0.7');
+    optionA.children[0].setAttribute('style', 'background: #CCC');
+    optionA.children[0].setAttribute('style', 'cursor:default');
     let optionB = document.getElementById("optionB");
     //optionB.setAttribute('style','display:none');
-    optionB.setAttribute('style','opacity: 0.7');
-    optionB.children[0].setAttribute('style','background: #CCC');
-    optionB.children[0].setAttribute('style','cursor:default');
+    optionB.setAttribute('style', 'opacity: 0.7');
+    optionB.children[0].setAttribute('style', 'background: #CCC');
+    optionB.children[0].setAttribute('style', 'cursor:default');
     let optionC = document.getElementById("optionC");
     if (optionC != null) {
         //optionC.setAttribute('style','display:none');
-        optionC.setAttribute('style','opacity: 0.7');
-        optionC.children[0].setAttribute('style','background: #CCC');
-        optionC.children[0].setAttribute('style','cursor:default');
+        optionC.setAttribute('style', 'opacity: 0.7');
+        optionC.children[0].setAttribute('style', 'background: #CCC');
+        optionC.children[0].setAttribute('style', 'cursor:default');
     }
     let optionD = document.getElementById("optionD");
-    if(optionD != null) {
+    if (optionD != null) {
         //optionD.setAttribute('style','display:none');
-        optionD.setAttribute('style','opacity: 0.7');
-        optionD.children[0].setAttribute('style','background: #CCC');
-        optionD.children[0].setAttribute('style','cursor:default');
+        optionD.setAttribute('style', 'opacity: 0.7');
+        optionD.children[0].setAttribute('style', 'background: #CCC');
+        optionD.children[0].setAttribute('style', 'cursor:default');
     }
     let answerSpace = document.getElementById("answerSpace");
     //<div class="spinner-grow" style="width: 3rem; height: 3rem;" role="status">
@@ -141,10 +141,10 @@ function hideOptions() {
     let spinner = document.createElement('div');
     spinner.id = 'spinner';
     spinner.class = 'spinner-grow';
-    spinner.style="width: 3rem; height: 3rem;"
-    spinner.role="status"
+    spinner.style = "width: 3rem; height: 3rem;"
+    spinner.role = "status"
     let loader = document.createElement('span');
-    loader.class ="sr-only";
+    loader.class = "sr-only";
     spinner.appendChild(loader);
     answerSpace.appendChild(spinner);
 
@@ -152,14 +152,14 @@ function hideOptions() {
 
 function saveAnswerOnAjax() {
     let selectedOptions = document.getElementById("selectedOptions").value;
-    console.log("selectedOptions is "+selectedOptions);
+    console.log("selectedOptions is " + selectedOptions);
     let timeTookForFirstClick = endTime - startTime;
     console.log('Execution time: ' + timeTookForFirstClick);
     let username = document.getElementById("user").value;
     xhr = new XMLHttpRequest();
     xhr.open('POST', "/answer/");
     xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-    xhr.onload = function() {
+    xhr.onload = function () {
         if (xhr.status === 200) {
             console.log('Response is ' + xhr.responseText);
         } else if (xhr.status !== 200) {
@@ -199,6 +199,6 @@ function connect() {
 }
 
 function gotoScoreBoard() {
-    document.forms[0].action="/scoreboard";
+    document.forms[0].action = "/scoreboard";
     document.forms[0].submit();
 }

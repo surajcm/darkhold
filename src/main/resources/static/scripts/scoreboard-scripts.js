@@ -20,16 +20,16 @@ function connect() {
 }
 
 function gotoQuestionsPage() {
-    document.forms[0].action="/question";
+    document.forms[0].action = "/question";
     document.forms[0].submit();
 }
 
 function logOut() {
-    document.forms[0].action="/logout";
+    document.forms[0].action = "/logout";
     document.forms[0].submit();
 }
 
 function toHome() {
-    document.forms[0].action="/home";
+    document.forms[0].action = "/home";
     document.forms[0].submit();
 }

@@ -1,14 +1,13 @@
-
 function uploadPDF() {
     let uploadButton = document.getElementById('btnSubmit');
     let progress = document.getElementById('progress');
-    let progressdiv = document.getElementById('progressdiv');
+    let progressDiv = document.getElementById('progressdiv');
     progress.style.display = "block";
     uploadButton.innerHTML = 'Uploading...';
 
-    let fileSelect = document.getElementById('upload');
-    let title = document.getElementById('title').value;
-    let description = document.getElementById('description').value;
+    const fileSelect = document.getElementById('upload');
+    const title = document.getElementById('title').value;
+    const description = document.getElementById('description').value;
 
     let files = fileSelect.files;
     let formData = new FormData();
@@ -27,7 +26,7 @@ function uploadPDF() {
         if (xhr.status === 200) {
             console.log(xhr.responseText);
             uploadButton.innerHTML = 'Submit';
-            progressdiv.innerHTML = "<h3 style='color:green' >" + xhr.responseText + "</h3>";
+            progressDiv.innerHTML = "<h3 style='color:green' >" + xhr.responseText + "</h3>";
             progress.style.display = "none";
         } else {
             alert('An error occurred!');
@@ -40,20 +39,21 @@ function update_progress(e) {
     let uploadButton = document.getElementById('btnSubmit');
     let progress = document.getElementById('progress');
     if (e.lengthComputable) {
-        let percentage = Math.round((e.loaded/e.total)*100);
+        let percentage = Math.round((e.loaded / e.total) * 100);
         progress.value = percentage;
-        uploadButton.innerHTML = 'Upload '+percentage+'%';
-        console.log("percent " + percentage + '%' );
+        uploadButton.innerHTML = 'Upload ' + percentage + '%';
+        console.log("percent " + percentage + '%');
     } else {
         console.log("Unable to compute progress information since the total size is unknown");
     }
 }
 
 function toOptions() {
-    document.forms[0].action="/options";
+    document.forms[0].action = "/options";
     document.forms[0].submit();
 }
+
 function logOut() {
-    document.forms[0].action="/logout";
+    document.forms[0].action = "/logout";
     document.forms[0].submit();
 }

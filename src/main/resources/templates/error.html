@@ -5,21 +5,16 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link href="styles/error-styles.css" rel="stylesheet" />
-    <script type="text/javascript">
-        function visitHome() {
-            document.forms[0].action="/options";
-            document.forms[0].submit();
-        }
-    </script>
+    <script type="text/javascript" src="/scripts/common-scripts.js"></script>
 </head>
 <body>
     <nav class="navbar transparent navbar-inverse">
         <div class="container-fluid">
-            <div class="icon-bar" onclick="visitHome()">
+            <div class="icon-bar" onclick="toHome()">
                 <a class="active" href="#"><i class="fas fa-home"></i></a>
             </div>
             <span class="ml-auto mr-3 order-lg-last" th:text="${#authentication.getPrincipal().getUsername()}"></span>
-            <button class="btn btn-lg btn-rised align-middle btn-primary ml-auto mr-3 order-lg-last" type="button" onclick="javascript:logOut()" >Logout</button>
+            <button class="btn btn-lg btn-rised align-middle btn-primary ml-auto mr-3 order-lg-last" type="button" onclick="logOut()" >Logout</button>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown"
                     aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -39,15 +34,13 @@
                     </div>
                     <div>
                         <br/>
-                        <button class="button-style" onclick="visitHome();">Visit Homepage</button>
+                        <button class="button-style" onclick="toHome();">Visit Homepage</button>
                     </div>
                 </div>
             </div>
         </div>
     </form>
-
-    <script type="text/javascript" src="scripts/core/jquery-3.2.1.slim.min.js"></script>
     <script type="text/javascript" src="scripts/core/popper.min.js"></script>
-    <script type="text/javascript" src="scripts/core/bootstrap.min.js"></script>
+    <script type="text/javascript" src="scripts/core/bootstrap-5.min.js"></script>
 </body>
 </html>

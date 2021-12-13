@@ -5,29 +5,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link href="/styles/preview-styles.css" rel="stylesheet" />
-
-    <script type="text/javascript">
-       function logOut() {
-            document.forms[0].method = "get";
-            document.forms[0].action="/";
-            document.forms[0].submit();
-       }
-       function toChallenges() {
-            document.forms[0].action="/viewChallenge";
-            document.forms[0].submit();
-       }
-       function publish() {
-            let challengeId = document.getElementById('challengeId').value;
-            console.log('triggering quiz of '+challengeId);
-            document.getElementById('challenge_id').value = challengeId;
-            document.forms[0].action="/publish";
-            document.forms[0].submit();
-       }
-       function toOptions() {
-            document.forms[0].action="/options";
-            document.forms[0].submit();
-        }
-    </script>
+    <script type="text/javascript" src="/scripts/preview-scripts.js"></script>
 </head>
 <body>
 <nav class="navbar transparent navbar-inverse">
@@ -82,8 +60,7 @@
     </div>
 </div>
 </form>
-<script type="text/javascript" src="/scripts/core/jquery-3.2.1.slim.min.js"></script>
 <script type="text/javascript" src="/scripts/core/popper.min.js"></script>
-<script type="text/javascript" src="/scripts/core/bootstrap.min.js"></script>
+<script type="text/javascript" src="/scripts/core/bootstrap-5.min.js"></script>
 </body>
 </html>

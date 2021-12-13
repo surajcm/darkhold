@@ -1,12 +1,12 @@
 function toOptions() {
-    document.forms[0].action="/options";
+    document.forms[0].action = "/options";
     document.forms[0].submit();
 }
 
 function connect() {
-    var name_val = document.getElementById('name').value;
-    var pin_val = document.getElementById('quizPin').value;
-    var socket = new SockJS('/darkhold-websocket');
+    let name_val = document.getElementById('name').value;
+    let pin_val = document.getElementById('quizPin').value;
+    let socket = new SockJS('/darkhold-websocket');
     stompClient = Stomp.over(socket);
     stompClient.connect({}, function (frame) {
         console.log('Connected: ' + frame);
@@ -24,21 +24,20 @@ function connect() {
 
 function showGreeting(message) {
     console.log(message);
-    var new_tbody = document.createElement('tbody');
-    var tableRef = document.getElementById('conversation').getElementsByTagName('tbody')[0];
+    let tableRef = document.getElementById('conversation').getElementsByTagName('tbody')[0];
     tableRef.innerHTML = "";
-    for (i = 0; i < message.length; i++) {
-        var newRow = tableRef.insertRow(tableRef.rows.length);
+    for (let i = 0; i < message.length; i++) {
+        let newRow = tableRef.insertRow(tableRef.rows.length);
         newRow.innerHTML = message[i];
     }
 }
 
 function gotoMyGame() {
-    document.forms[0].action="/interstitial";
+    document.forms[0].action = "/interstitial";
     document.forms[0].submit();
 }
 
 function logOut() {
-    document.forms[0].action="/logout";
+    document.forms[0].action = "/logout";
     document.forms[0].submit();
 }
