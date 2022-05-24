@@ -91,7 +91,7 @@ public class ChallengeService {
                 questionSets.add(populateQuestionSet(currentRow));
             }
         } catch (IOException | NotOfficeXmlFileException exception) {
-            logger.error(exception.getMessage());
+            logger.error(exception);
             throw new ChallengeException("Unable to process the file..");
         }
         return questionSets;

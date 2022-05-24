@@ -5,6 +5,7 @@ public class ChallengeException extends Exception {
     private final String errorMessage;
 
     public ChallengeException(final String errorMessage) {
+        super();
         this.errorMessage = errorMessage;
     }
 

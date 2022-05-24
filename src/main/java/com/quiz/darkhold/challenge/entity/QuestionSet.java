@@ -15,6 +15,9 @@ import java.util.StringJoiner;
 @Entity
 @Table(name = "question_set")
 public class QuestionSet implements Serializable {
+
+    public static final long serialVersionUID = 4328743;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

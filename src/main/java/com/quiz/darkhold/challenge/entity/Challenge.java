@@ -28,6 +28,9 @@ import java.util.List;
 @Entity
 @Table(name = "challenge")
 public class Challenge implements Serializable {
+
+    public static final long serialVersionUID = 4328743;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "challenge_id")
