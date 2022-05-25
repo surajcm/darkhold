@@ -28,6 +28,10 @@ function uploadPDF() {
             uploadButton.innerHTML = 'Submit';
             progressDiv.innerHTML = "<h3 style='color:green' >" + xhr.responseText + "</h3>";
             progress.style.display = "none";
+            //remove submit button
+            uploadButton.style.display = "none";
+            //add view challenge button - preconfigure
+            viewChallenge(uploadButton.parentElement);
         } else {
             alert('An error occurred!');
         }
@@ -56,4 +60,20 @@ function toOptions() {
 function logOut() {
     document.forms[0].action = "/logout";
     document.forms[0].submit();
+}
+
+function viewChallenge(elem) {
+    let viewButton = document.createElement('input');
+    viewButton.setAttribute("class", "btn btn-primary");
+    viewButton.setAttribute("value", "View Challenge");
+    viewButton.setAttribute("type", "button");
+    viewButton.setAttribute("id", "btnView");
+    viewButton.onclick = function () {
+        goToChallengePage();
+    };
+    elem.appendChild(viewButton);
+}
+
+function goToChallengePage() {
+    console.log("ready to got to challenge page");
 }
