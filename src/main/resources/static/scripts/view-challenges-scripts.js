@@ -1,5 +1,5 @@
 function selectQuiz(elem) {
-    console.log('triggering quiz of ' + elem.parentElement.parentElement.id);
+    console.log('selected quiz of ' + elem.parentElement.parentElement.id);
     document.getElementById('challenges').value = elem.parentElement.parentElement.id;
     document.forms[0].action = "/preconfigure";
     document.forms[0].submit();
@@ -17,7 +17,7 @@ function toOptions() {
 }
 
 function markQuizForDeletion(elem) {
-    console.log('triggering quiz of ' + elem.parentElement.parentElement.id);
+    console.log('triggering deletion of quiz # ' + elem.parentElement.parentElement.id);
     document.getElementById('challenges').value = elem.parentElement.parentElement.id;
 }
 
@@ -35,10 +35,10 @@ function deleteQuiz() {
                 let challengeRow = document.getElementById(challenge);
                 deleteChallengeCard(challengeRow);
             } else {
-                alert('An error occurred!');
+                console.log('An error occurred!');
             }
         } else {
-            alert('An error occurred!');
+            console.log('An error occurred!');
         }
     };
     xhr.send(formData);
@@ -47,5 +47,9 @@ function deleteQuiz() {
 function deleteChallengeCard(elem) {
     elem.innerHTML = "";
     //$('#confirmModal').modal('hide');
-    document.getElementById("confirmModal").modal('hide');
+    //document.getElementById("confirmModal").hide();
+    let myModal = new bootstrap.Modal(document.getElementById('confirmModal'), {
+        keyboard: false
+    })
+    myModal.hide();
 }
