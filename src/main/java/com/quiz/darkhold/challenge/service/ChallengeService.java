@@ -48,7 +48,7 @@ public class ChallengeService {
      * @param description challenge desc
      * @throws ChallengeException on error
      */
-    public void readProcessAndSaveChallenge(final MultipartFile upload,
+    public Long readProcessAndSaveChallenge(final MultipartFile upload,
                                             final String title,
                                             final String description)
             throws ChallengeException {
@@ -60,7 +60,8 @@ public class ChallengeService {
         challenge.setChallengeOwner(currentUserId());
         final var savedChallenge = challengeRepository.save(challenge);
         questionSets.forEach(q -> q.setChallenge(savedChallenge));
-        questionSets.forEach(questionSetRepository::save);
+        questionSetRepository.saveAll(questionSets);
+        return savedChallenge.getId();
     }
 
     public Boolean deleteChallenge(final Long challengeId) {

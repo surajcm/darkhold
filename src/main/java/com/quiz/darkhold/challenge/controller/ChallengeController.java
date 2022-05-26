@@ -18,6 +18,9 @@ public class ChallengeController {
     private final Logger logger = LogManager.getLogger(ChallengeController.class);
     private final ChallengeService challengeService;
 
+    public record ChallengeWithResponse(Long challengeId, String message) {
+    }
+
     public ChallengeController(final ChallengeService challengeService) {
         this.challengeService = challengeService;
     }
@@ -45,21 +48,23 @@ public class ChallengeController {
      */
     @PostMapping("/upload_challenge")
     public @ResponseBody
-    String handleFileUpload(final MultipartFile upload,
-                            final String title,
-                            final String description,
-                            final RedirectAttributes redirectAttributes) {
+    ChallengeWithResponse handleFileUpload(final MultipartFile upload,
+                                           final String title,
+                                           final String description,
+                                           final RedirectAttributes redirectAttributes) {
         String responseText;
+        Long challengeId = 0L;
         logParams(upload, title, description);
         try {
-            challengeService.readProcessAndSaveChallenge(upload, title, description);
+            challengeId = challengeService.readProcessAndSaveChallenge(upload, title, description);
             responseText = "Successfully created " + CommonUtils.sanitizedString(title) + " !!!";
+            return new ChallengeWithResponse(challengeId, responseText);
         } catch (ChallengeException challengeException) {
             logger.error(challengeException.getMessage());
             //todo: change the http status code and give this as an error message
             responseText = "Unable to process, huge file";
         }
-        return responseText;
+        return new ChallengeWithResponse(challengeId, responseText);
     }
 
     private void logParams(final MultipartFile upload,

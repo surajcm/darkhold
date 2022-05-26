@@ -25,13 +25,12 @@ function uploadPDF() {
     xhr.onload = function (e) {
         if (xhr.status === 200) {
             console.log(xhr.responseText);
+            let challengeResponse = JSON.parse(xhr.responseText);
             uploadButton.innerHTML = 'Submit';
-            progressDiv.innerHTML = "<h3 style='color:green' >" + xhr.responseText + "</h3>";
+            progressDiv.innerHTML = "<h3 style='color:green' >" + challengeResponse.message + "</h3>";
             progress.style.display = "none";
-            //remove submit button
             uploadButton.style.display = "none";
-            //add view challenge button - preconfigure
-            viewChallenge(uploadButton.parentElement);
+            viewChallenge(uploadButton.parentElement, challengeResponse.challengeId);
         } else {
             alert('An error occurred!');
         }
@@ -62,18 +61,21 @@ function logOut() {
     document.forms[0].submit();
 }
 
-function viewChallenge(elem) {
+function viewChallenge(elem, challengeId) {
     let viewButton = document.createElement('input');
     viewButton.setAttribute("class", "btn btn-primary");
     viewButton.setAttribute("value", "View Challenge");
     viewButton.setAttribute("type", "button");
     viewButton.setAttribute("id", "btnView");
     viewButton.onclick = function () {
-        goToChallengePage();
+        goToChallengePage(challengeId);
     };
     elem.appendChild(viewButton);
 }
 
-function goToChallengePage() {
+function goToChallengePage(challengeId) {
     console.log("ready to got to challenge page");
+    document.getElementById('challenges').value = challengeId;
+    document.forms[0].action = "/preconfigure";
+    document.forms[0].submit();
 }
