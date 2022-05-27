@@ -46,10 +46,5 @@ function deleteQuiz() {
 
 function deleteChallengeCard(elem) {
     elem.innerHTML = "";
-    //$('#confirmModal').modal('hide');
-    //document.getElementById("confirmModal").hide();
-    let myModal = new bootstrap.Modal(document.getElementById('confirmModal'), {
-        keyboard: false
-    })
-    myModal.hide();
+    document.getElementById('closeConfirmModal').click();
 }
