@@ -16,7 +16,7 @@ dependencies {
     implementation("org.apache.poi:poi-ooxml:4.1.1")
     implementation("org.apache.commons:commons-lang3:3.9")
     implementation("com.h2database:h2:1.4.200")
-    implementation("org.flywaydb:flyway-core:7.8.2")
+    implementation("org.flywaydb:flyway-core:7.15.0")
     implementation("org.dizitart:nitrite:3.4.3")
 
     testImplementation("org.springframework.boot:spring-boot-starter-test") {
