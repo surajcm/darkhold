@@ -13,7 +13,7 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-log4j2")
     runtimeOnly("org.springframework.boot:spring-boot-devtools")
 
-    implementation("org.apache.poi:poi-ooxml:4.1.1")
+    implementation("org.apache.poi:poi-ooxml:5.2.2")
     implementation("org.apache.commons:commons-lang3:3.9")
     implementation("com.h2database:h2:1.4.200")
     implementation("org.flywaydb:flyway-core:7.8.2")
