@@ -50,7 +50,7 @@ public class SecurityServiceImpl implements SecurityService {
         if (token.isAuthenticated()) {
             SecurityContextHolder.getContext().setAuthentication(token);
             var sanitizedUserName = CommonUtils.sanitizedString(username);
-            logger.info("Auto login %s successfully! : {}", sanitizedUserName);
+            logger.info("Auto login {} successfully! : ", sanitizedUserName);
         }
     }
 
