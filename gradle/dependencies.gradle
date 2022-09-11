@@ -15,7 +15,7 @@ dependencies {
 
     implementation("org.apache.poi:poi-ooxml:5.2.2")
     implementation("org.apache.commons:commons-lang3:3.9")
-    implementation("com.h2database:h2:1.4.200")
+    implementation("com.h2database:h2:2.1.214")
     implementation("org.flywaydb:flyway-core:9.3.0")
     implementation("org.dizitart:nitrite:3.4.3")
 
