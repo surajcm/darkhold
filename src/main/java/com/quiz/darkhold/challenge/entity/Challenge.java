@@ -5,21 +5,20 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EntityListeners;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.OrderBy;
-import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EntityListeners;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.OrderBy;
+import jakarta.persistence.Table;
+
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -36,14 +35,10 @@ public class Challenge implements Serializable {
     @Column(name = "challenge_id")
     private Long id;
 
-    @NotNull
-    @Size(max = 100)
-    @Column(unique = true)
+    @Column(length = 100, nullable = false, unique = true)
     private String title;
 
-    @NotNull
-    @Size(max = 250)
-    @Column
+    @Column(length = 250, nullable = false)
     private String description;
 
     @Column(name = "challengeowner")
