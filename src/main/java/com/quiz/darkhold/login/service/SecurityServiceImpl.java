@@ -4,6 +4,7 @@ import com.quiz.darkhold.util.CommonUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
@@ -52,6 +53,16 @@ public class SecurityServiceImpl implements SecurityService {
             var sanitizedUserName = CommonUtils.sanitizedString(username);
             logger.info("Auto login {} successfully! : ", sanitizedUserName);
         }
+    }
+
+    @Override
+    public boolean isAuthenticated() {
+        var authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null ||
+                AnonymousAuthenticationToken.class.isAssignableFrom(authentication.getClass())) {
+            return false;
+        }
+        return authentication.isAuthenticated();
     }
 
     private UserDetails getUserDetails(final String username, final boolean unRegistered) {

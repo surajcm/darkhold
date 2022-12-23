@@ -5,68 +5,59 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link href="/styles/login.css" rel="stylesheet" />
-    <script type="text/javascript">
-        function logMeIn() {
-            document.getElementById('username').value = document.getElementById('loginUsername').value;
-            document.getElementById('password').value = document.getElementById('loginPassword').value;
-            // we should have a better way to do this
-            document.forms[0].action="/logme";
-            document.forms[0].submit();
-        }
-
-        function signUp() {
-            document.getElementById('username').value = document.getElementById('sign_username').value;
-            document.getElementById('password').value = document.getElementById('sign_password').value;
-            document.forms[0].action="/registration";
-            document.forms[0].submit();
-        }
-    </script>
 </head>
 <body>
-<form action="#" th:action="@{/login}" method="post">
-<div class="container login-container">
-    <div class="row">
-        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-        <input type="hidden" name="username" id="username" />
-        <input type="hidden" name="password" id="password"/>
-        <div class="col-md-6 login-form-1">
-            <h3>Sign up</h3>
-            <form>
-                <div class="input-group mb-3">
-                    <input type="text" name="sign_username" id="sign_username" class="form-control" placeholder="Your Username *" value="" />
+    <main>
+        <section class="d-flex align-items-center my-5 mt-lg-6 mb-lg-5">
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-12 d-flex align-items-center justify-content-center">
+                        <div class="bg-white shadow-soft border rounded border-light p-4 p-lg-5 w-100 fmxw-500" style="opacity: 0.9;">
+                            <div class="text-center text-md-center mb-4 mt-md-0">
+                                <h1 class="mb-0 h3">Sign in</h1>
+                            </div>
+                            <form th:action="@{/login}" method="post" class="mt-4">
+                                <span th:text="${message}"></span>
+                                <div class="form-group mb-4"><label for="username">Your Username</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text" id="basic-addon1"><span class="fas fa-envelope"></span></span>
+                                        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+                                        <input id="username" name="username" type="text" class="form-control" placeholder="example@company.com" autofocus="true" required="true" />
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="form-group mb-4"><label for="password">Your Password</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text" id="basic-addon2">
+                                                <span class="fas fa-unlock-alt"></span>
+                                            </span>
+                                            <input type="password" placeholder="Password" class="form-control" id="password" name="password" required="true" />
+                                        </div>
+                                    </div>
+                                    <span class="has-error" th:text="${danger}"></span>
+                                    <div class="d-flex justify-content-between align-items-top mb-4">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" value="" id="remember"> <label class="form-check-label mb-0" for="remember">Remember me</label>
+                                        </div>
+                                        <div>
+                                            <a data-bs-toggle="modal" data-bs-target="#forgetPass" class="small text-right">Lost password?</a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="d-grid">
+                                    <button type="submit" class="btn btn-dark">Sign in</button>
+                                </div>
+                                <div class="form-group mb-4">
+                                    <div class="fw-light">Please Log In, or <a href="/" th:href="@{/registration}">Sign Up</a></div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
                 </div>
-                <div class="input-group mb-3">
-                    <input type="password" name="sign_password" id="sign_password" class="form-control" placeholder="Your Password *" value="" />
-                </div>
-                <div class="input-group mb-3">
-                    <input type="password" name="passwordConfirm" class="form-control" placeholder="Confirm password" value="" />
-                </div>
-                <div class="input-group mb-3">
-                    <input type="button" class="btnSubmit" value="Sign up" onclick="signUp();"/>
-                </div>
-            </form>
-        </div>
-        <div class="col-md-6 login-form-2">
-            <h3>Login</h3>
-            <form>
-                <div class="input-group mb-3">
-                    <input type="text" name="loginUsername"  id="loginUsername" class="form-control" placeholder="Your Username *" value="" />
-                </div>
-                <div class="input-group mb-3">
-                    <input type="password" name="loginPassword" id="loginPassword" class="form-control" placeholder="Your Password *" value="" />
-                </div>
-                <div class="input-group mb-3">
-                    <input type="button" class="btnSubmit" value="Login" onclick="logMeIn()" />
-                </div>
-                <div class="input-group mb-3">
-                    <a href="#" class="ForgetPwd">Forget Password?</a>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-</form>
-<script type="text/javascript" src="/scripts/core/popper.min.js"></script>
-<script type="text/javascript" src="/scripts/core/bootstrap-5.min.js"></script>
+            </div>
+        </section>
+    </main>
+    <script type="text/javascript" src="/scripts/core/popper.min.js"></script>
+    <script type="text/javascript" src="/scripts/core/bootstrap-5.min.js"></script>
 </body>
 </html>

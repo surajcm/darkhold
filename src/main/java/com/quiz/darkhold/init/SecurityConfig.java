@@ -28,24 +28,31 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(final HttpSecurity http) throws Exception {
         //todo : we need to enable CSRF
-        http.csrf().disable().httpBasic()
-                .and()
+        http.csrf().disable()
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(matchingPaths()).anonymous()
+                        .requestMatchers(matchingPaths()).permitAll()
                         .anyRequest().authenticated()
                 )
-                .logout().logoutSuccessUrl("/").invalidateHttpSession(true).deleteCookies("JSESSIONID");
+                .formLogin().loginPage("/login")
+                .defaultSuccessUrl("/", true)
+                .permitAll()
+                .and()
+                .logout().logoutSuccessUrl("/")
+                .invalidateHttpSession(true)
+                .clearAuthentication(true)
+                .deleteCookies("JSESSIONID");
         http.headers().frameOptions().sameOrigin();
         return http.build();
     }
 
     private String[] matchingPaths() {
-        return new String[] {"/", "/home", "/resources/**",
-                "/registration", "/images/*", "/logmein",
-                "/scripts/*", "/styles/*",
-                "/scripts/core/*", "/styles/core/*", "/styles/webfonts/*",
-                "/fonts/*", "/favicon.ico",
-                "/logme", "/h2-console/*"};
+        return new String[] {"/", "/logmein" ,
+                "/home", "/resources/**",
+                "/registration", "/images/**",
+                "/scripts/**", "/styles/**",
+                "/scripts/core/**", "/styles/core/*", "/styles/webfonts/**",
+                "/fonts/**", "/favicon.ico",
+                "/logme", "/h2-console/**"};
     }
 
     @Bean

@@ -9,7 +9,7 @@ import com.quiz.darkhold.preview.repository.CurrentGame;
 import com.quiz.darkhold.preview.service.PreviewService;
 import org.dizitart.no2.NitriteCollection;
 import org.mockito.Mockito;
-import org.springframework.boot.autoconfigure.flyway.FlywayMigrationStrategy;
+//import org.springframework.boot.autoconfigure.flyway.FlywayMigrationStrategy;
 import org.springframework.context.annotation.Bean;
 import org.springframework.test.context.ContextConfiguration;
 
@@ -57,8 +57,8 @@ public class OptionsConfigurations {
         return Mockito.mock(NitriteCollection.class);
     }
 
-    @Bean
+    /*@Bean
     public FlywayMigrationStrategy flywayMigrationStrategy() {
         return Mockito.mock(FlywayMigrationStrategy.class);
-    }
+    }*/
 }
