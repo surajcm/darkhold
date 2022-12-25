@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8"/>
+</head>
+<body>
+<div th:fragment="navbar" >
+    <nav class="navbar transparent navbar-inverse">
+        <div class="container-fluid" sec:authorize="isAuthenticated()">
+            <div class="icon-bar" onclick="toHome();">
+                <a class="active" href="#"><i class="fas fa-home"></i></a>
+            </div>
+            <div class="mx-auto order-0">
+                <span class="navbar-brand mx-auto" th:text="${#authentication.getPrincipal().getUsername()}"></span>
+            </div>
+            <div class="icon-bar" onclick="toOptions();">
+                <a class="active" href="#"><i class="fas fa-cog"></i></a>
+            </div>
+            <button class="btn btn-lg btn-rised align-middle btn-primary ml-auto mr-3 order-lg-last" type="button" onclick="logOut();" >Logout</button>
+        </div>
+        <div class="navbar-nav ms-auto mb-2 mb-lg-0" sec:authorize="isAnonymous()">
+            <button class="btn btn-lg btn-rised align-middle btn-primary ml-auto mr-3 order-lg-last" type="button" onclick="logMeIn()" >LogIn / SignUp</button>
+        </div>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown"
+                aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+    </nav>
+    <br />
+</div>
+</body>
+</html>

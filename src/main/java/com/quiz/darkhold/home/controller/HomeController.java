@@ -84,6 +84,6 @@ public class HomeController {
         activeUsers.add(gameInfo.getName());
         gameInfo.setUsers(activeUsers);
         model.addAttribute(GAME_INFO, gameInfo);
-        return "gamewait";
+        return "game/gamewait";
     }
 }

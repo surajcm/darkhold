@@ -30,7 +30,7 @@ public class OptionsController {
     @PostMapping("/createChallenge")
     public String createChallenge() {
         log.info("Into the createChallenge method");
-        return "createchallenge";
+        return "challenge/createchallenge";
     }
 
     /**
@@ -43,7 +43,7 @@ public class OptionsController {
     public String viewChallenges(final Model model) {
         log.info("Into the viewChallenge method");
         model.addAttribute("challengeInfo", optionsService.populateChallengeInfo());
-        return "viewchallenges";
+        return "challenge/viewchallenges";
     }
 
     /**
@@ -63,7 +63,7 @@ public class OptionsController {
             model.addAttribute("user", publishInfo.getModerator());
             log.info("activeChallenges method, quizPin : " + publishInfo.getPin());
         }
-        return "publish";
+        return "challenge/publish";
     }
 
     /**
@@ -74,7 +74,7 @@ public class OptionsController {
     @PostMapping("/userManagement")
     public String manageUsers() {
         log.info("Into the manageUsers method");
-        return "usermanagement";
+        return "user/usermanagement";
     }
 
     /**
@@ -85,6 +85,6 @@ public class OptionsController {
     @PostMapping("/gameManagement")
     public String manageGame() {
         log.info("Into the manageGame method");
-        return "gameManagement";
+        return "game/gameManagement";
     }
 }

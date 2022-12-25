@@ -9,27 +9,7 @@
     <script type="text/javascript" src="/scripts/home-scripts.js"></script>
 </head>
 <body onload="initialize_home();">
-    <nav class="navbar transparent navbar-inverse">
-        <div class="container-fluid" sec:authorize="isAuthenticated()">
-            <div class="icon-bar" onclick="toOptions();">
-                <a class="active" href="#"><i class="fas fa-home"></i></a>
-            </div>
-            <div class="mx-auto order-0">
-                <span class="navbar-brand mx-auto" th:text="${#authentication.getPrincipal().getUsername()}"></span>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".dual-collapse2">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-            </div>
-            <button class="btn btn-lg btn-rised align-middle btn-primary ml-auto mr-3 order-lg-last" type="button" onclick="logOut();" >Logout</button>
-        </div>
-        <div class="navbar-nav ms-auto mb-2 mb-lg-0" sec:authorize="isAnonymous()">
-            <button class="btn btn-lg btn-rised align-middle btn-primary ml-auto mr-3 order-lg-last" type="button" onclick="logMeIn()" >LogIn / SignUp</button>
-        </div>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown"
-                aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-    </nav>
+    <div th:insert="~{navbar :: navbar}"></div>
     <form action="#" th:action="@{/joinGame}" th:object="${gameinfo}" method="post">
         <div class="container-fluid">
             <div class="row justify-content-center align-items-center d-flex text-center h-100">

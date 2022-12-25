@@ -61,6 +61,12 @@ function logOut() {
     document.forms[0].submit();
 }
 
+function toHome() {
+    document.forms[0].method = 'get';
+    document.forms[0].action = "/";
+    document.forms[0].submit();
+}
+
 function viewChallenge(elem, challengeId) {
     let viewButton = document.createElement('input');
     viewButton.setAttribute("class", "btn btn-primary");

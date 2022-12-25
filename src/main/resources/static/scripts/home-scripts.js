@@ -13,6 +13,12 @@ function logOut() {
     document.forms[0].submit();
 }
 
+function toHome() {
+    document.forms[0].method = 'get';
+    document.forms[0].action = "/";
+    document.forms[0].submit();
+}
+
 function initialize_home() {
     const gamePin = document.getElementById("gamePin");
     const username = document.getElementById("username");

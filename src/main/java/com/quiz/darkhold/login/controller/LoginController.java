@@ -61,7 +61,7 @@ public class LoginController {
             model.addAttribute(tuple.getKey(), tuple.getValue());
         }
         model.addAttribute("userForm", new User());
-        return "options";
+        return "options/options";
     }
 
     @GetMapping("/login")

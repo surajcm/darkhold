@@ -35,7 +35,7 @@ public class PreviewController {
         log.info("Into the preconfigure method : {}", sanitizedChallenges);
         var previewInfo = previewService.fetchQuestions(challenges);
         model.addAttribute("previewInfo", previewInfo);
-        return "preview";
+        return "challenge/preview";
     }
 
     /**
@@ -56,6 +56,6 @@ public class PreviewController {
         model.addAttribute("quizPin", publishInfo.getPin());
         model.addAttribute("user", publishInfo.getModerator());
         log.info("publish method, quizPin : {}", publishInfo.getPin());
-        return "publish";
+        return "challenge/publish";
     }
 }
