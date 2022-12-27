@@ -42,9 +42,10 @@ function enterGame() {
         const username = document.getElementById("username").value;
         if (username.length === 0) {
             let xhr = new XMLHttpRequest();
-            xhr.open('POST', "/enterGame/");
+            xhr.open('POST', "/enterGame", true);
             xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
             xhr.onload = function () {
+                console.log('Response status is ' + xhr.status);
                 if (xhr.status === 200) {
                     console.log('Response is ' + xhr.responseText);
                     if (xhr.responseText === 'true') {

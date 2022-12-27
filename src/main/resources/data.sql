@@ -2,11 +2,11 @@ insert into role (id,name,createdOn, modifiedOn, createdBy, modifiedBy) values
     (1,'ADMIN','2019-11-20 00:00:00','2019-11-20 00:00:00','admin','admin');
 
 insert into member (id, username, password, role, createdOn, modifiedOn, createdBy, modifiedBy) values
-    (1, 'admin12345', '$2a$10$5uutYZ7MJRZUKOdPR4n0xet5rzQRzpf2Ng4OhPqkOk5LXOvZS5vI6', 1,
-     '2019-11-20 00:00:00','2019-11-20 00:00:00','admin','admin');
+    (1, 'admin@admin.com', '$2a$10$l0Y76CoFAdXlkZZYkVDsIeRP..4UcpuhQ01H0B4QvTNF2uATZx9Gq', 1,
+     '2022-12-27 00:00:00','2022-12-27 00:00:00','admin','admin');
 
-insert into challenge (challenge_id, title, description, createdOn, modifiedOn, createdBy, modifiedBy) values
-    (1, 'Challenge 01', 'new Challenges', '2020-04-08 00:00:00','2020-04-08 00:00:00','admin','admin');
+insert into challenge (challenge_id, title, description, challengeowner, createdOn, modifiedOn, createdBy, modifiedBy) values
+    (1, 'Challenge 01', 'new Challenges', 1L, '2020-04-08 00:00:00','2020-04-08 00:00:00','admin','admin');
 
 insert into question_set (id, question, answer1, answer2, answer3, answer4, correctOptions, challenge_id) values
     (1, 'What is ECR ?',
@@ -36,4 +36,3 @@ insert into question_set (id, question, answer1, answer2, answer3, answer4, corr
      'Deploy scale and manage in-memory cache in the cloud',
      'Amazon relational database combining speed and simplicity',
      'A' , 1);
-update challenge set challengeowner = 1 where challenge_id in (select challenge_id FROM challenge where challengeowner = null);

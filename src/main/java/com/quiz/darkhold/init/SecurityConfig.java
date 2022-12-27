@@ -52,7 +52,9 @@ public class SecurityConfig {
                 "/scripts/**", "/styles/**",
                 "/scripts/core/**", "/styles/core/*", "/styles/webfonts/**",
                 "/fonts/**", "/favicon.ico",
-                "/logme", "/h2-console/**"};
+                "/logme", "/h2-console/**",
+                "/enterGame", "/joinGame"
+        };
     }
 
     @Bean

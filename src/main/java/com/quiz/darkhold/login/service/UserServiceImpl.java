@@ -3,6 +3,8 @@ package com.quiz.darkhold.login.service;
 import com.quiz.darkhold.login.entity.User;
 import com.quiz.darkhold.login.repository.RoleRepository;
 import com.quiz.darkhold.login.repository.UserRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -10,6 +12,8 @@ import java.util.HashSet;
 
 @Service
 public class UserServiceImpl implements UserService {
+
+    private static final Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
     private final BCryptPasswordEncoder encoder;
@@ -24,7 +28,10 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void save(final User user) {
-        user.setPassword(encoder.encode(user.getPassword()));
+        var pass = encoder.encode(user.getPassword());
+        logger.info("User name is " + user.getUsername());
+        logger.info("password is " + pass);
+        user.setPassword(pass);
         user.setRoles(new HashSet<>(roleRepository.findAll()));
         userRepository.save(user);
     }

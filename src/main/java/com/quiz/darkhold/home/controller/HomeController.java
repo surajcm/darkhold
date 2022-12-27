@@ -60,7 +60,7 @@ public class HomeController {
      * @param gamePin pin
      * @return ajax call to same page
      */
-    @PostMapping("/enterGame/")
+    @PostMapping("/enterGame")
     public @ResponseBody
     Boolean enterGame(@ModelAttribute("gamePin") final String gamePin) {
         var sanitizedPin = CommonUtils.sanitizedString(gamePin);

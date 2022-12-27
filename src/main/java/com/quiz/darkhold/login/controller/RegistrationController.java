@@ -35,9 +35,9 @@ public class RegistrationController {
         return "registration";
     }
 
-    @PostMapping("/registration")
+    @PostMapping
     public String registration(final Model model,
-                               @ModelAttribute("userForm") final User userForm,
+                               @ModelAttribute("user") final User user,
                                final BindingResult bindingResult) {
         logger.info("Inside the registration post method");
         //userValidator.validate(userForm, bindingResult);
@@ -45,10 +45,11 @@ public class RegistrationController {
             logger.info(String.valueOf(bindingResult.getAllErrors().get(0)));
             return "login";
         }
-        userService.save(userForm);
+        userService.save(user);
         var gameInfo = new GameInfo();
         gameInfo.setMessage("Successfully created the account !!!");
         model.addAttribute("gameinfo", gameInfo);
+        logger.info("successfully created the user !!!");
         return "index";
     }
 
