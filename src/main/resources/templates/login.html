@@ -18,7 +18,7 @@
                             </div>
                             <form th:action="@{/login}" method="post" class="mt-4">
                                 <span th:text="${message}"></span>
-                                <div class="form-group mb-4"><label for="username">Your Username</label>
+                                <div class="form-group mb-4"><label for="username">Your Email</label>
                                     <div class="input-group">
                                         <span class="input-group-text" id="basic-addon1"><span class="fas fa-envelope"></span></span>
                                         <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>

@@ -1,14 +1,17 @@
 package com.quiz.darkhold.login.entity;
 
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
-import jakarta.persistence.Transient;
 import java.io.Serializable;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.StringJoiner;
 
@@ -19,15 +22,22 @@ public class User implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String username;
+    @Column(name = "name")
+    private String name;
+
+    @Column(name = "email")
+    private String email;
 
     private String password;
 
-    @Transient
-    private String passwordConfirm;
+    @Column(name = "enabled")
+    private Boolean enabled;
 
     @ManyToMany
-    private Set<Role> roles;
+    @JoinTable(name = "member_roles",
+            joinColumns = @JoinColumn(name = "users_id"),
+            inverseJoinColumns = @JoinColumn(name = "roles_id"))
+    private Set<Role> roles = new HashSet<>();
 
     public Long getId() {
         return id;
@@ -37,12 +47,20 @@ public class User implements Serializable {
         this.id = id;
     }
 
-    public String getUsername() {
-        return username;
+    public String getName() {
+        return name;
     }
 
-    public void setUsername(final String username) {
-        this.username = username;
+    public void setName(final String name) {
+        this.name = name;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(final String email) {
+        this.email = email;
     }
 
     public String getPassword() {
@@ -53,12 +71,12 @@ public class User implements Serializable {
         this.password = password;
     }
 
-    public String getPasswordConfirm() {
-        return passwordConfirm;
+    public Boolean getEnabled() {
+        return enabled;
     }
 
-    public void setPasswordConfirm(final String passwordConfirm) {
-        this.passwordConfirm = passwordConfirm;
+    public void setEnabled(final Boolean expired) {
+        this.enabled = expired;
     }
 
     public Set<Role> getRoles() {
@@ -69,13 +87,18 @@ public class User implements Serializable {
         this.roles = roles;
     }
 
+    public void addRole(final Role role) {
+        this.roles.add(role);
+    }
+
     @Override
     public String toString() {
         return new StringJoiner(", ", User.class.getSimpleName() + "[", "]")
                 .add("id=" + id)
-                .add("username='" + username + "'")
+                .add("name='" + name + "'")
+                .add("email='" + email + "'")
                 .add("password='" + password + "'")
-                .add("passwordConfirm='" + passwordConfirm + "'")
+                .add("enabled='" + enabled + "'")
                 .add("roles=" + roles)
                 .toString();
     }

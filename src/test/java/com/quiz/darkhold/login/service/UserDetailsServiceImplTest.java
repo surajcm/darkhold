@@ -29,7 +29,7 @@ class UserDetailsServiceImplTest {
 
     @Test
     void loadUserByNullUsername() {
-        when(userRepository.findByUsername(anyString())).thenReturn(null);
+        when(userRepository.findByEmail(anyString())).thenReturn(null);
         Assertions.assertThrows(UsernameNotFoundException.class,
                 () -> userDetailsService.loadUserByUsername("admin"));
     }
@@ -37,14 +37,14 @@ class UserDetailsServiceImplTest {
     @Test
     void loadUserByValidUsername() {
         var userName = "admin";
-        when(userRepository.findByUsername(anyString())).thenReturn(mockUser(userName));
+        when(userRepository.findByEmail(anyString())).thenReturn(mockUser(userName));
         var userDetails = userDetailsService.loadUserByUsername("admin");
         Assertions.assertEquals(userName, userDetails.getUsername());
     }
 
     private User mockUser(final String userName) {
         var user = new User();
-        user.setUsername(userName);
+        user.setName(userName);
         user.setRoles(mockRoles());
         user.setPassword("pass");
         return user;

@@ -29,15 +29,17 @@ public class UserServiceImpl implements UserService {
     @Override
     public void save(final User user) {
         var pass = encoder.encode(user.getPassword());
-        logger.info("User name is " + user.getUsername());
+        logger.info("User name is " + user.getName());
         logger.info("password is " + pass);
         user.setPassword(pass);
+        user.setEnabled(false);
+        //todo : this need to be corrected
         user.setRoles(new HashSet<>(roleRepository.findAll()));
         userRepository.save(user);
     }
 
     @Override
-    public User findByUsername(final String username) {
-        return userRepository.findByUsername(username);
+    public User findByUsername(final String email) {
+        return userRepository.findByEmail(email);
     }
 }

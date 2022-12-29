@@ -80,7 +80,7 @@ public class ChallengeService {
     private Long currentUserId() {
         var auth = SecurityContextHolder.getContext().getAuthentication();
         var username = auth.getName();
-        var user = userRepository.findByUsername(username);
+        var user = userRepository.findByEmail(username);
         return user.getId();
     }
 
