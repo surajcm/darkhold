@@ -1,5 +1,5 @@
 insert into member (id, name, email, password, enabled, createdOn, modifiedOn, createdBy, modifiedBy) values
-    (1, 'admin', 'admin@admin.com', '$2a$10$l0Y76CoFAdXlkZZYkVDsIeRP..4UcpuhQ01H0B4QvTNF2uATZx9Gq',
+    (1, 'Administrator', 'admin@admin.com', '$2a$10$l0Y76CoFAdXlkZZYkVDsIeRP..4UcpuhQ01H0B4QvTNF2uATZx9Gq',
      true, '2022-12-27 00:00:00','2022-12-27 00:00:00','admin','admin');
 
 insert into role (id, name, description, createdOn, modifiedOn, createdBy, modifiedBy) values
