@@ -7,86 +7,75 @@
     <link rel="stylesheet" href="/styles/game-styles.css"  />
     <link rel="stylesheet" href="/styles/core/flipclock.css" />
     <link rel="stylesheet" href="/styles/game-flipclock-custom.css" />
+    <script type="text/javascript" src="/scripts/common-scripts.js"></script>
 </head>
 <body onload="connect()">
-<nav class="navbar transparent navbar-inverse">
-    <div class="container-fluid">
-        <div class="icon-bar" onclick="toHome();">
-            <a class="active" href="#"><i class="fas fa-home"></i></a>
+    <div th:insert="~{navbar :: navbar}"></div>
+    <nav class="navbar transparent">
+        <div class="navbar-brand">
+            <div class="sidebar-nav">
+                <div class="clock2" style="margin:2em;"></div>
+                <div class="message"></div>
+            </div>
         </div>
-        <span class="ml-auto mr-3 order-lg-last" th:text="${#authentication.getPrincipal().getUsername()}"></span>
-        <span class="ml-auto mr-3 order-lg-last" th:text="${#authentication.getPrincipal().getAuthorities()}"></span>
-        <button class="btn btn-lg btn-rised align-middle btn-primary ml-auto mr-3 order-lg-last" type="button" onclick="logOut()" >Logout</button>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown"
-                aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-    </div>
-</nav>
-<nav class="navbar transparent">
-    <div class="navbar-brand">
-        <div class="sidebar-nav">
-            <div class="clock2" style="margin:2em;"></div>
-            <div class="message"></div>
-        </div>
-    </div>
-    <ul class="navbar-nav mx-auto">
-        <li class="nav-item">
-            <strong>[[${challenge.questionNumber}]].[[${challenge.QuestionSet.question}]]</strong>
-        </li>
-    </ul>
-    <span th:if="${not #sets.isEmpty(#authentication.getPrincipal().getAuthorities())}">
-        <button id="nextButton" class="btn btn-lg btn-rised align-middle btn-primary ml-auto mr-3 order-lg-last" type="button"
-                style="display:none" onclick="showScoreboard();" >Next</button>
-    </span>
-</nav>
-<form action="#" th:object="${challenge}" method="post">
-    <div id="wrapper">
-        <div id="page-content-wrapper">
-            <div class="container-fluid">
-                <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-                <input type="hidden" th:value="${challenge.QuestionSet.correctOptions}" id="correctOptions"/>
-                <input type="hidden" th:value="${game_timer}" id="time_to_flip"/>
-                <input type="hidden" th:name="selectedOptions" id="selectedOptions"/>
-                <input type="hidden" th:name="selectedAnswer" id="selectedAnswer"/>
-                <input type="hidden" th:value="${#authentication.getPrincipal().getUsername()}" id="user"/>
-                <input type="hidden" th:value="${#authentication.getPrincipal().getAuthorities()}" id="roles"/>
-                <div class="container">
-                    <div class="row" id="answerSpace">
-                        <div id="optionA" class="col-lg-6 col-md-6 col-sm-6 col-xs-12" onclick="waitAndShowAnswer(this)">
-                            <div class="card">
-                                <div class="card-body text-center">
-                                    <div class="title">
-                                        <h4>[[${challenge.QuestionSet.answer1}]]</h4>
+        <ul class="navbar-nav mx-auto">
+            <li class="nav-item">
+                <strong>[[${challenge.questionNumber}]].[[${challenge.QuestionSet.question}]]</strong>
+            </li>
+        </ul>
+        <span th:if="${not #sets.isEmpty(#authentication.getPrincipal().getAuthorities())}">
+            <button id="nextButton" class="btn btn-lg btn-rised align-middle btn-primary ml-auto mr-3 order-lg-last" type="button"
+                    style="display:none" onclick="showScoreboard();" >Next</button>
+        </span>
+    </nav>
+    <form action="#" th:object="${challenge}" method="post">
+        <div id="wrapper">
+            <div id="page-content-wrapper">
+                <div class="container-fluid">
+                    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+                    <input type="hidden" th:value="${challenge.QuestionSet.correctOptions}" id="correctOptions"/>
+                    <input type="hidden" th:value="${game_timer}" id="time_to_flip"/>
+                    <input type="hidden" th:name="selectedOptions" id="selectedOptions"/>
+                    <input type="hidden" th:name="selectedAnswer" id="selectedAnswer"/>
+                    <input type="hidden" th:value="${#authentication.getPrincipal().getUsername()}" id="user"/>
+                    <input type="hidden" th:value="${#authentication.getPrincipal().getAuthorities()}" id="roles"/>
+                    <div class="container">
+                        <div class="row" id="answerSpace">
+                            <div id="optionA" class="col-lg-6 col-md-6 col-sm-6 col-xs-12" onclick="waitAndShowAnswer(this)">
+                                <div class="card">
+                                    <div class="card-body text-center">
+                                        <div class="title">
+                                            <h4>[[${challenge.QuestionSet.answer1}]]</h4>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        <div id="optionB" class="col-lg-6 col-md-6 col-sm-6 col-xs-12" onclick="waitAndShowAnswer(this)">
-                            <div class="card">
-                                <div class="card-body text-center">
-                                    <div class="title">
-                                        <h4>[[${challenge.QuestionSet.answer2}]]</h4>
-                                    </div>
-                                 </div>
+                            <div id="optionB" class="col-lg-6 col-md-6 col-sm-6 col-xs-12" onclick="waitAndShowAnswer(this)">
+                                <div class="card">
+                                    <div class="card-body text-center">
+                                        <div class="title">
+                                            <h4>[[${challenge.QuestionSet.answer2}]]</h4>
+                                        </div>
+                                     </div>
+                                </div>
                             </div>
-                        </div>
-                        <div id="optionC" th:if="${not #strings.isEmpty(challenge.QuestionSet.answer3)}"
-                             class="col-lg-6 col-md-6 col-sm-6 col-xs-12" onclick="waitAndShowAnswer(this)">
-                            <div class="card">
-                                <div class="card-body text-center">
-                                    <div class="title">
-                                        <h4>[[${challenge.QuestionSet.answer3}]]</h4>
+                            <div id="optionC" th:if="${not #strings.isEmpty(challenge.QuestionSet.answer3)}"
+                                 class="col-lg-6 col-md-6 col-sm-6 col-xs-12" onclick="waitAndShowAnswer(this)">
+                                <div class="card">
+                                    <div class="card-body text-center">
+                                        <div class="title">
+                                            <h4>[[${challenge.QuestionSet.answer3}]]</h4>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        <div id="optionD" th:if="${not #strings.isEmpty(challenge.QuestionSet.answer4)}"
-                             class="col-lg-6 col-md-6 col-sm-6 col-xs-12" onclick="waitAndShowAnswer(this)">
-                            <div class="card">
-                                <div class="card-body text-center">
-                                    <div class="title">
-                                        <h4>[[${challenge.QuestionSet.answer4}]]</h4>
+                            <div id="optionD" th:if="${not #strings.isEmpty(challenge.QuestionSet.answer4)}"
+                                 class="col-lg-6 col-md-6 col-sm-6 col-xs-12" onclick="waitAndShowAnswer(this)">
+                                <div class="card">
+                                    <div class="card-body text-center">
+                                        <div class="title">
+                                            <h4>[[${challenge.QuestionSet.answer4}]]</h4>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -95,14 +84,13 @@
                 </div>
             </div>
         </div>
-    </div>
-</form>
-<script type="text/javascript" src="/scripts/core/jquery-3.2.1.slim.min.js"></script>
-<script type="text/javascript" src="/scripts/core/popper.min.js"></script>
-<script type="text/javascript" src="/scripts/core/bootstrap-5.min.js"></script>
-<script type="text/javascript" src="/scripts/core/flipclock.js"></script>
-<script type="text/javascript" src="/scripts/game-scripts.js"></script>
-<script type="text/javascript" src="/scripts/core/sockjs.min.js"></script>
-<script type="text/javascript" src="/scripts/core/stomp.min.js"></script>
+    </form>
+    <script type="text/javascript" src="/scripts/core/jquery-3.2.1.slim.min.js"></script>
+    <script type="text/javascript" src="/scripts/core/popper.min.js"></script>
+    <script type="text/javascript" src="/scripts/core/bootstrap-5.min.js"></script>
+    <script type="text/javascript" src="/scripts/core/flipclock.js"></script>
+    <script type="text/javascript" src="/scripts/game-scripts.js"></script>
+    <script type="text/javascript" src="/scripts/core/sockjs.min.js"></script>
+    <script type="text/javascript" src="/scripts/core/stomp.min.js"></script>
 </body>
 </html>

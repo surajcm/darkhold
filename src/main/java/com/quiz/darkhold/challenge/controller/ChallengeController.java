@@ -28,13 +28,13 @@ public class ChallengeController {
     @PostMapping("/options")
     public String options() {
         logger.info("on post to options");
-        return "options";
+        return "options/options";
     }
 
     @GetMapping("/options")
     public String optionsGet() {
         logger.info("on get to options");
-        return "options";
+        return "options/options";
     }
 
     /**

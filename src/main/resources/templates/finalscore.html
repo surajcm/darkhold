@@ -8,20 +8,7 @@
     <script type="text/javascript" src="/scripts/common-scripts.js"></script>
 </head>
 <body>
-    <nav class="navbar transparent navbar-inverse">
-        <div class="container-fluid">
-            <div class="icon-bar" onclick="toHome();">
-                <a class="active" href="#"><i class="fas fa-home"></i></a>
-            </div>
-            <span class="ml-auto mr-3 order-lg-last" th:text="${#authentication.getPrincipal().getUsername()}"></span>
-            <span class="ml-auto mr-3 order-lg-last" th:text="${#authentication.getPrincipal().getAuthorities()}"></span>
-            <button class="btn btn-lg btn-rised align-middle btn-primary ml-auto mr-3 order-lg-last" type="button" onclick="javascript:logOut()" >Logout</button>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown"
-                    aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-        </div>
-    </nav>
+    <div th:insert="~{navbar :: navbar}"></div>
     <nav class="navbar transparent">
         <ul class="navbar-nav mx-auto">
             <li class="nav-item">

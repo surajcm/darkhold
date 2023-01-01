@@ -29,6 +29,12 @@ function toOptions() {
     document.forms[0].submit();
 }
 
+function toHome() {
+    document.forms[0].method = 'get';
+    document.forms[0].action = "/";
+    document.forms[0].submit();
+}
+
 function connect() {
     let socket = new SockJS('/darkhold-websocket');
     stompClient = Stomp.over(socket);

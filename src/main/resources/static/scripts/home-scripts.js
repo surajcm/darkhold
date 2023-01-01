@@ -3,6 +3,22 @@ function logMeIn() {
     document.forms[0].submit();
 }
 
+function toOptions() {
+    document.forms[0].action = "/options";
+    document.forms[0].submit();
+}
+
+function logOut() {
+    document.forms[0].action = "/logout";
+    document.forms[0].submit();
+}
+
+function toHome() {
+    document.forms[0].method = 'get';
+    document.forms[0].action = "/";
+    document.forms[0].submit();
+}
+
 function initialize_home() {
     const gamePin = document.getElementById("gamePin");
     const username = document.getElementById("username");
@@ -26,9 +42,10 @@ function enterGame() {
         const username = document.getElementById("username").value;
         if (username.length === 0) {
             let xhr = new XMLHttpRequest();
-            xhr.open('POST', "/enterGame/");
+            xhr.open('POST', "/enterGame", true);
             xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
             xhr.onload = function () {
+                console.log('Response status is ' + xhr.status);
                 if (xhr.status === 200) {
                     console.log('Response is ' + xhr.responseText);
                     if (xhr.responseText === 'true') {

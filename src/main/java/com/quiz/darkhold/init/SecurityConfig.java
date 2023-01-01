@@ -2,17 +2,19 @@ package com.quiz.darkhold.init;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
-import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
+@Configuration
 @EnableWebSecurity
-@EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true, jsr250Enabled = true)
+@EnableMethodSecurity(securedEnabled = true, jsr250Enabled = true)
 public class SecurityConfig {
 
     @Autowired
@@ -26,16 +28,33 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(final HttpSecurity http) throws Exception {
         //todo : we need to enable CSRF
-        http.csrf().disable().httpBasic()
+        http.csrf().disable()
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers(matchingPaths()).permitAll()
+                        .anyRequest().authenticated()
+                )
+                .formLogin().loginPage("/login")
+                .defaultSuccessUrl("/", true)
+                .permitAll()
                 .and()
-                .authorizeRequests().antMatchers("/options", "/createChallenge", "/viewChallenge").authenticated()
-                .and()
-                .authorizeRequests().antMatchers("/", "/home", "/resources/**", "/registration",
-                "/images/*", "/logmein", "/logme", "/h2-console/*").permitAll()
-                .and()
-                .logout().logoutSuccessUrl("/").invalidateHttpSession(true).deleteCookies("JSESSIONID");
+                .logout().logoutSuccessUrl("/")
+                .invalidateHttpSession(true)
+                .clearAuthentication(true)
+                .deleteCookies("JSESSIONID");
         http.headers().frameOptions().sameOrigin();
         return http.build();
+    }
+
+    private String[] matchingPaths() {
+        return new String[] {"/", "/logmein" ,
+                "/home", "/resources/**",
+                "/registration", "/images/**",
+                "/scripts/**", "/styles/**",
+                "/scripts/core/**", "/styles/core/*", "/styles/webfonts/**",
+                "/fonts/**", "/favicon.ico",
+                "/logme", "/h2-console/**",
+                "/enterGame", "/joinGame"
+        };
     }
 
     @Bean

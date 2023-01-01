@@ -9,6 +9,12 @@ function toChallenges() {
     document.forms[0].submit();
 }
 
+function toHome() {
+    document.forms[0].method = 'get';
+    document.forms[0].action = "/";
+    document.forms[0].submit();
+}
+
 function publish() {
     let challengeId = document.getElementById('challengeId').value;
     console.log('triggering quiz of ' + challengeId);

@@ -1,5 +1,6 @@
 <!DOCTYPE HTML>
-<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <title>Getting Started: Darkhold classroom quiz experience</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
@@ -8,13 +9,7 @@
     <script type="text/javascript" src="/scripts/home-scripts.js"></script>
 </head>
 <body onload="initialize_home();">
-    <nav class="navbar transparent navbar-inverse">
-        <button class="btn btn-lg btn-rised align-middle btn-primary ml-auto mr-3 order-lg-last" type="button" onclick="javascript:logMeIn()" >LogIn / SignUp</button>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown"
-                aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-    </nav>
+    <div th:insert="~{navbar :: navbar}"></div>
     <form action="#" th:action="@{/joinGame}" th:object="${gameinfo}" method="post">
         <div class="container-fluid">
             <div class="row justify-content-center align-items-center d-flex text-center h-100">

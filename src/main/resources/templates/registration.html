@@ -1,0 +1,63 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+    <title>Registration: Darkhold classroom quiz experience</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link href="/styles/login.css" rel="stylesheet" />
+</head>
+<body>
+    <main>
+        <section class="d-flex align-items-center my-5 mt-lg-6 mb-lg-5">
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-12 d-flex align-items-center justify-content-center">
+                        <div class="bg-white shadow-soft border rounded border-light p-4 p-lg-5 w-100 fmxw-500" style="opacity: 0.9;">
+                            <div class="text-center text-md-center mb-4 mt-md-0">
+                                <h1 class="mb-0 h3">Registration</h1>
+                            </div>
+                            <form th:action="@{/registration}" class="mt-4" method="post" th:object="${user}">
+                                <div th:if="${param.success}">
+                                    <div class="alert alert-info alert-dismissible fade show d-flex align-items-center">You've successfully registered</div>
+                                </div>
+                                <div th:if="${param.failure}">
+                                    <div class="alert alert-danger alert-dismissible fade show d-flex align-items-center">An error occurred, please double-check your input and try again !!!</div>
+                                </div>
+                                <div class="form-group mb-4"><label for="name">Your Name</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text" id="basic-addon1"><span class="fas fa-envelope"></span></span>
+                                        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+                                        <input id="name" class="form-control" type="text" th:field="*{name}" required autofocus="autofocus" />
+                                    </div>
+                                </div>
+                                <div class="form-group mb-4"><label for="email"> Email</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text" id="basic-addon3"><span class="fas fa-envelope"></span></span>
+                                        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+                                        <input id="email" class="form-control" type="email" th:field="*{email}" required />
+                                    </div>
+                                </div>
+                                <div class="form-group mb-4"><label for="password">Password </label>
+                                    <div class="input-group">
+                                        <span class="input-group-text" id="basic-addon4">
+                                            <span class="fas fa-unlock-alt"></span>
+                                        </span>
+                                        <input id="password" class="form-control" type="password" placeholder="Password"
+                                               th:field="*{password}" required />
+                                    </div>
+                                </div>
+                                <div class="d-grid">
+                                    <button type="submit" class="btn btn-dark">Register</button>
+                                    <span>Already registered? <a href="/" th:href="@{/login}">Login here</a></span>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+    <script type="text/javascript" src="/scripts/core/popper.min.js"></script>
+    <script type="text/javascript" src="/scripts/core/bootstrap-5.min.js"></script>
+</body>
+</html>

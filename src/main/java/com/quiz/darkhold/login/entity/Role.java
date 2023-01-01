@@ -1,13 +1,12 @@
 package com.quiz.darkhold.login.entity;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.ManyToMany;
-import javax.persistence.Table;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import java.io.Serializable;
-import java.util.Set;
 
 @Entity
 @Table(name = "role")
@@ -19,10 +18,23 @@ public class Role implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "name")
     private String name;
 
-    @ManyToMany(mappedBy = "roles")
-    private Set<User> users;
+    @Column(name = "description")
+    private String description;
+
+    public Role() {
+    }
+
+    public Role(final Long id) {
+        this.setId(id);
+    }
+
+    public Role(final Long id, final String name) {
+        this.setId(id);
+        this.setName(name);
+    }
 
     public Long getId() {
         return id;
@@ -40,11 +52,12 @@ public class Role implements Serializable {
         this.name = name;
     }
 
-    public Set<User> getUsers() {
-        return users;
+    public String getDescription() {
+        return description;
     }
 
-    public void setUsers(final Set<User> users) {
-        this.users = users;
+    public void setDescription(final String description) {
+        this.description = description;
     }
+
 }

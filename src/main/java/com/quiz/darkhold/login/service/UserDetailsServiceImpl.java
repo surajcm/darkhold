@@ -25,8 +25,10 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     @Override
     @Transactional(readOnly = true)
     public UserDetails loadUserByUsername(final String username) {
-        var user = userRepository.findByUsername(username);
+        logger.info("requested user name is {}", username);
+        var user = userRepository.findByEmail(username);
         if (user == null) {
+            logger.error("Username not found !!");
             throw new UsernameNotFoundException(username);
         }
         logger.info("current user -> {}", user);
@@ -35,7 +37,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
                 user.getRoles().stream().map(role -> new SimpleGrantedAuthority(role.getName()))
                         .collect(Collectors.toSet());
 
-        return new org.springframework.security.core.userdetails.User(user.getUsername(),
+        return new org.springframework.security.core.userdetails.User(user.getName(),
                 user.getPassword(), grantedAuthorities);
     }
 }

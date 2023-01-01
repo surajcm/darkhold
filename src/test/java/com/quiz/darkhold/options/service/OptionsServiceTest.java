@@ -38,7 +38,7 @@ class OptionsServiceTest {
 
     @Test
     void populate() {
-        when(userRepository.findByUsername(anyString())).thenReturn(mockUser());
+        when(userRepository.findByEmail(anyString())).thenReturn(mockUser());
         when(challengeRepository.findAll()).thenReturn(mockChallenges());
         var challengeInfo = optionsService.populateChallengeInfo();
         Assertions.assertNotNull(challengeInfo);
@@ -47,7 +47,7 @@ class OptionsServiceTest {
     private User mockUser() {
         var user = new User();
         user.setId(1L);
-        user.setUsername("admin12345");
+        user.setName("admin12345");
         return user;
     }
 

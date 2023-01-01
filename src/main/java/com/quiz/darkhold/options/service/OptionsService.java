@@ -31,9 +31,10 @@ public class OptionsService {
     public ChallengeInfo populateChallengeInfo() {
         var auth = SecurityContextHolder.getContext().getAuthentication();
         var username = auth.getName();
-        var user = userRepository.findByUsername(username);
+        var user = userRepository.findByEmail(username);
         log.info(user.getId());
         var challenges = challengeRepository.findByChallengeOwner(user.getId());
+        log.info("total challenges owned by the user is " + challenges.size());
         var summaries = challenges.stream().map(this::getChallengeSummary).toList();
         var challengeInfo = new ChallengeInfo();
         challengeInfo.setChallengeSummaryList(summaries);

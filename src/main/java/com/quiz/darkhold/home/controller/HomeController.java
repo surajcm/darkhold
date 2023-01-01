@@ -60,7 +60,7 @@ public class HomeController {
      * @param gamePin pin
      * @return ajax call to same page
      */
-    @PostMapping("/enterGame/")
+    @PostMapping("/enterGame")
     public @ResponseBody
     Boolean enterGame(@ModelAttribute("gamePin") final String gamePin) {
         var sanitizedPin = CommonUtils.sanitizedString(gamePin);
@@ -84,6 +84,6 @@ public class HomeController {
         activeUsers.add(gameInfo.getName());
         gameInfo.setUsers(activeUsers);
         model.addAttribute(GAME_INFO, gameInfo);
-        return "gamewait";
+        return "game/gamewait";
     }
 }
