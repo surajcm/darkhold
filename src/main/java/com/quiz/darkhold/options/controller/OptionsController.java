@@ -1,9 +1,12 @@
 package com.quiz.darkhold.options.controller;
 
+import com.quiz.darkhold.login.entity.DarkholdUserDetails;
+import com.quiz.darkhold.login.entity.User;
 import com.quiz.darkhold.options.service.OptionsService;
 import com.quiz.darkhold.preview.service.PreviewService;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -40,9 +43,11 @@ public class OptionsController {
      * @return view challenge page
      */
     @PostMapping("/viewChallenge")
-    public String viewChallenges(final Model model) {
+    public String viewChallenges(final Model model,
+                                 @AuthenticationPrincipal(expression = "email") String email) {
         log.info("Into the viewChallenge method");
-        model.addAttribute("challengeInfo", optionsService.populateChallengeInfo());
+        log.info("email is : " +  email);
+        model.addAttribute("challengeInfo", optionsService.populateChallengeInfo(email));
         return "challenge/viewchallenges";
     }
 

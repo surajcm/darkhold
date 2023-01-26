@@ -1,5 +1,6 @@
 package com.quiz.darkhold.login.service;
 
+import com.quiz.darkhold.login.entity.DarkholdUserDetails;
 import com.quiz.darkhold.login.repository.UserRepository;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -32,12 +33,6 @@ public class UserDetailsServiceImpl implements UserDetailsService {
             throw new UsernameNotFoundException(username);
         }
         logger.info("current user -> {}", user);
-
-        Set<GrantedAuthority> grantedAuthorities =
-                user.getRoles().stream().map(role -> new SimpleGrantedAuthority(role.getName()))
-                        .collect(Collectors.toSet());
-
-        return new org.springframework.security.core.userdetails.User(user.getName(),
-                user.getPassword(), grantedAuthorities);
+        return new DarkholdUserDetails(user);
     }
 }

@@ -2,6 +2,7 @@ package com.quiz.darkhold.options.service;
 
 import com.quiz.darkhold.challenge.entity.Challenge;
 import com.quiz.darkhold.challenge.repository.ChallengeRepository;
+import com.quiz.darkhold.login.entity.User;
 import com.quiz.darkhold.login.repository.UserRepository;
 import com.quiz.darkhold.options.model.ChallengeInfo;
 import com.quiz.darkhold.options.model.ChallengeSummary;
@@ -28,10 +29,8 @@ public class OptionsService {
      *
      * @return challenges
      */
-    public ChallengeInfo populateChallengeInfo() {
-        var auth = SecurityContextHolder.getContext().getAuthentication();
-        var username = auth.getName();
-        var user = userRepository.findByEmail(username);
+    public ChallengeInfo populateChallengeInfo(String email) {
+        var user = userRepository.findByEmail(email);
         log.info(user.getId());
         var challenges = challengeRepository.findByChallengeOwner(user.getId());
         log.info("total challenges owned by the user is " + challenges.size());
