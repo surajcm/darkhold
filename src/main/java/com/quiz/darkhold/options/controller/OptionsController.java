@@ -1,7 +1,5 @@
 package com.quiz.darkhold.options.controller;
 
-import com.quiz.darkhold.login.entity.DarkholdUserDetails;
-import com.quiz.darkhold.login.entity.User;
 import com.quiz.darkhold.options.service.OptionsService;
 import com.quiz.darkhold.preview.service.PreviewService;
 import org.apache.commons.logging.Log;
@@ -10,8 +8,6 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PostMapping;
-
-import java.security.Principal;
 
 @Controller
 public class OptionsController {
@@ -44,7 +40,7 @@ public class OptionsController {
      */
     @PostMapping("/viewChallenge")
     public String viewChallenges(final Model model,
-                                 @AuthenticationPrincipal(expression = "email") String email) {
+                                 @AuthenticationPrincipal(expression = "email") final String email) {
         log.info("Into the viewChallenge method");
         log.info("email is : " +  email);
         model.addAttribute("challengeInfo", optionsService.populateChallengeInfo(email));
@@ -55,11 +51,10 @@ public class OptionsController {
      * show the currently running challenge.
      *
      * @param model     model
-     * @param principal auth
      * @return publish page
      */
     @PostMapping("/activeChallenge")
-    public String activeChallenges(final Model model, final Principal principal) {
+    public String activeChallenges(final Model model) {
         log.info("Into the activeChallenge method");
         var publishInfo = previewService.getActiveChallenge();
         if (publishInfo != null) {

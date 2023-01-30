@@ -7,9 +7,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.Collection;
 
 public class DarkholdUserDetails implements UserDetails {
-    private User user;
+    private final User user;
 
-    public DarkholdUserDetails(User user) {
+    public DarkholdUserDetails(final User user) {
         this.user = user;
     }
 

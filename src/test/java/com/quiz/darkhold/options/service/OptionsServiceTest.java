@@ -40,7 +40,7 @@ class OptionsServiceTest {
     void populate() {
         when(userRepository.findByEmail(anyString())).thenReturn(mockUser());
         when(challengeRepository.findAll()).thenReturn(mockChallenges());
-        var challengeInfo = optionsService.populateChallengeInfo();
+        var challengeInfo = optionsService.populateChallengeInfo("admin@admin.com");
         Assertions.assertNotNull(challengeInfo);
     }
 

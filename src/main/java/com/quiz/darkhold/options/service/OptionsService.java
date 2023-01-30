@@ -2,13 +2,11 @@ package com.quiz.darkhold.options.service;
 
 import com.quiz.darkhold.challenge.entity.Challenge;
 import com.quiz.darkhold.challenge.repository.ChallengeRepository;
-import com.quiz.darkhold.login.entity.User;
 import com.quiz.darkhold.login.repository.UserRepository;
 import com.quiz.darkhold.options.model.ChallengeInfo;
 import com.quiz.darkhold.options.model.ChallengeSummary;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -29,7 +27,7 @@ public class OptionsService {
      *
      * @return challenges
      */
-    public ChallengeInfo populateChallengeInfo(String email) {
+    public ChallengeInfo populateChallengeInfo(final String email) {
         var user = userRepository.findByEmail(email);
         log.info(user.getId());
         var challenges = challengeRepository.findByChallengeOwner(user.getId());
