@@ -4,7 +4,6 @@ import com.quiz.darkhold.login.entity.DarkholdUserDetails;
 import com.quiz.darkhold.login.repository.UserRepository;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -15,8 +14,11 @@ import org.springframework.transaction.annotation.Transactional;
 public class UserDetailsServiceImpl implements UserDetailsService {
     private final Logger logger = LogManager.getLogger(UserDetailsServiceImpl.class);
 
-    @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
+
+    public UserDetailsServiceImpl(final UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
 
     @Override
     @Transactional(readOnly = true)
@@ -27,7 +29,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
             logger.error("Username not found !!");
             throw new UsernameNotFoundException(username);
         }
-        logger.info("current user -> {}", user);
+        //logger.info("current user -> {}", user);
         return new DarkholdUserDetails(user);
     }
 }

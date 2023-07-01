@@ -30,6 +30,9 @@ public class User implements Serializable {
 
     private String password;
 
+    @Column(name = "photo")
+    private String photo;
+
     @Column(name = "enabled")
     private Boolean enabled;
 
@@ -71,6 +74,14 @@ public class User implements Serializable {
         this.password = password;
     }
 
+    public String getPhoto() {
+        return photo;
+    }
+
+    public void setPhoto(final String photo) {
+        this.photo = photo;
+    }
+
     public Boolean getEnabled() {
         return enabled;
     }
@@ -98,6 +109,7 @@ public class User implements Serializable {
                 .add("name='" + name + "'")
                 .add("email='" + email + "'")
                 .add("password='" + password + "'")
+                .add("photo='" + photo + "'")
                 .add("enabled='" + enabled + "'")
                 .add("roles=" + roles)
                 .toString();

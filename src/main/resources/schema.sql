@@ -3,6 +3,7 @@ create table member (
     name       varchar(225),
     email      varchar(225),
     password   varchar(255),
+    photo       varchar(45),
     enabled    boolean default false not null,
     createdOn  datetime,
     modifiedOn datetime,
