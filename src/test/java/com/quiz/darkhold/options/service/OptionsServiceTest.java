@@ -47,7 +47,7 @@ class OptionsServiceTest {
     private User mockUser() {
         var user = new User();
         user.setId(1L);
-        user.setName("admin12345");
+        user.setFirstName("admin12345");
         return user;
     }
 

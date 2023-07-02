@@ -37,7 +37,7 @@ class UserServiceImplTest {
         var username = "superman";
         when(userRepository.findByEmail(anyString())).thenReturn(mockUser(username));
         var user = userService.findByUsername(username);
-        Assertions.assertEquals(username, user.getName());
+        Assertions.assertEquals(username, user.getFirstName());
     }
 
     private List<Role> mockRoles() {
@@ -48,7 +48,7 @@ class UserServiceImplTest {
 
     private User mockUser(final String userName) {
         var user = new User();
-        user.setName(userName);
+        user.setFirstName(userName);
         return user;
     }
 }

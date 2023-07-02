@@ -2,8 +2,6 @@ package com.quiz.darkhold.login.controller;
 
 import com.quiz.darkhold.login.entity.User;
 import com.quiz.darkhold.login.service.SecurityService;
-import com.quiz.darkhold.login.service.UserService;
-import com.quiz.darkhold.login.validator.UserValidator;
 import com.quiz.darkhold.util.CommonUtils;
 import jakarta.servlet.http.HttpServletRequest;
 import org.apache.logging.log4j.LogManager;
@@ -23,18 +21,10 @@ public class LoginController {
     private static final String LOGIN = "login";
     private final Logger logger = LogManager.getLogger(LoginController.class);
 
-    private final UserService userService;
-
     private final SecurityService securityService;
 
-    private final UserValidator userValidator;
-
-    public LoginController(final UserService userService,
-                           final SecurityService securityService,
-                           final UserValidator userValidator) {
-        this.userService = userService;
+    public LoginController(final SecurityService securityService) {
         this.securityService = securityService;
-        this.userValidator = userValidator;
     }
 
     /**
@@ -71,7 +61,7 @@ public class LoginController {
             return "redirect:/";
         }
         if (error != null) {
-            logger.info("error is there ... {}", error);
+            logger.info("error is there ...{}", error);
             model.addAttribute("danger", "Your username or password is invalid.");
         }
         if (logout != null) {

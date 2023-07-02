@@ -37,7 +37,7 @@ class UserDetailsServiceImplTest {
 
     private User mockUser(final String userName) {
         var user = new User();
-        user.setName(userName);
+        user.setFirstName(userName);
         user.setRoles(mockRoles());
         user.setPassword("pass");
         return user;

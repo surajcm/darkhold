@@ -3,6 +3,7 @@ package com.quiz.darkhold.login.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -22,8 +23,11 @@ public class User implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "name")
-    private String name;
+    @Column(name = "firstname")
+    private String firstName;
+
+    @Column(name = "lastname")
+    private String lastName;
 
     @Column(name = "email")
     private String email;
@@ -36,7 +40,7 @@ public class User implements Serializable {
     @Column(name = "enabled")
     private Boolean enabled;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "member_roles",
             joinColumns = @JoinColumn(name = "users_id"),
             inverseJoinColumns = @JoinColumn(name = "roles_id"))
@@ -50,12 +54,20 @@ public class User implements Serializable {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getFirstName() {
+        return firstName;
     }
 
-    public void setName(final String name) {
-        this.name = name;
+    public void setFirstName(final String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(final String lastName) {
+        this.lastName = lastName;
     }
 
     public String getEmail() {
@@ -106,7 +118,8 @@ public class User implements Serializable {
     public String toString() {
         return new StringJoiner(", ", User.class.getSimpleName() + "[", "]")
                 .add("id=" + id)
-                .add("name='" + name + "'")
+                .add("firstname='" + firstName + "'")
+                .add("lastname='" + lastName + "'")
                 .add("email='" + email + "'")
                 .add("password='" + password + "'")
                 .add("photo='" + photo + "'")
