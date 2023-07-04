@@ -2,6 +2,7 @@ package com.quiz.darkhold.login.controller;
 
 import com.quiz.darkhold.login.entity.User;
 import com.quiz.darkhold.login.service.SecurityService;
+import com.quiz.darkhold.login.service.UserService;
 import com.quiz.darkhold.util.CommonUtils;
 import jakarta.servlet.http.HttpServletRequest;
 import org.apache.logging.log4j.LogManager;
@@ -22,9 +23,12 @@ public class LoginController {
     private final Logger logger = LogManager.getLogger(LoginController.class);
 
     private final SecurityService securityService;
+    private final UserService userService;
 
-    public LoginController(final SecurityService securityService) {
+    public LoginController(final SecurityService securityService,
+                           final UserService userService) {
         this.securityService = securityService;
+        this.userService = userService;
     }
 
     /**
@@ -124,5 +128,16 @@ public class LoginController {
     public String loginMe2() {
         logger.info("into GET loginMe");
         return LOGIN;
+    }
+
+    /**
+     * on to create challenge page.
+     *
+     * @return create challenge page
+     */
+    @PostMapping("/userManagement")
+    public String manageUsers() {
+        logger.info("Into the manageUsers method");
+        return "user/usermanagement";
     }
 }

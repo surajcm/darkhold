@@ -66,16 +66,7 @@ public class OptionsController {
         return "challenge/publish";
     }
 
-    /**
-     * on to create challenge page.
-     *
-     * @return create challenge page
-     */
-    @PostMapping("/userManagement")
-    public String manageUsers() {
-        log.info("Into the manageUsers method");
-        return "user/usermanagement";
-    }
+
 
     /**
      * on to create challenge page.
