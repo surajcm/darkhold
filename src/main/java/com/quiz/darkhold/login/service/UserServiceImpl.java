@@ -36,7 +36,7 @@ public class UserServiceImpl implements UserService {
         user.setPassword(pass);
         user.setEnabled(false);
         //todo : this need to be corrected
-        user.setRoles(new HashSet<>(roleRepository.findAll()));
+        //user.setRoles(new HashSet<>(roleRepository.findAll()));
         userRepository.save(user);
     }
 
@@ -45,6 +45,7 @@ public class UserServiceImpl implements UserService {
         return userRepository.findByEmail(email);
     }
 
+    @Override
     public List<User> listAll() {
         return userRepository.findAll();
     }

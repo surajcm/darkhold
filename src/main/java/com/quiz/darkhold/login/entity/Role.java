@@ -9,7 +9,7 @@ import jakarta.persistence.Table;
 import java.io.Serializable;
 
 @Entity
-@Table(name = "role")
+@Table(name = "roles")
 public class Role implements Serializable {
 
     public static final long serialVersionUID = 4328743;
@@ -18,10 +18,10 @@ public class Role implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "name")
+    @Column(length = 40, nullable = false, unique = true)
     private String name;
 
-    @Column(name = "description")
+    @Column(length = 150, nullable = false)
     private String description;
 
     public Role() {

@@ -136,7 +136,7 @@ public class LoginController {
      * @return create challenge page
      */
     @PostMapping("/userManagement")
-    public String manageUsers(Model model) {
+    public String manageUsers(final Model model) {
         logger.info("Into the manageUsers method");
         var listUsers = userService.listAll();
         model.addAttribute("listusers", listUsers);
