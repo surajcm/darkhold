@@ -1,6 +1,15 @@
 insert into roles (id, name, description, createdOn, modifiedOn, createdBy, modifiedBy) values
     (1,'ADMIN','Administrator of the darkhold', '2019-11-20 00:00:00','2019-11-20 00:00:00','admin','admin');
 
+insert into roles (id, name, description, createdOn, modifiedOn, createdBy, modifiedBy) values
+    (2,'GUEST','Guest of the darkhold', '2019-11-20 00:00:00','2019-11-20 00:00:00','admin','admin');
+
+insert into roles (id, name, description, createdOn, modifiedOn, createdBy, modifiedBy) values
+    (3,'GAME_MANAGER','Manager of the darkhold', '2019-11-20 00:00:00','2019-11-20 00:00:00','admin','admin');
+
+insert into roles (id, name, description, createdOn, modifiedOn, createdBy, modifiedBy) values
+    (4,'PARTICIPANT','Participant of the darkhold', '2019-11-20 00:00:00','2019-11-20 00:00:00','admin','admin');
+
 insert into member (id, firstname, lastname, email, password, enabled, createdOn, modifiedOn, createdBy, modifiedBy) values
     (1, 'Administrator','Of Darkhold', 'admin@admin.com', '$2a$10$l0Y76CoFAdXlkZZYkVDsIeRP..4UcpuhQ01H0B4QvTNF2uATZx9Gq',
      true, '2022-12-27 00:00:00','2022-12-27 00:00:00','admin','admin');
