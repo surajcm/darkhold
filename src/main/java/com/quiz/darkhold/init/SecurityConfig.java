@@ -8,9 +8,12 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.servlet.util.matcher.MvcRequestMatcher;
+import org.springframework.web.servlet.handler.HandlerMappingIntrospector;
 
 @Configuration
 @EnableWebSecurity
@@ -29,22 +32,37 @@ public class SecurityConfig {
     }
 
     @Bean
-    public SecurityFilterChain filterChain(final HttpSecurity http) throws Exception {
+    public SecurityFilterChain filterChain(final HttpSecurity http,
+                                           final HandlerMappingIntrospector introspector) throws Exception {
         //todo : we need to enable CSRF
         http.csrf(AbstractHttpConfigurer::disable);
-        http.authorizeHttpRequests(auth -> auth
-                        .requestMatchers(matchingPaths()).permitAll()
-                        .anyRequest().authenticated()
+        MvcRequestMatcher.Builder mvcMatcherBuilder = new MvcRequestMatcher.Builder(introspector);
+        for (var paths: matchingPaths()) {
+            http.authorizeHttpRequests(auth -> auth
+                    .requestMatchers(mvcMatcherBuilder.pattern(paths)).permitAll()
+            );
+        }
+        http.authorizeHttpRequests(auth -> auth.anyRequest().authenticated());
+        http.formLogin(
+                (formLogin) -> {
+                    try {
+                        formLogin
+                                        //.loginPage("/authenticate")
+                                        .defaultSuccessUrl("/", true)
+                                        .permitAll()
+                                        .and()
+                                        .logout((logout) -> logout.logoutSuccessUrl("/")
+                                        .invalidateHttpSession(true)
+                                        .clearAuthentication(true)
+                                        .deleteCookies("JSESSIONID"));
+                    } catch (Exception ex) {
+                        //todo : clean up
+                        throw new RuntimeException(ex);
+                    }
+                });
+        http.headers(
+                (header) -> header.frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin)
         );
-        http.formLogin().loginPage("/login")
-                .defaultSuccessUrl("/", true)
-                .permitAll()
-                .and()
-                .logout().logoutSuccessUrl("/")
-                .invalidateHttpSession(true)
-                .clearAuthentication(true)
-                .deleteCookies("JSESSIONID");
-        http.headers().frameOptions().sameOrigin();
         return http.build();
     }
 

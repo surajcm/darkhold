@@ -6,11 +6,11 @@
 
 <!--
 NOTES:
-Refer to Checkstyle Filters page given below to learn more abour suppression filter.
+Refer to Checkstyle Filters page given below to learn more about suppression filter.
 http://checkstyle.sourceforge.net/config_filters.html#SuppressionFilter
 WHAT AND WHY CHECKS SUPPRESSED
 ==============================
- - Indentation: Google style guide uses 2 spaces for identation, we use 4
+ - Indentation: Google style guide uses 2 spaces for indentation, we use 4
  - LineLength: Google style guice states to limit lines to 100, we prefer 120
  - JavadocParagraph: IDEs cannot put <p> immediately before the first word of the new paragraph
 -->
@@ -18,4 +18,5 @@ WHAT AND WHY CHECKS SUPPRESSED
 <suppressions>
     <suppress files="ChallengeService.java" checks="MethodLength"/>
     <suppress files="SecurityConfig.java" checks="MethodLength"/>
+    <suppress files="SecurityConfig.java" checks="IllegalCatch"/>
 </suppressions>
