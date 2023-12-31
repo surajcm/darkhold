@@ -11,6 +11,7 @@ import org.dizitart.no2.filters.Filters;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -37,7 +38,7 @@ public class CurrentGame {
      *
      * @param publishInfo publish info
      */
-    public void saveCurrentStatus(final PublishInfo publishInfo, final List<QuestionSet> questionSets) {
+    public void saveCurrentStatus(final PublishInfo publishInfo, final ArrayDeque<QuestionSet> questionSets) {
         List<String> users = new ArrayList<>();
         users.add(publishInfo.getModerator());
         // table contents
@@ -177,7 +178,7 @@ public class CurrentGame {
         var doc = cursor.toList().get(0);
         var questionNo = (Integer) doc.get(CURRENT_QUESTION_NO);
         logger.info("questionNo : {}", questionNo);
-        var questions = (List<QuestionSet>) doc.get(QUESTIONS);
+        var questions = ((ArrayDeque<QuestionSet>) doc.get(QUESTIONS)).stream().toList();
         logger.info("questions size : {}}", questions.size());
         var questionPointer = new QuestionPointer();
         questionPointer.setCurrentQuestionNumber(questionNo);

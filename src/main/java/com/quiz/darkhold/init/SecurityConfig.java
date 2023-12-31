@@ -33,33 +33,29 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(final HttpSecurity http,
-                                           final HandlerMappingIntrospector introspector) throws Exception {
+                                           final HandlerMappingIntrospector introspect) throws Exception {
         //todo : we need to enable CSRF
         http.csrf(AbstractHttpConfigurer::disable);
-        MvcRequestMatcher.Builder mvcMatcherBuilder = new MvcRequestMatcher.Builder(introspector);
-        for (var paths: matchingPaths()) {
+        MvcRequestMatcher.Builder mvcMatcherBuilder = new MvcRequestMatcher.Builder(introspect);
+        for (var paths : matchingPaths()) {
             http.authorizeHttpRequests(auth -> auth
                     .requestMatchers(mvcMatcherBuilder.pattern(paths)).permitAll()
             );
         }
         http.authorizeHttpRequests(auth -> auth.anyRequest().authenticated());
-        http.formLogin(
-                (formLogin) -> {
-                    try {
-                        formLogin
-                                        //.loginPage("/authenticate")
-                                        .defaultSuccessUrl("/", true)
-                                        .permitAll()
-                                        .and()
-                                        .logout((logout) -> logout.logoutSuccessUrl("/")
-                                        .invalidateHttpSession(true)
-                                        .clearAuthentication(true)
-                                        .deleteCookies("JSESSIONID"));
-                    } catch (Exception ex) {
-                        //todo : clean up
-                        throw new RuntimeException(ex);
-                    }
-                });
+        http.formLogin((formLogin) -> {
+            try {
+                formLogin.defaultSuccessUrl("/", true).permitAll();
+            } catch (Exception ex) {
+                //todo : clean up
+                throw new RuntimeException(ex);
+            }
+        });
+        http.logout((logout) -> logout.logoutSuccessUrl("/")
+                .invalidateHttpSession(true)
+                .clearAuthentication(true)
+                .deleteCookies("JSESSIONID"));
+
         http.headers(
                 (header) -> header.frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin)
         );
@@ -67,7 +63,7 @@ public class SecurityConfig {
     }
 
     private String[] matchingPaths() {
-        return new String[] {"/", "/logmein" ,
+        return new String[]{"/", "/logmein",
                 "/home", "/resources/**",
                 "/registration", "/images/**",
                 "/scripts/**", "/styles/**",

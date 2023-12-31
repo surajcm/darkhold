@@ -19,9 +19,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.ArrayDeque;
 import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -56,7 +55,7 @@ public class ChallengeService {
         var challenge = new Challenge();
         challenge.setTitle(title);
         challenge.setDescription(description);
-        challenge.setQuestionSets(questionSets);
+        challenge.setQuestionSets(questionSets.stream().toList());
         challenge.setChallengeOwner(currentUserId());
         final var savedChallenge = challengeRepository.save(challenge);
         questionSets.forEach(q -> q.setChallenge(savedChallenge));
@@ -84,8 +83,9 @@ public class ChallengeService {
         return user.getId();
     }
 
-    private List<QuestionSet> readAndProcessChallenge(final MultipartFile upload) throws ChallengeException {
-        List<QuestionSet> questionSets = new LinkedList<>();
+    //replace LinkedList with ArrayDeque as the return type
+    private ArrayDeque<QuestionSet> readAndProcessChallenge(final MultipartFile upload) throws ChallengeException {
+        ArrayDeque<QuestionSet> questionSets = new ArrayDeque<>();
         try (var workbook = new XSSFWorkbook(upload.getInputStream());) {
             var datatypeSheet = workbook.getSheetAt(0);
             for (Row currentRow : datatypeSheet) {

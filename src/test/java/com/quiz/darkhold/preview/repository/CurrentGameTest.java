@@ -13,6 +13,7 @@ import org.mockito.Mockito;
 import org.powermock.reflect.Whitebox;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,7 +34,7 @@ class CurrentGameTest {
         var publishInfo = new PublishInfo();
         publishInfo.setPin("1234");
         publishInfo.setModerator("admin");
-        Assertions.assertAll(() -> currentGame.saveCurrentStatus(publishInfo, new ArrayList<>()));
+        Assertions.assertAll(() -> currentGame.saveCurrentStatus(publishInfo, new ArrayDeque<>()));
     }
 
     @Test

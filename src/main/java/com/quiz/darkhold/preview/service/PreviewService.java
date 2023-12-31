@@ -10,6 +10,8 @@ import com.quiz.darkhold.preview.repository.CurrentGame;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayDeque;
+
 @Service
 public class PreviewService {
 
@@ -37,7 +39,9 @@ public class PreviewService {
         var previewInfo = new PreviewInfo();
         var challengeOne = Long.valueOf(challengeId);
         var challenge = challengeRepository.getById(challengeOne);
-        previewInfo.setQuestionSets(challenge.getQuestionSets());
+        // convert challenge to type ArrayDeque<QuestionSet>
+        var dequeChallenge = new ArrayDeque<>(challenge.getQuestionSets());;
+        previewInfo.setQuestionSets(dequeChallenge);
         previewInfo.setChallengeName(challenge.getTitle());
         previewInfo.setChallengeId(challengeId);
         return previewInfo;
@@ -55,7 +59,7 @@ public class PreviewService {
         var previewInfo = new PreviewInfo();
         var challengeOne = Long.valueOf(challengeId);
         var challenge = challengeRepository.findById(challengeOne);
-        challenge.ifPresent(value -> previewInfo.setQuestionSets(value.getQuestionSets()));
+        challenge.ifPresent(value -> previewInfo.setQuestionSets(new ArrayDeque<>(value.getQuestionSets())));
         challenge.ifPresent(value -> previewInfo.setChallengeName(value.getTitle()));
         previewInfo.setChallengeId(challengeId);
         return previewInfo;

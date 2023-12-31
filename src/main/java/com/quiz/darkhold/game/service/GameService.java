@@ -41,7 +41,7 @@ public class GameService {
     public QuestionPointer getCurrentQuestionPointer() {
         var publishInfo = previewService.getActiveChallenge();
         var pin = publishInfo.getPin();
-        logger.info("Current pin is ");
+        logger.info("Current pin is {}", pin);
         return currentGame.getCurrentQuestionPointer(pin);
     }
 
@@ -68,6 +68,7 @@ public class GameService {
 
     public Map<String, Integer> getCurrentScore() {
         var pin = currentPin();
+        logger.info("current pin is {}", pin);
         return currentGame.getCurrentScore(pin);
     }
 

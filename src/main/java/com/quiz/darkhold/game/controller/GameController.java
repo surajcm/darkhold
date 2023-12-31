@@ -85,7 +85,7 @@ public class GameController {
         challenge.setQuestionSet(questionPointer.getCurrentQuestion());
         challenge.setQuestionNumber(challenge.getQuestionNumber() + 1);
         model.addAttribute("challenge", challenge);
-        model.addAttribute("game_timer", "25");
+        model.addAttribute("game_timer", "5");
         return "game";
     }
 
@@ -99,6 +99,7 @@ public class GameController {
         var scoreOnStatus = findScoreOnStatus(status, timeTook);
         logger.info("score is {}", scoreOnStatus);
         var moderator = gameService.findModerator();
+        logger.info("is user moderator : {}", user.equalsIgnoreCase(moderator));
         if (user.equalsIgnoreCase(moderator)) {
             gameService.incrementQuestionNo();
         } else {

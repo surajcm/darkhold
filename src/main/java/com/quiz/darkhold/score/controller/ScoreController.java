@@ -32,10 +32,10 @@ public class ScoreController {
         logger.info("On to the scoreboard screen");
         var score = new CurrentScore();
         var scores = gameService.getCurrentScore();
+        logger.info("Total uses are {}", scores.size());
         scores.forEach((key, value) ->
-                logger.info(new StringBuilder()
-                        .append("key is:").append(key)
-                        .append(", and value is :").append(value).toString()));
+                logger.info("key is:" + key +
+                        ", and value is :" + value));
         score.setScore(scores);
         model.addAttribute("score", score);
         return "scoreboard";
