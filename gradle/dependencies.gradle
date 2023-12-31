@@ -13,7 +13,7 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-log4j2")
     runtimeOnly("org.springframework.boot:spring-boot-devtools")
 
-    implementation("org.apache.poi:poi-ooxml:5.2.3")
+    implementation("org.apache.poi:poi-ooxml:5.2.5")
     implementation("org.apache.commons:commons-lang3:3.13.0")
     implementation("com.h2database:h2:2.1.214")
     implementation("org.dizitart:nitrite:3.4.4")
