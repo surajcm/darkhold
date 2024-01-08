@@ -17,7 +17,7 @@ insert into member (id, firstname, lastname, email, password, enabled, createdOn
 insert into member_roles(users_id, roles_id) values (1,1);
 
 insert into challenge (challenge_id, title, description, challengeowner, createdOn, modifiedOn, createdBy, modifiedBy) values
-    (1, 'Challenge 01', 'new Challenges', 1L, '2020-04-08 00:00:00','2020-04-08 00:00:00','admin','admin');
+    (1, 'Challenge 01', 'new Challenges', 1, '2020-04-08 00:00:00','2020-04-08 00:00:00','admin','admin');
 
 insert into question_set (id, question, answer1, answer2, answer3, answer4, correctOptions, challenge_id) values
     (1, 'What is ECR ?',
