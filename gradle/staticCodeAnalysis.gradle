@@ -4,7 +4,7 @@ apply plugin: 'jacoco'
 //apply plugin: 'com.github.spotbugs'
 
 checkstyle {
-    toolVersion = '10.12.7'
+    toolVersion = '10.13.0'
     ignoreFailures = false
     maxWarnings = 0
     checkstyleMain {
