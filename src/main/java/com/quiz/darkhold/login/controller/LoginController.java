@@ -135,11 +135,29 @@ public class LoginController {
      *
      * @return create challenge page
      */
-    @PostMapping("/userManagement")
+    @GetMapping("/userManagement")
     public String manageUsers(final Model model) {
         logger.info("Into the manageUsers method");
         var listUsers = userService.listAll();
         model.addAttribute("listusers", listUsers);
         return "user/usermanagement";
     }
+
+    @GetMapping("/user/create")
+    public String createUser(final Model model) {
+        logger.info("Into the createUser method");
+        var roles = userService.listRoles();
+        var user = new User();
+        user.setEnabled(true);
+        model.addAttribute("userForm", user);
+        model.addAttribute("listRoles", roles);
+        return "user/createuser";
+    }
+
+    @PostMapping("/users/save")
+    public String saveUser(final User user) {
+        logger.info("Into the saveUser method, user is {}", user);
+        return "redirect:/userManagement";
+    }
+
 }

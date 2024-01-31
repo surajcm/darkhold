@@ -30,6 +30,7 @@ function toHome() {
 }
 
 function manageUsers() {
+    document.forms[0].method = 'get';
     document.forms[0].action = "/userManagement";
     document.forms[0].submit();
 }

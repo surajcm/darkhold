@@ -1,5 +1,6 @@
 package com.quiz.darkhold.login.service;
 
+import com.quiz.darkhold.login.entity.Role;
 import com.quiz.darkhold.login.entity.User;
 import com.quiz.darkhold.login.repository.RoleRepository;
 import com.quiz.darkhold.login.repository.UserRepository;
@@ -47,5 +48,10 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<User> listAll() {
         return userRepository.findAll();
+    }
+
+    @Override
+    public List<Role> listRoles() {
+        return (List<Role>) roleRepository.findAll();
     }
 }
