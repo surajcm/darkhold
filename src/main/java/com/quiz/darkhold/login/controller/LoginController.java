@@ -13,6 +13,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.AbstractMap;
 import java.util.Map;
@@ -155,8 +156,10 @@ public class LoginController {
     }
 
     @PostMapping("/users/save")
-    public String saveUser(final User user) {
+    public String saveUser(final User user, final RedirectAttributes redirectAttributes) {
         logger.info("Into the saveUser method, user is {}", user);
+        userService.save(user);
+        redirectAttributes.addFlashAttribute("message", "The user has been saved successfully");
         return "redirect:/userManagement";
     }
 

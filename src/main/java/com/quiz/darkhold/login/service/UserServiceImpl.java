@@ -34,9 +34,6 @@ public class UserServiceImpl implements UserService {
         logger.info("User last name is " + user.getLastName());
         logger.info("password is " + pass);
         user.setPassword(pass);
-        user.setEnabled(false);
-        //todo : this need to be corrected
-        //user.setRoles(new HashSet<>(roleRepository.findAll()));
         userRepository.save(user);
     }
 

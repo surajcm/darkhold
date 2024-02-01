@@ -15,6 +15,11 @@
         <h2>Manage Users</h2>
         <a th:href="@{/user/create}">Create New User</a>
     </div>
+    <div th:if="${message != null}">
+        <div class="alert alert-success text-center" role="alert">
+            [[${message}]]
+        </div>
+    </div>
     <div>
         <form action="#" method="post">
         </form>
