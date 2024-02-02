@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import java.util.Set;
+
 @Controller
 @RequestMapping("/registration")
 public class RegistrationController {
@@ -45,6 +47,10 @@ public class RegistrationController {
             logger.info(String.valueOf(bindingResult.getAllErrors().get(0)));
             return "login";
         }
+        var roles = userService.listRoles();
+        var role = roles.stream().filter(a -> a.getName().equals("GUEST")).findFirst();
+        role.ifPresent(value -> user.setRoles(Set.of(value)));
+        user.setEnabled(true);
         userService.save(user);
         var gameInfo = new GameInfo();
         gameInfo.setMessage("Successfully created the account !!!");

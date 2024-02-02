@@ -67,12 +67,19 @@
                     </div>
                 </div>
                 <div class="text-center">
-                    <input type="submit" value="Save" class="btn btn-primary m-3" onclick="saveThisUser();" />
-                    <input type="button" value="Cancel" class="btn border-secondary" />
+                    <input type="submit" value="Save" class="btn btn-primary m-3" />
+                    <input type="button" value="Cancel" id="cancelButton" onclick="toUsers()" class="btn border-secondary" />
                 </div>
             </div>
         </form>
     </div>
 </main>
 </body>
+<script type="text/javascript">
+    /*<![CDATA[*/
+   function toUsers() {
+       window.location = "/userManagement";
+   }
+    /*]]>*/
+</script>
 </html>

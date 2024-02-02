@@ -30,9 +30,6 @@ public class UserServiceImpl implements UserService {
     @Override
     public void save(final User user) {
         var pass = encoder.encode(user.getPassword());
-        logger.info("User first name is " + user.getFirstName());
-        logger.info("User last name is " + user.getLastName());
-        logger.info("password is " + pass);
         user.setPassword(pass);
         userRepository.save(user);
     }
