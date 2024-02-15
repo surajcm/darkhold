@@ -14,7 +14,22 @@ insert into member (id, firstname, lastname, email, password, enabled, createdOn
     (1, 'Administrator','Of Darkhold', 'admin@admin.com', '$2a$10$l0Y76CoFAdXlkZZYkVDsIeRP..4UcpuhQ01H0B4QvTNF2uATZx9Gq',
      true, '2022-12-27 00:00:00','2022-12-27 00:00:00','admin','admin');
 
+insert into member (id, firstname, lastname, email, password, enabled, createdOn, modifiedOn, createdBy, modifiedBy) values
+    (2, 'Guest','Of Darkhold', 'guest@guest.com', '$2a$10$l0Y76CoFAdXlkZZYkVDsIeRP..4UcpuhQ01H0B4QvTNF2uATZx9Gq',
+     true, '2024-02-14 00:00:00','2024-02-14 00:00:00','admin','admin');
+
+insert into member (id, firstname, lastname, email, password, enabled, createdOn, modifiedOn, createdBy, modifiedBy) values
+    (3, 'Manager','Of Darkhold', 'manager@guest.com', '$2a$10$l0Y76CoFAdXlkZZYkVDsIeRP..4UcpuhQ01H0B4QvTNF2uATZx9Gq',
+     true, '2024-02-14 00:00:00','2024-02-14 00:00:00','admin','admin');
+
+insert into member (id, firstname, lastname, email, password, enabled, createdOn, modifiedOn, createdBy, modifiedBy) values
+    (4, 'Participant','Of Darkhold', 'participant@guest.com', '$2a$10$l0Y76CoFAdXlkZZYkVDsIeRP..4UcpuhQ01H0B4QvTNF2uATZx9Gq',
+     true, '2024-02-14 00:00:00','2024-02-14 00:00:00','admin','admin');
+
 insert into member_roles(users_id, roles_id) values (1,1);
+insert into member_roles(users_id, roles_id) values (2,2);
+insert into member_roles(users_id, roles_id) values (3,3);
+insert into member_roles(users_id, roles_id) values (4,4);
 
 insert into challenge (challenge_id, title, description, challengeowner, createdOn, modifiedOn, createdBy, modifiedBy) values
     (1, 'Challenge 01', 'new Challenges', 1, '2020-04-08 00:00:00','2020-04-08 00:00:00','admin','admin');

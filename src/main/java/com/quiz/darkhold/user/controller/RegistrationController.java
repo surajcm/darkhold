@@ -1,8 +1,8 @@
-package com.quiz.darkhold.login.controller;
+package com.quiz.darkhold.user.controller;
 
 import com.quiz.darkhold.home.model.GameInfo;
-import com.quiz.darkhold.login.entity.User;
-import com.quiz.darkhold.login.service.UserService;
+import com.quiz.darkhold.user.entity.User;
+import com.quiz.darkhold.user.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;

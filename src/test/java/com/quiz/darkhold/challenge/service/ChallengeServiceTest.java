@@ -3,7 +3,7 @@ package com.quiz.darkhold.challenge.service;
 import com.quiz.darkhold.challenge.exception.ChallengeException;
 import com.quiz.darkhold.challenge.repository.ChallengeRepository;
 import com.quiz.darkhold.challenge.repository.QuestionSetRepository;
-import com.quiz.darkhold.login.repository.UserRepository;
+import com.quiz.darkhold.user.repository.UserRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

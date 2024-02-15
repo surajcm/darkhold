@@ -2,7 +2,7 @@ package com.quiz.darkhold.options;
 
 import com.quiz.darkhold.challenge.repository.ChallengeRepository;
 import com.quiz.darkhold.game.repository.GameRepository;
-import com.quiz.darkhold.login.repository.UserRepository;
+import com.quiz.darkhold.user.repository.UserRepository;
 import com.quiz.darkhold.options.controller.OptionsController;
 import com.quiz.darkhold.options.service.OptionsService;
 import com.quiz.darkhold.preview.repository.CurrentGame;

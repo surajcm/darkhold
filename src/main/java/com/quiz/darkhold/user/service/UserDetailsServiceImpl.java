@@ -1,7 +1,7 @@
-package com.quiz.darkhold.login.service;
+package com.quiz.darkhold.user.service;
 
-import com.quiz.darkhold.login.entity.DarkholdUserDetails;
-import com.quiz.darkhold.login.repository.UserRepository;
+import com.quiz.darkhold.user.entity.DarkholdUserDetails;
+import com.quiz.darkhold.user.repository.UserRepository;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.security.core.userdetails.UserDetails;

@@ -2,7 +2,7 @@ package com.quiz.darkhold.options.service;
 
 import com.quiz.darkhold.challenge.entity.Challenge;
 import com.quiz.darkhold.challenge.repository.ChallengeRepository;
-import com.quiz.darkhold.login.repository.UserRepository;
+import com.quiz.darkhold.user.repository.UserRepository;
 import com.quiz.darkhold.options.model.ChallengeInfo;
 import com.quiz.darkhold.options.model.ChallengeSummary;
 import org.apache.commons.logging.Log;

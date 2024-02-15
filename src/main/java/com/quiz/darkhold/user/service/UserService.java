@@ -1,7 +1,7 @@
-package com.quiz.darkhold.login.service;
+package com.quiz.darkhold.user.service;
 
-import com.quiz.darkhold.login.entity.Role;
-import com.quiz.darkhold.login.entity.User;
+import com.quiz.darkhold.user.entity.Role;
+import com.quiz.darkhold.user.entity.User;
 
 import java.util.List;
 
@@ -13,5 +13,7 @@ public interface UserService {
     List<User> listAll();
 
     List<Role> listRoles();
+
+    Boolean isEmailUnique(String email);
 }
 

@@ -1,4 +1,4 @@
-package com.quiz.darkhold.login.entity;
+package com.quiz.darkhold.user.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

@@ -21,34 +21,34 @@
         </div>
     </div>
     <div>
-        <form action="#" method="post">
+        <form th:action="" method="post">
+            <table class="table table-bordered table-striped table-hover table-responsive-xl">
+                <thead class="thead-dark">
+                    <tr>
+                        <th>User ID</th>
+                        <th>Photos</th>
+                        <th>Email</th>
+                        <th>First Name</th>
+                        <th>Last Name</th>
+                        <th>Roles</th>
+                        <th>Enabled</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="user: ${listusers}">
+                        <td>[[${user.id}]]</td>
+                        <td></td>
+                        <td>[[${user.email}]]</td>
+                        <td>[[${user.firstName}]]</td>
+                        <td>[[${user.lastName}]]</td>
+                        <td>[[${user.roles}]]</td>
+                        <td>[[${user.enabled}]]</td>
+                        <td>Edit &nbsp; Delete  </td>
+                    </tr>
+                </tbody>
+            </table>
         </form>
-        <table class="table table-bordered table-striped table-hover table-responsive-xl">
-            <thead class="thead-dark">
-                <tr>
-                    <th>User ID</th>
-                    <th>Photos</th>
-                    <th>Email</th>
-                    <th>First Name</th>
-                    <th>Last Name</th>
-                    <th>Roles</th>
-                    <th>Enabled</th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr th:each="user: ${listusers}">
-                    <td>[[${user.id}]]</td>
-                    <td></td>
-                    <td>[[${user.email}]]</td>
-                    <td>[[${user.firstName}]]</td>
-                    <td>[[${user.lastName}]]</td>
-                    <td>[[${user.roles}]]</td>
-                    <td>[[${user.enabled}]]</td>
-                    <td>Edit &nbsp; Delete  </td>
-                </tr>
-            </tbody>
-        </table>
     </div>
 </body>
 </html>

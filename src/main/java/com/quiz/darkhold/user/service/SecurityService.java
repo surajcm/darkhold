@@ -1,4 +1,4 @@
-package com.quiz.darkhold.login.service;
+package com.quiz.darkhold.user.service;
 
 public interface SecurityService {
     String findLoggedInUsername();

@@ -1,4 +1,4 @@
-package com.quiz.darkhold.login.entity;
+package com.quiz.darkhold.user.entity;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;

@@ -1,4 +1,4 @@
-package com.quiz.darkhold.login.service;
+package com.quiz.darkhold.user.service;
 
 import com.quiz.darkhold.util.CommonUtils;
 import org.apache.logging.log4j.LogManager;

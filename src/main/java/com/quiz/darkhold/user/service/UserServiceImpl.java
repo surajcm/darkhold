@@ -1,9 +1,9 @@
-package com.quiz.darkhold.login.service;
+package com.quiz.darkhold.user.service;
 
-import com.quiz.darkhold.login.entity.Role;
-import com.quiz.darkhold.login.entity.User;
-import com.quiz.darkhold.login.repository.RoleRepository;
-import com.quiz.darkhold.login.repository.UserRepository;
+import com.quiz.darkhold.user.entity.Role;
+import com.quiz.darkhold.user.entity.User;
+import com.quiz.darkhold.user.repository.RoleRepository;
+import com.quiz.darkhold.user.repository.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -13,8 +13,6 @@ import java.util.List;
 
 @Service
 public class UserServiceImpl implements UserService {
-
-    private static final Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
     private final BCryptPasswordEncoder encoder;
@@ -47,5 +45,10 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<Role> listRoles() {
         return (List<Role>) roleRepository.findAll();
+    }
+
+    @Override
+    public Boolean isEmailUnique(String email) {
+        return userRepository.findByEmail(email) == null;
     }
 }

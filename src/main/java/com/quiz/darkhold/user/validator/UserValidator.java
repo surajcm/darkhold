@@ -1,7 +1,7 @@
-package com.quiz.darkhold.login.validator;
+package com.quiz.darkhold.user.validator;
 
-import com.quiz.darkhold.login.entity.User;
-import com.quiz.darkhold.login.service.UserService;
+import com.quiz.darkhold.user.entity.User;
+import com.quiz.darkhold.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;

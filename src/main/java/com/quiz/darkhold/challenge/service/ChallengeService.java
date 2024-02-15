@@ -6,7 +6,7 @@ import com.quiz.darkhold.challenge.entity.QuestionSet;
 import com.quiz.darkhold.challenge.exception.ChallengeException;
 import com.quiz.darkhold.challenge.repository.ChallengeRepository;
 import com.quiz.darkhold.challenge.repository.QuestionSetRepository;
-import com.quiz.darkhold.login.repository.UserRepository;
+import com.quiz.darkhold.user.repository.UserRepository;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.poi.openxml4j.exceptions.NotOfficeXmlFileException;

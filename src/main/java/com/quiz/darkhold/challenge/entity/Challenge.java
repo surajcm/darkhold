@@ -1,6 +1,6 @@
 package com.quiz.darkhold.challenge.entity;
 
-import com.quiz.darkhold.login.entity.User;
+import com.quiz.darkhold.user.entity.User;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;

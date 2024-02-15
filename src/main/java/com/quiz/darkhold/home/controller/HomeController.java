@@ -2,7 +2,7 @@ package com.quiz.darkhold.home.controller;
 
 import com.quiz.darkhold.home.model.GameInfo;
 import com.quiz.darkhold.home.service.HomeService;
-import com.quiz.darkhold.login.service.SecurityService;
+import com.quiz.darkhold.user.service.SecurityService;
 import com.quiz.darkhold.util.CommonUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

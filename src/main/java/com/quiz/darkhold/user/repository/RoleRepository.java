@@ -1,6 +1,6 @@
-package com.quiz.darkhold.login.repository;
+package com.quiz.darkhold.user.repository;
 
-import com.quiz.darkhold.login.entity.Role;  
+import com.quiz.darkhold.user.entity.Role;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 

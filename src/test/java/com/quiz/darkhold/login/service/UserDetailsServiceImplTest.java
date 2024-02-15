@@ -1,8 +1,9 @@
 package com.quiz.darkhold.login.service;
 
-import com.quiz.darkhold.login.entity.Role;
-import com.quiz.darkhold.login.entity.User;
-import com.quiz.darkhold.login.repository.UserRepository;
+import com.quiz.darkhold.user.entity.Role;
+import com.quiz.darkhold.user.entity.User;
+import com.quiz.darkhold.user.repository.UserRepository;
+import com.quiz.darkhold.user.service.UserDetailsServiceImpl;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

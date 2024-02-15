@@ -2,8 +2,8 @@ package com.quiz.darkhold.options.service;
 
 import com.quiz.darkhold.challenge.entity.Challenge;
 import com.quiz.darkhold.challenge.repository.ChallengeRepository;
-import com.quiz.darkhold.login.entity.User;
-import com.quiz.darkhold.login.repository.UserRepository;
+import com.quiz.darkhold.user.entity.User;
+import com.quiz.darkhold.user.repository.UserRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
