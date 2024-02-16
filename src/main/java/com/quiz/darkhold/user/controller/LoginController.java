@@ -2,7 +2,6 @@ package com.quiz.darkhold.user.controller;
 
 import com.quiz.darkhold.user.entity.User;
 import com.quiz.darkhold.user.service.SecurityService;
-import com.quiz.darkhold.user.service.UserService;
 import com.quiz.darkhold.util.CommonUtils;
 import jakarta.servlet.http.HttpServletRequest;
 import org.apache.logging.log4j.LogManager;
@@ -23,12 +22,9 @@ public class LoginController {
     private final Logger logger = LogManager.getLogger(LoginController.class);
 
     private final SecurityService securityService;
-    private final UserService userService;
 
-    public LoginController(final SecurityService securityService,
-                           final UserService userService) {
+    public LoginController(final SecurityService securityService) {
         this.securityService = securityService;
-        this.userService = userService;
     }
 
     /**

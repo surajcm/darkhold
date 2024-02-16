@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>Getting Started: Darkhold classroom quiz experience</title>
     <link href="/styles/error-styles.css" rel="stylesheet" />
+    <link href="/styles/core/fontawesome-6.2.1/css/all.min.css" rel="stylesheet">
+    <link href="/styles/icon-styles.css" rel="stylesheet">
     <script type="text/javascript" src="/scripts/common-scripts.js"></script>
     <script type="text/javascript" src="/scripts/user-management-scripts.js"></script>
     <script type="text/javascript" src="/scripts/core/bootstrap-5.3.1/bootstrap.min.js"></script>
@@ -21,7 +23,7 @@
         </div>
     </div>
     <div>
-        <form th:action="" method="post">
+        <form action="" method="post">
             <table class="table table-bordered table-striped table-hover table-responsive-xl">
                 <thead class="thead-dark">
                     <tr>
@@ -38,13 +40,20 @@
                 <tbody>
                     <tr th:each="user: ${listusers}">
                         <td>[[${user.id}]]</td>
-                        <td></td>
+                        <td><span class="fas fa-portrait fa-3x icon-silver"></span></td>
                         <td>[[${user.email}]]</td>
                         <td>[[${user.firstName}]]</td>
                         <td>[[${user.lastName}]]</td>
                         <td>[[${user.roles}]]</td>
-                        <td>[[${user.enabled}]]</td>
-                        <td>Edit &nbsp; Delete  </td>
+                        <td>
+                            <a th:if="${user.enabled == true}" class="fas fa-check-circle fa-2x icon-green" href=""></a>
+                            <a th:if="${user.enabled == false}" class="fas fa-check-circle fa-2x icon-dark" href=""></a>
+                        </td>
+                        <td>
+                            <a class="fas fa-edit fa-2x icon-green" th:href="@{'/users/edit/' + ${user.id}}" title="Edit this user"></a>
+                            &nbsp;
+                            <a class="fas fa-trash fa-2x icon-dark" href=""></a>
+                        </td>
                     </tr>
                 </tbody>
             </table>

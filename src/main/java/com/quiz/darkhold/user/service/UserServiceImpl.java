@@ -4,8 +4,6 @@ import com.quiz.darkhold.user.entity.Role;
 import com.quiz.darkhold.user.entity.User;
 import com.quiz.darkhold.user.repository.RoleRepository;
 import com.quiz.darkhold.user.repository.UserRepository;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -48,7 +46,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Boolean isEmailUnique(String email) {
+    public Boolean isEmailUnique(final String email) {
         return userRepository.findByEmail(email) == null;
     }
 }

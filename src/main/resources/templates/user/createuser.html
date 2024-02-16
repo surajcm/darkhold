@@ -9,6 +9,7 @@
         <meta name="author" content="Suraj" />
         <title>Getting Started: Darkhold classroom quiz experience</title>
         <link href="/styles/error-styles.css" rel="stylesheet" />
+        <link href="/styles/core/fontawesome-6.2.1/css/all.min.css" rel="stylesheet">
         <script type="text/javascript" src="/scripts/common-scripts.js"></script>
         <script type="text/javascript" src="/scripts/user-management-scripts.js"></script>
         <script type="text/javascript" src="/scripts/core/bootstrap-5.3.1/bootstrap.min.js"></script>
@@ -71,6 +72,22 @@
                         </div>
                     </div>
                 </form>
+                <div class="modal fade text-center" id="modalDialog">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h4 class="modal-title" id="modalTitle">Warning</h4>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal">&times;</button>
+                            </div>
+                            <div class="modal-body">
+                                <span id="modalBody"></span>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </main>
         <script type="text/javascript">
@@ -78,8 +95,34 @@
             function toUsers() {
                 window.location = "/userManagement";
             }
-            function checkEmailUnique() {
+
+            function checkEmailUnique(form) {
+                const email = form.email.value;
+                const xhr = new XMLHttpRequest();
+                xhr.open("POST", "/users/check_email", true);
+                xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+                xhr.send("email=" + encodeURIComponent(email));
+                xhr.onreadystatechange = function () {
+                    if (this.readyState == 4 && this.status == 200) {
+                        // The request has been processed successfully
+                        const response = this.responseText;
+                        if (response == 'OK') {
+                            form.submit();
+                        } else if (response == 'DUPLICATED') {
+                            showModelDialog("Warning", "Email already exists. Please use a different email : " + email);
+                        } else {
+                            showModelDialog("Error", "An error occurred while checking email uniqueness. Please try again later.");
+                        }
+                    }
+                }
                 return false;
+            }
+
+            function showModelDialog(title, body) {
+                document.getElementById('modalTitle').innerText = title;
+                document.getElementById('modalBody').innerText = body;
+                const myModal = new bootstrap.Modal(document.getElementById('modalDialog'));
+                myModal.show();
             }
             /*]]>*/
         </script>
