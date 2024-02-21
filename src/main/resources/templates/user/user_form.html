@@ -20,10 +20,11 @@
             <div class="container">
                 <div class="panel panel-primary">
                     <div class="panel-heading">
-                        <h3 class="panel-title">Create User</h3>
+                        <h3 class="panel-title">[[${pageTitle}]]</h3>
                     </div>
                 </div>
                 <form th:action="@{/users/save}" method="post" th:object="${userForm}" onsubmit="return checkEmailUnique(this);">
+                    <input type="hidden" th:field="*{id}" />
                     <div class="border border-secondary rounded p-3">
                         <div class="input-group mb-3">
                             <label class="col-sm-4 col-form-label">First Name : </label>
@@ -46,7 +47,10 @@
                         <div class="input-group mb-3">
                             <label class="col-sm-4 col-form-label">Password : </label>
                             <div class="col-sm-8">
-                                <input type="password" class="form-control" th:field="*{password}" required minlength="8" maxlength="20" />
+                                <input type="password" th:if="${userForm.id == null}" class="form-control"
+                                       th:field="*{password}" required minlength="8" maxlength="20" />
+                                <input type="password" th:if="${userForm.id != null}" class="form-control"
+                                       th:field="*{password}" minlength="8" maxlength="20" />
                             </div>
                         </div>
                         <div class="input-group mb-3">
@@ -98,10 +102,11 @@
 
             function checkEmailUnique(form) {
                 const email = form.email.value;
+                const userId = form.id.value;
                 const xhr = new XMLHttpRequest();
                 xhr.open("POST", "/users/check_email", true);
                 xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-                xhr.send("email=" + encodeURIComponent(email));
+                xhr.send("email=" + encodeURIComponent(email) + "&userId=" + userId);
                 xhr.onreadystatechange = function () {
                     if (this.readyState == 4 && this.status == 200) {
                         // The request has been processed successfully

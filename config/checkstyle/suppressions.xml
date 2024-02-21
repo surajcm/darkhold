@@ -20,4 +20,5 @@ WHAT AND WHY CHECKS SUPPRESSED
     <suppress files="SecurityConfig.java" checks="MethodLength"/>
     <suppress files="SecurityConfig.java" checks="IllegalCatch"/>
     <suppress files="RegistrationController.java" checks="MethodLength"/>
+    <suppress files="UserServiceImpl.java" checks="MethodLength"/>
 </suppressions>

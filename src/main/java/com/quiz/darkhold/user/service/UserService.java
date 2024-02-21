@@ -2,6 +2,7 @@ package com.quiz.darkhold.user.service;
 
 import com.quiz.darkhold.user.entity.Role;
 import com.quiz.darkhold.user.entity.User;
+import com.quiz.darkhold.user.exception.UserNotFoundException;
 
 import java.util.List;
 
@@ -14,6 +15,8 @@ public interface UserService {
 
     List<Role> listRoles();
 
-    Boolean isEmailUnique(String email);
+    Boolean isEmailUnique(Long id, String email);
+
+    User get(Long id) throws UserNotFoundException;
 }
 
