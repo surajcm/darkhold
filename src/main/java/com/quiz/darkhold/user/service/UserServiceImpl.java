@@ -26,20 +26,29 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void save(final User user) {
-        var isUpdating = (user.getId() != null);
-        if (isUpdating) {
-            var existingUser = userRepository.findById(user.getId()).get();
-            if (user.getPassword().isEmpty()) {
-                user.setPassword(existingUser.getPassword());
-            } else {
-                var pass = encoder.encode(user.getPassword());
-                user.setPassword(pass);
-            }
+        if (isUpdatingUser(user)) {
+            var existingUser = findExistingUser(user.getId());
+            user.setPassword(getPassword(user, existingUser));
         } else {
-            var pass = encoder.encode(user.getPassword());
-            user.setPassword(pass);
+            user.setPassword(encodePassword(user.getPassword()));
         }
         userRepository.save(user);
+    }
+
+    private boolean isUpdatingUser(final User user) {
+        return user.getId() != null;
+    }
+
+    private User findExistingUser(final Long id) {
+        return userRepository.findById(id).get();
+    }
+
+    private String getPassword(final User newUser, final User existingUser) {
+        return newUser.getPassword().isEmpty() ? existingUser.getPassword() : encodePassword(newUser.getPassword());
+    }
+
+    private String encodePassword(final String password) {
+        return encoder.encode(password);
     }
 
     @Override
@@ -63,21 +72,16 @@ public class UserServiceImpl implements UserService {
         if (userByEmail == null) {
             return true;
         }
-        var isCreatingNew = (id == null);
-        if (isCreatingNew) {
-            if (userByEmail != null) {
-                return false;
-            }
-        } else {
-            if (userByEmail.getId().equals(id)) {
-                return false;
-            }
-        }
-        return userByEmail == null;
+        return isCreatingNew(id) ? userByEmail == null : !userByEmail.getId().equals(id);
+    }
+
+    private boolean isCreatingNew(final Long id) {
+        return id == null;
     }
 
     @Override
     public User get(final Long id) throws UserNotFoundException {
-        return userRepository.findById(id).orElseThrow(() -> new UserNotFoundException("Could not find any user with the id " + id));
+        return userRepository.findById(id)
+                .orElseThrow(() -> new UserNotFoundException("Could not find any user with the id " + id));
     }
 }
