@@ -45,12 +45,7 @@ public class SecurityConfig {
         }
         http.authorizeHttpRequests(auth -> auth.anyRequest().authenticated());
         http.formLogin((formLogin) -> {
-            try {
-                formLogin.defaultSuccessUrl("/", true).permitAll();
-            } catch (Exception ex) {
-                //todo : clean up
-                throw new RuntimeException(ex);
-            }
+            formLogin.defaultSuccessUrl("/", true).permitAll();
         });
         http.logout((logout) -> logout.logoutSuccessUrl("/")
                 .invalidateHttpSession(true)

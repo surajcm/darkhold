@@ -1,9 +1,7 @@
 <?xml version="1.0"?>
-
 <!DOCTYPE suppressions PUBLIC
         "-//Checkstyle//DTD SuppressionFilter Configuration 1.2//EN"
         "https://checkstyle.org/dtds/suppressions_1_2.dtd">
-
 <!--
 NOTES:
 Refer to Checkstyle Filters page given below to learn more about suppression filter.
@@ -18,6 +16,5 @@ WHAT AND WHY CHECKS SUPPRESSED
 <suppressions>
     <suppress files="ChallengeService.java" checks="MethodLength"/>
     <suppress files="SecurityConfig.java" checks="MethodLength"/>
-    <suppress files="SecurityConfig.java" checks="IllegalCatch"/>
     <suppress files="RegistrationController.java" checks="MethodLength"/>
 </suppressions>

@@ -42,7 +42,6 @@ public class RegistrationController {
                                @ModelAttribute("user") final User user,
                                final BindingResult bindingResult) {
         logger.info("Inside the registration post method");
-        //userValidator.validate(userForm, bindingResult);
         if (bindingResult.hasErrors()) {
             logger.info(String.valueOf(bindingResult.getAllErrors().get(0)));
             return "login";
