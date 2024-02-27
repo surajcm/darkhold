@@ -84,4 +84,13 @@ public class UserServiceImpl implements UserService {
         return userRepository.findById(id)
                 .orElseThrow(() -> new UserNotFoundException("Could not find any user with the id " + id));
     }
+
+    @Override
+    public void delete(final Long id) throws UserNotFoundException {
+        var countById = userRepository.countById(id);
+        if (countById == null ||  countById == 0) {
+            throw new UserNotFoundException("Could not find any user with the id " + id);
+        }
+        userRepository.deleteById(id);
+    }
 }

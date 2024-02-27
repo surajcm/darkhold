@@ -53,7 +53,7 @@
                         <td>
                             <a class="fas fa-edit fa-2x icon-green" th:href="@{'/user/edit/' + ${user.id}}" title="Edit this user"></a>
                             &nbsp;
-                            <a class="fas fa-trash fa-2x icon-dark" href=""></a>
+                            <a class="fas fa-trash fa-2x icon-dark" th:href="@{'/user/delete/' + ${user.id}}" title="Delete this user"></a>
                         </td>
                     </tr>
                 </tbody>
