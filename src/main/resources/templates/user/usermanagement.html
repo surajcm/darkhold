@@ -53,12 +53,52 @@
                         <td>
                             <a class="fas fa-edit fa-2x icon-green" th:href="@{'/user/edit/' + ${user.id}}" title="Edit this user"></a>
                             &nbsp;
-                            <a class="fas fa-trash fa-2x icon-dark" th:href="@{'/user/delete/' + ${user.id}}" title="Delete this user"></a>
+                            <a class="fas fa-trash fa-2x icon-dark" th:href="@{'/user/delete/' + ${user.id}}"
+                               th:userId="${user.id}"
+                               title="Delete this user"></a>
                         </td>
                     </tr>
                 </tbody>
             </table>
         </form>
+        <div class="modal fade text-center" id="confirmModal">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title" id="modalTitle">Delete Confirmation</h4>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        <span id="confirmText"></span>
+                    </div>
+                    <div class="modal-footer">
+                        <a class="btn btn-success" href="">Yes</a>
+                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">No</button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
+<script type="text/javascript">
+    window.onload = function() {
+        var deleteLinks = document.querySelectorAll('a[title="Delete this user"]');
+
+        deleteLinks.forEach(function(link) {
+            const userId = link.getAttribute('userId');
+            link.addEventListener('click', function(event) {
+                event.preventDefault();
+                document.getElementById('confirmText').innerText = 'Are you sure you want to delete user ID ' + userId + '?';
+
+                // Open the modal
+                var myModal = new bootstrap.Modal(document.getElementById('confirmModal'));
+                myModal.show();
+
+                // Set the href of the confirmation button to the href of the delete link
+                var confirmButton = document.querySelector('#confirmModal .btn-success');
+                confirmButton.href = this.href;
+            });
+        });
+    };
+</script>
 </body>
 </html>
