@@ -5,6 +5,9 @@ build/
 !**/src/main/**
 !**/src/test/**
 logs/
+user-photos/
+
+
 ### STS ###
 .apt_generated
 .classpath

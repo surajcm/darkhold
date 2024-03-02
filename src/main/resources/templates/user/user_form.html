@@ -24,7 +24,9 @@
                         <h3 class="panel-title">[[${pageTitle}]]</h3>
                     </div>
                 </div>
-                <form th:action="@{/users/save}" method="post" th:object="${userForm}" onsubmit="return checkEmailUnique(this);">
+                <form th:action="@{/users/save}" method="post" th:object="${userForm}"
+                      enctype="multipart/form-data"
+                      onsubmit="return checkEmailUnique(this);">
                     <input type="hidden" th:field="*{id}" />
                     <div class="border border-secondary rounded p-3">
                         <div class="input-group mb-3">
@@ -71,6 +73,15 @@
                                 <input type="checkbox" th:field="*{enabled}" />
                             </div>
                         </div>
+                        <div class="input-group mb-3">
+                            <label class="col-sm-4 col-form-label">Photos : </label>
+                            <div class="col-sm-8">
+                                <input type="hidden" th:field="*{photo}" />
+                                <input type="file" id="fileImage" name="image" accept="image/png, image/jpeg" class="mb-2"/>
+                                <img id="thumbnail" alt="Photos preview" th:src="@{${userForm.photosImagePath}}"
+                                     onchange="changeThumbnail(this);" class="img-fluid"/>
+                            </div>
+                        </div>
                         <div class="text-center">
                             <input type="submit" value="Save" class="btn btn-primary m-3" />
                             <input type="button" value="Cancel" id="cancelButton" onclick="toUsers()" class="btn border-secondary" />
@@ -107,7 +118,7 @@
                 const xhr = new XMLHttpRequest();
                 xhr.open("POST", "/users/check_email", true);
                 xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-                xhr.send("email=" + encodeURIComponent(email) + "&userId=" + userId);
+                xhr.send("email=" + encodeURIComponent(email) + "&id=" + userId);
                 xhr.onreadystatechange = function () {
                     if (this.readyState == 4 && this.status == 200) {
                         // The request has been processed successfully
@@ -129,6 +140,27 @@
                 document.getElementById('modalBody').innerText = body;
                 const myModal = new bootstrap.Modal(document.getElementById('modalDialog'));
                 myModal.show();
+            }
+
+            function changeThumbnail(input) {
+                const fileSize = input.files[0].size;
+                console.log("File size : " + fileSize);
+                if (fileSize > 1048576) {
+                    this.setCustomValidity("Please select a file with a size less than 1 MB.");
+                    this.reportValidity();
+                } else {
+                    this.setCustomValidity("");
+                    showImageThumbnail(input);
+                }
+            }
+
+            function showImageThumbnail(fileInput) {
+                const file = fileInput.files[0];
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    document.getElementById('thumbnail').setAttribute('src', e.target.result);
+                };
+                reader.readAsDataURL(file);
             }
             /*]]>*/
         </script>

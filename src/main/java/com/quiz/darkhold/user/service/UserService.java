@@ -7,7 +7,7 @@ import com.quiz.darkhold.user.exception.UserNotFoundException;
 import java.util.List;
 
 public interface UserService {
-    void save(User user);
+    User save(User user);
 
     User findByUsername(String username);
 
@@ -20,5 +20,7 @@ public interface UserService {
     User get(Long id) throws UserNotFoundException;
 
     void delete(final Long id) throws UserNotFoundException;
+
+    void updateUserEnabledStatus(final Long id, final boolean enabled);
 }
 

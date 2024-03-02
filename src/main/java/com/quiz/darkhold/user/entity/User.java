@@ -11,6 +11,8 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
+
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
@@ -127,5 +129,13 @@ public class User implements Serializable {
                 .add("enabled='" + enabled + "'")
                 .add("roles=" + roles)
                 .toString();
+    }
+
+    @Transient
+    public String getPhotosImagePath() {
+        if (id == null || photo == null) {
+            return "/images/default-user.png";
+        }
+        return "/user-photos/" + this.id + "/" + this.photo;
     }
 }

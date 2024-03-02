@@ -5,12 +5,14 @@ import com.quiz.darkhold.user.entity.User;
 import com.quiz.darkhold.user.exception.UserNotFoundException;
 import com.quiz.darkhold.user.repository.RoleRepository;
 import com.quiz.darkhold.user.repository.UserRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
+@Transactional
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
@@ -25,14 +27,14 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void save(final User user) {
+    public User save(final User user) {
         if (isUpdatingUser(user)) {
             var existingUser = findExistingUser(user.getId());
             user.setPassword(getPassword(user, existingUser));
         } else {
             user.setPassword(encodePassword(user.getPassword()));
         }
-        userRepository.save(user);
+        return userRepository.save(user);
     }
 
     private boolean isUpdatingUser(final User user) {
@@ -72,7 +74,7 @@ public class UserServiceImpl implements UserService {
         if (userByEmail == null) {
             return true;
         }
-        return isCreatingNew(id) ? userByEmail == null : !userByEmail.getId().equals(id);
+        return isCreatingNew(id) ? userByEmail == null : userByEmail.getId().equals(id);
     }
 
     private boolean isCreatingNew(final Long id) {
@@ -92,5 +94,10 @@ public class UserServiceImpl implements UserService {
             throw new UserNotFoundException("Could not find any user with the id " + id);
         }
         userRepository.deleteById(id);
+    }
+
+    @Override
+    public void updateUserEnabledStatus(final Long id, final boolean enabled) {
+        userRepository.updateEnabledStatus(id, enabled);
     }
 }
