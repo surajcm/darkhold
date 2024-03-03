@@ -77,9 +77,10 @@
                             <label class="col-sm-4 col-form-label">Photos : </label>
                             <div class="col-sm-8">
                                 <input type="hidden" th:field="*{photo}" />
-                                <input type="file" id="fileImage" name="image" accept="image/png, image/jpeg" class="mb-2"/>
+                                <input type="file" id="fileImage" name="image" accept="image/png, image/jpeg"
+                                       onchange="changeThumbnail(this);" class="mb-2"/>
                                 <img id="thumbnail" alt="Photos preview" th:src="@{${userForm.photosImagePath}}"
-                                     onchange="changeThumbnail(this);" class="img-fluid"/>
+                                     class="img-fluid"/>
                             </div>
                         </div>
                         <div class="text-center">
@@ -143,13 +144,15 @@
             }
 
             function changeThumbnail(input) {
+                console.log("thumbnail changed");
+                console.log("File changed : " + input.files[0].name);
                 const fileSize = input.files[0].size;
                 console.log("File size : " + fileSize);
                 if (fileSize > 1048576) {
-                    this.setCustomValidity("Please select a file with a size less than 1 MB.");
-                    this.reportValidity();
+                    input.setCustomValidity("Please select a file with a size less than 1 MB.");
+                    input.reportValidity();
                 } else {
-                    this.setCustomValidity("");
+                    input.setCustomValidity("");
                     showImageThumbnail(input);
                 }
             }
@@ -157,10 +160,13 @@
             function showImageThumbnail(fileInput) {
                 const file = fileInput.files[0];
                 const reader = new FileReader();
-                reader.onload = function (e) {
-                    document.getElementById('thumbnail').setAttribute('src', e.target.result);
-                };
                 reader.readAsDataURL(file);
+                reader.onload = (function (f) {
+                    return function (e) {
+                        let thumb = document.getElementById("thumbnail");
+                        thumb.setAttribute("src", e.target.result);
+                    };
+                })(file);
             }
             /*]]>*/
         </script>
