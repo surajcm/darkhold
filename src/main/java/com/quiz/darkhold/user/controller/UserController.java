@@ -4,6 +4,7 @@ import com.quiz.darkhold.init.FileUploadUtil;
 import com.quiz.darkhold.user.entity.User;
 import com.quiz.darkhold.user.exception.UserNotFoundException;
 import com.quiz.darkhold.user.service.UserService;
+import com.quiz.darkhold.user.service.UserServiceImpl;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Controller;
@@ -12,6 +13,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -34,9 +36,25 @@ public class UserController {
      */
     @GetMapping("/userManagement")
     public String manageUsers(final Model model) {
-        logger.info("Into the manageUsers method");
-        var listUsers = userService.listAll();
-        model.addAttribute("listusers", listUsers);
+        return listByPage(1, model);
+    }
+
+    @RequestMapping("/user/page/{pageNumber}")
+    public String listByPage(final @PathVariable(name = "pageNumber") int pageNumber,
+                             final Model model) {
+        logger.info("ListByPage method of user controller ");
+        var page = userService.getAllUsers(pageNumber);
+        var startCount = (pageNumber - 1) * UserServiceImpl.USERS_PER_PAGE + 1;
+        long endCount = (long) startCount + UserServiceImpl.USERS_PER_PAGE - 1;
+        if (endCount > page.getTotalElements()) {
+            endCount = page.getTotalElements();
+        }
+        model.addAttribute("currentPage", pageNumber);
+        model.addAttribute("totalPages", page.getTotalPages());
+        model.addAttribute("startCount", startCount);
+        model.addAttribute("endCount", endCount);
+        model.addAttribute("totalItems", page.getTotalElements());
+        model.addAttribute("listusers", page.getContent());
         return "user/usermanagement";
     }
 

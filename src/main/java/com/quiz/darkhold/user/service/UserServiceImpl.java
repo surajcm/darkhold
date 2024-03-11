@@ -6,6 +6,8 @@ import com.quiz.darkhold.user.exception.UserNotFoundException;
 import com.quiz.darkhold.user.repository.RoleRepository;
 import com.quiz.darkhold.user.repository.UserRepository;
 import jakarta.transaction.Transactional;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -14,6 +16,8 @@ import java.util.List;
 @Service
 @Transactional
 public class UserServiceImpl implements UserService {
+    public static final int USERS_PER_PAGE = 5;
+
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
     private final BCryptPasswordEncoder encoder;
@@ -59,8 +63,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<User> listAll() {
-        return userRepository.findAll();
+    public Page<User> getAllUsers(final int pageNumber) {
+        var pageable = PageRequest.of(pageNumber - 1, USERS_PER_PAGE);
+        return userRepository.findAll(pageable);
     }
 
     @Override

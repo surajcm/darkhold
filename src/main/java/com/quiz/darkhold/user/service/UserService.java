@@ -3,6 +3,7 @@ package com.quiz.darkhold.user.service;
 import com.quiz.darkhold.user.entity.Role;
 import com.quiz.darkhold.user.entity.User;
 import com.quiz.darkhold.user.exception.UserNotFoundException;
+import org.springframework.data.domain.Page;
 
 import java.util.List;
 
@@ -11,7 +12,7 @@ public interface UserService {
 
     User findByUsername(String username);
 
-    List<User> listAll();
+    Page<User> getAllUsers(final int pageNumber);
 
     List<Role> listRoles();
 

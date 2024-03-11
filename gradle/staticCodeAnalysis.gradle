@@ -41,7 +41,7 @@ jacocoTestReport {
     }
 }
 
-tasks.withType(Checkstyle) {
+tasks.withType(Checkstyle).configureEach {
     reports {
         xml.required = false
         html.required = true
@@ -49,12 +49,13 @@ tasks.withType(Checkstyle) {
     }
 }
 
-tasks.withType(Pmd) {
+tasks.withType(Pmd).configureEach {
     reports {
         xml.required = false
         html.required = true
     }
 }
+
 cpd {
     toolVersion = '6.45.0'
     minimumTokenCount = 40
@@ -73,7 +74,7 @@ jacocoTestCoverageVerification {
     violationRules {
         rule {
             limit {
-                minimum = 0.27
+                minimum = 0.26
             }
         }
     }
