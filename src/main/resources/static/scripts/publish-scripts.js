@@ -13,7 +13,6 @@ function startGame() {
     });
 }
 
-
 function gotoMyGame() {
     document.forms[0].action = "/interstitial";
     document.forms[0].submit();

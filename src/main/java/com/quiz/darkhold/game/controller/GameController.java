@@ -37,6 +37,7 @@ public class GameController {
     public String startInterstitial(final Model model, @RequestParam("quiz_pin") final String quizPin) {
         var sanitizedPin = CommonUtils.sanitizedString(quizPin);
         logger.info("On to interstitial : {}", sanitizedPin);
+        model.addAttribute("quizPin", quizPin);
         return "interstitial";
     }
 
@@ -48,8 +49,9 @@ public class GameController {
      * @return question page
      */
     @PostMapping("/question")
-    public String question(final Model model, final Principal principal) {
-        logger.info("On to question :");
+    public String question(final Model model,
+                           final Principal principal) {
+        //logger.info("On to question :" + quizPin);
         var questionPointer = gameService.getCurrentQuestionPointer();
         if (questionPointer.getCurrentQuestionNumber() == questionPointer.getTotalQuestionCount()) {
             return finalScore(model);

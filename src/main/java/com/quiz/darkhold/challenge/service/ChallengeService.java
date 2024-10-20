@@ -6,7 +6,7 @@ import com.quiz.darkhold.challenge.entity.QuestionSet;
 import com.quiz.darkhold.challenge.exception.ChallengeException;
 import com.quiz.darkhold.challenge.repository.ChallengeRepository;
 import com.quiz.darkhold.challenge.repository.QuestionSetRepository;
-import com.quiz.darkhold.user.repository.UserRepository;
+import com.quiz.darkhold.user.entity.DarkholdUserDetails;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.poi.openxml4j.exceptions.NotOfficeXmlFileException;
@@ -29,14 +29,11 @@ public class ChallengeService {
     private final Logger logger = LogManager.getLogger(ChallengeService.class);
     private final ChallengeRepository challengeRepository;
     private final QuestionSetRepository questionSetRepository;
-    private final UserRepository userRepository;
 
     public ChallengeService(final ChallengeRepository challengeRepository,
-                            final QuestionSetRepository questionSetRepository,
-                            final UserRepository userRepository) {
+                            final QuestionSetRepository questionSetRepository) {
         this.challengeRepository = challengeRepository;
         this.questionSetRepository = questionSetRepository;
-        this.userRepository = userRepository;
     }
 
     /**
@@ -78,9 +75,8 @@ public class ChallengeService {
 
     private Long currentUserId() {
         var auth = SecurityContextHolder.getContext().getAuthentication();
-        var username = auth.getName();
-        var user = userRepository.findByEmail(username);
-        return user.getId();
+        var principal = auth.getPrincipal();
+        return ((DarkholdUserDetails) principal).getUser().getId();
     }
 
     //replace LinkedList with ArrayDeque as the return type

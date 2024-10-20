@@ -32,7 +32,7 @@ public class ScoreController {
         logger.info("On to the scoreboard screen");
         var score = new CurrentScore();
         var scores = gameService.getCurrentScore();
-        logger.info("Total uses are {}", scores.size());
+        logger.info("Current score is  {}", scores.size());
         scores.forEach((key, value) ->
                 logger.info("key is:" + key +
                         ", and value is :" + value));
