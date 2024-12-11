@@ -4,7 +4,7 @@ apply plugin: 'jacoco'
 //apply plugin: 'com.github.spotbugs'
 
 checkstyle {
-    toolVersion = '10.17.0'
+    toolVersion = '10.20.0'
     ignoreFailures = false
     maxWarnings = 0
     checkstyleMain {
@@ -22,7 +22,7 @@ checkstyle {
 //}
 
 pmd {
-    toolVersion = '7.4.0'
+    toolVersion = '7.8.0'
     ignoreFailures = true
     ruleSetFiles = files("config/pmd/ruleset.xml")
     ruleSets = []
