@@ -26,13 +26,10 @@
     </rule>
 
     <rule ref="category/java/codestyle.xml">
-        <exclude name="DefaultPackage"/>
         <exclude name="OnlyOneReturn"/>
         <exclude name="ConfusingTernary"/>
-        <exclude name="AbstractNaming"/>
         <exclude name="FieldNamingConventions"/>
         <exclude name="AtLeastOneConstructor"/>
-        <exclude name="AvoidFinalLocalVariable"/>
         <exclude name="MethodArgumentCouldBeFinal"/>
         <exclude name="LocalVariableCouldBeFinal"/>
         <exclude name="CommentDefaultAccessModifier"/>
@@ -78,12 +75,6 @@
     <rule ref="category/java/design.xml/SignatureDeclareThrowsException">
         <properties>
             <property name="IgnoreJUnitCompletely" value="true"/>
-        </properties>
-    </rule>
-
-    <rule ref="category/java/design.xml/UseUtilityClass">
-        <properties>
-            <property name="ignoredAnnotations" value="org.springframework.boot.autoconfigure.SpringBootApplication"/>
         </properties>
     </rule>
 

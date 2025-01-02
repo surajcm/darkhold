@@ -8,6 +8,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.stream.Stream;
 
 public class FileUploadUtil {
     public static void saveFile(final String uploadDir,
@@ -26,8 +27,8 @@ public class FileUploadUtil {
     }
 
     public static void cleanDir(final String dir) {
-        try {
-            Files.list(Paths.get(dir)).forEach(file -> {
+        try (Stream<Path> stream = Files.list(Paths.get(dir))) {
+            stream.forEach(file -> {
                 if (!Files.isDirectory(file)) {
                     try {
                         Files.delete(file);
