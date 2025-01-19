@@ -3,7 +3,7 @@ apply plugin: 'pmd'
 apply plugin: 'jacoco'
 
 checkstyle {
-    toolVersion = '10.21.0'
+    toolVersion = '10.21.1'
     ignoreFailures = false
     maxWarnings = 0
     checkstyleMain {
@@ -14,7 +14,6 @@ checkstyle {
         configFile = file("config/checkstyle/checkstyleTest.xml")
     }
 }
-
 
 pmd {
     toolVersion = '7.9.0'

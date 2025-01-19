@@ -1,5 +1,5 @@
 dependencies {
-    errorprone("com.google.errorprone:error_prone_core:2.30.0")
+    errorprone("com.google.errorprone:error_prone_core:2.36.0")
     errorproneJavac("com.google.errorprone:javac:9+181-r4173-1")
 
     implementation("org.springframework.boot:spring-boot-starter-web")
@@ -13,9 +13,9 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-log4j2")
     runtimeOnly("org.springframework.boot:spring-boot-devtools")
 
-    implementation("org.apache.poi:poi-ooxml:5.3.0")
+    implementation("org.apache.poi:poi-ooxml:5.4.0")
     implementation("org.apache.commons:commons-lang3:3.17.0")
-    implementation("com.h2database:h2:2.1.214")
+    implementation("com.h2database:h2:2.3.232")
     implementation("org.dizitart:nitrite:3.4.4")
 
     testImplementation("org.springframework.boot:spring-boot-starter-test") {
@@ -30,7 +30,7 @@ dependencies {
     testImplementation("org.powermock:powermock-api-mockito2:2.0.9")
 }
 configurations {
-    all {
+    configureEach {
         exclude group: 'org.springframework.boot', module: 'spring-boot-starter-logging'
     }
 }
