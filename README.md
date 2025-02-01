@@ -12,8 +12,7 @@
 </p>
 <a href="https://foojay.io/today/works-with-openjdk"><img align="right" src="https://github.com/foojayio/badges/blob/0aa8a69ff09d88d650f8a2e9d54b0d43c14b058d/works_with_openjdk/Works-with-OpenJDK.png" width="100"></a>
 
-An online portal, which has provision to create and host quiz, inspired by `kahoot`. Additional feature is the provision of remote users to participate in the quiz.
-
+Self-hosted quiz platform, inspired by `kahoot`. Please note that this is work in progress and not ready for production use. This is maintained by a single developer and contributions are welcome.
 
 ## Author
 
