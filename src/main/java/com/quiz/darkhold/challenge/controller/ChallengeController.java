@@ -38,7 +38,7 @@ public class ChallengeController {
     }
 
     /**
-     * Upload the challenge as a predefined excel sheet.
+     * Upload the challenge as a predefined Excel sheet.
      *
      * @param upload             excel file
      * @param title              game title
