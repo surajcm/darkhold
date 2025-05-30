@@ -4,7 +4,8 @@ services:
     image: surajcm/darkhold
     container_name: darkhold
     volumes:
-      - ./Darkhold/:/tmp/db #Optional, Darkhold database
+      - ./db:/tmp/db #Optional, Darkhold database
     ports:
       - 8181:8181/tcp
     restart: unless-stopped
+    entrypoint: ["/bin/sh", "-c", "microdnf install -y findutils && exec /start.sh"]
