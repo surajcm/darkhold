@@ -3,7 +3,7 @@ apply plugin: 'pmd'
 apply plugin: 'jacoco'
 
 checkstyle {
-    toolVersion = '10.21.3'
+    toolVersion = '10.26.1'
     ignoreFailures = false
     maxWarnings = 0
     checkstyleMain {
