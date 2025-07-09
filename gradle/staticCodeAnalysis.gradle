@@ -3,7 +3,7 @@ apply plugin: 'pmd'
 apply plugin: 'jacoco'
 
 checkstyle {
-    toolVersion = '10.21.3'
+    toolVersion = '10.26.1'
     ignoreFailures = false
     maxWarnings = 0
     checkstyleMain {
@@ -16,7 +16,7 @@ checkstyle {
 }
 
 pmd {
-    toolVersion = '7.11.0'
+    toolVersion = '7.15.0'
     ignoreFailures = true
     ruleSetFiles = files("config/pmd/ruleset.xml")
     ruleSets = []
@@ -25,7 +25,7 @@ pmd {
 }
 
 jacoco {
-    toolVersion = "0.8.12"
+    toolVersion = "0.8.13"
     reportsDirectory = file("build/reports/jacoco/")
 }
 
