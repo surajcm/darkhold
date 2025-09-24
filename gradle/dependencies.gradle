@@ -14,7 +14,7 @@ dependencies {
     runtimeOnly("org.springframework.boot:spring-boot-devtools")
 
     implementation("org.apache.poi:poi-ooxml:5.4.0")
-    implementation("org.apache.commons:commons-lang3:3.17.0")
+    implementation("org.apache.commons:commons-lang3:3.19.0")
     implementation("com.h2database:h2:2.3.232")
     implementation("org.dizitart:nitrite:3.4.4")
 
