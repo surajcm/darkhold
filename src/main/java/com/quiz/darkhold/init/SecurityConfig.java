@@ -13,7 +13,6 @@ import org.springframework.security.config.annotation.web.configurers.HeadersCon
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.servlet.util.matcher.MvcRequestMatcher;
 import org.springframework.web.servlet.handler.HandlerMappingIntrospector;
 
 @Configuration
@@ -37,10 +36,9 @@ public class SecurityConfig {
                                            final HandlerMappingIntrospector introspect) throws Exception {
         //todo : we need to enable CSRF
         http.csrf(AbstractHttpConfigurer::disable);
-        MvcRequestMatcher.Builder mvcMatcherBuilder = new MvcRequestMatcher.Builder(introspect);
         for (var paths : matchingPaths()) {
             http.authorizeHttpRequests(auth -> auth
-                    .requestMatchers(mvcMatcherBuilder.pattern(paths)).permitAll()
+                    .requestMatchers(paths).permitAll()
             );
         }
         http.authorizeHttpRequests(auth -> auth.anyRequest().authenticated());

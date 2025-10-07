@@ -1,5 +1,5 @@
 dependencies {
-    errorprone("com.google.errorprone:error_prone_core:2.39.0")
+    errorprone("com.google.errorprone:error_prone_core:2.42.0")
     errorproneJavac("com.google.errorprone:javac:9+181-r4173-1")
 
     implementation("org.springframework.boot:spring-boot-starter-web")
@@ -13,9 +13,9 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-log4j2")
     runtimeOnly("org.springframework.boot:spring-boot-devtools")
 
-    implementation("org.apache.poi:poi-ooxml:5.4.0")
-    implementation("org.apache.commons:commons-lang3:3.17.0")
-    implementation("com.h2database:h2:2.3.232")
+    implementation("org.apache.poi:poi-ooxml:5.4.1")
+    implementation("org.apache.commons:commons-lang3:3.19.0")
+    implementation("com.h2database:h2:2.4.240")
     implementation("org.dizitart:nitrite:3.4.4")
 
     testImplementation("org.springframework.boot:spring-boot-starter-test") {
