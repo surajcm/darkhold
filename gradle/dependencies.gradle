@@ -1,5 +1,5 @@
 dependencies {
-    errorprone("com.google.errorprone:error_prone_core:2.42.0")
+    errorprone("com.google.errorprone:error_prone_core:2.44.0")
     errorproneJavac("com.google.errorprone:javac:9+181-r4173-1")
 
     implementation("org.springframework.boot:spring-boot-starter-web")
@@ -13,7 +13,7 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-log4j2")
     runtimeOnly("org.springframework.boot:spring-boot-devtools")
 
-    implementation("org.apache.poi:poi-ooxml:5.4.1")
+    implementation("org.apache.poi:poi-ooxml:5.5.0")
     implementation("org.apache.commons:commons-lang3:3.19.0")
     implementation("com.h2database:h2:2.4.240")
     implementation("org.dizitart:nitrite:3.4.4")
@@ -22,12 +22,12 @@ dependencies {
         exclude module: "junit"
         exclude group: "org.junit.vintage", module: "junit-vintage-engine"
         exclude group: "com.vaadin.external.google", module: "android-json"
+        exclude group: 'org.powermock'
     }
     testImplementation("org.junit.jupiter:junit-jupiter-api")
     testImplementation("org.junit.jupiter:junit-jupiter-params")
 
     testImplementation("org.mockito:mockito-core")
-    testImplementation("org.powermock:powermock-api-mockito2:2.0.9")
 }
 configurations {
     configureEach {

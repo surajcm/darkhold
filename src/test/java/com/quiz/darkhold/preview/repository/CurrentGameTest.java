@@ -5,13 +5,12 @@ import com.quiz.darkhold.preview.model.PublishInfo;
 import org.dizitart.no2.Filter;
 import org.dizitart.no2.NitriteCollection;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentMatchers;
-import org.mockito.Mockito;
-import org.powermock.reflect.Whitebox;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
@@ -19,15 +18,13 @@ import java.util.List;
 
 import static org.mockito.Mockito.when;
 
-@ExtendWith(SpringExtension.class)
+@ExtendWith(MockitoExtension.class)
 class CurrentGameTest {
-    private final CurrentGame currentGame = new CurrentGame();
-    private final NitriteCollection collection = Mockito.mock(NitriteCollection.class);
+    @Mock
+    private NitriteCollection collection;
 
-    @BeforeEach
-    public void setup() {
-        Whitebox.setInternalState(currentGame, "collection", collection);
-    }
+    @InjectMocks
+    private CurrentGame currentGame;
 
     @Test
     void saveCurrentStatus() {
@@ -43,7 +40,7 @@ class CurrentGameTest {
         var users = currentGame.getActiveUsersInGame("1234");
         Assertions.assertAll("name",
                 () -> Assertions.assertEquals("admin",
-                        users.get(0)
+                        users.getFirst()
                 ),
                 () -> Assertions.assertEquals("tester",
                         users.get(1)
@@ -74,7 +71,7 @@ class CurrentGameTest {
     void getQuestionsOnAPin() {
         when(collection.find(ArgumentMatchers.any(Filter.class))).thenReturn(new MockCursor());
         var questionSets = currentGame.getQuestionsOnAPin("1234");
-        Assertions.assertEquals("Q1", questionSets.get(0).getQuestion());
+        Assertions.assertEquals("Q1", questionSets.getFirst().getQuestion());
     }
 
     @Test
