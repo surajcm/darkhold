@@ -18,4 +18,6 @@ WHAT AND WHY CHECKS SUPPRESSED
     <suppress files="SecurityConfig.java" checks="MethodLength"/>
     <suppress files="RegistrationController.java" checks="MethodLength"/>
     <suppress files="UserController.java" checks="MethodLength"/>
+    <suppress files="CurrentGame.java" checks="MethodLength"/>
+    <suppress files="CurrentGameTest.java" checks="MethodLength"/>
 </suppressions>

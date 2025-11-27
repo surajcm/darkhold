@@ -16,7 +16,6 @@ dependencies {
     implementation("org.apache.poi:poi-ooxml:5.5.0")
     implementation("org.apache.commons:commons-lang3:3.19.0")
     implementation("com.h2database:h2:2.4.240")
-    implementation("org.dizitart:nitrite:3.4.4")
 
     testImplementation("org.springframework.boot:spring-boot-starter-test") {
         exclude module: "junit"

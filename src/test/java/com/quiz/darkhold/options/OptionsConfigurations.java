@@ -2,14 +2,13 @@ package com.quiz.darkhold.options;
 
 import com.quiz.darkhold.challenge.repository.ChallengeRepository;
 import com.quiz.darkhold.game.repository.GameRepository;
+import com.quiz.darkhold.preview.repository.CurrentGameSessionRepository;
 import com.quiz.darkhold.user.repository.UserRepository;
 import com.quiz.darkhold.options.controller.OptionsController;
 import com.quiz.darkhold.options.service.OptionsService;
 import com.quiz.darkhold.preview.repository.CurrentGame;
 import com.quiz.darkhold.preview.service.PreviewService;
-import org.dizitart.no2.NitriteCollection;
 import org.mockito.Mockito;
-//import org.springframework.boot.autoconfigure.flyway.FlywayMigrationStrategy;
 import org.springframework.context.annotation.Bean;
 import org.springframework.test.context.ContextConfiguration;
 
@@ -53,12 +52,8 @@ public class OptionsConfigurations {
     }
 
     @Bean
-    public NitriteCollection nitriteCollection() {
-        return Mockito.mock(NitriteCollection.class);
+    public CurrentGameSessionRepository currentGameSessionRepository() {
+        return Mockito.mock(CurrentGameSessionRepository.class);
     }
 
-    /*@Bean
-    public FlywayMigrationStrategy flywayMigrationStrategy() {
-        return Mockito.mock(FlywayMigrationStrategy.class);
-    }*/
 }
