@@ -2,70 +2,60 @@ package com.quiz.darkhold.preview.repository;
 
 import com.quiz.darkhold.challenge.entity.QuestionSet;
 import com.quiz.darkhold.game.model.QuestionPointer;
+import com.quiz.darkhold.preview.entity.CurrentGameSession;
 import com.quiz.darkhold.preview.model.PublishInfo;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.dizitart.no2.Document;
-import org.dizitart.no2.NitriteCollection;
-import org.dizitart.no2.filters.Filters;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
-import static org.dizitart.no2.filters.Filters.eq;
-
-@Repository
+@Service
 public class CurrentGame {
 
-    private static final String PIN = "pin";
-    private static final String USERS = "users";
-    private static final String CURRENT_QUESTION_NO = "currentQuestionNo";
-    private static final String QUESTIONS = "questions";
-    private static final String MODERATOR = "MODERATOR";
-    private static final String SCORES = "SCORES";
     private final Logger logger = LogManager.getLogger(CurrentGame.class);
 
     @Autowired
-    private NitriteCollection collection;
+    private CurrentGameSessionRepository repository;
 
     /**
-     * save the game info to nitrate before we start the game.
+     * save the game info to H2 database before we start the game.
      *
      * @param publishInfo publish info
      */
     public void saveCurrentStatus(final PublishInfo publishInfo, final ArrayDeque<QuestionSet> questionSets) {
         List<String> users = new ArrayList<>();
         users.add(publishInfo.getModerator());
-        // table contents
-        // PIN , List of users, Game moderator, Current question number
-        // table of questions
-        // table of scores
-        Document doc = Document.createDocument(PIN, publishInfo.getPin())
-                .put(USERS, users)
-                .put(MODERATOR, publishInfo.getModerator())
-                .put(CURRENT_QUESTION_NO, 0)
-                .put(QUESTIONS, questionSets)
-                .put(SCORES, new HashMap<String, Integer>());
 
-        collection.insert(doc);
+        CurrentGameSession session = new CurrentGameSession(publishInfo.getPin(), publishInfo.getModerator());
+        session.setUsersList(users);
+        session.setQuestionsList(new ArrayList<>(questionSets));
+        session.setCurrentQuestionNo(0);
+        session.setScoresMap(new HashMap<>());
+
+        repository.save(session);
     }
 
     /**
-     * get the active users in the gme.
+     * get the active users in the game.
      *
      * @param pin of the game
      * @return users
      */
     public List<String> getActiveUsersInGame(final String pin) {
-        var cursor = collection.find(Filters.and(eq(PIN, pin)));
-        var users = (List<String>) cursor.toList().get(0).get(USERS);
-        logger.info("Participants are : {}", users);
-        return users;
+        Optional<CurrentGameSession> session = repository.findByPin(pin);
+        if (session.isPresent()) {
+            List<String> users = session.get().getUsersList();
+            logger.info("Participants are : {}", users);
+            return users;
+        }
+        return new ArrayList<>();
     }
 
     /**
@@ -75,11 +65,17 @@ public class CurrentGame {
      * @param userName of user
      */
     public void saveUserToActiveGame(final String pin, final String userName) {
-        var cursor = collection.find(Filters.and(eq(PIN, pin)));
-        var doc = cursor.toList().get(0);
-        var users = (List<String>) doc.get(USERS);
-        users.add(userName);
-        collection.update(doc);
+        Optional<CurrentGameSession> session = repository.findByPin(pin);
+        if (session.isPresent()) {
+            CurrentGameSession gameSession = session.get();
+            List<String> users = gameSession.getUsersList();
+            if (users == null) {
+                users = new ArrayList<>();
+            }
+            users.add(userName);
+            gameSession.setUsersList(users);
+            repository.save(gameSession);
+        }
     }
 
     /**
@@ -89,11 +85,17 @@ public class CurrentGame {
      * @param questionSets of the game
      */
     public void saveQuestionsToActiveGame(final String pin, final List<QuestionSet> questionSets) {
-        var cursor = collection.find(Filters.and(eq(PIN, pin)));
-        var doc = cursor.toList().get(0);
-        var questions = (List<QuestionSet>) doc.get(QUESTIONS);
-        questions.addAll(questionSets);
-        collection.update(doc);
+        Optional<CurrentGameSession> session = repository.findByPin(pin);
+        if (session.isPresent()) {
+            CurrentGameSession gameSession = session.get();
+            List<QuestionSet> questions = gameSession.getQuestionsList();
+            if (questions == null) {
+                questions = new ArrayList<>();
+            }
+            questions.addAll(questionSets);
+            gameSession.setQuestionsList(questions);
+            repository.save(gameSession);
+        }
     }
 
     /**
@@ -103,10 +105,13 @@ public class CurrentGame {
      * @return question no
      */
     public int getCurrentQuestionNo(final String pin) {
-        var cursor = collection.find(Filters.and(eq(PIN, pin)));
-        var questionNo = (Integer) cursor.toList().get(0).get(CURRENT_QUESTION_NO);
-        logger.info("getCurrentQuestionNo : questionNo : {}}", questionNo);
-        return questionNo;
+        Optional<CurrentGameSession> session = repository.findByPin(pin);
+        if (session.isPresent()) {
+            Integer questionNo = session.get().getCurrentQuestionNo();
+            logger.info("getCurrentQuestionNo : questionNo : {}}", questionNo);
+            return questionNo != null ? questionNo : 0;
+        }
+        return 0;
     }
 
     /**
@@ -116,10 +121,15 @@ public class CurrentGame {
      * @return question list
      */
     public List<QuestionSet> getQuestionsOnAPin(final String pin) {
-        var cursor = collection.find(Filters.and(eq(PIN, pin)));
-        var questions = (List<QuestionSet>) cursor.toList().get(0).get(QUESTIONS);
-        logger.info("question count : {}", questions.size());
-        return questions;
+        Optional<CurrentGameSession> session = repository.findByPin(pin);
+        if (session.isPresent()) {
+            List<QuestionSet> questions = session.get().getQuestionsList();
+            if (questions != null) {
+                logger.info("question count : {}", questions.size());
+                return questions;
+            }
+        }
+        return new ArrayList<>();
     }
 
     /**
@@ -128,12 +138,15 @@ public class CurrentGame {
      * @param pin of game
      */
     public void incrementQuestionCount(final String pin) {
-        var cursor = collection.find(Filters.and(eq(PIN, pin)));
-        var questionNo = (Integer) cursor.toList().get(0).get(CURRENT_QUESTION_NO);
-        questionNo++;
-        var doc = cursor.toList().get(0);
-        doc.put(CURRENT_QUESTION_NO, questionNo);
-        collection.update(doc);
+        Optional<CurrentGameSession> session = repository.findByPin(pin);
+        if (session.isPresent()) {
+            CurrentGameSession gameSession = session.get();
+            Integer questionNo = gameSession.getCurrentQuestionNo();
+            if (questionNo != null) {
+                gameSession.setCurrentQuestionNo(questionNo + 1);
+                repository.save(gameSession);
+            }
+        }
     }
 
     /**
@@ -143,61 +156,70 @@ public class CurrentGame {
      * @return moderator
      */
     public String findModerator(final String pin) {
-        var cursor = collection.find(Filters.and(eq(PIN, pin)));
-        return (String) cursor.toList().get(0).get(MODERATOR);
+        Optional<CurrentGameSession> session = repository.findByPin(pin);
+        return session.map(CurrentGameSession::getModerator).orElse(null);
     }
 
     /**
-     * save current score to nitrate.
+     * save current score to H2 database.
      *
      * @param pin    pin of game
      * @param name   of user
      * @param status success or not
      */
     public void saveCurrentScore(final String pin, final String name, final Integer status) {
-        var cursor = collection.find(Filters.and(eq(PIN, pin)));
-        var scores = (Map<String, Integer>) cursor.toList().get(0).get(SCORES);
-        if (scores.containsKey(name)) {
-            var currentValue = scores.get(name);
-            scores.put(name, currentValue + status);
-        } else {
-            scores.put(name, status);
+        Optional<CurrentGameSession> session = repository.findByPin(pin);
+        if (session.isPresent()) {
+            CurrentGameSession gameSession = session.get();
+            Map<String, Integer> scores = gameSession.getScoresMap();
+            if (scores == null) {
+                scores = new HashMap<>();
+            }
+            if (scores.containsKey(name)) {
+                scores.compute(name, (k, currentValue) -> currentValue + status);
+            } else {
+                scores.put(name, status);
+            }
+            gameSession.setScoresMap(scores);
+            repository.save(gameSession);
         }
-        var doc = cursor.toList().get(0);
-        doc.put(SCORES, scores);
-        collection.update(doc);
     }
 
     public Map<String, Integer> getCurrentScore(final String pin) {
-        var cursor = collection.find(Filters.and(eq(PIN, pin)));
-        return (Map<String, Integer>) cursor.toList().get(0).get(SCORES);
+        Optional<CurrentGameSession> session = repository.findByPin(pin);
+        if (session.isPresent()) {
+            Map<String, Integer> scores = session.get().getScoresMap();
+            return scores != null ? scores : new HashMap<>();
+        }
+        return new HashMap<>();
     }
 
     public QuestionPointer getCurrentQuestionPointer(final String pin) {
-        var cursor = collection.find(Filters.and(eq(PIN, pin)));
-        var doc = cursor.toList().get(0);
-        var questionNo = (Integer) doc.get(CURRENT_QUESTION_NO);
-        logger.info("questionNo : {}", questionNo);
-        var questions = ((ArrayDeque<QuestionSet>) doc.get(QUESTIONS)).stream().toList();
-        logger.info("questions size : {}}", questions.size());
-        var questionPointer = new QuestionPointer();
-        questionPointer.setCurrentQuestionNumber(questionNo);
-        questionPointer.setTotalQuestionCount(questions.size());
-        if (questionNo < questions.size()) {
-            questionPointer.setCurrentQuestion(questions.get(questionNo));
+        Optional<CurrentGameSession> session = repository.findByPin(pin);
+        QuestionPointer questionPointer = new QuestionPointer();
+
+        if (session.isPresent()) {
+            CurrentGameSession gameSession = session.get();
+            Integer questionNo = gameSession.getCurrentQuestionNo();
+            List<QuestionSet> questions = gameSession.getQuestionsList();
+
+            if (questionNo != null) {
+                logger.info("questionNo : {}", questionNo);
+                if (questions != null) {
+                    logger.info("questions size : {}", questions.size());
+                    questionPointer.setCurrentQuestionNumber(questionNo);
+                    questionPointer.setTotalQuestionCount(questions.size());
+                    if (questionNo < questions.size()) {
+                        questionPointer.setCurrentQuestion(questions.get(questionNo));
+                    }
+                }
+            }
         }
         return questionPointer;
     }
 
     public void stopTheGame(final String pin) {
-        var cursor = collection.find(Filters.and(eq(PIN, pin)));
-        var doc = cursor.toList().get(0);
-        doc.remove(PIN);
-        doc.remove(USERS);
-        doc.remove(MODERATOR);
-        doc.remove(CURRENT_QUESTION_NO);
-        doc.remove(QUESTIONS);
-        doc.remove(SCORES);
-        collection.update(doc);
+        Optional<CurrentGameSession> session = repository.findByPin(pin);
+        session.ifPresent(currentGameSession -> repository.delete(currentGameSession));
     }
 }

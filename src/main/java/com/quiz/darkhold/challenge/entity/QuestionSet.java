@@ -1,5 +1,6 @@
 package com.quiz.darkhold.challenge.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -40,6 +41,7 @@ public class QuestionSet implements Serializable {
     @Column
     private String correctOptions;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "challenge_id", nullable = true)
     private Challenge challenge;
