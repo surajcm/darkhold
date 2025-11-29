@@ -1,8 +1,8 @@
 dependencies {
-    errorprone("com.google.errorprone:error_prone_core:2.44.0")
+    errorprone("com.google.errorprone:error_prone_core:2.45.0")
     errorproneJavac("com.google.errorprone:javac:9+181-r4173-1")
 
-    implementation("org.springframework.boot:spring-boot-starter-web")
+    implementation("org.springframework.boot:spring-boot-starter-webmvc")
     implementation("org.springframework.boot:spring-boot-starter-thymeleaf")
     implementation("org.thymeleaf.extras:thymeleaf-extras-springsecurity6")
     implementation("org.springframework.boot:spring-boot-starter-websocket")
@@ -11,10 +11,11 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-security")
     implementation("org.springframework.boot:spring-boot-starter-actuator")
     implementation("org.springframework.boot:spring-boot-starter-log4j2")
+    implementation("tools.jackson.core:jackson-core:3.0.2")
     runtimeOnly("org.springframework.boot:spring-boot-devtools")
 
     implementation("org.apache.poi:poi-ooxml:5.5.0")
-    implementation("org.apache.commons:commons-lang3:3.19.0")
+    implementation("org.apache.commons:commons-lang3:3.20.0")
     implementation("com.h2database:h2:2.4.240")
 
     testImplementation("org.springframework.boot:spring-boot-starter-test") {
@@ -23,6 +24,7 @@ dependencies {
         exclude group: "com.vaadin.external.google", module: "android-json"
         exclude group: 'org.powermock'
     }
+    testImplementation("org.springframework.boot:spring-boot-starter-webmvc-test")
     testImplementation("org.junit.jupiter:junit-jupiter-api")
     testImplementation("org.junit.jupiter:junit-jupiter-params")
 

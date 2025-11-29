@@ -13,7 +13,6 @@ import org.springframework.security.config.annotation.web.configurers.HeadersCon
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.web.servlet.handler.HandlerMappingIntrospector;
 
 @Configuration
 @EnableWebSecurity
@@ -32,8 +31,7 @@ public class SecurityConfig {
     }
 
     @Bean
-    public SecurityFilterChain filterChain(final HttpSecurity http,
-                                           final HandlerMappingIntrospector introspect) throws Exception {
+    public SecurityFilterChain filterChain(final HttpSecurity http) {
         //todo : we need to enable CSRF
         http.csrf(AbstractHttpConfigurer::disable);
         for (var paths : matchingPaths()) {
@@ -42,9 +40,7 @@ public class SecurityConfig {
             );
         }
         http.authorizeHttpRequests(auth -> auth.anyRequest().authenticated());
-        http.formLogin((formLogin) -> {
-            formLogin.defaultSuccessUrl("/", true).permitAll();
-        });
+        http.formLogin((formLogin) -> formLogin.defaultSuccessUrl("/", true).permitAll());
         http.logout((logout) -> logout.logoutSuccessUrl("/")
                 .invalidateHttpSession(true)
                 .clearAuthentication(true)
@@ -70,8 +66,7 @@ public class SecurityConfig {
 
     @Bean
     public AuthenticationManager authManager(final BCryptPasswordEncoder bCryptPasswordEncoder) {
-        DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
-        authProvider.setUserDetailsService(userDetailsService);
+        DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider(userDetailsService);
         authProvider.setPasswordEncoder(bCryptPasswordEncoder);
         return new ProviderManager(authProvider);
     }

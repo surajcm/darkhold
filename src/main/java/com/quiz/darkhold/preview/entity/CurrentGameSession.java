@@ -1,8 +1,5 @@
 package com.quiz.darkhold.preview.entity;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.quiz.darkhold.challenge.entity.QuestionSet;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -12,6 +9,9 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import tools.jackson.core.type.TypeReference;
+import tools.jackson.core.JacksonException;
+import tools.jackson.databind.ObjectMapper;
 
 import java.util.List;
 import java.util.Map;
@@ -120,7 +120,7 @@ public class CurrentGameSession {
         }
         try {
             return objectMapper.readValue(usersJson, List.class);
-        } catch (JsonProcessingException ex) {
+        } catch (JacksonException ex) {
             logger.error("Error deserializing users list", ex);
             return null;
         }
@@ -132,7 +132,7 @@ public class CurrentGameSession {
         } else {
             try {
                 this.usersJson = objectMapper.writeValueAsString(users);
-            } catch (JsonProcessingException ex) {
+            } catch (JacksonException ex) {
                 logger.error("Error serializing users list", ex);
             }
         }
@@ -144,7 +144,7 @@ public class CurrentGameSession {
         }
         try {
             return objectMapper.readValue(questionsJson, new TypeReference<List<QuestionSet>>() {});
-        } catch (JsonProcessingException ex) {
+        } catch (JacksonException ex) {
             logger.error("Error deserializing questions list", ex);
             return null;
         }
@@ -156,7 +156,7 @@ public class CurrentGameSession {
         } else {
             try {
                 this.questionsJson = objectMapper.writeValueAsString(questions);
-            } catch (JsonProcessingException ex) {
+            } catch (JacksonException ex) {
                 logger.error("Error serializing questions list", ex);
             }
         }
@@ -168,7 +168,7 @@ public class CurrentGameSession {
         }
         try {
             return objectMapper.readValue(scoresJson, new TypeReference<Map<String, Integer>>() {});
-        } catch (JsonProcessingException ex) {
+        } catch (JacksonException ex) {
             logger.error("Error deserializing scores map", ex);
             return null;
         }
@@ -180,7 +180,7 @@ public class CurrentGameSession {
         } else {
             try {
                 this.scoresJson = objectMapper.writeValueAsString(scores);
-            } catch (JsonProcessingException ex) {
+            } catch (JacksonException ex) {
                 logger.error("Error serializing scores map", ex);
             }
         }
