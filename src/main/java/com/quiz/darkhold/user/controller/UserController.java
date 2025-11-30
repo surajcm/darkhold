@@ -19,6 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.IOException;
+import java.util.Objects;
 
 @Controller
 public class UserController {
@@ -40,7 +41,7 @@ public class UserController {
     }
 
     @RequestMapping("/user/page/{pageNumber}")
-    public String listByPage(final @PathVariable(name = "pageNumber") int pageNumber,
+    public String listByPage(@PathVariable final int pageNumber,
                              final Model model) {
         logger.info("ListByPage method of user controller ");
         var page = userService.getAllUsers(pageNumber);
@@ -75,7 +76,7 @@ public class UserController {
                            @RequestParam("image") final MultipartFile multipartFile) throws IOException {
         logger.info("Into the saveUser method, user is {}", user);
         if (multipartFile != null && !multipartFile.isEmpty()) {
-            var fileName = StringUtils.cleanPath(multipartFile.getOriginalFilename());
+            var fileName = StringUtils.cleanPath(Objects.requireNonNull(multipartFile.getOriginalFilename()));
             user.setPhoto(fileName);
             var savedUser = userService.save(user);
             var uploadDir = "user-photos/" + savedUser.getId();
@@ -92,7 +93,7 @@ public class UserController {
     }
 
     @GetMapping("/user/edit/{id}")
-    public String editUser(@PathVariable(name = "id") final Long id, final Model model,
+    public String editUser(@PathVariable final Long id, final Model model,
                            final RedirectAttributes redirectAttributes) {
         logger.info("Into the editUser method, id is {}", id);
         try {
@@ -108,7 +109,7 @@ public class UserController {
     }
 
     @GetMapping("/user/delete/{id}")
-    public String deleteUser(@PathVariable(name = "id") final Long id,
+    public String deleteUser(@PathVariable final Long id,
                              final RedirectAttributes redirectAttributes) {
         logger.info("Into the deleteUser method, id is {}", id);
         try {
@@ -121,7 +122,7 @@ public class UserController {
     }
 
     @GetMapping("/users/{id}/enabled/{status}")
-    public String updateUserEnabledStatus(@PathVariable("id") final Long id,
+    public String updateUserEnabledStatus(@PathVariable final Long id,
                                           @PathVariable("status") final boolean enabled,
                                           final RedirectAttributes redirectAttributes) {
         logger.info("Into the updateUserEnabledStatus method, id is {}, status is {}", id, enabled);
