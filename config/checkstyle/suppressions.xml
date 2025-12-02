@@ -22,4 +22,5 @@ WHAT AND WHY CHECKS SUPPRESSED
     <suppress files="CurrentGameTest.java" checks="MethodLength"/>
     <suppress files="UserControllerTest.java" checks="MethodLength"/>
     <suppress files="UserRestControllerTest.java" checks="MethodLength"/>
+    <suppress files="ChallengeServiceTest.java" checks="MethodLength"/>
 </suppressions>
