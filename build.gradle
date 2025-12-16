@@ -1,7 +1,6 @@
 buildscript {
 	ext {
 		applicationDefaultJvmArgs = ['-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5005']
-		spotbugsVersion = '5.0.7'
 		toolVersion = '3.1.10'
 	}
 	repositories {
@@ -9,9 +8,6 @@ buildscript {
 		maven {
 			url "https://plugins.gradle.org/m2/"
 		}
-	}
-	dependencies {
-		classpath "gradle.plugin.com.github.spotbugs:spotbugs-gradle-plugin:2.0.0"
 	}
 }
 
@@ -21,7 +17,7 @@ plugins {
 	id 'org.springframework.boot' version '4.0.0'
 	id 'io.spring.dependency-management' version '1.1.7'
 	id 'net.ltgt.errorprone' version '4.3.0'
-	id "org.sonarqube" version "7.1.0.6387"
+	id "org.sonarqube" version "7.2.1.6560"
 }
 
 group = 'com.quiz.darkhold'

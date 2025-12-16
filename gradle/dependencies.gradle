@@ -11,10 +11,10 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-security")
     implementation("org.springframework.boot:spring-boot-starter-actuator")
     implementation("org.springframework.boot:spring-boot-starter-log4j2")
-    implementation("tools.jackson.core:jackson-core:3.0.2")
+    implementation("tools.jackson.core:jackson-core:3.0.3")
     runtimeOnly("org.springframework.boot:spring-boot-devtools")
 
-    implementation("org.apache.poi:poi-ooxml:5.5.0")
+    implementation("org.apache.poi:poi-ooxml:5.5.1")
     implementation("org.apache.commons:commons-lang3:3.20.0")
     implementation("com.h2database:h2:2.4.240")
 

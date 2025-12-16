@@ -3,7 +3,7 @@ apply plugin: 'pmd'
 apply plugin: 'jacoco'
 
 checkstyle {
-    toolVersion = '12.1.2'
+    toolVersion = '12.3.0'
     ignoreFailures = false
     maxWarnings = 0
     checkstyleMain {
@@ -20,7 +20,6 @@ pmd {
     ignoreFailures = true
     ruleSetFiles = files("config/pmd/ruleset.xml")
     ruleSets = []
-    //rulesMinimumPriority = 2
     incrementalAnalysis = true
 }
 
@@ -30,6 +29,7 @@ jacoco {
 }
 
 jacocoTestReport {
+    dependsOn test
     reports {
         xml.required = true
     }
@@ -67,15 +67,11 @@ sonarqube {
         property "sonar.projectKey", "surajcm_darkhold"
         property "sonar.organization", "surajcm"
         property "sonar.host.url", "https://sonarcloud.io"
-        property "sonar.login", "0c8baf470e3c2eb956994cddcf77739cf32beb03"
+        property "sonar.login", project.findProperty("sonarToken")
         property "sonar.coverage.jacoco.xmlReportPaths", "build/reports/jacoco/test/jacocoTestReport.xml"
     }
 }
 
 test {
     finalizedBy jacocoTestReport
-}
-
-jacocoTestReport {
-    dependsOn test
 }

@@ -331,8 +331,4 @@ class ChallengeServiceTest {
                 bytes);
     }
 
-    private MultipartFile mockMultipartFile() {
-        return new MockMultipartFile("mockfile.xls", "Q1, A1,A2,A3,A4,A1".getBytes(UTF_8));
-    }
-
 }
