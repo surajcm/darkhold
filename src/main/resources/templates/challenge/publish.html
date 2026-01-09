@@ -19,7 +19,7 @@
             <div class="row justify-content-center align-items-center d-flex text-center h-100">
                 <div class="col-12 col-md-8  h-50">
                     <div th:if="${quizPin != null}">
-                        <div class="jumbotron min-vh-100 text-center m-0 d-flex flex-column justify-content-center">
+                        <div class="jumbotron text-center m-0 d-flex flex-column justify-content-center py-5">
                             <h1 class="display-2 text-dark mb-2 mt-5" id="head_msg">Your Quiz PIN is : <strong>[[${quizPin}]]</strong> </h1>
                             <div id="messenger">
                                 <p id="message_disp"></p>
@@ -28,7 +28,7 @@
                         </div>
                     </div>
                     <div th:unless="${quizPin != null}">
-                        <div class="jumbotron min-vh-100 text-center m-0 d-flex flex-column justify-content-center">
+                        <div class="jumbotron text-center m-0 d-flex flex-column justify-content-center py-5">
                             <h1 class="display-2 text-dark mb-2 mt-5" id="head_msg">There are no active challenges !!!</h1>
                         </div>
                     </div>

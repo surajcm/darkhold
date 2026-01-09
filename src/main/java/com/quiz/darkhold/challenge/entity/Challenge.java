@@ -53,7 +53,7 @@ public class Challenge implements Serializable {
     private LocalDateTime modifiedOn;
 
     @OneToMany(mappedBy = "challenge", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @OrderBy("id")
+    @OrderBy("displayOrder, id")
     private List<QuestionSet> questionSets;
 
     @ManyToOne

@@ -1,19 +1,38 @@
 <!DOCTYPE HTML>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Getting Started: Darkhold classroom quiz experience</title>
+    <title>Final Results - Darkhold classroom quiz experience</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="shortcut icon" href="/images/favicon.png">
     <link href="/styles/darkhold-styles.css" rel="stylesheet" />
     <script type="text/javascript" src="/scripts/common-scripts.js"></script>
+    <style>
+        .podium-container { display: flex; justify-content: center; align-items: flex-end; margin: 40px 0; }
+        .podium-place { text-align: center; margin: 0 10px; animation: slideUp 0.8s ease-out; }
+        .podium-place.first { order: 2; }
+        .podium-place.second { order: 1; }
+        .podium-place.third { order: 3; }
+        .podium-block { padding: 20px 30px; border-radius: 8px 8px 0 0; color: white; min-width: 120px; }
+        .podium-block.gold { background: linear-gradient(135deg, #FFD700, #FFA500); height: 150px; }
+        .podium-block.silver { background: linear-gradient(135deg, #C0C0C0, #A8A8A8); height: 120px; }
+        .podium-block.bronze { background: linear-gradient(135deg, #CD7F32, #8B4513); height: 90px; }
+        .podium-rank { font-size: 2.5rem; font-weight: bold; margin-bottom: 5px; }
+        .podium-name { font-size: 1.2rem; font-weight: 500; word-break: break-word; }
+        .podium-score { font-size: 1rem; opacity: 0.9; }
+        .trophy { font-size: 3rem; margin-bottom: 10px; }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(50px); } to { opacity: 1; transform: translateY(0); } }
+        .confetti { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: -1; }
+        .remaining-scores { margin-top: 30px; }
+        .winner-announcement { font-size: 1.5rem; text-align: center; margin-bottom: 20px; color: #333; }
+    </style>
 </head>
 <body>
     <div th:insert="~{navbar :: navbar}"></div>
     <nav class="navbar transparent">
         <ul class="navbar-nav mx-auto">
             <li class="nav-item">
-                <span class="badge badge-pill badge-primary">Final ScoreBoard</span>
+                <span class="badge badge-pill badge-primary" style="font-size: 1.5rem;">Final Results</span>
             </li>
         </ul>
     </nav>
@@ -22,14 +41,79 @@
             <div id="page-content-wrapper">
                 <div class="container-fluid">
                     <div class="container">
-                        <table class="table table-striped">
-                            <tbody>
-                                <tr th:each="eachScore : ${score.score}">
-                                    <td>[[${eachScore.key}]]</td>
-                                    <td>[[${eachScore.value}]]</td>
-                                </tr>
-                            </tbody>
-                        </table>
+                        <!-- Winner Announcement -->
+                        <div class="winner-announcement" th:if="${score.score != null and !score.score.isEmpty()}">
+                            Congratulations to our winner!
+                        </div>
+
+                        <!-- Podium for top 3 -->
+                        <div class="podium-container" th:if="${score.score != null and !score.score.isEmpty()}"
+                             th:with="sortedScores=${score.score.entrySet().stream().sorted(T(java.util.Map.Entry).comparingByValue().reversed()).toList()}">
+                            <!-- 2nd Place -->
+                            <div class="podium-place second" th:if="${#lists.size(sortedScores) > 1}">
+                                <div class="trophy">&#129352;</div>
+                                <div class="podium-block silver">
+                                    <div class="podium-rank">2nd</div>
+                                    <div class="podium-name" th:text="${sortedScores[1].key}"></div>
+                                    <div class="podium-score" th:text="${sortedScores[1].value} + ' pts'"></div>
+                                </div>
+                            </div>
+
+                            <!-- 1st Place -->
+                            <div class="podium-place first" th:if="${#lists.size(sortedScores) > 0}">
+                                <div class="trophy">&#127942;</div>
+                                <div class="podium-block gold">
+                                    <div class="podium-rank">1st</div>
+                                    <div class="podium-name" th:text="${sortedScores[0].key}"></div>
+                                    <div class="podium-score" th:text="${sortedScores[0].value} + ' pts'"></div>
+                                </div>
+                            </div>
+
+                            <!-- 3rd Place -->
+                            <div class="podium-place third" th:if="${#lists.size(sortedScores) > 2}">
+                                <div class="trophy">&#129353;</div>
+                                <div class="podium-block bronze">
+                                    <div class="podium-rank">3rd</div>
+                                    <div class="podium-name" th:text="${sortedScores[2].key}"></div>
+                                    <div class="podium-score" th:text="${sortedScores[2].value} + ' pts'"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Full leaderboard -->
+                        <div class="remaining-scores" th:if="${score.score != null and !score.score.isEmpty()}">
+                            <h4 class="text-center mb-3">Full Leaderboard</h4>
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th style="width: 60px;">Rank</th>
+                                        <th>Player</th>
+                                        <th style="text-align: right;">Score</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr th:each="entry, stat : ${score.score.entrySet().stream().sorted(T(java.util.Map.Entry).comparingByValue().reversed()).toList()}"
+                                        th:classappend="${stat.index < 3} ? 'table-warning' : ''">
+                                        <td th:text="${stat.index + 1}"></td>
+                                        <td th:text="${entry.key}"></td>
+                                        <td style="text-align: right;" th:text="${entry.value}"></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- No scores message -->
+                        <div class="text-center my-5" th:if="${score.score == null or score.score.isEmpty()}">
+                            <h3>No scores to display</h3>
+                            <p>The game ended without any scores recorded.</p>
+                        </div>
+
+                        <!-- Return button -->
+                        <div class="text-center mt-4 mb-4">
+                            <button type="button" class="btn btn-lg btn-primary" onclick="window.location.href='/'">
+                                Return to Home
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>

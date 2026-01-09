@@ -1,5 +1,13 @@
 @import url('darkhold-styles.css');
-
+body {
+    font-size: .9rem;
+}
+.bg-gray {
+    background-color: #f8f9fa;
+}
+.text-green {
+    color: #28a745;
+}
 section{
     padding: 60px 0;
 }
@@ -37,6 +45,13 @@ section{
     display: inline-block;
     margin: 0px;
 }
+.checkout-step-title a {
+    cursor: pointer;
+    text-decoration: none;
+}
+.checkout-step-title a:hover {
+    text-decoration: underline;
+}
 
 p.title {
   color: #323232;
@@ -56,5 +71,5 @@ p.title_correct {
     text-align: center;
     padding: 16px;
     transition: all 0.3s ease;
-    font-size: 36px;
+    font-size: 24px;
 }

@@ -3,6 +3,8 @@ package com.quiz.darkhold.challenge.entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -40,6 +42,22 @@ public class QuestionSet implements Serializable {
 
     @Column
     private String correctOptions;
+
+    @Column(name = "display_order")
+    private Integer displayOrder = 0;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "question_type")
+    private QuestionType questionType = QuestionType.MULTIPLE_CHOICE;
+
+    @Column(name = "time_limit")
+    private Integer timeLimit;
+
+    @Column
+    private Integer points = 1000;
+
+    @Column(name = "acceptable_answers", length = 500)
+    private String acceptableAnswers;
 
     @JsonIgnore
     @ManyToOne
@@ -110,6 +128,46 @@ public class QuestionSet implements Serializable {
         this.challenge = challenge;
     }
 
+    public Integer getDisplayOrder() {
+        return displayOrder;
+    }
+
+    public void setDisplayOrder(final Integer displayOrder) {
+        this.displayOrder = displayOrder;
+    }
+
+    public QuestionType getQuestionType() {
+        return questionType;
+    }
+
+    public void setQuestionType(final QuestionType questionType) {
+        this.questionType = questionType;
+    }
+
+    public Integer getTimeLimit() {
+        return timeLimit;
+    }
+
+    public void setTimeLimit(final Integer timeLimit) {
+        this.timeLimit = timeLimit;
+    }
+
+    public Integer getPoints() {
+        return points;
+    }
+
+    public void setPoints(final Integer points) {
+        this.points = points;
+    }
+
+    public String getAcceptableAnswers() {
+        return acceptableAnswers;
+    }
+
+    public void setAcceptableAnswers(final String acceptableAnswers) {
+        this.acceptableAnswers = acceptableAnswers;
+    }
+
     @Override
     public String toString() {
         return new StringJoiner(", ", QuestionSet.class.getSimpleName() + "[", "]")
@@ -120,6 +178,9 @@ public class QuestionSet implements Serializable {
                 .add("answer3='" + answer3 + "'")
                 .add("answer4='" + answer4 + "'")
                 .add("correctOptions='" + correctOptions + "'")
+                .add("questionType=" + questionType)
+                .add("timeLimit=" + timeLimit)
+                .add("points=" + points)
                 .toString();
     }
 }

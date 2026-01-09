@@ -1,18 +1,23 @@
 package com.quiz.darkhold.game.controller;
 
+import com.quiz.darkhold.challenge.entity.QuestionSet;
+import com.quiz.darkhold.challenge.entity.QuestionType;
 import com.quiz.darkhold.game.model.Challenge;
 import com.quiz.darkhold.game.model.CurrentScore;
 import com.quiz.darkhold.game.model.ExamStatus;
 import com.quiz.darkhold.game.model.Game;
+import com.quiz.darkhold.game.model.QuestionPointer;
 import com.quiz.darkhold.game.model.StartTrigger;
 import com.quiz.darkhold.game.model.UserResponse;
+import com.quiz.darkhold.game.service.AnswerValidationService;
 import com.quiz.darkhold.game.service.GameService;
+import com.quiz.darkhold.init.GameConfig;
 import com.quiz.darkhold.util.CommonUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.messaging.handler.annotation.MessageMapping;
-import org.springframework.messaging.handler.annotation.SendTo;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -28,9 +33,18 @@ public class GameController {
     private final Logger logger = LogManager.getLogger(GameController.class);
 
     private final GameService gameService;
+    private final GameConfig gameConfig;
+    private final AnswerValidationService answerValidationService;
+    private final SimpMessagingTemplate messagingTemplate;
 
-    public GameController(final GameService gameService) {
+    public GameController(final GameService gameService,
+                          final GameConfig gameConfig,
+                          final AnswerValidationService answerValidationService,
+                          final SimpMessagingTemplate messagingTemplate) {
         this.gameService = gameService;
+        this.gameConfig = gameConfig;
+        this.answerValidationService = answerValidationService;
+        this.messagingTemplate = messagingTemplate;
     }
 
     @PostMapping("/interstitial")
@@ -45,17 +59,20 @@ public class GameController {
      * On to the page where the only question is getting displayed for few seconds.
      *
      * @param model     model
+     * @param quizPin   the quiz PIN
      * @param principal auth
      * @return question page
      */
     @PostMapping("/question")
     public String question(final Model model,
+                           @RequestParam(value = "quizPin", required = false) final String quizPin,
                            final Principal principal) {
-        //logger.info("On to question :" + quizPin);
+        logger.info("On to question : {}", quizPin);
         var questionPointer = gameService.getCurrentQuestionPointer();
         if (questionPointer.getCurrentQuestionNumber() == questionPointer.getTotalQuestionCount()) {
             return finalScore(model);
         }
+        model.addAttribute("quizPin", quizPin);
         logger.info("Going to question page");
         return "question";
     }
@@ -75,20 +92,39 @@ public class GameController {
      * On to the game.
      *
      * @param model     model
+     * @param quizPin   the quiz PIN
      * @param principal auth
      * @return game page
      */
     @PostMapping("/game")
-    public String startGame(final Model model, final Principal principal) {
-        logger.info("On to game :");
+    public String startGame(final Model model,
+                            @RequestParam(value = "quizPin", required = false) final String quizPin,
+                            final Principal principal) {
+        logger.info("On to game : {}", quizPin);
         var questionPointer = gameService.getCurrentQuestionPointer();
-        var challenge = new Challenge();
-        challenge.setQuestionNumber(questionPointer.getCurrentQuestionNumber());
-        challenge.setQuestionSet(questionPointer.getCurrentQuestion());
-        challenge.setQuestionNumber(challenge.getQuestionNumber() + 1);
+        var currentQuestion = questionPointer.getCurrentQuestion();
+        var challenge = buildChallengeModel(questionPointer, currentQuestion);
         model.addAttribute("challenge", challenge);
-        model.addAttribute("game_timer", "5");
+        model.addAttribute("quizPin", quizPin);
+        addQuestionAttributes(model, currentQuestion);
         return "game";
+    }
+
+    private Challenge buildChallengeModel(final QuestionPointer qp, final QuestionSet qs) {
+        var challenge = new Challenge();
+        challenge.setQuestionNumber(qp.getCurrentQuestionNumber());
+        challenge.setQuestionSet(qs);
+        challenge.setQuestionNumber(challenge.getQuestionNumber() + 1);
+        return challenge;
+    }
+
+    private void addQuestionAttributes(final Model model, final QuestionSet qs) {
+        int timeLimit = qs.getTimeLimit() != null ? qs.getTimeLimit() : gameConfig.getTimerSeconds();
+        model.addAttribute("game_timer", String.valueOf(timeLimit));
+        var qType = qs.getQuestionType() != null ? qs.getQuestionType() : QuestionType.MULTIPLE_CHOICE;
+        model.addAttribute("question_type", qType.name());
+        int points = qs.getPoints() != null ? qs.getPoints() : 1000;
+        model.addAttribute("question_points", String.valueOf(points));
     }
 
     @PostMapping("/answer/")
@@ -98,17 +134,55 @@ public class GameController {
                       @ModelAttribute("timeTook") final String timeTook) {
         logParams(selectedOptions, user, timeTook);
         var status = getExamStatus(selectedOptions);
-        var scoreOnStatus = findScoreOnStatus(status, timeTook);
-        logger.info("score is {}", scoreOnStatus);
         var moderator = gameService.findModerator();
         logger.info("is user moderator : {}", user.equalsIgnoreCase(moderator));
         if (user.equalsIgnoreCase(moderator)) {
+            // Save previous scores for delta calculation before moving to next question
+            gameService.savePreviousScores();
             gameService.incrementQuestionNo();
         } else {
-            // save score only if it is not a moderator, moderator scores are not saved
-            gameService.saveCurrentScore(user, scoreOnStatus);
+            processPlayerAnswer(user, status, timeTook);
         }
         return true;
+    }
+
+    private void processPlayerAnswer(final String user, final ExamStatus status, final String timeTook) {
+        boolean isCorrect = status == ExamStatus.SUCCESS;
+        int streak = gameService.updateStreak(user, isCorrect);
+        var questionPointer = gameService.getCurrentQuestionPointer();
+        var currentQuestion = questionPointer.getCurrentQuestion();
+        int basePoints = currentQuestion.getPoints() != null ? currentQuestion.getPoints() : 1000;
+        var scoreOnStatus = calculateScoreWithStreak(status, timeTook, basePoints, streak);
+        logger.info("score is {} (streak: {}, base: {})", scoreOnStatus, streak, basePoints);
+        gameService.saveCurrentScore(user, scoreOnStatus);
+    }
+
+    /**
+     * Validate a TYPE_ANSWER response server-side using fuzzy matching.
+     *
+     * @param userAnswer the user's typed answer
+     * @param user       the username
+     * @param timeTook   time taken in ms
+     * @return "correct" or "incorrect"
+     */
+    @PostMapping("/validate_answer/")
+    public @ResponseBody
+    String validateTypeAnswer(@ModelAttribute("userAnswer") final String userAnswer,
+                              @ModelAttribute("user") final String user,
+                              @ModelAttribute("timeTook") final String timeTook) {
+        logger.info("Validating TYPE_ANSWER: '{}' for user {}", userAnswer, user);
+        var questionPointer = gameService.getCurrentQuestionPointer();
+        var currentQuestion = questionPointer.getCurrentQuestion();
+
+        boolean isCorrect = answerValidationService.validateAnswer(currentQuestion, userAnswer);
+        var status = isCorrect ? ExamStatus.SUCCESS : ExamStatus.FAILURE;
+
+        var moderator = gameService.findModerator();
+        if (!user.equalsIgnoreCase(moderator)) {
+            processPlayerAnswer(user, status, timeTook);
+        }
+
+        return isCorrect ? "correct" : "incorrect";
     }
 
     private void logParams(final String selectedOptions, final String user, final String timeTook) {
@@ -119,19 +193,27 @@ public class GameController {
                 sanitizedOptions, sanitizedUser, sanitizedTime);
     }
 
-    private int findScoreOnStatus(final ExamStatus status, final String timeTook) {
-        int timeForAnswer = 0;
-        if (status == ExamStatus.SUCCESS) {
-            try {
-                var inTwentySeconds = Integer.parseInt(timeTook);
-                if (inTwentySeconds > 0L) {
-                    timeForAnswer = (20_000 - inTwentySeconds) / 20;
-                }
-            } catch (NumberFormatException exception) {
-                logger.info(exception.getMessage());
-            }
+    private int calculateScoreWithStreak(final ExamStatus status, final String timeTook,
+                                          final int basePoints, final int streak) {
+        if (status != ExamStatus.SUCCESS) {
+            return 0;
         }
-        return timeForAnswer;
+        return calculateTimeFactor(timeTook, basePoints, streak);
+    }
+
+    private int calculateTimeFactor(final String timeTook, final int basePoints, final int streak) {
+        try {
+            var timeTakenMs = Integer.parseInt(timeTook);
+            if (timeTakenMs <= 0) {
+                return 0;
+            }
+            var timerMs = gameConfig.getTimerSeconds() * 1000;
+            int timeFactor = Math.max(0, (timerMs - timeTakenMs) * 1000 / timerMs);
+            return gameService.calculateScoreWithStreak(basePoints, timeFactor, streak);
+        } catch (NumberFormatException ex) {
+            logger.info("Invalid time format: {}", ex.getMessage());
+            return 0;
+        }
     }
 
     private ExamStatus getExamStatus(@RequestParam("selectedOptions") final String selectedOptions) {
@@ -153,53 +235,158 @@ public class GameController {
 
     /**
      * Always active, will add the new user and give it back in response.
+     * Sends to PIN-scoped topic for concurrent game support.
      *
      * @param game game
-     * @return ajax
      */
     @MessageMapping("/user")
-    @SendTo("/topic/user")
-    public UserResponse getGame(final Game game) {
+    public void getGame(final Game game) {
         logger.info("On to getGame : {}", game);
         var users = gameService.getAllParticipants(game.getPin());
-        return new UserResponse(users);
+        var response = new UserResponse(users);
+        messagingTemplate.convertAndSend("/topic/" + game.getPin() + "/user", response);
     }
 
     /**
      * Trigger for starting the game.
+     * Sends to PIN-scoped topic for concurrent game support.
      *
      * @param pin       of the game
      * @param principal of who started it
-     * @return to the game page
      */
     @MessageMapping("/start")
-    @SendTo("/topic/start")
-    public StartTrigger startTrigger(final String pin, final Principal principal) {
+    public void startTrigger(final String pin, final Principal principal) {
         // this is triggered by the game moderator
         logger.info("On to startGame : {}", pin);
         logger.info("On to startGame : user : {}", principal.getName());
         // who started the game is already in nitrate
-        return new StartTrigger(pin);
+        var trigger = new StartTrigger(pin);
+        messagingTemplate.convertAndSend("/topic/" + pin + "/start", trigger);
     }
 
+    /**
+     * Fetch current question for display.
+     * Sends to PIN-scoped topic for concurrent game support.
+     *
+     * @param message format: "pin:username" or just "pin"
+     */
     @MessageMapping("/question_fetch")
-    @SendTo("/topic/question_read")
-    public StartTrigger questionFetch(final String name) {
-        logger.info("On to questionFetch : {}}", name);
+    public void questionFetch(final String message) {
+        logger.info("On to questionFetch : {}", message);
+        // Extract PIN from message (format: "pin" or "pin:username")
+        String pin = message.contains(":") ? message.substring(0, message.indexOf(":")) : message;
         var questionPointer = gameService.getCurrentQuestionPointer();
+        StartTrigger trigger;
         if (questionPointer.getCurrentQuestionNumber() == questionPointer.getTotalQuestionCount()) {
-            return new StartTrigger("END_GAME");
+            trigger = new StartTrigger("END_GAME");
+        } else {
+            logger.info("On questionPointer.getCurrentQuestionNumber() : {}",
+                    questionPointer.getCurrentQuestionNumber());
+            trigger = new StartTrigger(questionPointer.getCurrentQuestionNumber() + 1 + " : "
+                    + questionPointer.getCurrentQuestion().getQuestion());
         }
-        logger.info("On questionPointer.getCurrentQuestionNumber() : {}",
-                questionPointer.getCurrentQuestionNumber());
-        return new StartTrigger(questionPointer.getCurrentQuestionNumber() + 1 + " : "
-                + questionPointer.getCurrentQuestion().getQuestion());
+        messagingTemplate.convertAndSend("/topic/" + pin + "/question_read", trigger);
     }
 
+    /**
+     * Signal that scores are ready to be fetched.
+     * Sends to PIN-scoped topic for concurrent game support.
+     *
+     * @param pin game PIN
+     */
     @MessageMapping("/fetch_scores")
-    @SendTo("/topic/read_scores")
-    public Boolean scoresFetch() {
-        logger.info("On to scoresFetch");
-        return Boolean.TRUE;
+    public void scoresFetch(final String pin) {
+        logger.info("On to scoresFetch for game: {}", pin);
+        messagingTemplate.convertAndSend("/topic/" + pin + "/read_scores", true);
+    }
+
+    // ==================== Game Control WebSocket Endpoints ====================
+
+    /**
+     * Pause the current game.
+     * Sends to PIN-scoped topic for concurrent game support.
+     *
+     * @param pin game pin
+     */
+    @MessageMapping("/pause_game")
+    public void pauseGame(final String pin) {
+        logger.info("Pausing game: {}", pin);
+        Boolean result = gameService.pauseGame();
+        messagingTemplate.convertAndSend("/topic/" + pin + "/game_paused", result);
+    }
+
+    /**
+     * Resume a paused game.
+     * Sends to PIN-scoped topic for concurrent game support.
+     *
+     * @param pin game pin
+     */
+    @MessageMapping("/resume_game")
+    public void resumeGame(final String pin) {
+        logger.info("Resuming game: {}", pin);
+        Long elapsed = gameService.resumeGame();
+        messagingTemplate.convertAndSend("/topic/" + pin + "/game_resumed", elapsed);
+    }
+
+    /**
+     * Skip the current question.
+     * Sends to PIN-scoped topic for concurrent game support.
+     *
+     * @param pin game pin
+     */
+    @MessageMapping("/skip_question")
+    public void skipQuestion(final String pin) {
+        logger.info("Skipping question for game: {}", pin);
+        gameService.savePreviousScores();
+        gameService.skipQuestion();
+        messagingTemplate.convertAndSend("/topic/" + pin + "/question_skipped", true);
+    }
+
+    /**
+     * End the game early.
+     * Sends to PIN-scoped topic for concurrent game support.
+     *
+     * @param pin game pin
+     */
+    @MessageMapping("/end_game_early")
+    public void endGameEarly(final String pin) {
+        logger.info("Ending game early: {}", pin);
+        gameService.setGameStatus(
+                com.quiz.darkhold.game.model.GameStatus.ENDED);
+        messagingTemplate.convertAndSend("/topic/" + pin + "/game_ended", true);
+    }
+
+    /**
+     * Kick a player from the game.
+     * Sends to PIN-scoped topic for concurrent game support.
+     *
+     * @param message format: "pin:username"
+     */
+    @MessageMapping("/kick_player")
+    public void kickPlayer(final String message) {
+        // Expected format: "pin:username"
+        String[] parts = message.split(":", 2);
+        if (parts.length != 2) {
+            logger.warn("Invalid kick message format: {}", message);
+            return;
+        }
+        String pin = parts[0];
+        String username = parts[1];
+        logger.info("Kicking player {} from game {}", username, pin);
+        boolean kicked = gameService.kickPlayer(username);
+        String result = kicked ? username : null;
+        messagingTemplate.convertAndSend("/topic/" + pin + "/player_kicked", result);
+    }
+
+    /**
+     * Get current participant count.
+     * Sends to PIN-scoped topic for concurrent game support.
+     *
+     * @param pin game pin
+     */
+    @MessageMapping("/participant_count")
+    public void getParticipantCount(final String pin) {
+        Integer count = gameService.getParticipantCount();
+        messagingTemplate.convertAndSend("/topic/" + pin + "/participant_count", count);
     }
 }

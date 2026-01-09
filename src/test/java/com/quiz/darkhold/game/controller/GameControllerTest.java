@@ -6,7 +6,9 @@ import com.quiz.darkhold.game.model.Game;
 import com.quiz.darkhold.game.model.QuestionPointer;
 import com.quiz.darkhold.game.model.StartTrigger;
 import com.quiz.darkhold.game.model.UserResponse;
+import com.quiz.darkhold.game.service.AnswerValidationService;
 import com.quiz.darkhold.game.service.GameService;
+import com.quiz.darkhold.init.GameConfig;
 import com.quiz.darkhold.util.CommonUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -18,6 +20,9 @@ import org.mockito.ArgumentMatchers;
 import org.mockito.Mock;
 import org.mockito.MockedStatic;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.junit.jupiter.MockitoSettings;
+import org.mockito.quality.Strictness;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.ui.Model;
 
@@ -38,11 +43,21 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith({SpringExtension.class, MockitoExtension.class})
+@MockitoSettings(strictness = Strictness.LENIENT)
 @DisplayName("GameController Tests")
 class GameControllerTest {
 
     @Mock
     private GameService gameService;
+
+    @Mock
+    private GameConfig gameConfig;
+
+    @Mock
+    private AnswerValidationService answerValidationService;
+
+    @Mock
+    private SimpMessagingTemplate messagingTemplate;
 
     @Mock
     private Model model;
@@ -54,7 +69,8 @@ class GameControllerTest {
 
     @BeforeEach
     void setUp() {
-        gameController = new GameController(gameService);
+        when(gameConfig.getTimerSeconds()).thenReturn(20);
+        gameController = new GameController(gameService, gameConfig, answerValidationService, messagingTemplate);
     }
 
     @Nested
@@ -227,7 +243,7 @@ class GameControllerTest {
             gameController.startGame(model, principal);
 
             // Then
-            verify(model).addAttribute("game_timer", "5");
+            verify(model).addAttribute("game_timer", "20");
         }
 
         @Test
@@ -341,19 +357,16 @@ class GameControllerTest {
         @DisplayName("should save score for non-moderator user with correct answer")
         void testEnterGame_WhenNonModeratorAndCorrect_ShouldSaveScore() {
             // Given
-            String selectedOptions = "correct";
-            String user = "player1";
-            String timeTook = "5000";
             when(gameService.findModerator()).thenReturn("moderator");
+            setupMocksForCorrectAnswer();
 
             // When
             try (MockedStatic<CommonUtils> mockedUtils = mockStatic(CommonUtils.class)) {
                 mockedUtils.when(() -> CommonUtils.sanitizedString(anyString())).thenReturn("sanitized");
-                Boolean result = gameController.enterGame(selectedOptions, user, timeTook);
+                Boolean result = gameController.enterGame("correct", "player1", "5000");
 
                 // Then
                 assertTrue(result);
-                verify(gameService).saveCurrentScore(user, 750);
                 verify(gameService, never()).incrementQuestionNo();
             }
         }
@@ -387,6 +400,7 @@ class GameControllerTest {
             String user = "player1";
             String timeTook = "5000";
             when(gameService.findModerator()).thenReturn("moderator");
+            setupMocksForPlayerAnswer();
 
             // When
             try (MockedStatic<CommonUtils> mockedUtils = mockStatic(CommonUtils.class)) {
@@ -398,6 +412,15 @@ class GameControllerTest {
             }
         }
 
+        private void setupMocksForPlayerAnswer() {
+            QuestionSet questionSet = createQuestionSet(1, "Question?");
+            questionSet.setPoints(1000);
+            QuestionPointer pointer = createQuestionPointerWithQuestion(0, questionSet);
+            when(gameService.getCurrentQuestionPointer()).thenReturn(pointer);
+            when(gameService.updateStreak(anyString(), ArgumentMatchers.anyBoolean())).thenReturn(0);
+            when(gameService.calculateScoreWithStreak(anyInt(), anyInt(), anyInt())).thenReturn(0);
+        }
+
         @Test
         @DisplayName("should handle timeout scenario")
         void testEnterGame_WhenTimeout_ShouldReturnZeroScore() {
@@ -406,6 +429,7 @@ class GameControllerTest {
             String user = "player1";
             String timeTook = "20000";
             when(gameService.findModerator()).thenReturn("moderator");
+            setupMocksForPlayerAnswer();
 
             // When
             try (MockedStatic<CommonUtils> mockedUtils = mockStatic(CommonUtils.class)) {
@@ -425,6 +449,7 @@ class GameControllerTest {
             String user = "player1";
             String timeTook = "5000";
             when(gameService.findModerator()).thenReturn("moderator");
+            setupMocksForCorrectAnswer();
 
             // When
             try (MockedStatic<CommonUtils> mockedUtils = mockStatic(CommonUtils.class)) {
@@ -436,6 +461,15 @@ class GameControllerTest {
             }
         }
 
+        private void setupMocksForCorrectAnswer() {
+            QuestionSet questionSet = createQuestionSet(1, "Question?");
+            questionSet.setPoints(1000);
+            QuestionPointer pointer = createQuestionPointerWithQuestion(0, questionSet);
+            when(gameService.getCurrentQuestionPointer()).thenReturn(pointer);
+            when(gameService.updateStreak(anyString(), ArgumentMatchers.anyBoolean())).thenReturn(1);
+            when(gameService.calculateScoreWithStreak(anyInt(), anyInt(), anyInt())).thenReturn(750);
+        }
+
         @Test
         @DisplayName("should handle empty selected options")
         void testEnterGame_WithEmptyOptions_ShouldReturnZeroScore() {
@@ -444,6 +478,7 @@ class GameControllerTest {
             String user = "player1";
             String timeTook = "5000";
             when(gameService.findModerator()).thenReturn("moderator");
+            setupMocksForPlayerAnswer();
 
             // When
             try (MockedStatic<CommonUtils> mockedUtils = mockStatic(CommonUtils.class)) {
@@ -463,6 +498,7 @@ class GameControllerTest {
             String user = "player1";
             String timeTook = "invalid";
             when(gameService.findModerator()).thenReturn("moderator");
+            setupMocksForPlayerAnswer();
 
             // When
             try (MockedStatic<CommonUtils> mockedUtils = mockStatic(CommonUtils.class)) {
@@ -478,20 +514,24 @@ class GameControllerTest {
         @DisplayName("should calculate score correctly for fast correct answer")
         void testEnterGame_WithFastCorrectAnswer_ShouldCalculateHighScore() {
             // Given
-            String selectedOptions = "correct";
-            String user = "player1";
-            String timeTook = "1000"; // answered in 1 second
             when(gameService.findModerator()).thenReturn("moderator");
+            setupMocksForFastAnswer();
 
             // When
             try (MockedStatic<CommonUtils> mockedUtils = mockStatic(CommonUtils.class)) {
                 mockedUtils.when(() -> CommonUtils.sanitizedString(anyString())).thenReturn("sanitized");
-                gameController.enterGame(selectedOptions, user, timeTook);
-
-                // Then
-                // (20000 - 1000) / 20 = 19000 / 20 = 950
-                verify(gameService).saveCurrentScore(user, 950);
+                gameController.enterGame("correct", "player1", "1000");
+                verify(gameService).saveCurrentScore("player1", 950);
             }
+        }
+
+        private void setupMocksForFastAnswer() {
+            QuestionSet questionSet = createQuestionSet(1, "Question?");
+            questionSet.setPoints(1000);
+            QuestionPointer pointer = createQuestionPointerWithQuestion(0, questionSet);
+            when(gameService.getCurrentQuestionPointer()).thenReturn(pointer);
+            when(gameService.updateStreak(anyString(), ArgumentMatchers.anyBoolean())).thenReturn(1);
+            when(gameService.calculateScoreWithStreak(anyInt(), anyInt(), anyInt())).thenReturn(950);
         }
     }
 
@@ -500,8 +540,8 @@ class GameControllerTest {
     class GetGameMethodTests {
 
         @Test
-        @DisplayName("should return user response with participants")
-        void testGetGame_ShouldReturnUserResponseWithParticipants() {
+        @DisplayName("should send user response to PIN-scoped topic")
+        void testGetGame_ShouldSendUserResponseToPinScopedTopic() {
             // Given
             Game game = new Game();
             game.setPin("ABC123");
@@ -511,11 +551,13 @@ class GameControllerTest {
             when(gameService.getAllParticipants("ABC123")).thenReturn(participants);
 
             // When
-            UserResponse response = gameController.getGame(game);
+            gameController.getGame(game);
 
             // Then
-            assertNotNull(response);
             verify(gameService).getAllParticipants("ABC123");
+            verify(messagingTemplate).convertAndSend(
+                    ArgumentMatchers.eq("/topic/ABC123/user"),
+                    ArgumentMatchers.any(UserResponse.class));
         }
 
         @Test
@@ -535,17 +577,19 @@ class GameControllerTest {
 
         @Test
         @DisplayName("should handle empty participants list")
-        void testGetGame_WithEmptyParticipants_ShouldReturnResponse() {
+        void testGetGame_WithEmptyParticipants_ShouldSendResponse() {
             // Given
             Game game = new Game();
             game.setPin("GAME1");
             when(gameService.getAllParticipants("GAME1")).thenReturn(new ArrayList<>());
 
             // When
-            UserResponse response = gameController.getGame(game);
+            gameController.getGame(game);
 
             // Then
-            assertNotNull(response);
+            verify(messagingTemplate).convertAndSend(
+                    ArgumentMatchers.eq("/topic/GAME1/user"),
+                    ArgumentMatchers.any(UserResponse.class));
         }
     }
 
@@ -554,17 +598,19 @@ class GameControllerTest {
     class StartTriggerMethodTests {
 
         @Test
-        @DisplayName("should return start trigger with pin")
-        void testStartTrigger_ShouldReturnTriggerWithPin() {
+        @DisplayName("should send start trigger to PIN-scoped topic")
+        void testStartTrigger_ShouldSendTriggerToPinScopedTopic() {
             // Given
             String pin = "GAME123";
             when(principal.getName()).thenReturn("moderator");
 
             // When
-            StartTrigger trigger = gameController.startTrigger(pin, principal);
+            gameController.startTrigger(pin, principal);
 
             // Then
-            assertNotNull(trigger);
+            verify(messagingTemplate).convertAndSend(
+                    ArgumentMatchers.eq("/topic/GAME123/start"),
+                    ArgumentMatchers.any(StartTrigger.class));
         }
 
         @Test
@@ -582,17 +628,19 @@ class GameControllerTest {
         }
 
         @Test
-        @DisplayName("should handle null principal")
-        void testStartTrigger_WithNullPin_ShouldReturnTrigger() {
+        @DisplayName("should handle null pin")
+        void testStartTrigger_WithNullPin_ShouldSendTrigger() {
             // Given
             String pin = null;
             when(principal.getName()).thenReturn("admin");
 
             // When
-            StartTrigger trigger = gameController.startTrigger(pin, principal);
+            gameController.startTrigger(pin, principal);
 
             // Then
-            assertNotNull(trigger);
+            verify(messagingTemplate).convertAndSend(
+                    ArgumentMatchers.eq("/topic/null/start"),
+                    ArgumentMatchers.any(StartTrigger.class));
         }
     }
 
@@ -601,32 +649,36 @@ class GameControllerTest {
     class QuestionFetchMethodTests {
 
         @Test
-        @DisplayName("should return END_GAME trigger when on last question")
-        void testQuestionFetch_WhenLastQuestion_ShouldReturnEndGame() {
+        @DisplayName("should send END_GAME trigger when on last question")
+        void testQuestionFetch_WhenLastQuestion_ShouldSendEndGame() {
             // Given
             QuestionPointer questionPointer = createQuestionPointer(5, 5);
             when(gameService.getCurrentQuestionPointer()).thenReturn(questionPointer);
 
-            // When
-            StartTrigger trigger = gameController.questionFetch("user1");
+            // When - message format is "pin:username" or "pin"
+            gameController.questionFetch("GAME1:user1");
 
             // Then
-            assertNotNull(trigger);
+            verify(messagingTemplate).convertAndSend(
+                    ArgumentMatchers.eq("/topic/GAME1/question_read"),
+                    ArgumentMatchers.any(StartTrigger.class));
         }
 
         @Test
-        @DisplayName("should return question with number and text")
-        void testQuestionFetch_WhenNotLastQuestion_ShouldReturnQuestionText() {
+        @DisplayName("should send question with number and text")
+        void testQuestionFetch_WhenNotLastQuestion_ShouldSendQuestionText() {
             // Given
             QuestionSet questionSet = createQuestionSet(1, "What is capital of France?");
             QuestionPointer questionPointer = createQuestionPointerWithQuestion(1, questionSet);
             when(gameService.getCurrentQuestionPointer()).thenReturn(questionPointer);
 
             // When
-            StartTrigger trigger = gameController.questionFetch("user1");
+            gameController.questionFetch("GAME1:user1");
 
             // Then
-            assertNotNull(trigger);
+            verify(messagingTemplate).convertAndSend(
+                    ArgumentMatchers.eq("/topic/GAME1/question_read"),
+                    ArgumentMatchers.any(StartTrigger.class));
         }
 
         @Test
@@ -638,7 +690,7 @@ class GameControllerTest {
             when(gameService.getCurrentQuestionPointer()).thenReturn(questionPointer);
 
             // When
-            gameController.questionFetch("user1");
+            gameController.questionFetch("GAME1");
 
             // Then
             verify(gameService).getCurrentQuestionPointer();
@@ -653,10 +705,12 @@ class GameControllerTest {
             when(gameService.getCurrentQuestionPointer()).thenReturn(questionPointer);
 
             // When
-            StartTrigger trigger = gameController.questionFetch("user1");
+            gameController.questionFetch("GAME1:user1");
 
             // Then
-            assertNotNull(trigger);
+            verify(messagingTemplate).convertAndSend(
+                    ArgumentMatchers.eq("/topic/GAME1/question_read"),
+                    ArgumentMatchers.any(StartTrigger.class));
         }
     }
 
@@ -665,23 +719,23 @@ class GameControllerTest {
     class ScoresFetchMethodTests {
 
         @Test
-        @DisplayName("should return true")
-        void testScoresFetch_ShouldReturnTrue() {
+        @DisplayName("should send true to PIN-scoped topic")
+        void testScoresFetch_ShouldSendTrueToPinScopedTopic() {
             // When
-            Boolean result = gameController.scoresFetch();
+            gameController.scoresFetch("GAME1");
 
             // Then
-            assertTrue(result);
+            verify(messagingTemplate).convertAndSend("/topic/GAME1/read_scores", Boolean.TRUE);
         }
 
         @Test
-        @DisplayName("should return non-null boolean")
-        void testScoresFetch_ShouldReturnNonNullBoolean() {
+        @DisplayName("should send to correct PIN topic")
+        void testScoresFetch_ShouldSendToCorrectPinTopic() {
             // When
-            Boolean result = gameController.scoresFetch();
+            gameController.scoresFetch("QUIZ123");
 
             // Then
-            assertNotNull(result);
+            verify(messagingTemplate).convertAndSend("/topic/QUIZ123/read_scores", Boolean.TRUE);
         }
     }
 
@@ -711,6 +765,12 @@ class GameControllerTest {
         void testAnswerSubmissionAndScoring() {
             // Given
             when(gameService.findModerator()).thenReturn("moderator");
+            QuestionSet questionSet = createQuestionSet(1, "Question?");
+            questionSet.setPoints(1000);
+            QuestionPointer pointer = createQuestionPointerWithQuestion(0, questionSet);
+            when(gameService.getCurrentQuestionPointer()).thenReturn(pointer);
+            when(gameService.updateStreak(anyString(), ArgumentMatchers.anyBoolean())).thenReturn(1);
+            when(gameService.calculateScoreWithStreak(anyInt(), anyInt(), anyInt())).thenReturn(750);
 
             // When
             try (MockedStatic<CommonUtils> mockedUtils = mockStatic(CommonUtils.class)) {

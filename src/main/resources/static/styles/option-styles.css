@@ -30,3 +30,10 @@ p{
     font-weight: 500;
     padding-top: 5px;
 }
+.icon-bar a {
+    display: block;
+    text-align: center;
+    padding: 16px;
+    transition: all 0.3s ease;
+    font-size: 24px;
+}

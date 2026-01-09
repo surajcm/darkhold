@@ -1,0 +1,451 @@
+<!DOCTYPE HTML>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <title>Edit Challenge - Darkhold</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="shortcut icon" href="/images/favicon.png">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+    <link rel="stylesheet" href="/styles/core/font-awesome-all.5.15.4.min.css">
+    <link rel="stylesheet" href="/styles/icon-styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
+    <script type="text/javascript" src="/scripts/common-scripts.js"></script>
+    <style>
+        body {
+            background-image: url("/images/funky-lines.png");
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            font-style: normal;
+        }
+        body::before {
+            content: "";
+            position: fixed;
+            top: -10px;
+            left: 0;
+            width: 100%;
+            height: 10px;
+            box-shadow: 0px 0 10px rgba(0, 0, 0, 0.8);
+            z-index: 100;
+        }
+        .question-card { cursor: move; transition: transform 0.2s; }
+        .question-card:hover { transform: translateX(5px); }
+        .question-card.sortable-ghost { opacity: 0.4; }
+        .correct-answer { color: #198754; font-weight: bold; }
+        .btn-icon { padding: 0.25rem 0.5rem; }
+        .icon-bar a {
+            display: block;
+            text-align: center;
+            padding: 16px;
+            transition: all 0.3s ease;
+            font-size: 24px;
+        }
+    </style>
+</head>
+<body>
+<div th:insert="~{navbar :: navbar}"></div>
+<form method="POST" id="editChallengeForm">
+<div class="container my-4">
+    <input type="hidden" id="challengeId" th:value="${challenge.id}"/>
+
+    <!-- Challenge Info -->
+    <div class="card mb-4">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <h5 class="mb-0" th:text="${challenge.title}">Challenge Title</h5>
+            <div>
+                <button class="btn btn-outline-primary btn-sm" data-bs-toggle="modal" data-bs-target="#editInfoModal">
+                    <i class="bi bi-pencil"></i> Edit Info
+                </button>
+                <a href="/options" class="btn btn-success btn-sm">
+                    <i class="bi bi-check-circle"></i> Done
+                </a>
+            </div>
+        </div>
+        <div class="card-body">
+            <p class="text-muted mb-0" th:text="${challenge.description ?: 'No description'}"></p>
+        </div>
+    </div>
+
+    <!-- Questions -->
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h5>Questions (<span id="questionCount" th:text="${challenge.questionSets?.size() ?: 0}">0</span>)</h5>
+        <button class="btn btn-primary" onclick="showQuestionModal()"><i class="bi bi-plus"></i> Add Question</button>
+    </div>
+
+    <div id="questionList">
+        <div th:each="q, stat : ${challenge.questionSets}" class="card mb-2 question-card" th:data-id="${q.id}">
+            <div class="card-body py-2">
+                <div class="d-flex align-items-center">
+                    <span class="badge bg-secondary me-2" th:text="${stat.index + 1}">1</span>
+                    <div class="flex-grow-1">
+                        <div class="d-flex align-items-center gap-2">
+                            <strong th:text="${q.question}">Question text</strong>
+                            <span th:if="${q.questionType != null and q.questionType.name() != 'MULTIPLE_CHOICE'}"
+                                  class="badge bg-info text-dark"
+                                  th:text="${q.questionType.name() == 'TRUE_FALSE' ? 'T/F' : (q.questionType.name() == 'TYPE_ANSWER' ? 'Type' : 'Poll')}"></span>
+                            <span th:if="${q.timeLimit != null}" class="badge bg-warning text-dark" th:text="${q.timeLimit} + 's'"></span>
+                        </div>
+                        <div class="small text-muted" th:if="${q.questionType == null or q.questionType.name() == 'MULTIPLE_CHOICE' or q.questionType.name() == 'POLL'}">
+                            <span th:class="${q.questionType == null or q.questionType.name() != 'POLL'} and ${#strings.contains(q.correctOptions, 'A')} ? 'correct-answer' : ''" th:text="'A: ' + ${q.answer1}"></span> |
+                            <span th:class="${q.questionType == null or q.questionType.name() != 'POLL'} and ${#strings.contains(q.correctOptions, 'B')} ? 'correct-answer' : ''" th:text="'B: ' + ${q.answer2}"></span>
+                            <span th:if="${q.answer3}"> | <span th:class="${q.questionType == null or q.questionType.name() != 'POLL'} and ${#strings.contains(q.correctOptions, 'C')} ? 'correct-answer' : ''" th:text="'C: ' + ${q.answer3}"></span></span>
+                            <span th:if="${q.answer4}"> | <span th:class="${q.questionType == null or q.questionType.name() != 'POLL'} and ${#strings.contains(q.correctOptions, 'D')} ? 'correct-answer' : ''" th:text="'D: ' + ${q.answer4}"></span></span>
+                        </div>
+                        <div class="small text-muted" th:if="${q.questionType != null and q.questionType.name() == 'TRUE_FALSE'}">
+                            <span th:class="${#strings.contains(q.correctOptions, 'TRUE')} ? 'correct-answer' : ''">True</span> |
+                            <span th:class="${#strings.contains(q.correctOptions, 'FALSE')} ? 'correct-answer' : ''">False</span>
+                        </div>
+                        <div class="small text-muted" th:if="${q.questionType != null and q.questionType.name() == 'TYPE_ANSWER'}">
+                            Answer: <span class="correct-answer" th:text="${q.answer1}"></span>
+                            <span th:if="${q.acceptableAnswers}"> (also accepts: <span th:text="${q.acceptableAnswers}"></span>)</span>
+                        </div>
+                    </div>
+                    <div class="btn-group">
+                        <button class="btn btn-outline-secondary btn-icon" th:onclick="'editQuestion(' + ${q.id} + ')'"><i class="bi bi-pencil"></i></button>
+                        <button class="btn btn-outline-secondary btn-icon" th:onclick="'duplicateQuestion(' + ${q.id} + ')'"><i class="bi bi-copy"></i></button>
+                        <button class="btn btn-outline-danger btn-icon" th:onclick="'deleteQuestion(' + ${q.id} + ')'"><i class="bi bi-trash"></i></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="emptyState" class="text-center text-muted py-5" th:if="${challenge.questionSets == null || challenge.questionSets.empty}">
+        No questions yet. Click "Add Question" to get started.
+    </div>
+</div>
+
+<!-- Question Modal -->
+<div class="modal fade" id="questionModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalTitle">Add Question</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="editingQuestionId"/>
+                <!-- Question Type and Settings Row -->
+                <div class="row mb-3">
+                    <div class="col-md-4">
+                        <label class="form-label">Question Type</label>
+                        <select id="questionType" class="form-select" onchange="onQuestionTypeChange()">
+                            <option value="MULTIPLE_CHOICE">Multiple Choice</option>
+                            <option value="TRUE_FALSE">True/False</option>
+                            <option value="TYPE_ANSWER">Type Answer</option>
+                            <option value="POLL">Poll (No Correct)</option>
+                        </select>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">Time Limit</label>
+                        <select id="timeLimit" class="form-select">
+                            <option value="">Default</option>
+                            <option value="5">5 seconds</option>
+                            <option value="10">10 seconds</option>
+                            <option value="20">20 seconds</option>
+                            <option value="30">30 seconds</option>
+                            <option value="60">60 seconds</option>
+                            <option value="90">90 seconds</option>
+                            <option value="120">2 minutes</option>
+                            <option value="240">4 minutes</option>
+                        </select>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">Points</label>
+                        <input type="number" id="points" class="form-control" value="1000" min="0" max="10000">
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Question *</label>
+                    <textarea id="questionText" class="form-control" rows="2" maxlength="425" required></textarea>
+                </div>
+                <!-- Multiple Choice / Poll Answers -->
+                <div id="multipleChoiceAnswers">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Answer A *</label>
+                            <div class="input-group">
+                                <div class="input-group-text"><input type="checkbox" id="correctA" class="form-check-input mt-0"></div>
+                                <input type="text" id="answer1" class="form-control" maxlength="225" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Answer B *</label>
+                            <div class="input-group">
+                                <div class="input-group-text"><input type="checkbox" id="correctB" class="form-check-input mt-0"></div>
+                                <input type="text" id="answer2" class="form-control" maxlength="225" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3" id="answerCGroup">
+                            <label class="form-label">Answer C</label>
+                            <div class="input-group">
+                                <div class="input-group-text"><input type="checkbox" id="correctC" class="form-check-input mt-0"></div>
+                                <input type="text" id="answer3" class="form-control" maxlength="225">
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3" id="answerDGroup">
+                            <label class="form-label">Answer D</label>
+                            <div class="input-group">
+                                <div class="input-group-text"><input type="checkbox" id="correctD" class="form-check-input mt-0"></div>
+                                <input type="text" id="answer4" class="form-control" maxlength="225">
+                            </div>
+                        </div>
+                    </div>
+                    <small id="correctAnswerHint" class="text-muted">Check the box next to correct answer(s)</small>
+                </div>
+                <!-- True/False Answers -->
+                <div id="trueFalseAnswers" style="display:none;">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="tfAnswer" id="tfTrue" value="TRUE">
+                                <label class="form-check-label" for="tfTrue">True is correct</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="tfAnswer" id="tfFalse" value="FALSE">
+                                <label class="form-check-label" for="tfFalse">False is correct</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Type Answer Input -->
+                <div id="typeAnswerInput" style="display:none;">
+                    <div class="mb-3">
+                        <label class="form-label">Correct Answer *</label>
+                        <input type="text" id="typeAnswerCorrect" class="form-control" maxlength="225" placeholder="Enter the correct answer">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Alternative Answers (optional)</label>
+                        <input type="text" id="acceptableAnswers" class="form-control" maxlength="500" placeholder="Comma-separated alternatives, e.g.: answer1, answer2, answer3">
+                        <small class="text-muted">Typos will be tolerated using fuzzy matching</small>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary" onclick="saveQuestion()">Save Question</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Edit Info Modal -->
+<div class="modal fade" id="editInfoModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Edit Challenge Info</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-3">
+                    <label class="form-label">Title *</label>
+                    <input type="text" id="editTitle" class="form-control" maxlength="100" th:value="${challenge.title}">
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Description</label>
+                    <textarea id="editDescription" class="form-control" rows="3" maxlength="250" th:text="${challenge.description}"></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary" onclick="updateChallengeInfo()">Save</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
+<script th:inline="javascript">
+const challengeId = [[${challenge.id}]];
+const questionModal = new bootstrap.Modal(document.getElementById('questionModal'));
+
+// Initialize drag-and-drop
+new Sortable(document.getElementById('questionList'), {
+    animation: 150,
+    ghostClass: 'sortable-ghost',
+    onEnd: function() {
+        const ids = [...document.querySelectorAll('.question-card')].map(el => parseInt(el.dataset.id));
+        fetch('/api/question/reorder', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({challengeId: challengeId, questionIds: ids})
+        });
+        updateNumbers();
+    }
+});
+
+function updateNumbers() {
+    document.querySelectorAll('.question-card').forEach((card, i) => {
+        card.querySelector('.badge').textContent = i + 1;
+    });
+}
+
+function showQuestionModal(id = null) {
+    document.getElementById('editingQuestionId').value = id || '';
+    document.getElementById('modalTitle').textContent = id ? 'Edit Question' : 'Add Question';
+    document.getElementById('questionText').value = '';
+    document.getElementById('questionType').value = 'MULTIPLE_CHOICE';
+    document.getElementById('timeLimit').value = '';
+    document.getElementById('points').value = '1000';
+    document.getElementById('answer1').value = '';
+    document.getElementById('answer2').value = '';
+    document.getElementById('answer3').value = '';
+    document.getElementById('answer4').value = '';
+    document.getElementById('typeAnswerCorrect').value = '';
+    document.getElementById('acceptableAnswers').value = '';
+    document.getElementById('tfTrue').checked = false;
+    document.getElementById('tfFalse').checked = false;
+    ['A','B','C','D'].forEach(x => document.getElementById('correct'+x).checked = false);
+    onQuestionTypeChange();
+    questionModal.show();
+}
+
+function onQuestionTypeChange() {
+    const type = document.getElementById('questionType').value;
+    const mcAnswers = document.getElementById('multipleChoiceAnswers');
+    const tfAnswers = document.getElementById('trueFalseAnswers');
+    const taInput = document.getElementById('typeAnswerInput');
+    const correctHint = document.getElementById('correctAnswerHint');
+    const answerCGroup = document.getElementById('answerCGroup');
+    const answerDGroup = document.getElementById('answerDGroup');
+
+    // Hide all first
+    mcAnswers.style.display = 'none';
+    tfAnswers.style.display = 'none';
+    taInput.style.display = 'none';
+
+    if (type === 'MULTIPLE_CHOICE') {
+        mcAnswers.style.display = 'block';
+        answerCGroup.style.display = 'block';
+        answerDGroup.style.display = 'block';
+        correctHint.style.display = 'block';
+        ['A','B','C','D'].forEach(x => document.getElementById('correct'+x).parentElement.style.display = 'flex');
+    } else if (type === 'TRUE_FALSE') {
+        tfAnswers.style.display = 'block';
+    } else if (type === 'TYPE_ANSWER') {
+        taInput.style.display = 'block';
+    } else if (type === 'POLL') {
+        mcAnswers.style.display = 'block';
+        answerCGroup.style.display = 'block';
+        answerDGroup.style.display = 'block';
+        correctHint.style.display = 'none';
+        // Hide correct answer checkboxes for polls
+        ['A','B','C','D'].forEach(x => document.getElementById('correct'+x).parentElement.style.display = 'none');
+    }
+}
+
+function editQuestion(id) {
+    fetch('/api/question/' + id)
+        .then(r => r.json())
+        .then(q => {
+            document.getElementById('editingQuestionId').value = id;
+            document.getElementById('modalTitle').textContent = 'Edit Question';
+            document.getElementById('questionText').value = q.question;
+            document.getElementById('questionType').value = q.questionType || 'MULTIPLE_CHOICE';
+            document.getElementById('timeLimit').value = q.timeLimit || '';
+            document.getElementById('points').value = q.points || 1000;
+            document.getElementById('answer1').value = q.answer1 || '';
+            document.getElementById('answer2').value = q.answer2 || '';
+            document.getElementById('answer3').value = q.answer3 || '';
+            document.getElementById('answer4').value = q.answer4 || '';
+            document.getElementById('acceptableAnswers').value = q.acceptableAnswers || '';
+
+            const opts = q.correctOptions || '';
+            const type = q.questionType || 'MULTIPLE_CHOICE';
+
+            if (type === 'TRUE_FALSE') {
+                document.getElementById('tfTrue').checked = opts.includes('TRUE');
+                document.getElementById('tfFalse').checked = opts.includes('FALSE');
+            } else if (type === 'TYPE_ANSWER') {
+                document.getElementById('typeAnswerCorrect').value = q.answer1 || '';
+            } else {
+                ['A','B','C','D'].forEach(x => document.getElementById('correct'+x).checked = opts.includes(x));
+            }
+
+            onQuestionTypeChange();
+            questionModal.show();
+        });
+}
+
+function saveQuestion() {
+    const type = document.getElementById('questionType').value;
+    let correct = '';
+    let answer1 = '', answer2 = '', answer3 = '', answer4 = '';
+    let acceptableAnswers = '';
+
+    if (type === 'MULTIPLE_CHOICE') {
+        correct = ['A','B','C','D'].filter(x => document.getElementById('correct'+x).checked).join(',');
+        if (!correct) { alert('Select at least one correct answer'); return; }
+        answer1 = document.getElementById('answer1').value;
+        answer2 = document.getElementById('answer2').value;
+        answer3 = document.getElementById('answer3').value;
+        answer4 = document.getElementById('answer4').value;
+    } else if (type === 'TRUE_FALSE') {
+        answer1 = 'True';
+        answer2 = 'False';
+        if (document.getElementById('tfTrue').checked) correct = 'TRUE';
+        else if (document.getElementById('tfFalse').checked) correct = 'FALSE';
+        else { alert('Select the correct answer (True or False)'); return; }
+    } else if (type === 'TYPE_ANSWER') {
+        answer1 = document.getElementById('typeAnswerCorrect').value;
+        if (!answer1) { alert('Enter the correct answer'); return; }
+        correct = 'A'; // Correct is always answer1 for type answer
+        acceptableAnswers = document.getElementById('acceptableAnswers').value;
+    } else if (type === 'POLL') {
+        // Poll has no correct answer
+        answer1 = document.getElementById('answer1').value;
+        answer2 = document.getElementById('answer2').value;
+        answer3 = document.getElementById('answer3').value;
+        answer4 = document.getElementById('answer4').value;
+        correct = ''; // No correct answer for polls
+    }
+
+    const timeLimitVal = document.getElementById('timeLimit').value;
+    const data = {
+        challengeId: challengeId,
+        question: document.getElementById('questionText').value,
+        questionType: type,
+        timeLimit: timeLimitVal ? parseInt(timeLimitVal) : null,
+        points: parseInt(document.getElementById('points').value) || 1000,
+        answer1: answer1,
+        answer2: answer2,
+        answer3: answer3,
+        answer4: answer4,
+        correctOptions: correct,
+        acceptableAnswers: acceptableAnswers
+    };
+
+    const editId = document.getElementById('editingQuestionId').value;
+    const url = editId ? '/api/question/' + editId : '/api/question';
+    const method = editId ? 'PUT' : 'POST';
+
+    fetch(url, {
+        method: method,
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(data)
+    }).then(r => r.ok ? location.reload() : alert('Error saving question'));
+}
+
+function deleteQuestion(id) {
+    if (!confirm('Delete this question?')) return;
+    fetch('/api/question/' + id, {method: 'DELETE'})
+        .then(r => r.ok ? location.reload() : alert('Error deleting question'));
+}
+
+function duplicateQuestion(id) {
+    fetch('/api/question/' + id + '/duplicate', {method: 'POST'})
+        .then(r => r.ok ? location.reload() : alert('Error duplicating question'));
+}
+
+function updateChallengeInfo() {
+    const formData = new FormData();
+    formData.append('title', document.getElementById('editTitle').value);
+    formData.append('description', document.getElementById('editDescription').value);
+    fetch('/update_challenge/' + challengeId, {method: 'POST', body: formData})
+        .then(r => r.ok ? location.reload() : alert('Error updating challenge'));
+}
+</script>
+</form>
+</body>
+</html>

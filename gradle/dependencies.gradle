@@ -4,6 +4,7 @@ dependencies {
 
     implementation("org.springframework.boot:spring-boot-starter-webmvc")
     implementation("org.springframework.boot:spring-boot-starter-thymeleaf")
+    implementation("org.springframework.boot:spring-boot-starter-validation")
     implementation("org.thymeleaf.extras:thymeleaf-extras-springsecurity6")
     implementation("org.springframework.boot:spring-boot-starter-websocket")
 
@@ -16,7 +17,17 @@ dependencies {
 
     implementation("org.apache.poi:poi-ooxml:5.5.1")
     implementation("org.apache.commons:commons-lang3:3.20.0")
-    implementation("com.h2database:h2:2.4.240")
+    implementation("org.apache.commons:commons-text:1.13.0")
+
+    // Database - PostgreSQL for production
+    implementation("org.postgresql:postgresql:42.7.4")
+
+    // Flyway migrations
+    implementation("org.flywaydb:flyway-core")
+    implementation("org.flywaydb:flyway-database-postgresql")
+
+    // H2 for development/testing only
+    runtimeOnly("com.h2database:h2:2.4.240")
 
     testImplementation("org.springframework.boot:spring-boot-starter-test") {
         exclude module: "junit"

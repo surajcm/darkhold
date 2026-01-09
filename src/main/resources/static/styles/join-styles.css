@@ -31,5 +31,5 @@ input[type=number]:focus {
     text-align: center;
     padding: 16px;
     transition: all 0.3s ease;
-    font-size: 36px;
+    font-size: 24px;
 }

@@ -4,10 +4,13 @@ import com.quiz.darkhold.home.model.GameInfo;
 import com.quiz.darkhold.home.service.HomeService;
 import com.quiz.darkhold.user.service.SecurityService;
 import com.quiz.darkhold.util.CommonUtils;
+import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -71,19 +74,36 @@ public class HomeController {
     /**
      * If the user entered pin is correct, go to the page where everyone waits for the game to start.
      *
-     * @param gameInfo user info
-     * @param model    model
-     * @return wait screen
+     * @param gameInfo      user info
+     * @param bindingResult validation result
+     * @param model         model
+     * @param session       HTTP session to store game PIN
+     * @return wait screen or index with errors
      */
     @PostMapping("/joinGame")
-    public String joinGame(@ModelAttribute final GameInfo gameInfo, final Model model) {
+    public String joinGame(@Valid @ModelAttribute final GameInfo gameInfo,
+                           final BindingResult bindingResult,
+                           final Model model,
+                           final HttpSession session) {
+        if (bindingResult.hasErrors()) {
+            logger.warn("Validation errors in joinGame: {}", bindingResult.getAllErrors());
+            model.addAttribute(GAME_INFO, gameInfo);
+            return "index";
+        }
         logger.info("joinGame : gameInfo is {}", gameInfo);
         securityService.autoLogin(gameInfo.getName(), UNREGISTERED_USER);
-        logger.info("autoLogin done !!!");
+        populateGameInfo(gameInfo);
+        // Store PIN in session for concurrent game support
+        session.setAttribute("gamePin", gameInfo.getGamePin());
+        logger.info("Stored gamePin in session: {}", gameInfo.getGamePin());
+        model.addAttribute(GAME_INFO, gameInfo);
+        return "game/gamewait";
+    }
+
+    private void populateGameInfo(final GameInfo gameInfo) {
         var activeUsers = homeService.participantsInActiveQuiz(gameInfo.getGamePin());
         activeUsers.add(gameInfo.getName());
         gameInfo.setUsers(activeUsers);
-        model.addAttribute(GAME_INFO, gameInfo);
-        return "game/gamewait";
+        gameInfo.setModerator(homeService.getModerator(gameInfo.getGamePin()));
     }
 }

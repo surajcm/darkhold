@@ -2,6 +2,7 @@ package com.quiz.darkhold.preview.controller;
 
 import com.quiz.darkhold.preview.service.PreviewService;
 import com.quiz.darkhold.util.CommonUtils;
+import jakarta.servlet.http.HttpSession;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Controller;
@@ -44,15 +45,20 @@ public class PreviewController {
      * @param model       model
      * @param challengeId of game
      * @param principal   auth
+     * @param session     HTTP session to store game PIN
      * @return publish page
      */
     @PostMapping("/publish")
     public String publish(final Model model,
                           @RequestParam("challenge_id") final String challengeId,
-                          final Principal principal) {
+                          final Principal principal,
+                          final HttpSession session) {
         var sanitizedChallengeId = CommonUtils.sanitizedString(challengeId);
         log.info("Into publish method : {}", sanitizedChallengeId);
         var publishInfo = previewService.generateQuizPin(challengeId, principal.getName());
+        // Store PIN in session for concurrent game support (moderator)
+        session.setAttribute("gamePin", publishInfo.getPin());
+        log.info("Stored gamePin in session for moderator: {}", publishInfo.getPin());
         model.addAttribute("quizPin", publishInfo.getPin());
         model.addAttribute("user", publishInfo.getModerator());
         log.info("publish method, quizPin : {}", publishInfo.getPin());

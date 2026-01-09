@@ -11,13 +11,23 @@ function connect() {
     stompClient.connect({}, function (frame) {
         console.log('Connected: ' + frame);
         stompClient.send("/app/user", {}, JSON.stringify({'name': name_val, 'pin': pin_val}));
-        //listen...
-        stompClient.subscribe('/topic/user', function (greeting) {
+        // Subscribe to PIN-scoped topics for concurrent game support
+        stompClient.subscribe('/topic/' + pin_val + '/user', function (greeting) {
             showGreeting(JSON.parse(greeting.body).users);
         });
 
-        stompClient.subscribe('/topic/start', function (greeting) {
+        stompClient.subscribe('/topic/' + pin_val + '/start', function (greeting) {
             gotoMyGame();
+        });
+
+        // Subscribe to kick events (PIN-scoped)
+        stompClient.subscribe('/topic/' + pin_val + '/player_kicked', function (message) {
+            let kickedUser = message.body;
+            let currentUser = document.getElementById('name').value;
+            if (kickedUser === currentUser) {
+                alert('You have been removed from this game.');
+                window.location.href = '/';
+            }
         });
     });
 }
@@ -26,9 +36,52 @@ function showGreeting(message) {
     console.log(message);
     let tableRef = document.getElementById('conversation').getElementsByTagName('tbody')[0];
     tableRef.innerHTML = "";
+    let moderator = document.getElementById('moderator').value;
+    let currentUser = document.getElementById('name').value;
+    let isModerator = currentUser === moderator;
+    let participantCount = 0;
+
     for (let i = 0; i < message.length; i++) {
+        let username = message[i];
+        // Don't count moderator in participant count
+        if (username !== moderator) {
+            participantCount++;
+        }
         let newRow = tableRef.insertRow(tableRef.rows.length);
-        newRow.innerHTML = message[i];
+        let cell = newRow.insertCell(0);
+        cell.innerHTML = buildParticipantRow(username, isModerator, moderator);
+    }
+
+    // Update participant count display
+    let countElem = document.getElementById('participantCount');
+    if (countElem) {
+        countElem.textContent = participantCount;
+    }
+}
+
+function buildParticipantRow(username, isModerator, moderator) {
+    let html = '<span>' + escapeHtml(username) + '</span>';
+    if (username === moderator) {
+        html += ' <span class="badge bg-primary">Moderator</span>';
+    }
+    // Add kick button for moderator (can't kick self)
+    if (isModerator && username !== moderator) {
+        html += ' <button type="button" class="btn btn-sm btn-danger ms-2" '
+            + 'onclick="kickPlayer(\'' + escapeHtml(username) + '\')">Kick</button>';
+    }
+    return html;
+}
+
+function escapeHtml(text) {
+    let div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+}
+
+function kickPlayer(username) {
+    if (confirm('Are you sure you want to remove ' + username + ' from the game?')) {
+        let pin = document.getElementById('quizPin').value;
+        stompClient.send("/app/kick_player", {}, pin + ':' + username);
     }
 }
 

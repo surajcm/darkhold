@@ -1,0 +1,22 @@
+# Simple H2 Database Configuration (Development/Testing)
+# Usage: docker-compose -f docker-compose.h2.yml up
+
+version: '3.8'
+
+services:
+  darkhold:
+    image: surajcm/darkhold
+    container_name: darkhold
+    volumes:
+      - ./db:/tmp/db  # H2 database persistence
+    ports:
+      - "8181:8181"
+    restart: unless-stopped
+    environment:
+      - JAVA_OPTS=-Xmx512m
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8181/actuator/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s

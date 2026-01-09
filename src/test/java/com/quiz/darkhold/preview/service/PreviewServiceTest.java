@@ -4,8 +4,10 @@ import com.quiz.darkhold.challenge.entity.Challenge;
 import com.quiz.darkhold.challenge.repository.ChallengeRepository;
 import com.quiz.darkhold.game.entity.Game;
 import com.quiz.darkhold.game.repository.GameRepository;
+import com.quiz.darkhold.init.GameConfig;
 import com.quiz.darkhold.preview.repository.CurrentGame;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
@@ -24,10 +26,18 @@ class PreviewServiceTest {
     private final ChallengeRepository challengeRepository = Mockito.mock(ChallengeRepository.class);
     private final GameRepository gameRepository = Mockito.mock(GameRepository.class);
     private final CurrentGame currentGame = Mockito.mock(CurrentGame.class);
-    private final PreviewService previewService = new PreviewService(
-            challengeRepository,
-            gameRepository,
-            currentGame);
+    private final GameConfig gameConfig = Mockito.mock(GameConfig.class);
+    private PreviewService previewService;
+
+    @BeforeEach
+    void setUp() {
+        when(gameConfig.getPinLength()).thenReturn(5);
+        previewService = new PreviewService(
+                challengeRepository,
+                gameRepository,
+                currentGame,
+                gameConfig);
+    }
 
     @Test
     void fetchQuestions() {

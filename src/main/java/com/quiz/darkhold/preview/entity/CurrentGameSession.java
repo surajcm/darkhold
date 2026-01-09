@@ -1,8 +1,11 @@
 package com.quiz.darkhold.preview.entity;
 
 import com.quiz.darkhold.challenge.entity.QuestionSet;
+import com.quiz.darkhold.game.model.GameStatus;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -13,6 +16,7 @@ import tools.jackson.core.type.TypeReference;
 import tools.jackson.core.JacksonException;
 import tools.jackson.databind.ObjectMapper;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -41,6 +45,18 @@ public class CurrentGameSession {
 
     @Column(columnDefinition = "TEXT")
     private String scoresJson;
+
+    @Column(columnDefinition = "TEXT")
+    private String streakJson;
+
+    @Column(columnDefinition = "TEXT")
+    private String previousScoresJson;
+
+    @Enumerated(EnumType.STRING)
+    @Column(length = 20)
+    private GameStatus gameStatus = GameStatus.WAITING;
+
+    private Long pausedAt;
 
     private static final Logger logger = LogManager.getLogger(CurrentGameSession.class);
     private static final ObjectMapper objectMapper = new ObjectMapper();
@@ -184,6 +200,90 @@ public class CurrentGameSession {
                 logger.error("Error serializing scores map", ex);
             }
         }
+    }
+
+    // Streak map helpers
+    public String getStreakJson() {
+        return streakJson;
+    }
+
+    public void setStreakJson(final String streakJson) {
+        this.streakJson = streakJson;
+    }
+
+    public Map<String, Integer> getStreakMap() {
+        if (streakJson == null || streakJson.isEmpty()) {
+            return new HashMap<>();
+        }
+        try {
+            return objectMapper.readValue(streakJson, new TypeReference<Map<String, Integer>>() { });
+        } catch (JacksonException ex) {
+            logger.error("Error deserializing streak map", ex);
+            return new HashMap<>();
+        }
+    }
+
+    public void setStreakMap(final Map<String, Integer> streaks) {
+        if (streaks == null) {
+            this.streakJson = null;
+        } else {
+            try {
+                this.streakJson = objectMapper.writeValueAsString(streaks);
+            } catch (JacksonException ex) {
+                logger.error("Error serializing streak map", ex);
+            }
+        }
+    }
+
+    // Previous scores map helpers
+    public String getPreviousScoresJson() {
+        return previousScoresJson;
+    }
+
+    public void setPreviousScoresJson(final String previousScoresJson) {
+        this.previousScoresJson = previousScoresJson;
+    }
+
+    public Map<String, Integer> getPreviousScoresMap() {
+        if (previousScoresJson == null || previousScoresJson.isEmpty()) {
+            return new HashMap<>();
+        }
+        try {
+            return objectMapper.readValue(previousScoresJson,
+                    new TypeReference<Map<String, Integer>>() { });
+        } catch (JacksonException ex) {
+            logger.error("Error deserializing previous scores map", ex);
+            return new HashMap<>();
+        }
+    }
+
+    public void setPreviousScoresMap(final Map<String, Integer> previousScores) {
+        if (previousScores == null) {
+            this.previousScoresJson = null;
+        } else {
+            try {
+                this.previousScoresJson = objectMapper.writeValueAsString(previousScores);
+            } catch (JacksonException ex) {
+                logger.error("Error serializing previous scores map", ex);
+            }
+        }
+    }
+
+    // Game status helpers
+    public GameStatus getGameStatus() {
+        return gameStatus;
+    }
+
+    public void setGameStatus(final GameStatus gameStatus) {
+        this.gameStatus = gameStatus;
+    }
+
+    public Long getPausedAt() {
+        return pausedAt;
+    }
+
+    public void setPausedAt(final Long pausedAt) {
+        this.pausedAt = pausedAt;
     }
 }
 

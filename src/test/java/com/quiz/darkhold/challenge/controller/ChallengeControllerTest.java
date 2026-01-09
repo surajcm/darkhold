@@ -9,6 +9,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.web.multipart.MultipartFile;
@@ -85,9 +87,12 @@ class ChallengeControllerTest {
             when(challengeService.readProcessAndSaveChallenge(mockFile, testTitle, testDescription))
                     .thenReturn(expectedChallengeId);
 
-            ChallengeController.ChallengeWithResponse response =
+            ResponseEntity<ChallengeController.ChallengeWithResponse> responseEntity =
                     challengeController.handleFileUpload(mockFile, testTitle, testDescription, redirectAttributes);
 
+            assertNotNull(responseEntity);
+            assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+            var response = responseEntity.getBody();
             assertNotNull(response);
             assertEquals(expectedChallengeId, response.challengeId());
             assertTrue(response.message().contains("Successfully created"));
@@ -101,12 +106,15 @@ class ChallengeControllerTest {
             when(challengeService.readProcessAndSaveChallenge(any(MultipartFile.class), anyString(), anyString()))
                     .thenThrow(new ChallengeException("File processing error"));
 
-            ChallengeController.ChallengeWithResponse response =
+            ResponseEntity<ChallengeController.ChallengeWithResponse> responseEntity =
                     challengeController.handleFileUpload(mockFile, testTitle, testDescription, redirectAttributes);
 
+            assertNotNull(responseEntity);
+            assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
+            var response = responseEntity.getBody();
             assertNotNull(response);
             assertEquals(0L, response.challengeId());
-            assertEquals("Unable to process, huge file", response.message());
+            assertEquals("File processing error", response.message());
             verify(challengeService).readProcessAndSaveChallenge(mockFile, testTitle, testDescription);
         }
 
@@ -118,15 +126,13 @@ class ChallengeControllerTest {
             when(challengeService.readProcessAndSaveChallenge(mockFile, titleWithSpecialChars, testDescription))
                     .thenReturn(expectedChallengeId);
 
-            ChallengeController.ChallengeWithResponse response =
-                    challengeController.handleFileUpload(mockFile,
-                            titleWithSpecialChars,
-                            testDescription,
-                            redirectAttributes);
+            var responseEntity = challengeController.handleFileUpload(mockFile,
+                    titleWithSpecialChars, testDescription, redirectAttributes);
 
-            assertNotNull(response);
-            assertEquals(expectedChallengeId, response.challengeId());
-            verify(challengeService).readProcessAndSaveChallenge(mockFile, titleWithSpecialChars, testDescription);
+            assertNotNull(responseEntity);
+            assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+            assertNotNull(responseEntity.getBody());
+            assertEquals(expectedChallengeId, responseEntity.getBody().challengeId());
         }
 
         @Test
@@ -137,9 +143,12 @@ class ChallengeControllerTest {
             when(challengeService.readProcessAndSaveChallenge(mockFile, emptyTitle, testDescription))
                     .thenReturn(expectedChallengeId);
 
-            ChallengeController.ChallengeWithResponse response =
+            ResponseEntity<ChallengeController.ChallengeWithResponse> responseEntity =
                     challengeController.handleFileUpload(mockFile, emptyTitle, testDescription, redirectAttributes);
 
+            assertNotNull(responseEntity);
+            assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+            var response = responseEntity.getBody();
             assertNotNull(response);
             assertEquals(expectedChallengeId, response.challengeId());
             verify(challengeService).readProcessAndSaveChallenge(mockFile, emptyTitle, testDescription);
@@ -150,17 +159,15 @@ class ChallengeControllerTest {
         void shouldHandleLargeFileSize() throws ChallengeException {
             byte[] largeData = new byte[10 * 1024 * 1024];
             MultipartFile largeFile = new MockMultipartFile("file", "large.xlsx",
-                    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-                    largeData);
+                    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", largeData);
             when(challengeService.readProcessAndSaveChallenge(largeFile, testTitle, testDescription))
                     .thenThrow(new ChallengeException("File too large"));
 
-            ChallengeController.ChallengeWithResponse response =
-                    challengeController.handleFileUpload(largeFile, testTitle, testDescription, redirectAttributes);
+            var responseEntity = challengeController.handleFileUpload(
+                    largeFile, testTitle, testDescription, redirectAttributes);
 
-            assertNotNull(response);
-            assertEquals(0L, response.challengeId());
-            assertEquals("Unable to process, huge file", response.message());
+            assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
+            assertEquals(0L, responseEntity.getBody().challengeId());
         }
 
 
@@ -170,9 +177,12 @@ class ChallengeControllerTest {
             when(challengeService.readProcessAndSaveChallenge(mockFile, null, testDescription))
                     .thenReturn(111L);
 
-            ChallengeController.ChallengeWithResponse response =
+            ResponseEntity<ChallengeController.ChallengeWithResponse> responseEntity =
                     challengeController.handleFileUpload(mockFile, null, testDescription, redirectAttributes);
 
+            assertNotNull(responseEntity);
+            assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+            var response = responseEntity.getBody();
             assertNotNull(response);
             assertEquals(111L, response.challengeId());
         }
@@ -183,9 +193,12 @@ class ChallengeControllerTest {
             when(challengeService.readProcessAndSaveChallenge(mockFile, testTitle, null))
                     .thenReturn(222L);
 
-            ChallengeController.ChallengeWithResponse response =
+            ResponseEntity<ChallengeController.ChallengeWithResponse> responseEntity =
                     challengeController.handleFileUpload(mockFile, testTitle, null, redirectAttributes);
 
+            assertNotNull(responseEntity);
+            assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+            var response = responseEntity.getBody();
             assertNotNull(response);
             assertEquals(222L, response.challengeId());
         }
@@ -201,21 +214,22 @@ class ChallengeControllerTest {
             Long challengeId = 123L;
             when(challengeService.deleteChallenge(challengeId)).thenReturn(true);
 
-            Boolean result = challengeController.deleteChallenge(challengeId, redirectAttributes);
+            var responseEntity = challengeController.deleteChallenge(challengeId, redirectAttributes);
 
-            assertTrue(result);
+            assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+            assertTrue(responseEntity.getBody());
             verify(challengeService).deleteChallenge(challengeId);
         }
 
         @Test
-        @DisplayName("Should return false when challenge deletion fails")
-        void shouldReturnFalseWhenDeletionFails() {
+        @DisplayName("Should return 404 when challenge deletion fails")
+        void shouldReturn404WhenDeletionFails() {
             Long challengeId = 456L;
             when(challengeService.deleteChallenge(challengeId)).thenReturn(false);
 
-            Boolean result = challengeController.deleteChallenge(challengeId, redirectAttributes);
+            var responseEntity = challengeController.deleteChallenge(challengeId, redirectAttributes);
 
-            assertEquals(false, result);
+            assertEquals(HttpStatus.NOT_FOUND, responseEntity.getStatusCode());
             verify(challengeService).deleteChallenge(challengeId);
         }
 
@@ -225,10 +239,10 @@ class ChallengeControllerTest {
             Long nonExistentChallengeId = 999999L;
             when(challengeService.deleteChallenge(nonExistentChallengeId)).thenReturn(false);
 
-            Boolean result = challengeController.deleteChallenge(nonExistentChallengeId, redirectAttributes);
+            var responseEntity = challengeController.deleteChallenge(
+                    nonExistentChallengeId, redirectAttributes);
 
-            assertEquals(false, result);
-            verify(challengeService).deleteChallenge(nonExistentChallengeId);
+            assertEquals(HttpStatus.NOT_FOUND, responseEntity.getStatusCode());
         }
 
         @Test
@@ -237,10 +251,10 @@ class ChallengeControllerTest {
             Long zeroChallengeId = 0L;
             when(challengeService.deleteChallenge(zeroChallengeId)).thenReturn(false);
 
-            Boolean result = challengeController.deleteChallenge(zeroChallengeId, redirectAttributes);
+            var responseEntity = challengeController.deleteChallenge(
+                    zeroChallengeId, redirectAttributes);
 
-            assertEquals(false, result);
-            verify(challengeService).deleteChallenge(zeroChallengeId);
+            assertEquals(HttpStatus.NOT_FOUND, responseEntity.getStatusCode());
         }
 
         @Test
@@ -249,10 +263,10 @@ class ChallengeControllerTest {
             Long negativeChallengeId = -1L;
             when(challengeService.deleteChallenge(negativeChallengeId)).thenReturn(false);
 
-            Boolean result = challengeController.deleteChallenge(negativeChallengeId, redirectAttributes);
+            var responseEntity = challengeController.deleteChallenge(
+                    negativeChallengeId, redirectAttributes);
 
-            assertEquals(false, result);
-            verify(challengeService).deleteChallenge(negativeChallengeId);
+            assertEquals(HttpStatus.NOT_FOUND, responseEntity.getStatusCode());
         }
 
         @Test
@@ -261,10 +275,10 @@ class ChallengeControllerTest {
             Long largeChallengeId = Long.MAX_VALUE;
             when(challengeService.deleteChallenge(largeChallengeId)).thenReturn(false);
 
-            Boolean result = challengeController.deleteChallenge(largeChallengeId, redirectAttributes);
+            var responseEntity = challengeController.deleteChallenge(
+                    largeChallengeId, redirectAttributes);
 
-            assertEquals(false, result);
-            verify(challengeService).deleteChallenge(largeChallengeId);
+            assertEquals(HttpStatus.NOT_FOUND, responseEntity.getStatusCode());
         }
     }
 

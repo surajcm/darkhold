@@ -48,3 +48,19 @@ function deleteChallengeCard(elem) {
     elem.innerHTML = "";
     document.getElementById('closeConfirmModal').click();
 }
+
+function duplicateChallenge(elem) {
+    let challengeId = elem.parentElement.parentElement.id;
+    console.log('duplicating challenge # ' + challengeId);
+    fetch('/duplicate_challenge/' + challengeId, {method: 'POST'})
+        .then(response => response.json())
+        .then(data => {
+            if (data.challengeId && data.challengeId > 0) {
+                alert(data.message);
+                location.reload();
+            } else {
+                alert('Error duplicating challenge');
+            }
+        })
+        .catch(error => alert('Error: ' + error.message));
+}

@@ -22,12 +22,15 @@ function updateTextOrEndGame(message) {
 
 function connect() {
     let name = document.getElementById('name').value;
+    let pin = document.getElementById('quizPin').value;
     let socket = new SockJS('/darkhold-websocket');
     stompClient = Stomp.over(socket);
     stompClient.connect({}, function (frame) {
         console.log('Connected: ' + frame);
-        stompClient.send("/app/question_fetch", {}, name);
-        stompClient.subscribe('/topic/question_read', function (greeting) {
+        // Send PIN:name format for PIN-scoped topic
+        stompClient.send("/app/question_fetch", {}, pin + ":" + name);
+        // Subscribe to PIN-scoped topic for concurrent game support
+        stompClient.subscribe('/topic/' + pin + '/question_read', function (greeting) {
             updateTextOrEndGame(JSON.parse(greeting.body).startGame);
         });
     });

@@ -10,6 +10,17 @@
     <script type="text/javascript" src="/scripts/core/stomp.min.js"></script>
     <script type="text/javascript" src="/scripts/scoreboard-scripts.js"></script>
     <script type="text/javascript" src="/scripts/common-scripts.js"></script>
+    <style>
+        .rank-up { color: #28a745; }
+        .rank-down { color: #dc3545; }
+        .score-delta { font-size: 0.8em; margin-left: 5px; }
+        .streak-badge { background-color: #ff6b6b; color: white; padding: 2px 8px; border-radius: 12px; margin-left: 5px; }
+        .score-animate { animation: countUp 1s ease-out; }
+        @keyframes countUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .rank-cell { width: 60px; font-weight: bold; }
+        .username-cell { text-align: left; }
+        .score-cell { text-align: right; width: 150px; }
+    </style>
 </head>
 <body onload="connect()">
     <div th:insert="~{navbar :: navbar}"></div>
@@ -20,22 +31,46 @@
             </li>
         </ul>
         <span th:if="${not #sets.isEmpty(#authentication.getPrincipal().getAuthorities())}">
+            <button class="btn btn-lg btn-outline-warning mr-2" type="button" onclick="skipQuestion();">Skip</button>
+            <button class="btn btn-lg btn-outline-danger mr-2" type="button" onclick="endGameEarly();">End Game</button>
             <button id="nextButton" class="btn btn-lg btn-rised align-middle btn-primary ml-auto mr-3 order-lg-last" type="button"
                     onclick="askQuestion();" >Next</button>
         </span>
     </nav>
     <form action="#" th:object="${score}" method="post">
+        <input type="hidden" th:value="${quizPin}" id="quizPin" name="quizPin"/>
         <div id="wrapper">
-            <div id="page-content-wrappCustomerDAOImpler">
+            <div id="page-content-wrapper">
                 <div class="container-fluid">
                     <div class="row justify-content-center align-items-center d-flex text-center h-100">
-                        <div class="col-12 col-md-8  h-50">
-                            <div class="jumbotron vertical-center min-vh-100 text-center m-0 d-flex flex-column justify-content-center">
+                        <div class="col-12 col-md-8 h-50">
+                            <div class="jumbotron vertical-center text-center m-0 d-flex flex-column justify-content-center py-5">
                                 <table class="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th class="rank-cell">Rank</th>
+                                            <th class="username-cell">Player</th>
+                                            <th class="score-cell">Score</th>
+                                        </tr>
+                                    </thead>
                                     <tbody>
-                                        <tr th:each="eachScore : ${score.score}">
-                                            <td>[[${eachScore.key}]]</td>
-                                            <td>[[${eachScore.value}]]</td>
+                                        <tr th:each="result : ${scoreResults}" class="score-animate"
+                                            th:classappend="${#authentication.getPrincipal().getUsername() == result.username} ? 'table-info' : ''">
+                                            <td class="rank-cell">
+                                                <span th:text="${result.rank}"></span>
+                                                <span th:if="${result.rankUp}" class="rank-up">&#9650;</span>
+                                                <span th:if="${result.rankDown}" class="rank-down">&#9660;</span>
+                                            </td>
+                                            <td class="username-cell">
+                                                [[${result.username}]]
+                                                <span th:if="${result.hasStreak()}" class="streak-badge"
+                                                      th:text="${result.streakDisplay}"></span>
+                                            </td>
+                                            <td class="score-cell">
+                                                <span th:text="${result.currentScore}"></span>
+                                                <span th:if="${result.scoreDelta > 0}" class="score-delta rank-up"
+                                                      th:text="'+' + ${result.scoreDelta}"></span>
+                                            </td>
                                         </tr>
                                     </tbody>
                                 </table>

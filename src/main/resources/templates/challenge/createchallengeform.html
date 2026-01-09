@@ -1,0 +1,111 @@
+<!DOCTYPE HTML>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <title>Create New Challenge - Darkhold</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="shortcut icon" href="/images/favicon.png">
+    <link href="/styles/create-challenge-styles.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/styles/core/font-awesome-all.5.15.4.min.css">
+    <link rel="stylesheet" href="/styles/icon-styles.css">
+    <script type="text/javascript" src="/scripts/common-scripts.js"></script>
+</head>
+<body>
+    <div th:insert="~{navbar :: navbar}"></div>
+    <form method="POST" id="challengeForm">
+        <main class="my-form">
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-md-8">
+                        <div class="card">
+                            <div class="card-header">Create New Challenge</div>
+                            <div class="card-body">
+                                <div class="mb-3">
+                                    <label for="title" class="form-label">Challenge Title *</label>
+                                    <input type="text" id="title" class="form-control" name="title"
+                                           maxlength="100" required placeholder="Enter challenge title">
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="description" class="form-label">Description</label>
+                                    <textarea id="description" class="form-control" name="description"
+                                              rows="3" maxlength="250" placeholder="Enter challenge description"></textarea>
+                                </div>
+
+                                <div class="alert alert-info">
+                                    <strong>Note:</strong> After creating the challenge, you can add questions
+                                    using the in-app editor or upload an Excel file.
+                                </div>
+
+                                <div id="resultMessage" class="mb-3"></div>
+
+                                <div class="d-flex gap-2">
+                                    <button type="button" class="btn btn-primary" id="btnSubmit" onclick="saveChallenge()">
+                                        Create Challenge
+                                    </button>
+                                    <button type="button" class="btn btn-secondary" onclick="toOptions()">
+                                        Cancel
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </form>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function saveChallenge() {
+            const title = document.getElementById('title').value.trim();
+            const description = document.getElementById('description').value.trim();
+            const resultDiv = document.getElementById('resultMessage');
+            const submitBtn = document.getElementById('btnSubmit');
+
+            if (!title) {
+                resultDiv.innerHTML = '<div class="alert alert-danger">Please enter a challenge title.</div>';
+                return;
+            }
+
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = 'Creating...';
+
+            const formData = new FormData();
+            formData.append('title', title);
+            formData.append('description', description);
+
+            fetch('/save_challenge', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.challengeId && data.challengeId > 0) {
+                    resultDiv.innerHTML = '<div class="alert alert-success">' + data.message + '</div>';
+                    submitBtn.style.display = 'none';
+                    // Add button to edit the challenge
+                    const editBtn = document.createElement('a');
+                    editBtn.href = '/edit_challenge/' + data.challengeId;
+                    editBtn.className = 'btn btn-success';
+                    editBtn.innerHTML = 'Add Questions';
+                    resultDiv.appendChild(editBtn);
+                } else {
+                    resultDiv.innerHTML = '<div class="alert alert-danger">' + data.message + '</div>';
+                    submitBtn.disabled = false;
+                    submitBtn.innerHTML = 'Create Challenge';
+                }
+            })
+            .catch(error => {
+                resultDiv.innerHTML = '<div class="alert alert-danger">An error occurred: ' + error.message + '</div>';
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = 'Create Challenge';
+            });
+        }
+
+        function toOptions() {
+            window.location.href = '/options';
+        }
+    </script>
+</body>
+</html>

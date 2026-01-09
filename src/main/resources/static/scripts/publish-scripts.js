@@ -6,8 +6,10 @@ function startGame() {
     stompClient = Stomp.over(socket);
     stompClient.connect({}, function (frame) {
         console.log('Connected: ' + frame);
-        stompClient.send("/app/start", {}, JSON.stringify({'pin': pin}));
-        stompClient.subscribe('/topic/start', function (greeting) {
+        // Send PIN directly for PIN-scoped topic
+        stompClient.send("/app/start", {}, pin);
+        // Subscribe to PIN-scoped topic for concurrent game support
+        stompClient.subscribe('/topic/' + pin + '/start', function (greeting) {
             gotoMyGame();
         });
     });
@@ -35,10 +37,12 @@ function toHome() {
 }
 
 function connect() {
+    let pin = document.getElementById('quizPin').value;
     let socket = new SockJS('/darkhold-websocket');
     stompClient = Stomp.over(socket);
     stompClient.connect({}, function (frame) {
-        stompClient.subscribe('/topic/user', function (greeting) {
+        // Subscribe to PIN-scoped topic for concurrent game support
+        stompClient.subscribe('/topic/' + pin + '/user', function (greeting) {
             showGreeting(JSON.parse(greeting.body).users);
         });
     });

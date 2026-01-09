@@ -1,11 +1,49 @@
-version: '2'
+# PostgreSQL Production Configuration
+# Usage: docker-compose up -d
+
+version: '3.8'
+
 services:
   darkhold:
     image: surajcm/darkhold
     container_name: darkhold
-    volumes:
-      - ./db:/tmp/db #Optional, Darkhold database
+    depends_on:
+      db:
+        condition: service_healthy
     ports:
-      - 8181:8181/tcp
+      - "8181:8181"
+    environment:
+      - SPRING_PROFILES_ACTIVE=postgres
+      - DATABASE_URL=jdbc:postgresql://db:5432/darkhold
+      - DATABASE_USER=darkhold
+      - DATABASE_PASSWORD=darkhold
+      - JAVA_OPTS=-Xmx512m
     restart: unless-stopped
-    entrypoint: ["/bin/sh", "-c", "microdnf install -y findutils && exec /start.sh"]
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8181/actuator/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+
+  db:
+    image: postgres:16-alpine
+    container_name: darkhold-db
+    environment:
+      - POSTGRES_DB=darkhold
+      - POSTGRES_USER=darkhold
+      - POSTGRES_PASSWORD=darkhold
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U darkhold -d darkhold"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  postgres_data:
+    driver: local

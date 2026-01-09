@@ -37,4 +37,13 @@ public class HomeService {
         return currentGame.getActiveUsersInGame(pin);
     }
 
+    /**
+     * Get the moderator of the game.
+     *
+     * @param pin game pin
+     * @return moderator username
+     */
+    public String getModerator(final String pin) {
+        return currentGame.findModerator(pin);
+    }
 }
