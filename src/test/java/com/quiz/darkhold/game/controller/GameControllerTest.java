@@ -3,6 +3,7 @@ package com.quiz.darkhold.game.controller;
 import com.quiz.darkhold.challenge.entity.QuestionSet;
 import com.quiz.darkhold.game.model.CurrentScore;
 import com.quiz.darkhold.game.model.Game;
+import com.quiz.darkhold.game.model.GameMode;
 import com.quiz.darkhold.game.model.QuestionPointer;
 import com.quiz.darkhold.game.model.StartTrigger;
 import com.quiz.darkhold.game.model.UserResponse;
@@ -154,10 +155,10 @@ class GameControllerTest {
         void testQuestion_WhenNotLastQuestion_ShouldReturnQuestionView() {
             // Given
             QuestionPointer questionPointer = createQuestionPointer(1, 5);
-            when(gameService.getCurrentQuestionPointer()).thenReturn(questionPointer);
+            when(gameService.getCurrentQuestionPointer(anyString())).thenReturn(questionPointer);
 
             // When
-            String result = gameController.question(model, principal);
+            String result = gameController.question(model, "QUIZ123", principal);
 
             // Then
             assertEquals("question", result);
@@ -168,11 +169,11 @@ class GameControllerTest {
         void testQuestion_WhenLastQuestion_ShouldReturnFinalScore() {
             // Given
             QuestionPointer questionPointer = createQuestionPointer(5, 5);
-            when(gameService.getCurrentQuestionPointer()).thenReturn(questionPointer);
+            when(gameService.getCurrentQuestionPointer(anyString())).thenReturn(questionPointer);
             when(gameService.getCurrentScore()).thenReturn(createScoreMap());
 
             // When
-            String result = gameController.question(model, principal);
+            String result = gameController.question(model, "QUIZ123", principal);
 
             // Then
             assertEquals("finalscore", result);
@@ -184,13 +185,13 @@ class GameControllerTest {
         void testQuestion_ShouldCallGetCurrentQuestionPointer() {
             // Given
             QuestionPointer questionPointer = createQuestionPointer(2, 5);
-            when(gameService.getCurrentQuestionPointer()).thenReturn(questionPointer);
+            when(gameService.getCurrentQuestionPointer(anyString())).thenReturn(questionPointer);
 
             // When
-            gameController.question(model, principal);
+            gameController.question(model, "QUIZ123", principal);
 
             // Then
-            verify(gameService).getCurrentQuestionPointer();
+            verify(gameService).getCurrentQuestionPointer(anyString());
         }
 
         @Test
@@ -198,11 +199,11 @@ class GameControllerTest {
         void testQuestion_WhenFirstAndLastQuestion_ShouldReturnFinalScore() {
             // Given
             QuestionPointer questionPointer = createQuestionPointer(1, 1);
-            when(gameService.getCurrentQuestionPointer()).thenReturn(questionPointer);
+            when(gameService.getCurrentQuestionPointer(anyString())).thenReturn(questionPointer);
             when(gameService.getCurrentScore()).thenReturn(createScoreMap());
 
             // When
-            String result = gameController.question(model, principal);
+            String result = gameController.question(model, "QUIZ123", principal);
 
             // Then
             assertEquals("finalscore", result);
@@ -219,10 +220,11 @@ class GameControllerTest {
             // Given
             QuestionSet questionSet = createQuestionSet(1, "What is 2+2?");
             QuestionPointer questionPointer = createQuestionPointerWithQuestion(0, questionSet);
-            when(gameService.getCurrentQuestionPointer()).thenReturn(questionPointer);
+            when(gameService.getCurrentQuestionPointer(anyString())).thenReturn(questionPointer);
+            when(gameService.getGameMode(anyString())).thenReturn(GameMode.MULTIPLAYER);
 
             // When
-            String result = gameController.startGame(model, principal);
+            String result = gameController.startGame(model, "QUIZ123", principal);
 
             // Then
             assertEquals("game", result);
@@ -237,10 +239,11 @@ class GameControllerTest {
             // Given
             QuestionSet questionSet = createQuestionSet(1, "Question?");
             QuestionPointer questionPointer = createQuestionPointerWithQuestion(0, questionSet);
-            when(gameService.getCurrentQuestionPointer()).thenReturn(questionPointer);
+            when(gameService.getCurrentQuestionPointer(anyString())).thenReturn(questionPointer);
+            when(gameService.getGameMode(anyString())).thenReturn(GameMode.MULTIPLAYER);
 
             // When
-            gameController.startGame(model, principal);
+            gameController.startGame(model, "QUIZ123", principal);
 
             // Then
             verify(model).addAttribute("game_timer", "20");
@@ -252,10 +255,11 @@ class GameControllerTest {
             // Given
             QuestionSet questionSet = createQuestionSet(1, "Question?");
             QuestionPointer questionPointer = createQuestionPointerWithQuestion(0, questionSet);
-            when(gameService.getCurrentQuestionPointer()).thenReturn(questionPointer);
+            when(gameService.getCurrentQuestionPointer(anyString())).thenReturn(questionPointer);
+            when(gameService.getGameMode(anyString())).thenReturn(GameMode.MULTIPLAYER);
 
             // When
-            String result = gameController.startGame(model, principal);
+            String result = gameController.startGame(model, "QUIZ123", principal);
 
             // Then
             assertEquals("game", result);
@@ -267,10 +271,11 @@ class GameControllerTest {
             // Given
             QuestionSet questionSet = createQuestionSet(2, "Second question?");
             QuestionPointer questionPointer = createQuestionPointerWithQuestion(1, questionSet);
-            when(gameService.getCurrentQuestionPointer()).thenReturn(questionPointer);
+            when(gameService.getCurrentQuestionPointer(anyString())).thenReturn(questionPointer);
+            when(gameService.getGameMode(anyString())).thenReturn(GameMode.MULTIPLAYER);
 
             // When
-            gameController.startGame(model, principal);
+            gameController.startGame(model, "QUIZ123", principal);
 
             // Then
             ArgumentCaptor<Object> captor = ArgumentCaptor.forClass(Object.class);
@@ -653,7 +658,7 @@ class GameControllerTest {
         void testQuestionFetch_WhenLastQuestion_ShouldSendEndGame() {
             // Given
             QuestionPointer questionPointer = createQuestionPointer(5, 5);
-            when(gameService.getCurrentQuestionPointer()).thenReturn(questionPointer);
+            when(gameService.getCurrentQuestionPointer(anyString())).thenReturn(questionPointer);
 
             // When - message format is "pin:username" or "pin"
             gameController.questionFetch("GAME1:user1");
@@ -670,7 +675,7 @@ class GameControllerTest {
             // Given
             QuestionSet questionSet = createQuestionSet(1, "What is capital of France?");
             QuestionPointer questionPointer = createQuestionPointerWithQuestion(1, questionSet);
-            when(gameService.getCurrentQuestionPointer()).thenReturn(questionPointer);
+            when(gameService.getCurrentQuestionPointer(anyString())).thenReturn(questionPointer);
 
             // When
             gameController.questionFetch("GAME1:user1");
@@ -687,13 +692,13 @@ class GameControllerTest {
             // Given
             QuestionSet questionSet = createQuestionSet(1, "Question?");
             QuestionPointer questionPointer = createQuestionPointerWithQuestion(1, questionSet);
-            when(gameService.getCurrentQuestionPointer()).thenReturn(questionPointer);
+            when(gameService.getCurrentQuestionPointer(anyString())).thenReturn(questionPointer);
 
             // When
             gameController.questionFetch("GAME1");
 
             // Then
-            verify(gameService).getCurrentQuestionPointer();
+            verify(gameService).getCurrentQuestionPointer(anyString());
         }
 
         @Test
@@ -702,7 +707,7 @@ class GameControllerTest {
             // Given
             QuestionSet questionSet = createQuestionSet(3, "Question 3?");
             QuestionPointer questionPointer = createQuestionPointerWithQuestion(2, questionSet);
-            when(gameService.getCurrentQuestionPointer()).thenReturn(questionPointer);
+            when(gameService.getCurrentQuestionPointer(anyString())).thenReturn(questionPointer);
 
             // When
             gameController.questionFetch("GAME1:user1");
@@ -725,7 +730,7 @@ class GameControllerTest {
             gameController.scoresFetch("GAME1");
 
             // Then
-            verify(messagingTemplate).convertAndSend("/topic/GAME1/read_scores", Boolean.TRUE);
+            verify(messagingTemplate).convertAndSend("/topic/GAME1/read_scores", true);
         }
 
         @Test
@@ -735,7 +740,7 @@ class GameControllerTest {
             gameController.scoresFetch("QUIZ123");
 
             // Then
-            verify(messagingTemplate).convertAndSend("/topic/QUIZ123/read_scores", Boolean.TRUE);
+            verify(messagingTemplate).convertAndSend("/topic/QUIZ123/read_scores", true);
         }
     }
 

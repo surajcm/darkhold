@@ -62,6 +62,15 @@
             font-size: 4rem;
             margin-bottom: 1rem;
         }
+        /* Responsive media styles */
+        @media (max-width: 768px) {
+            .question-image {
+                max-height: 250px !important;
+            }
+            .ratio.ratio-16x9 {
+                max-width: 100% !important;
+            }
+        }
     </style>
     <form action="#" th:object="${challenge}" method="post">
         <div id="wrapper">
@@ -77,7 +86,30 @@
                     <input type="hidden" th:value="${#authentication.getPrincipal().getAuthorities()}" id="roles"/>
                     <input type="hidden" th:value="${question_type}" id="questionType"/>
                     <input type="hidden" th:value="${question_points}" id="questionPoints"/>
+                    <input type="hidden" th:value="${gameMode}" id="gameMode"/>
                     <div class="container">
+                        <!-- Question Media -->
+                        <div th:if="${challenge.QuestionSet.imageUrl != null or challenge.QuestionSet.videoUrl != null}" class="row mb-4">
+                            <div class="col-12">
+                                <!-- Question Image -->
+                                <div th:if="${challenge.QuestionSet.imageUrl != null}" class="text-center mb-3">
+                                    <img th:src="${challenge.QuestionSet.imageUrl}"
+                                         alt="Question Image"
+                                         class="img-fluid question-image"
+                                         style="max-width: 100%; max-height: 400px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+                                </div>
+                                <!-- Question Video -->
+                                <div th:if="${challenge.QuestionSet.videoUrl != null}" class="text-center mb-3">
+                                    <div class="ratio ratio-16x9" style="max-width: 640px; margin: 0 auto;">
+                                        <iframe th:src="${#strings.replace(challenge.QuestionSet.videoUrl, 'watch?v=', 'embed/')}"
+                                                frameborder="0"
+                                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                                allowfullscreen
+                                                style="border-radius: 8px;"></iframe>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                         <div class="row" id="answerSpace">
                             <!-- MULTIPLE_CHOICE and POLL: Show answer options -->
                             <th:block th:if="${question_type == 'MULTIPLE_CHOICE' or question_type == 'POLL'}">
@@ -146,6 +178,14 @@
                                     </div>
                                 </div>
                             </th:block>
+                        </div>
+                        <!-- Practice Mode: Next Question Button -->
+                        <div class="row mt-4" id="practiceNextContainer" style="display:none;">
+                            <div class="col-12 text-center">
+                                <button type="button" class="btn btn-lg btn-success" onclick="goToNextQuestion()">
+                                    Next Question
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>

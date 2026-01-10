@@ -93,6 +93,14 @@ public class HomeController {
         logger.info("joinGame : gameInfo is {}", gameInfo);
         securityService.autoLogin(gameInfo.getName(), UNREGISTERED_USER);
         populateGameInfo(gameInfo);
+
+        // Check if moderator is trying to join their own game
+        var moderator = homeService.getModerator(gameInfo.getGamePin());
+        if (gameInfo.getName().equalsIgnoreCase(moderator)) {
+            logger.warn("Moderator {} is joining their own game", moderator);
+            model.addAttribute("moderatorWarning", true);
+        }
+
         // Store PIN in session for concurrent game support
         session.setAttribute("gamePin", gameInfo.getGamePin());
         logger.info("Stored gamePin in session: {}", gameInfo.getGamePin());

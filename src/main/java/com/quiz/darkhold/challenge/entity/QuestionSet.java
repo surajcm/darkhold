@@ -59,6 +59,12 @@ public class QuestionSet implements Serializable {
     @Column(name = "acceptable_answers", length = 500)
     private String acceptableAnswers;
 
+    @Column(name = "image_url", length = 500)
+    private String imageUrl;
+
+    @Column(name = "video_url", length = 500)
+    private String videoUrl;
+
     @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "challenge_id", nullable = true)
@@ -166,6 +172,22 @@ public class QuestionSet implements Serializable {
 
     public void setAcceptableAnswers(final String acceptableAnswers) {
         this.acceptableAnswers = acceptableAnswers;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(final String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
+
+    public String getVideoUrl() {
+        return videoUrl;
+    }
+
+    public void setVideoUrl(final String videoUrl) {
+        this.videoUrl = videoUrl;
     }
 
     @Override

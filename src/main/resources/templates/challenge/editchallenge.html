@@ -220,6 +220,26 @@
                         <small class="text-muted">Typos will be tolerated using fuzzy matching</small>
                     </div>
                 </div>
+                <!-- Media Section -->
+                <hr>
+                <h6 class="mb-3">Media (Optional)</h6>
+                <div class="mb-3">
+                    <label class="form-label">Question Image</label>
+                    <input type="file" id="questionImageInput" class="form-control" accept="image/jpeg,image/jpg,image/png,image/gif">
+                    <small class="text-muted">Max 2MB. JPEG, PNG, or GIF. Will be auto-resized to 1200x800.</small>
+                    <div id="imagePreviewContainer" style="margin-top: 10px; display: none;">
+                        <img id="imagePreview" style="max-width: 200px; max-height: 150px; border-radius: 4px; border: 1px solid #ddd;">
+                        <button type="button" id="removeImageBtn" class="btn btn-sm btn-danger ms-2" onclick="removeImage()">Remove</button>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">YouTube Video URL</label>
+                    <input type="text" id="videoUrl" class="form-control" placeholder="https://www.youtube.com/watch?v=..." onchange="previewYouTubeVideo()">
+                    <small class="text-muted">Enter a YouTube video URL to embed in the question</small>
+                    <div id="videoPreviewContainer" style="margin-top: 10px; display: none;">
+                        <iframe id="videoPreview" width="300" height="169" frameborder="0" allowfullscreen></iframe>
+                    </div>
+                </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
@@ -297,6 +317,12 @@ function showQuestionModal(id = null) {
     document.getElementById('tfTrue').checked = false;
     document.getElementById('tfFalse').checked = false;
     ['A','B','C','D'].forEach(x => document.getElementById('correct'+x).checked = false);
+    // Reset media fields
+    document.getElementById('questionImageInput').value = '';
+    document.getElementById('videoUrl').value = '';
+    document.getElementById('imagePreviewContainer').style.display = 'none';
+    document.getElementById('videoPreviewContainer').style.display = 'none';
+    window.currentImageUrl = null;
     onQuestionTypeChange();
     questionModal.show();
 }
@@ -363,6 +389,22 @@ function editQuestion(id) {
                 ['A','B','C','D'].forEach(x => document.getElementById('correct'+x).checked = opts.includes(x));
             }
 
+            // Load media
+            window.currentImageUrl = q.imageUrl;
+            if (q.imageUrl) {
+                document.getElementById('imagePreview').src = q.imageUrl;
+                document.getElementById('imagePreviewContainer').style.display = 'block';
+            } else {
+                document.getElementById('imagePreviewContainer').style.display = 'none';
+            }
+
+            document.getElementById('videoUrl').value = q.videoUrl || '';
+            if (q.videoUrl) {
+                previewYouTubeVideo();
+            } else {
+                document.getElementById('videoPreviewContainer').style.display = 'none';
+            }
+
             onQuestionTypeChange();
             questionModal.show();
         });
@@ -402,6 +444,7 @@ function saveQuestion() {
     }
 
     const timeLimitVal = document.getElementById('timeLimit').value;
+    const videoUrlVal = document.getElementById('videoUrl').value;
     const data = {
         challengeId: challengeId,
         question: document.getElementById('questionText').value,
@@ -413,18 +456,42 @@ function saveQuestion() {
         answer3: answer3,
         answer4: answer4,
         correctOptions: correct,
-        acceptableAnswers: acceptableAnswers
+        acceptableAnswers: acceptableAnswers,
+        imageUrl: window.currentImageUrl || null,
+        videoUrl: videoUrlVal || null
     };
 
     const editId = document.getElementById('editingQuestionId').value;
     const url = editId ? '/api/question/' + editId : '/api/question';
     const method = editId ? 'PUT' : 'POST';
 
+    // First, save the question
     fetch(url, {
         method: method,
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify(data)
-    }).then(r => r.ok ? location.reload() : alert('Error saving question'));
+    }).then(r => {
+        if (!r.ok) {
+            alert('Error saving question');
+            return;
+        }
+        return r.json();
+    }).then(savedQuestion => {
+        if (!savedQuestion) return;
+
+        // If there's a new image selected, upload it
+        const imageInput = document.getElementById('questionImageInput');
+        if (imageInput.files && imageInput.files[0]) {
+            const formData = new FormData();
+            formData.append('image', imageInput.files[0]);
+            return fetch('/api/question/' + savedQuestion.id + '/upload-image', {
+                method: 'POST',
+                body: formData
+            }).then(r => r.ok ? location.reload() : alert('Question saved but image upload failed'));
+        } else {
+            location.reload();
+        }
+    });
 }
 
 function deleteQuestion(id) {
@@ -444,6 +511,83 @@ function updateChallengeInfo() {
     formData.append('description', document.getElementById('editDescription').value);
     fetch('/update_challenge/' + challengeId, {method: 'POST', body: formData})
         .then(r => r.ok ? location.reload() : alert('Error updating challenge'));
+}
+
+// Media handling functions
+document.getElementById('questionImageInput').addEventListener('change', function(e) {
+    const file = e.target.files[0];
+    if (file) {
+        // Validate file size (2MB)
+        if (file.size > 2 * 1024 * 1024) {
+            alert('Image file size must be less than 2MB');
+            e.target.value = '';
+            return;
+        }
+        // Show preview
+        const reader = new FileReader();
+        reader.onload = function(event) {
+            document.getElementById('imagePreview').src = event.target.result;
+            document.getElementById('imagePreviewContainer').style.display = 'block';
+        };
+        reader.readAsDataURL(file);
+    }
+});
+
+function removeImage() {
+    const editId = document.getElementById('editingQuestionId').value;
+    if (editId && window.currentImageUrl) {
+        // Delete existing image from server
+        if (confirm('Remove the image from this question?')) {
+            fetch('/api/question/' + editId + '/delete-image', {method: 'DELETE'})
+                .then(r => {
+                    if (r.ok) {
+                        window.currentImageUrl = null;
+                        document.getElementById('imagePreviewContainer').style.display = 'none';
+                        document.getElementById('questionImageInput').value = '';
+                        alert('Image removed successfully');
+                    } else {
+                        alert('Failed to remove image');
+                    }
+                });
+        }
+    } else {
+        // Just clear the preview for new questions
+        window.currentImageUrl = null;
+        document.getElementById('imagePreviewContainer').style.display = 'none';
+        document.getElementById('questionImageInput').value = '';
+    }
+}
+
+function previewYouTubeVideo() {
+    const url = document.getElementById('videoUrl').value;
+    if (!url) {
+        document.getElementById('videoPreviewContainer').style.display = 'none';
+        return;
+    }
+
+    // Extract video ID from YouTube URL
+    let videoId = '';
+    const patterns = [
+        /(?:youtube\.com\/watch\?v=|youtu\.be\/)([^&\n?#]+)/,
+        /youtube\.com\/embed\/([^&\n?#]+)/
+    ];
+
+    for (const pattern of patterns) {
+        const match = url.match(pattern);
+        if (match) {
+            videoId = match[1];
+            break;
+        }
+    }
+
+    if (videoId) {
+        const embedUrl = 'https://www.youtube.com/embed/' + videoId;
+        document.getElementById('videoPreview').src = embedUrl;
+        document.getElementById('videoPreviewContainer').style.display = 'block';
+    } else {
+        alert('Invalid YouTube URL. Please use format: https://www.youtube.com/watch?v=VIDEO_ID');
+        document.getElementById('videoPreviewContainer').style.display = 'none';
+    }
 }
 </script>
 </form>

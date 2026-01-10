@@ -40,6 +40,12 @@ public class QuestionRequest {
     @Size(max = 500, message = "Acceptable answers must be at most 500 characters")
     private String acceptableAnswers;
 
+    @Size(max = 500, message = "Image URL must be at most 500 characters")
+    private String imageUrl;
+
+    @Size(max = 500, message = "Video URL must be at most 500 characters")
+    private String videoUrl;
+
     public Long getChallengeId() {
         return challengeId;
     }
@@ -126,5 +132,21 @@ public class QuestionRequest {
 
     public void setAcceptableAnswers(final String acceptableAnswers) {
         this.acceptableAnswers = acceptableAnswers;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(final String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
+
+    public String getVideoUrl() {
+        return videoUrl;
+    }
+
+    public void setVideoUrl(final String videoUrl) {
+        this.videoUrl = videoUrl;
     }
 }

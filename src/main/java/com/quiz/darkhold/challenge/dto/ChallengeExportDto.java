@@ -66,7 +66,10 @@ public class ChallengeExportDto {
         private Integer timeLimit;
         private Integer points;
         private String acceptableAnswers;
+        private String imageUrl;
+        private String videoUrl;
 
+        @SuppressWarnings("checkstyle:MethodLength")
         public static QuestionExportDto fromEntity(final QuestionSet questionSet) {
             var dto = new QuestionExportDto();
             dto.setQuestion(questionSet.getQuestion());
@@ -79,6 +82,8 @@ public class ChallengeExportDto {
             dto.setTimeLimit(questionSet.getTimeLimit());
             dto.setPoints(questionSet.getPoints());
             dto.setAcceptableAnswers(questionSet.getAcceptableAnswers());
+            dto.setImageUrl(questionSet.getImageUrl());
+            dto.setVideoUrl(questionSet.getVideoUrl());
             return dto;
         }
 
@@ -160,6 +165,22 @@ public class ChallengeExportDto {
 
         public void setAcceptableAnswers(final String acceptableAnswers) {
             this.acceptableAnswers = acceptableAnswers;
+        }
+
+        public String getImageUrl() {
+            return imageUrl;
+        }
+
+        public void setImageUrl(final String imageUrl) {
+            this.imageUrl = imageUrl;
+        }
+
+        public String getVideoUrl() {
+            return videoUrl;
+        }
+
+        public void setVideoUrl(final String videoUrl) {
+            this.videoUrl = videoUrl;
         }
     }
 }

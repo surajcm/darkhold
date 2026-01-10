@@ -23,6 +23,14 @@ function publish() {
     document.forms[0].submit();
 }
 
+function startPractice() {
+    let challengeId = document.getElementById('challengeId').value;
+    console.log('starting practice mode for challenge ' + challengeId);
+    document.getElementById('challenge_id').value = challengeId;
+    document.forms[0].action = "/start_practice";
+    document.forms[0].submit();
+}
+
 function toOptions() {
     document.forms[0].action = "/options";
     document.forms[0].submit();

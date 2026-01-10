@@ -68,8 +68,23 @@ public class GameController {
                            @RequestParam(value = "quizPin", required = false) final String quizPin,
                            final Principal principal) {
         logger.info("On to question : {}", quizPin);
-        var questionPointer = gameService.getCurrentQuestionPointer();
+        var questionPointer = quizPin != null
+                ? gameService.getCurrentQuestionPointer(quizPin)
+                : gameService.getCurrentQuestionPointer();
+        logger.info("Question pointer: current={}, total={}",
+                questionPointer.getCurrentQuestionNumber(),
+                questionPointer.getTotalQuestionCount());
+
+        // Check if question pointer is valid (total count should be > 0)
+        if (questionPointer.getTotalQuestionCount() == 0) {
+            logger.error("Invalid question pointer - total count is 0. PIN: {}", quizPin);
+            return finalScore(model);
+        }
+
         if (questionPointer.getCurrentQuestionNumber() == questionPointer.getTotalQuestionCount()) {
+            logger.warn("Game ending: currentQuestion == totalQuestions ({} == {})",
+                    questionPointer.getCurrentQuestionNumber(),
+                    questionPointer.getTotalQuestionCount());
             return finalScore(model);
         }
         model.addAttribute("quizPin", quizPin);
@@ -101,11 +116,18 @@ public class GameController {
                             @RequestParam(value = "quizPin", required = false) final String quizPin,
                             final Principal principal) {
         logger.info("On to game : {}", quizPin);
-        var questionPointer = gameService.getCurrentQuestionPointer();
+        var questionPointer = quizPin != null
+                ? gameService.getCurrentQuestionPointer(quizPin)
+                : gameService.getCurrentQuestionPointer();
         var currentQuestion = questionPointer.getCurrentQuestion();
         var challenge = buildChallengeModel(questionPointer, currentQuestion);
+        var gameMode = quizPin != null
+                ? gameService.getGameMode(quizPin)
+                : gameService.getGameMode();
+
         model.addAttribute("challenge", challenge);
         model.addAttribute("quizPin", quizPin);
+        model.addAttribute("gameMode", gameMode.name());
         addQuestionAttributes(model, currentQuestion);
         return "game";
     }
@@ -135,13 +157,24 @@ public class GameController {
         logParams(selectedOptions, user, timeTook);
         var status = getExamStatus(selectedOptions);
         var moderator = gameService.findModerator();
+        boolean isPracticeMode = gameService.isPracticeMode();
+
         logger.info("is user moderator : {}", user.equalsIgnoreCase(moderator));
-        if (user.equalsIgnoreCase(moderator)) {
-            // Save previous scores for delta calculation before moving to next question
+        logger.info("is practice mode : {}", isPracticeMode);
+
+        // In practice mode, moderator CAN score. In multiplayer, moderator cannot.
+        if (user.equalsIgnoreCase(moderator) && !isPracticeMode) {
+            // Multiplayer: moderator doesn't earn points, just controls game flow
             gameService.savePreviousScores();
             gameService.incrementQuestionNo();
         } else {
+            // Regular player OR practice mode player (who is also moderator)
             processPlayerAnswer(user, status, timeTook);
+            // In practice mode, also increment question after scoring
+            if (isPracticeMode && user.equalsIgnoreCase(moderator)) {
+                gameService.savePreviousScores();
+                gameService.incrementQuestionNo();
+            }
         }
         return true;
     }
@@ -178,8 +211,16 @@ public class GameController {
         var status = isCorrect ? ExamStatus.SUCCESS : ExamStatus.FAILURE;
 
         var moderator = gameService.findModerator();
-        if (!user.equalsIgnoreCase(moderator)) {
+        boolean isPracticeMode = gameService.isPracticeMode();
+
+        // In practice mode, moderator CAN score. In multiplayer, moderator cannot.
+        if (!user.equalsIgnoreCase(moderator) || isPracticeMode) {
             processPlayerAnswer(user, status, timeTook);
+            // In practice mode, also increment question after scoring
+            if (isPracticeMode && user.equalsIgnoreCase(moderator)) {
+                gameService.savePreviousScores();
+                gameService.incrementQuestionNo();
+            }
         }
 
         return isCorrect ? "correct" : "incorrect";
@@ -275,7 +316,7 @@ public class GameController {
         logger.info("On to questionFetch : {}", message);
         // Extract PIN from message (format: "pin" or "pin:username")
         String pin = message.contains(":") ? message.substring(0, message.indexOf(":")) : message;
-        var questionPointer = gameService.getCurrentQuestionPointer();
+        var questionPointer = gameService.getCurrentQuestionPointer(pin);
         StartTrigger trigger;
         if (questionPointer.getCurrentQuestionNumber() == questionPointer.getTotalQuestionCount()) {
             trigger = new StartTrigger("END_GAME");

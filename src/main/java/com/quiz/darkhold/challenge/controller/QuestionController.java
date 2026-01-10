@@ -15,7 +15,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Map;
@@ -131,6 +133,38 @@ public class QuestionController {
             return ResponseEntity.badRequest().build();
         }
         return ResponseEntity.ok(Map.of("reordered", true));
+    }
+
+    /**
+     * Upload an image for a question.
+     *
+     * @param id   the question ID
+     * @param file the image file
+     * @return the image URL
+     */
+    @PostMapping("/{id}/upload-image")
+    public ResponseEntity<Map<String, String>> uploadImage(
+            @PathVariable final Long id,
+            @RequestParam("image") final MultipartFile file) {
+        logger.info("Uploading image for question: {}", id);
+        String imageUrl = questionService.uploadQuestionImage(id, file);
+        return ResponseEntity.ok(Map.of("imageUrl", imageUrl));
+    }
+
+    /**
+     * Delete the image for a question.
+     *
+     * @param id the question ID
+     * @return success status
+     */
+    @DeleteMapping("/{id}/delete-image")
+    public ResponseEntity<Map<String, Boolean>> deleteImage(@PathVariable final Long id) {
+        logger.info("Deleting image for question: {}", id);
+        var deleted = questionService.deleteQuestionImage(id);
+        if (!deleted) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(Map.of("deleted", true));
     }
 
     /**

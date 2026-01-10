@@ -1,6 +1,7 @@
 package com.quiz.darkhold.preview.entity;
 
 import com.quiz.darkhold.challenge.entity.QuestionSet;
+import com.quiz.darkhold.game.model.GameMode;
 import com.quiz.darkhold.game.model.GameStatus;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -55,6 +56,10 @@ public class CurrentGameSession {
     @Enumerated(EnumType.STRING)
     @Column(length = 20)
     private GameStatus gameStatus = GameStatus.WAITING;
+
+    @Enumerated(EnumType.STRING)
+    @Column(length = 20)
+    private GameMode gameMode = GameMode.MULTIPLAYER;
 
     private Long pausedAt;
 
@@ -276,6 +281,14 @@ public class CurrentGameSession {
 
     public void setGameStatus(final GameStatus gameStatus) {
         this.gameStatus = gameStatus;
+    }
+
+    public GameMode getGameMode() {
+        return gameMode != null ? gameMode : GameMode.MULTIPLAYER;
+    }
+
+    public void setGameMode(final GameMode gameMode) {
+        this.gameMode = gameMode;
     }
 
     public Long getPausedAt() {

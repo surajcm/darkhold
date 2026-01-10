@@ -1,5 +1,6 @@
 package com.quiz.darkhold.game.service;
 
+import com.quiz.darkhold.game.model.GameMode;
 import com.quiz.darkhold.game.model.GameStatus;
 import com.quiz.darkhold.game.model.QuestionPointer;
 import com.quiz.darkhold.game.model.ScoreResult;
@@ -46,6 +47,17 @@ public class GameService {
 
     public QuestionPointer getCurrentQuestionPointer() {
         var pin = currentPin();
+        logger.info("Current pin is {}", pin);
+        return currentGame.getCurrentQuestionPointer(pin);
+    }
+
+    /**
+     * Get current question pointer for a specific PIN (for WebSocket handlers).
+     *
+     * @param pin game PIN
+     * @return current question pointer
+     */
+    public QuestionPointer getCurrentQuestionPointer(final String pin) {
         logger.info("Current pin is {}", pin);
         return currentGame.getCurrentQuestionPointer(pin);
     }
@@ -250,5 +262,34 @@ public class GameService {
         logger.info("Score: base={}, time={}, streak={}, mult={}, final={}",
                 basePoints, timeFactor, streak, multiplier, finalScore);
         return finalScore;
+    }
+
+    /**
+     * Get the game mode for the current game.
+     *
+     * @return GameMode (MULTIPLAYER or PRACTICE)
+     */
+    public GameMode getGameMode() {
+        var pin = currentPin();
+        return currentGame.getGameMode(pin);
+    }
+
+    /**
+     * Get the game mode for a specific PIN (for use when PIN is explicitly available).
+     *
+     * @param pin game PIN
+     * @return GameMode (MULTIPLAYER or PRACTICE)
+     */
+    public GameMode getGameMode(final String pin) {
+        return currentGame.getGameMode(pin);
+    }
+
+    /**
+     * Check if current game is in practice mode.
+     *
+     * @return true if practice mode, false otherwise
+     */
+    public boolean isPracticeMode() {
+        return getGameMode() == GameMode.PRACTICE;
     }
 }

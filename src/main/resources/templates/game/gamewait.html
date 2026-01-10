@@ -13,6 +13,15 @@
 </head>
 <body onload="connect()">
     <div th:insert="~{navbar :: navbar}"></div>
+
+    <!-- Moderator Warning Banner -->
+    <div th:if="${moderatorWarning}" class="alert alert-warning alert-dismissible fade show m-3" role="alert" style="text-align: center;">
+        <strong>⚠️ You are the moderator of this game.</strong><br/>
+        In multiplayer mode, moderators control the game but do not earn points.<br/>
+        <small>Consider using a different name if you want to participate as a player.</small>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+
     <form action="#" th:object="${gameinfo}" method="post">
         <input type="hidden" th:value="${gameinfo.gamePin}" id="quizPin"/>
         <input type="hidden" th:value="${gameinfo.name}" id="name"/>

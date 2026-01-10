@@ -1,5 +1,6 @@
 package com.quiz.darkhold.preview.controller;
 
+import com.quiz.darkhold.practice.service.PracticeService;
 import com.quiz.darkhold.preview.service.PreviewService;
 import com.quiz.darkhold.util.CommonUtils;
 import jakarta.servlet.http.HttpSession;
@@ -18,9 +19,12 @@ public class PreviewController {
     private final Logger log = LogManager.getLogger(PreviewController.class);
 
     private final PreviewService previewService;
+    private final PracticeService practiceService;
 
-    public PreviewController(final PreviewService previewService) {
+    public PreviewController(final PreviewService previewService,
+                            final PracticeService practiceService) {
         this.previewService = previewService;
+        this.practiceService = practiceService;
     }
 
     /**
@@ -63,5 +67,33 @@ public class PreviewController {
         model.addAttribute("user", publishInfo.getModerator());
         log.info("publish method, quizPin : {}", publishInfo.getPin());
         return "challenge/publish";
+    }
+
+    /**
+     * Start a practice game (single-player mode).
+     *
+     * @param model       model
+     * @param challengeId the challenge to practice
+     * @param principal   authenticated user
+     * @param session     HTTP session
+     * @return redirect to interstitial page (skips waiting room)
+     */
+    @PostMapping("/start_practice")
+    public String startPractice(final Model model,
+                                @RequestParam("challenge_id") final String challengeId,
+                                final Principal principal,
+                                final HttpSession session) {
+        var sanitizedChallengeId = CommonUtils.sanitizedString(challengeId);
+        log.info("Starting practice mode for challenge: {} player: {}",
+                sanitizedChallengeId, principal.getName());
+
+        var publishInfo = practiceService.initializePracticeGame(
+                challengeId, principal.getName(), session);
+
+        model.addAttribute("quizPin", publishInfo.getPin());
+        log.info("Practice game started with ID: {}", publishInfo.getPin());
+
+        // Skip waiting room, go directly to interstitial
+        return "interstitial";
     }
 }

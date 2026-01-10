@@ -21,6 +21,8 @@ public class QuestionResponse {
     private Integer timeLimit;
     private Integer points;
     private String acceptableAnswers;
+    private String imageUrl;
+    private String videoUrl;
 
     public QuestionResponse() {
     }
@@ -55,6 +57,8 @@ public class QuestionResponse {
         resp.timeLimit = qs.getTimeLimit();
         resp.points = qs.getPoints();
         resp.acceptableAnswers = qs.getAcceptableAnswers();
+        resp.imageUrl = qs.getImageUrl();
+        resp.videoUrl = qs.getVideoUrl();
     }
 
     public Long getId() {
@@ -159,5 +163,21 @@ public class QuestionResponse {
 
     public void setAcceptableAnswers(final String acceptableAnswers) {
         this.acceptableAnswers = acceptableAnswers;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(final String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
+
+    public String getVideoUrl() {
+        return videoUrl;
+    }
+
+    public void setVideoUrl(final String videoUrl) {
+        this.videoUrl = videoUrl;
     }
 }

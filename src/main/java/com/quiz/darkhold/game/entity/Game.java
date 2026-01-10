@@ -31,6 +31,9 @@ public class Game {
     @Column
     private String challengeId;
 
+    @Column
+    private String gameMode = "MULTIPLAYER";
+
     @CreatedDate
     @Column(name = "createdOn")
     private LocalDateTime createdOn;
@@ -69,6 +72,14 @@ public class Game {
 
     public void setChallengeId(final String challengeId) {
         this.challengeId = challengeId;
+    }
+
+    public String getGameMode() {
+        return gameMode != null ? gameMode : "MULTIPLAYER";
+    }
+
+    public void setGameMode(final String gameMode) {
+        this.gameMode = gameMode;
     }
 
     public LocalDateTime getCreatedOn() {

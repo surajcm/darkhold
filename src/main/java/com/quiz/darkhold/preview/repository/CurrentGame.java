@@ -1,6 +1,7 @@
 package com.quiz.darkhold.preview.repository;
 
 import com.quiz.darkhold.challenge.entity.QuestionSet;
+import com.quiz.darkhold.game.model.GameMode;
 import com.quiz.darkhold.game.model.GameStatus;
 import com.quiz.darkhold.game.model.QuestionPointer;
 import com.quiz.darkhold.preview.entity.CurrentGameSession;
@@ -427,5 +428,20 @@ public class CurrentGame {
         }
         // Subtract 1 for moderator if present
         return moderator != null && users.contains(moderator) ? users.size() - 1 : users.size();
+    }
+
+    /**
+     * Get game mode for a specific game.
+     *
+     * @param pin game pin
+     * @return GameMode (MULTIPLAYER or PRACTICE)
+     */
+    public GameMode getGameMode(final String pin) {
+        Optional<CurrentGameSession> session = repository.findByPin(pin);
+        if (session.isPresent()) {
+            GameMode mode = session.get().getGameMode();
+            return mode != null ? mode : GameMode.MULTIPLAYER;
+        }
+        return GameMode.MULTIPLAYER;
     }
 }

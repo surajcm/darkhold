@@ -47,35 +47,34 @@
                         </div>
 
                         <!-- Podium for top 3 -->
-                        <div class="podium-container" th:if="${score.score != null and !score.score.isEmpty()}"
-                             th:with="sortedScores=${score.score.entrySet().stream().sorted(T(java.util.Map.Entry).comparingByValue().reversed()).toList()}">
+                        <div class="podium-container" th:if="${score.sortedScores != null and !score.sortedScores.isEmpty()}">
                             <!-- 2nd Place -->
-                            <div class="podium-place second" th:if="${#lists.size(sortedScores) > 1}">
+                            <div class="podium-place second" th:if="${#lists.size(score.sortedScores) > 1}">
                                 <div class="trophy">&#129352;</div>
                                 <div class="podium-block silver">
                                     <div class="podium-rank">2nd</div>
-                                    <div class="podium-name" th:text="${sortedScores[1].key}"></div>
-                                    <div class="podium-score" th:text="${sortedScores[1].value} + ' pts'"></div>
+                                    <div class="podium-name" th:text="${score.sortedScores[1].key}"></div>
+                                    <div class="podium-score" th:text="${score.sortedScores[1].value} + ' pts'"></div>
                                 </div>
                             </div>
 
                             <!-- 1st Place -->
-                            <div class="podium-place first" th:if="${#lists.size(sortedScores) > 0}">
+                            <div class="podium-place first" th:if="${#lists.size(score.sortedScores) > 0}">
                                 <div class="trophy">&#127942;</div>
                                 <div class="podium-block gold">
                                     <div class="podium-rank">1st</div>
-                                    <div class="podium-name" th:text="${sortedScores[0].key}"></div>
-                                    <div class="podium-score" th:text="${sortedScores[0].value} + ' pts'"></div>
+                                    <div class="podium-name" th:text="${score.sortedScores[0].key}"></div>
+                                    <div class="podium-score" th:text="${score.sortedScores[0].value} + ' pts'"></div>
                                 </div>
                             </div>
 
                             <!-- 3rd Place -->
-                            <div class="podium-place third" th:if="${#lists.size(sortedScores) > 2}">
+                            <div class="podium-place third" th:if="${#lists.size(score.sortedScores) > 2}">
                                 <div class="trophy">&#129353;</div>
                                 <div class="podium-block bronze">
                                     <div class="podium-rank">3rd</div>
-                                    <div class="podium-name" th:text="${sortedScores[2].key}"></div>
-                                    <div class="podium-score" th:text="${sortedScores[2].value} + ' pts'"></div>
+                                    <div class="podium-name" th:text="${score.sortedScores[2].key}"></div>
+                                    <div class="podium-score" th:text="${score.sortedScores[2].value} + ' pts'"></div>
                                 </div>
                             </div>
                         </div>
@@ -92,7 +91,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr th:each="entry, stat : ${score.score.entrySet().stream().sorted(T(java.util.Map.Entry).comparingByValue().reversed()).toList()}"
+                                    <tr th:each="entry, stat : ${score.sortedScores}"
                                         th:classappend="${stat.index < 3} ? 'table-warning' : ''">
                                         <td th:text="${stat.index + 1}"></td>
                                         <td th:text="${entry.key}"></td>

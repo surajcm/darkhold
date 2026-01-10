@@ -5,6 +5,7 @@ import com.quiz.darkhold.challenge.dto.QuestionResponse;
 import com.quiz.darkhold.challenge.dto.ReorderRequest;
 import com.quiz.darkhold.challenge.entity.Challenge;
 import com.quiz.darkhold.challenge.entity.QuestionSet;
+import com.quiz.darkhold.challenge.exception.ImageValidationException;
 import com.quiz.darkhold.challenge.repository.ChallengeRepository;
 import com.quiz.darkhold.challenge.repository.QuestionSetRepository;
 import com.quiz.darkhold.user.entity.DarkholdUserDetails;
@@ -13,6 +14,7 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -22,11 +24,14 @@ public class QuestionService {
     private final Logger logger = LogManager.getLogger(QuestionService.class);
     private final QuestionSetRepository questionSetRepository;
     private final ChallengeRepository challengeRepository;
+    private final ImageProcessingService imageProcessingService;
 
     public QuestionService(final QuestionSetRepository questionSetRepository,
-                           final ChallengeRepository challengeRepository) {
+                           final ChallengeRepository challengeRepository,
+                           final ImageProcessingService imageProcessingService) {
         this.questionSetRepository = questionSetRepository;
         this.challengeRepository = challengeRepository;
+        this.imageProcessingService = imageProcessingService;
     }
 
     @Transactional
@@ -59,6 +64,10 @@ public class QuestionService {
         var question = getOwnedQuestion(questionId);
         if (question == null) {
             return false;
+        }
+        // Delete associated image if exists
+        if (question.getImageUrl() != null) {
+            imageProcessingService.deleteQuestionImage(question.getImageUrl());
         }
         questionSetRepository.delete(question);
         logger.info("Deleted question {}", questionId);
@@ -105,6 +114,48 @@ public class QuestionService {
         return deleted;
     }
 
+    @Transactional
+    public String uploadQuestionImage(final Long questionId, final MultipartFile file) {
+        var question = getOwnedQuestion(questionId);
+        if (question == null) {
+            throw new ImageValidationException("Question not found or access denied");
+        }
+
+        // Delete old image if exists
+        if (question.getImageUrl() != null) {
+            imageProcessingService.deleteQuestionImage(question.getImageUrl());
+        }
+
+        // Save new image
+        var challengeId = question.getChallenge().getId();
+        var imageUrl = imageProcessingService.saveQuestionImage(challengeId, questionId, file);
+
+        // Update question entity
+        question.setImageUrl(imageUrl);
+        questionSetRepository.save(question);
+
+        logger.info("Uploaded image for question {}: {}", questionId, imageUrl);
+        return imageUrl;
+    }
+
+    @Transactional
+    public boolean deleteQuestionImage(final Long questionId) {
+        var question = getOwnedQuestion(questionId);
+        if (question == null || question.getImageUrl() == null) {
+            return false;
+        }
+
+        // Delete image file
+        imageProcessingService.deleteQuestionImage(question.getImageUrl());
+
+        // Clear imageUrl field
+        question.setImageUrl(null);
+        questionSetRepository.save(question);
+
+        logger.info("Deleted image for question {}", questionId);
+        return true;
+    }
+
     private Challenge getOwnedChallenge(final Long challengeId) {
         var challengeOpt = challengeRepository.findById(challengeId);
         if (challengeOpt.isEmpty() || !isOwner(challengeOpt.get())) {
@@ -141,6 +192,7 @@ public class QuestionService {
                 .max().orElse(0) + 1;
     }
 
+    @SuppressWarnings("checkstyle:MethodLength")
     private QuestionSet buildQuestionSet(final QuestionRequest request, final Challenge challenge) {
         var qs = new QuestionSet();
         qs.setQuestion(request.getQuestion());
@@ -153,6 +205,8 @@ public class QuestionService {
         qs.setTimeLimit(request.getTimeLimit());
         qs.setPoints(request.getPoints());
         qs.setAcceptableAnswers(request.getAcceptableAnswers());
+        qs.setImageUrl(request.getImageUrl());
+        qs.setVideoUrl(request.getVideoUrl());
         qs.setChallenge(challenge);
         return qs;
     }
@@ -168,6 +222,8 @@ public class QuestionService {
         question.setTimeLimit(request.getTimeLimit());
         question.setPoints(request.getPoints());
         question.setAcceptableAnswers(request.getAcceptableAnswers());
+        question.setVideoUrl(request.getVideoUrl());
+        // Note: imageUrl is NOT updated here - use upload-image endpoint instead
     }
 
     private void updateQuestionOrders(final Long challengeId, final List<Long> questionIds) {
@@ -207,6 +263,8 @@ public class QuestionService {
         dest.setTimeLimit(src.getTimeLimit());
         dest.setPoints(src.getPoints());
         dest.setAcceptableAnswers(src.getAcceptableAnswers());
+        dest.setVideoUrl(src.getVideoUrl());
+        // Note: imageUrl is NOT copied - each question should have unique images
     }
 
     private Long currentUserId() {

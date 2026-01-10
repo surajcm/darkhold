@@ -266,6 +266,8 @@ public class ChallengeService {
                 case 7 -> questionSet.setTimeLimit(parseTimeLimit(currentCell));
                 case 8 -> questionSet.setPoints(parsePoints(currentCell));
                 case 9 -> questionSet.setAcceptableAnswers(fetchCurrentCellValue(currentCell));
+                case 10 -> questionSet.setImageUrl(fetchCurrentCellValue(currentCell));
+                case 11 -> questionSet.setVideoUrl(fetchCurrentCellValue(currentCell));
                 default -> logger.debug("Extra column at {}", currentCell.getColumnIndex());
             }
         }

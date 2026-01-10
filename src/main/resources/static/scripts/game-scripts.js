@@ -38,9 +38,21 @@ function callTimeOut() {
     }
 
     saveAnswerOnAjax();
-    let nextButton = document.getElementById('nextButton');
-    if (nextButton) {
-        nextButton.setAttribute('style', 'display:block');
+
+    // Check if practice mode
+    let gameMode = document.getElementById('gameMode') ? document.getElementById('gameMode').value : 'MULTIPLAYER';
+    if (gameMode === 'PRACTICE') {
+        // Show practice mode next button
+        let practiceNextContainer = document.getElementById('practiceNextContainer');
+        if (practiceNextContainer) {
+            practiceNextContainer.style.display = 'block';
+        }
+    } else {
+        // Show moderator next button
+        let nextButton = document.getElementById('nextButton');
+        if (nextButton) {
+            nextButton.setAttribute('style', 'display:block');
+        }
     }
 
     // Only highlight correct/incorrect for non-POLL questions
@@ -428,5 +440,14 @@ function hidePauseOverlay() {
 
 function gotoScoreBoard() {
     document.forms[0].action = "/scoreboard";
+    document.forms[0].submit();
+}
+
+/**
+ * Practice Mode: Advance to next question
+ */
+function goToNextQuestion() {
+    console.log('Practice mode: advancing to next question');
+    document.forms[0].action = "/question";
     document.forms[0].submit();
 }
