@@ -326,6 +326,15 @@ function saveAnswerOnAjax() {
     xhr.onload = function () {
         if (xhr.status === 200) {
             console.log('Response is ' + xhr.responseText);
+            // Show "Waiting for others" message for non-moderators in multiplayer mode
+            let roles = document.getElementById("roles").value;
+            let gameMode = document.getElementById('gameMode') ? document.getElementById('gameMode').value : 'MULTIPLAYER';
+            if (!roles.includes("ROLE_MODERATOR") && gameMode === 'MULTIPLAYER') {
+                let waitingMessage = document.getElementById('waitingMessage');
+                if (waitingMessage) {
+                    waitingMessage.style.display = 'block';
+                }
+            }
         } else if (xhr.status !== 200) {
             console.log('Request failed.  Returned status of ' + xhr.status);
         }

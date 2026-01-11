@@ -1,0 +1,185 @@
+<!DOCTYPE HTML>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Game Results - Darkhold</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="shortcut icon" href="/images/favicon.png">
+    <link href="/styles/darkhold-styles.css" rel="stylesheet" />
+    <script type="text/javascript" src="/scripts/common-scripts.js"></script>
+    <style>
+        .summary-card {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        .stat-box {
+            text-align: center;
+            padding: 15px;
+            margin: 10px;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+        .stat-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #007bff;
+        }
+        .stat-label {
+            font-size: 0.9rem;
+            color: #6c757d;
+            margin-top: 5px;
+        }
+        .difficulty-easy { color: #28a745; }
+        .difficulty-medium { color: #ffc107; }
+        .difficulty-hard { color: #dc3545; }
+        .results-table th {
+            background-color: #f8f9fa;
+            padding: 12px;
+            font-weight: 600;
+        }
+        .results-table td {
+            padding: 12px;
+        }
+        .rank-1 { background-color: #fff3cd; font-weight: bold; }
+        .rank-2 { background-color: #e2e3e5; }
+        .rank-3 { background-color: #f8d7da; }
+    </style>
+</head>
+<body>
+    <div th:insert="~{navbar :: navbar}"></div>
+    <nav class="navbar transparent">
+        <ul class="navbar-nav mx-auto">
+            <li class="nav-item">
+                <span class="badge badge-pill badge-primary" style="font-size: 1.5rem;">Game Results</span>
+            </li>
+        </ul>
+        <a th:href="@{/game-result/{id}/export-csv(id=${gameResult.id})}" class="btn btn-secondary">
+            Export CSV
+        </a>
+        <a href="/past-games" class="btn btn-outline-primary">Back to List</a>
+    </nav>
+
+    <div class="container mt-4">
+        <!-- Summary Section -->
+        <div class="summary-card">
+            <h3 th:text="${gameResult.challengeName}">Challenge Name</h3>
+            <p class="text-muted">
+                PIN: <strong th:text="${gameResult.pin}"></strong> |
+                Completed: <span th:text="${#temporals.format(gameResult.completedAt, 'MMM dd, yyyy HH:mm')}"></span>
+            </p>
+
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="stat-box">
+                        <div class="stat-value" th:text="${gameResult.participantCount}">0</div>
+                        <div class="stat-label">Participants</div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="stat-box">
+                        <div class="stat-value" th:text="${gameResult.totalQuestions}">0</div>
+                        <div class="stat-label">Questions</div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="stat-box">
+                        <div class="stat-value" th:text="${gameResult.durationMinutes}">0</div>
+                        <div class="stat-label">Minutes</div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="stat-box">
+                        <div class="stat-value" th:text="${gameResult.gameMode}">Mode</div>
+                        <div class="stat-label">Game Mode</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Participant Results -->
+        <div class="summary-card">
+            <h4>Participant Results</h4>
+            <table class="results-table table table-striped">
+                <thead>
+                    <tr>
+                        <th>Rank</th>
+                        <th>Username</th>
+                        <th>Score</th>
+                        <th>Correct</th>
+                        <th>Incorrect</th>
+                        <th>Max Streak</th>
+                        <th>Accuracy</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="pr : ${gameResult.participantResults}"
+                        th:classappend="${pr.finalRank == 1 ? 'rank-1' : (pr.finalRank == 2 ? 'rank-2' : (pr.finalRank == 3 ? 'rank-3' : ''))}">
+                        <td>
+                            <strong th:text="${pr.finalRank}">1</strong>
+                            <span th:if="${pr.finalRank == 1}">🥇</span>
+                            <span th:if="${pr.finalRank == 2}">🥈</span>
+                            <span th:if="${pr.finalRank == 3}">🥉</span>
+                        </td>
+                        <td th:text="${pr.username}">Player</td>
+                        <td><strong th:text="${pr.finalScore}">1000</strong></td>
+                        <td th:text="${pr.correctAnswers}">0</td>
+                        <td th:text="${pr.incorrectAnswers}">0</td>
+                        <td>
+                            <span class="badge badge-danger" th:text="'x' + ${pr.maxStreak}">x3</span>
+                        </td>
+                        <td>
+                            <span th:text="${#numbers.formatDecimal(pr.accuracyPercentage, 1, 1)} + '%'">0.0%</span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Question Results -->
+        <div class="summary-card">
+            <h4>Question Statistics</h4>
+            <table class="results-table table table-striped">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Question</th>
+                        <th>Type</th>
+                        <th>Correct</th>
+                        <th>Incorrect</th>
+                        <th>Timeout</th>
+                        <th>Success Rate</th>
+                        <th>Difficulty</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="qr : ${gameResult.questionResults}">
+                        <td th:text="${qr.questionNumber}">1</td>
+                        <td>
+                            <span th:text="${#strings.abbreviate(qr.questionText, 60)}">Question text...</span>
+                        </td>
+                        <td>
+                            <small th:text="${qr.questionType}">MULTIPLE_CHOICE</small>
+                        </td>
+                        <td><span class="text-success" th:text="${qr.correctCount}">0</span></td>
+                        <td><span class="text-danger" th:text="${qr.incorrectCount}">0</span></td>
+                        <td><span class="text-muted" th:text="${qr.timeoutCount}">0</span></td>
+                        <td>
+                            <strong th:text="${#numbers.formatDecimal(qr.successRatePercentage, 1, 1)} + '%'">0%</strong>
+                        </td>
+                        <td>
+                            <span th:class="'difficulty-' + ${#strings.toLowerCase(qr.difficultyLevel)}"
+                                  th:text="${qr.difficultyLevel}">EASY</span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script type="text/javascript" src="/scripts/core/popper.min.js"></script>
+    <script type="text/javascript" src="/scripts/core/bootstrap-5.3.1/bootstrap.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,149 @@
+<!DOCTYPE HTML>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Past Games - Darkhold</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="shortcut icon" href="/images/favicon.png">
+    <link href="/styles/darkhold-styles.css" rel="stylesheet" />
+    <script type="text/javascript" src="/scripts/common-scripts.js"></script>
+    <style>
+        .games-table {
+            width: 100%;
+            margin-top: 20px;
+        }
+        .games-table th {
+            background-color: #f8f9fa;
+            padding: 12px;
+            text-align: left;
+            font-weight: 600;
+        }
+        .games-table td {
+            padding: 12px;
+            border-bottom: 1px solid #dee2e6;
+        }
+        .games-table tbody tr:hover {
+            background-color: #f8f9fa;
+            cursor: pointer;
+        }
+        .mode-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 0.85rem;
+        }
+        .mode-multiplayer {
+            background-color: #28a745;
+            color: white;
+        }
+        .mode-practice {
+            background-color: #17a2b8;
+            color: white;
+        }
+        .winner-info {
+            color: #28a745;
+            font-weight: 500;
+        }
+        .no-games {
+            text-align: center;
+            padding: 60px 20px;
+            color: #6c757d;
+        }
+        .stats-badge {
+            background-color: #e9ecef;
+            padding: 4px 8px;
+            border-radius: 8px;
+            margin: 0 4px;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+    <div th:insert="~{navbar :: navbar}"></div>
+    <nav class="navbar transparent">
+        <ul class="navbar-nav mx-auto">
+            <li class="nav-item">
+                <span class="badge badge-pill badge-primary" style="font-size: 1.5rem;">Past Games</span>
+            </li>
+        </ul>
+    </nav>
+
+    <div class="container mt-4">
+        <!-- Past Games Table -->
+        <div th:if="${pastGames != null and !pastGames.isEmpty()}">
+            <div class="row mb-3">
+                <div class="col-12">
+                    <p class="text-muted">
+                        Showing <strong th:text="${#lists.size(pastGames)}"></strong> completed game(s)
+                    </p>
+                </div>
+            </div>
+
+            <table class="games-table table table-hover">
+                <thead>
+                    <tr>
+                        <th>Date & Time</th>
+                        <th>Challenge</th>
+                        <th>Mode</th>
+                        <th>Duration</th>
+                        <th>Questions</th>
+                        <th>Participants</th>
+                        <th>Winner</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="game : ${pastGames}">
+                        <td>
+                            <div th:text="${#temporals.format(game.completedAt, 'MMM dd, yyyy')}"></div>
+                            <small class="text-muted" th:text="${#temporals.format(game.completedAt, 'HH:mm')}"></small>
+                        </td>
+                        <td>
+                            <strong th:text="${game.challengeName}">Challenge</strong>
+                            <br/>
+                            <small class="text-muted">PIN: <span th:text="${game.pin}"></span></small>
+                        </td>
+                        <td>
+                            <span class="mode-badge"
+                                  th:classappend="${game.gameMode == 'PRACTICE' ? 'mode-practice' : 'mode-multiplayer'}"
+                                  th:text="${game.gameMode == 'PRACTICE' ? 'Practice' : 'Multiplayer'}">
+                            </span>
+                        </td>
+                        <td>
+                            <span th:text="${game.durationMinutes} + ' min'"></span>
+                        </td>
+                        <td>
+                            <span class="stats-badge" th:text="${game.totalQuestions}"></span>
+                        </td>
+                        <td>
+                            <span class="stats-badge" th:text="${game.participantCount}"></span>
+                        </td>
+                        <td>
+                            <div class="winner-info" th:if="${game.winnerUsername != null}">
+                                <div th:text="${game.winnerUsername}"></div>
+                                <small th:text="${game.winnerScore} + ' pts'"></small>
+                            </div>
+                            <span th:if="${game.winnerUsername == null}" class="text-muted">-</span>
+                        </td>
+                        <td>
+                            <a th:href="@{/game-result/{id}(id=${game.id})}" class="btn btn-sm btn-primary">View</a>
+                            <a th:href="@{/game-result/{id}/export-csv(id=${game.id})}" class="btn btn-sm btn-secondary">CSV</a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- No Games Message -->
+        <div th:if="${pastGames == null or pastGames.isEmpty()}" class="no-games">
+            <div style="font-size: 4rem; margin-bottom: 20px;">📊</div>
+            <h3>No Past Games</h3>
+            <p>You haven't completed any games yet.</p>
+            <a href="/" class="btn btn-primary mt-3">Start a New Game</a>
+        </div>
+    </div>
+
+    <script type="text/javascript" src="/scripts/core/popper.min.js"></script>
+    <script type="text/javascript" src="/scripts/core/bootstrap-5.3.1/bootstrap.min.js"></script>
+</body>
+</html>

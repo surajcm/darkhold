@@ -1,5 +1,6 @@
 package com.quiz.darkhold.game.controller;
 
+import com.quiz.darkhold.analytics.service.ResultService;
 import com.quiz.darkhold.challenge.entity.QuestionSet;
 import com.quiz.darkhold.game.model.CurrentScore;
 import com.quiz.darkhold.game.model.Game;
@@ -61,6 +62,9 @@ class GameControllerTest {
     private SimpMessagingTemplate messagingTemplate;
 
     @Mock
+    private ResultService resultService;
+
+    @Mock
     private Model model;
 
     @Mock
@@ -71,7 +75,8 @@ class GameControllerTest {
     @BeforeEach
     void setUp() {
         when(gameConfig.getTimerSeconds()).thenReturn(20);
-        gameController = new GameController(gameService, gameConfig, answerValidationService, messagingTemplate);
+        gameController = new GameController(gameService, gameConfig, answerValidationService,
+                messagingTemplate, resultService);
     }
 
     @Nested
@@ -296,7 +301,7 @@ class GameControllerTest {
             when(gameService.getCurrentScore()).thenReturn(scoreMap);
 
             // When
-            String result = gameController.finalScore(model);
+            String result = gameController.finalScore(model, null);
 
             // Then
             assertEquals("finalscore", result);
@@ -313,7 +318,7 @@ class GameControllerTest {
             when(gameService.getCurrentScore()).thenReturn(createScoreMap());
 
             // When
-            String result = gameController.finalScore(model);
+            String result = gameController.finalScore(model, null);
 
             // Then
             assertEquals("finalscore", result);
@@ -326,7 +331,7 @@ class GameControllerTest {
             when(gameService.getCurrentScore()).thenReturn(new HashMap<>());
 
             // When
-            String result = gameController.finalScore(model);
+            String result = gameController.finalScore(model, null);
 
             // Then
             assertEquals("finalscore", result);
@@ -345,7 +350,7 @@ class GameControllerTest {
             when(gameService.getCurrentScore()).thenReturn(scoreMap);
 
             // When
-            gameController.finalScore(model);
+            gameController.finalScore(model, null);
 
             // Then
             ArgumentCaptor<CurrentScore> scoreCaptor = ArgumentCaptor.forClass(CurrentScore.class);

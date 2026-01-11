@@ -11,6 +11,12 @@
             <div class="icon-bar" onclick="toHome();">
                 <a class="active" href="#"><i class="fas fa-home"></i></a>
             </div>
+            <div class="icon-bar" onclick="toActiveGames();" title="My Active Games">
+                <a class="active" href="#"><i class="fas fa-gamepad"></i></a>
+            </div>
+            <div class="icon-bar" onclick="toPastGames();" title="Past Games">
+                <a class="active" href="#"><i class="fas fa-chart-bar"></i></a>
+            </div>
             <div class="mx-auto order-0">
                 <span class="navbar-brand mx-auto" th:text="${#authentication.getPrincipal().getUsername()}"></span>
             </div>

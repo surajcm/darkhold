@@ -59,7 +59,11 @@ class PreviewServiceTest {
     @Test
     void generateQuizPin() {
         var user = "USER";
-        when(gameRepository.findByPin(anyString())).thenReturn(mockGame("1234"));
+        var game = mockGame("1234");
+        when(gameRepository.existsByPin(anyString())).thenReturn(false);
+        when(gameRepository.save(Mockito.any(Game.class))).thenReturn(game);
+        when(gameRepository.findByPin(anyString())).thenReturn(game);
+        when(challengeRepository.findById(anyLong())).thenReturn(mockOptionalChallenge());
         var publishInfo = previewService.generateQuizPin("1234", user);
         Assertions.assertEquals(user, publishInfo.getModerator());
     }
@@ -86,6 +90,7 @@ class PreviewServiceTest {
     private Game mockGame(final String challengeId) {
         var game = new Game();
         game.setChallengeId(challengeId);
+        game.setPin("12345");
         return game;
     }
 

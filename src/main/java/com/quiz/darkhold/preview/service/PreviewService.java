@@ -12,6 +12,7 @@ import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayDeque;
+import java.util.List;
 
 @Service
 public class PreviewService {
@@ -69,25 +70,44 @@ public class PreviewService {
     }
 
     /**
-     * Indicating the start of the game, generate a pin.
+     * Generate a unique PIN for a new game.
      *
      * @param challengeId of game
      * @param currentUser who starts it
      * @return game info
      */
     public PublishInfo generateQuizPin(final String challengeId, final String currentUser) {
-        var generatedString = RandomStringUtils.random(gameConfig.getPinLength(), false, true);
+        String uniquePin = generateUniquePin();
+        Game game = createAndSaveGame(uniquePin, challengeId, currentUser);
+        return createPublishInfo(game, currentUser);
+    }
+
+    private String generateUniquePin() {
+        int maxAttempts = 10;
+        for (int attempts = 0; attempts < maxAttempts; attempts++) {
+            String pin = RandomStringUtils.random(gameConfig.getPinLength(), false, true);
+            if (!gameRepository.existsByPin(pin)) {
+                return pin;
+            }
+        }
+        throw new IllegalStateException("Failed to generate unique PIN after " + maxAttempts + " attempts");
+    }
+
+    private Game createAndSaveGame(final String pin, final String challengeId, final String moderator) {
         var game = new Game();
-        game.setPin(generatedString);
+        game.setPin(pin);
         game.setGameStatus(GameStatus.WAITING.name());
         game.setChallengeId(challengeId);
-        gameRepository.save(game);
+        game.setModerator(moderator);
+        return gameRepository.save(game);
+    }
+
+    private PublishInfo createPublishInfo(final Game game, final String moderator) {
         var publishInfo = new PublishInfo();
-        publishInfo.setPin(generatedString);
-        publishInfo.setModerator(currentUser);
-        var previewInfo = fetchQuestionsFromPin(generatedString);
-        var questionSets = previewInfo.getQuestionSets();
-        currentGame.saveCurrentStatus(publishInfo, questionSets);
+        publishInfo.setPin(game.getPin());
+        publishInfo.setModerator(moderator);
+        var previewInfo = fetchQuestionsFromPin(game.getPin());
+        currentGame.saveCurrentStatus(publishInfo, previewInfo.getQuestionSets());
         return publishInfo;
     }
 
@@ -133,5 +153,28 @@ public class PreviewService {
             publishInfo.setPin(game.getPin());
         }
         return publishInfo;
+    }
+
+    /**
+     * Get all active games for a specific moderator.
+     * Active games are those not in FINISHED status.
+     *
+     * @param moderator the moderator username
+     * @return list of active games
+     */
+    public List<Game> getActiveGamesForModerator(final String moderator) {
+        return gameRepository.findByModeratorAndGameStatusNotOrderByCreatedOnDesc(
+                moderator, GameStatus.FINISHED.name());
+    }
+
+    /**
+     * Get all games for a specific moderator with a specific status.
+     *
+     * @param moderator the moderator username
+     * @param status the game status
+     * @return list of games
+     */
+    public List<Game> getGamesByModeratorAndStatus(final String moderator, final GameStatus status) {
+        return gameRepository.findByModeratorAndGameStatus(moderator, status.name());
     }
 }

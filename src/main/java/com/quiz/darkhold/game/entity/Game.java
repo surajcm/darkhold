@@ -34,6 +34,9 @@ public class Game {
     @Column
     private String gameMode = "MULTIPLAYER";
 
+    @Column
+    private String moderator;
+
     @CreatedDate
     @Column(name = "createdOn")
     private LocalDateTime createdOn;
@@ -96,6 +99,14 @@ public class Game {
 
     public void setModifiedOn(final LocalDateTime modifiedOn) {
         this.modifiedOn = modifiedOn;
+    }
+
+    public String getModerator() {
+        return moderator;
+    }
+
+    public void setModerator(final String moderator) {
+        this.moderator = moderator;
     }
 
 }

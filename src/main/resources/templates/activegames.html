@@ -1,0 +1,163 @@
+<!DOCTYPE HTML>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>My Active Games - Darkhold</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="shortcut icon" href="/images/favicon.png">
+    <link href="/styles/darkhold-styles.css" rel="stylesheet" />
+    <script type="text/javascript" src="/scripts/common-scripts.js"></script>
+    <style>
+        .game-card {
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            transition: box-shadow 0.3s;
+        }
+        .game-card:hover {
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        .game-pin {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #007bff;
+        }
+        .game-status {
+            display: inline-block;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+        .status-WAITING {
+            background-color: #17a2b8;
+            color: white;
+        }
+        .status-IN_PROGRESS {
+            background-color: #28a745;
+            color: white;
+        }
+        .status-PAUSED {
+            background-color: #ffc107;
+            color: #212529;
+        }
+        .status-FINISHED {
+            background-color: #6c757d;
+            color: white;
+        }
+        .game-info-label {
+            font-weight: 600;
+            color: #6c757d;
+        }
+        .participant-badge {
+            background-color: #e9ecef;
+            padding: 5px 10px;
+            border-radius: 12px;
+            font-size: 0.9rem;
+        }
+        .no-games-message {
+            text-align: center;
+            padding: 60px 20px;
+            color: #6c757d;
+        }
+        .no-games-icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div th:insert="~{navbar :: navbar}"></div>
+    <nav class="navbar transparent">
+        <ul class="navbar-nav mx-auto">
+            <li class="nav-item">
+                <span class="badge badge-pill badge-primary" style="font-size: 1.5rem;">My Active Games</span>
+            </li>
+        </ul>
+    </nav>
+
+    <div class="container mt-4">
+        <!-- Active Games List -->
+        <div th:if="${activeGames != null and !activeGames.isEmpty()}">
+            <div class="row">
+                <div class="col-12">
+                    <p class="text-muted">
+                        You have <strong th:text="${#lists.size(activeGames)}"></strong> active game(s)
+                    </p>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12 col-md-6 col-lg-4" th:each="game : ${activeGames}">
+                    <div class="game-card">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <div class="game-pin" th:text="${game.pin}"></div>
+                            <span class="game-status" th:text="${game.status}"
+                                  th:classappend="'status-' + ${game.status}"></span>
+                        </div>
+
+                        <h5 class="mb-3" th:text="${game.challengeName}">Challenge Name</h5>
+
+                        <div class="mb-2">
+                            <span class="game-info-label">Mode:</span>
+                            <span th:text="${game.gameModeDisplay}">Multiplayer</span>
+                        </div>
+
+                        <div class="mb-2">
+                            <span class="game-info-label">Created:</span>
+                            <span th:text="${game.formattedCreatedOn}">Jan 10, 2026 14:30</span>
+                        </div>
+
+                        <div class="mb-3">
+                            <span class="game-info-label">Participants:</span>
+                            <span class="participant-badge">
+                                <i class="fas fa-users"></i>
+                                <span th:text="${game.participantCount}">0</span>
+                            </span>
+                        </div>
+
+                        <!-- Action Buttons -->
+                        <div class="d-grid gap-2">
+                            <!-- Show for WAITING status -->
+                            <a th:if="${game.status == 'WAITING'}"
+                               th:href="@{/publish(challengeId=${game.challengeId})}"
+                               class="btn btn-primary btn-sm">
+                                View Lobby
+                            </a>
+
+                            <!-- Show for IN_PROGRESS status -->
+                            <form th:if="${game.status == 'IN_PROGRESS'}"
+                                  th:action="@{/game}" method="post" style="margin:0;">
+                                <input type="hidden" name="quizPin" th:value="${game.pin}"/>
+                                <button type="submit" class="btn btn-success btn-sm w-100">
+                                    Rejoin Game
+                                </button>
+                            </form>
+
+                            <!-- Show for PAUSED status -->
+                            <form th:if="${game.status == 'PAUSED'}"
+                                  th:action="@{/game}" method="post" style="margin:0;">
+                                <input type="hidden" name="quizPin" th:value="${game.pin}"/>
+                                <button type="submit" class="btn btn-warning btn-sm w-100">
+                                    Resume Game
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- No Active Games Message -->
+        <div th:if="${activeGames == null or activeGames.isEmpty()}" class="no-games-message">
+            <div class="no-games-icon">🎮</div>
+            <h3>No Active Games</h3>
+            <p>You don't have any active games at the moment.</p>
+            <a href="/" class="btn btn-primary mt-3">Start a New Game</a>
+        </div>
+    </div>
+
+    <script type="text/javascript" src="/scripts/core/popper.min.js"></script>
+    <script type="text/javascript" src="/scripts/core/bootstrap-5.3.1/bootstrap.min.js"></script>
+</body>
+</html>

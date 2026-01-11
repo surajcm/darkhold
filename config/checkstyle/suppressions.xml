@@ -30,4 +30,7 @@ WHAT AND WHY CHECKS SUPPRESSED
     <suppress files="GameController.java" checks="MethodLength"/>
     <suppress files="PracticeService.java" checks="MethodLength"/>
     <suppress files="PracticeService.java" checks="VariableDeclarationUsageDistance"/>
+    <suppress files="ResultService.java" checks="MethodLength"/>
+    <suppress files="PastGamesController.java" checks="MethodLength"/>
+    <suppress files="GameController.java" checks="IllegalCatch"/>
 </suppressions>

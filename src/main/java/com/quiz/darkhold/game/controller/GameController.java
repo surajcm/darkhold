@@ -9,6 +9,7 @@ import com.quiz.darkhold.game.model.Game;
 import com.quiz.darkhold.game.model.QuestionPointer;
 import com.quiz.darkhold.game.model.StartTrigger;
 import com.quiz.darkhold.game.model.UserResponse;
+import com.quiz.darkhold.analytics.service.ResultService;
 import com.quiz.darkhold.game.service.AnswerValidationService;
 import com.quiz.darkhold.game.service.GameService;
 import com.quiz.darkhold.init.GameConfig;
@@ -36,15 +37,18 @@ public class GameController {
     private final GameConfig gameConfig;
     private final AnswerValidationService answerValidationService;
     private final SimpMessagingTemplate messagingTemplate;
+    private final ResultService resultService;
 
     public GameController(final GameService gameService,
                           final GameConfig gameConfig,
                           final AnswerValidationService answerValidationService,
-                          final SimpMessagingTemplate messagingTemplate) {
+                          final SimpMessagingTemplate messagingTemplate,
+                          final ResultService resultService) {
         this.gameService = gameService;
         this.gameConfig = gameConfig;
         this.answerValidationService = answerValidationService;
         this.messagingTemplate = messagingTemplate;
+        this.resultService = resultService;
     }
 
     @PostMapping("/interstitial")
@@ -78,14 +82,14 @@ public class GameController {
         // Check if question pointer is valid (total count should be > 0)
         if (questionPointer.getTotalQuestionCount() == 0) {
             logger.error("Invalid question pointer - total count is 0. PIN: {}", quizPin);
-            return finalScore(model);
+            return finalScore(model, quizPin);
         }
 
         if (questionPointer.getCurrentQuestionNumber() == questionPointer.getTotalQuestionCount()) {
             logger.warn("Game ending: currentQuestion == totalQuestions ({} == {})",
                     questionPointer.getCurrentQuestionNumber(),
                     questionPointer.getTotalQuestionCount());
-            return finalScore(model);
+            return finalScore(model, quizPin);
         }
         model.addAttribute("quizPin", quizPin);
         logger.info("Going to question page");
@@ -93,14 +97,32 @@ public class GameController {
     }
 
     @PostMapping("/final")
-    public String finalScore(final Model model) {
-        logger.info("On to the finalScore :");
+    public String finalScore(final Model model,
+                             @RequestParam(value = "quizPin", required = false) final String quizPin) {
+        logger.info("On to the finalScore for PIN: {}", quizPin);
         var score = new CurrentScore();
         var scores = gameService.getCurrentScore();
         score.setScore(scores);
         model.addAttribute("score", score);
+
+        // Save game results for analytics
+        saveGameResultIfAvailable(quizPin);
+
         gameService.cleanUpCurrentGame();
         return "finalscore";
+    }
+
+    private void saveGameResultIfAvailable(final String quizPin) {
+        if (quizPin != null && !quizPin.isEmpty()) {
+            try {
+                String challengeName = "Quiz Session";
+                resultService.saveGameResult(quizPin, challengeName);
+                logger.info("Game results saved for PIN: {}", quizPin);
+                // OK to catch RuntimeException
+            } catch (RuntimeException ex) {
+                logger.error("Failed to save game results for PIN: {}", quizPin, ex);
+            }
+        }
     }
 
     /**
@@ -135,6 +157,7 @@ public class GameController {
     private Challenge buildChallengeModel(final QuestionPointer qp, final QuestionSet qs) {
         var challenge = new Challenge();
         challenge.setQuestionNumber(qp.getCurrentQuestionNumber());
+        challenge.setTotalQuestions(qp.getTotalQuestionCount());
         challenge.setQuestionSet(qs);
         challenge.setQuestionNumber(challenge.getQuestionNumber() + 1);
         return challenge;

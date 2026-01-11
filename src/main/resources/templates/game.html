@@ -21,7 +21,8 @@
         </div>
         <ul class="navbar-nav mx-auto">
             <li class="nav-item">
-                <strong>[[${challenge.questionNumber}]].[[${challenge.QuestionSet.question}]]</strong>
+                <span class="badge badge-secondary mr-2">Question [[${challenge.questionNumber}]] of [[${challenge.totalQuestions}]]</span>
+                <strong>[[${challenge.QuestionSet.question}]]</strong>
             </li>
         </ul>
         <span th:if="${not #sets.isEmpty(#authentication.getPrincipal().getAuthorities())}">
@@ -178,6 +179,18 @@
                                     </div>
                                 </div>
                             </th:block>
+                        </div>
+                        <!-- Waiting for Others Message -->
+                        <div class="row mt-4" id="waitingMessage" style="display:none;">
+                            <div class="col-12 text-center">
+                                <div class="alert alert-info" role="alert">
+                                    <h4 class="mb-2">Answer Submitted!</h4>
+                                    <p class="mb-0">Waiting for other players to finish...</p>
+                                    <div class="spinner-border text-info mt-2" role="status">
+                                        <span class="visually-hidden">Loading...</span>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                         <!-- Practice Mode: Next Question Button -->
                         <div class="row mt-4" id="practiceNextContainer" style="display:none;">

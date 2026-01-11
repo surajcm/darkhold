@@ -10,6 +10,43 @@
     <link rel="stylesheet" href="/styles/icon-styles.css">
     <script type="text/javascript" src="/scripts/common-scripts.js"></script>
     <script type="text/javascript" src="/scripts/preview-scripts.js"></script>
+    <style>
+        .game-mode-card {
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            height: 100%;
+            background: white;
+        }
+        .game-mode-card:not(.disabled):hover {
+            border-color: #007bff;
+            box-shadow: 0 4px 12px rgba(0,123,255,0.2);
+            transform: translateY(-2px);
+        }
+        .game-mode-card.disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+        .game-mode-card .mode-icon {
+            font-size: 3rem;
+            margin-bottom: 10px;
+        }
+        .game-mode-card h5 {
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        .game-mode-card p {
+            color: #666;
+            min-height: 60px;
+            margin-bottom: 15px;
+        }
+        .game-mode-card .btn-block {
+            width: 100%;
+        }
+    </style>
 </head>
 <body>
     <div th:insert="~{navbar :: navbar}"></div>
@@ -43,10 +80,49 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-12">
-                        <button type="button" class="btn btn-warning  pl-5 pr-5" onclick="toChallenges();" >Back to challenges</button>
-                        <button type="button" class="btn btn-warning  pl-5 pr-5" onclick="publish();" >Publish game</button>
-                        <button type="button" class="btn btn-success  pl-5 pr-5" onclick="startPractice();" >Start Practice Mode</button>
+                    <div class="col-12 mt-4">
+                        <div class="card">
+                            <div class="card-body">
+                                <h4 class="mb-3">Select Game Mode</h4>
+                                <div class="row">
+                                    <div class="col-md-6 col-lg-3 mb-3">
+                                        <div class="game-mode-card" onclick="publish();">
+                                            <div class="mode-icon">🎮</div>
+                                            <h5>Multiplayer</h5>
+                                            <p class="small">Live game with PIN. Moderator controls pace. Real-time competition.</p>
+                                            <button type="button" class="btn btn-primary btn-block">Start Multiplayer</button>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 col-lg-3 mb-3">
+                                        <div class="game-mode-card" onclick="startPractice();">
+                                            <div class="mode-icon">📝</div>
+                                            <h5>Practice</h5>
+                                            <p class="small">Solo mode with instant feedback. See correct answers immediately. No pressure.</p>
+                                            <button type="button" class="btn btn-success btn-block">Start Practice</button>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 col-lg-3 mb-3">
+                                        <div class="game-mode-card disabled" title="Coming Soon">
+                                            <div class="mode-icon">📅</div>
+                                            <h5>Self-Paced</h5>
+                                            <p class="small">Shareable link. Take anytime within window. Multiple attempts allowed.</p>
+                                            <button type="button" class="btn btn-secondary btn-block" disabled>Coming Soon</button>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 col-lg-3 mb-3">
+                                        <div class="game-mode-card disabled" title="Coming Soon">
+                                            <div class="mode-icon">🏆</div>
+                                            <h5>Challenge</h5>
+                                            <p class="small">Persistent leaderboard. Best scores tracked. Competitive rankings.</p>
+                                            <button type="button" class="btn btn-secondary btn-block" disabled>Coming Soon</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 mt-3">
+                        <button type="button" class="btn btn-outline-secondary pl-5 pr-5" onclick="toChallenges();">Back to Challenges</button>
                     </div>
                 </div>
             </section>
