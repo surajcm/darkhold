@@ -4,8 +4,17 @@
     <title>Final Results - Darkhold classroom quiz experience</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="theme-color" content="#0062cc">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Darkhold Quiz">
     <link rel="shortcut icon" href="/images/favicon.png">
+    <link rel="manifest" href="/manifest.json">
+    <link rel="apple-touch-icon" href="/images/icons/icon-192.png">
     <link href="/styles/darkhold-styles.css" rel="stylesheet" />
+    <script type="text/javascript" src="/scripts/theme-manager.js"></script>
+    <script type="text/javascript" src="/scripts/audio-manager.js"></script>
+    <script type="text/javascript" src="/scripts/accessibility.js"></script>
     <script type="text/javascript" src="/scripts/common-scripts.js"></script>
     <style>
         .podium-container { display: flex; justify-content: center; align-items: flex-end; margin: 40px 0; }
@@ -42,7 +51,7 @@
                 <div class="container-fluid">
                     <div class="container">
                         <!-- Winner Announcement -->
-                        <div class="winner-announcement" th:if="${score.score != null and !score.score.isEmpty()}">
+                        <div class="winner-announcement victory-message" th:if="${score.score != null and !score.score.isEmpty()}" role="status" aria-live="polite">
                             Congratulations to our winner!
                         </div>
 
@@ -120,5 +129,32 @@
     </form>
     <script type="text/javascript" src="/scripts/core/popper.min.js"></script>
     <script type="text/javascript" src="/scripts/core/bootstrap-5.3.1/bootstrap.min.js"></script>
+    <script>
+        // Play victory/defeat sound and add trophy animation
+        document.addEventListener('DOMContentLoaded', function() {
+            // Check if user is authenticated and if there are scores
+            const trophies = document.querySelectorAll('.trophy');
+            trophies.forEach(trophy => {
+                trophy.classList.add('trophy-icon');
+            });
+
+            // Play victory sound if there are winners
+            const hasWinners = document.querySelector('.podium-container') !== null;
+            if (hasWinners && typeof AudioManager !== 'undefined') {
+                AudioManager.playVictory();
+            }
+
+            // Announce results for screen readers
+            if (typeof A11y !== 'undefined') {
+                const winnerElement = document.querySelector('.podium-name');
+                if (winnerElement) {
+                    const winnerName = winnerElement.textContent.trim();
+                    A11y.announce('Game complete! The winner is ' + winnerName);
+                } else {
+                    A11y.announce('Game complete! Final results are displayed');
+                }
+            }
+        });
+    </script>
 </body>
 </html>

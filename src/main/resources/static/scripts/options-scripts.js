@@ -1,9 +1,4 @@
 function createChallenge() {
-    document.forms[0].action = "/createChallenge";
-    document.forms[0].submit();
-}
-
-function createChallengeFromScratch() {
     window.location.href = "/create_challenge_form";
 }
 

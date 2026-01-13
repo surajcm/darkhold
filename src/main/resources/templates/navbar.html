@@ -23,6 +23,12 @@
             <div class="icon-bar" onclick="toOptions();">
                 <a class="active" href="#"><i class="fas fa-cog"></i></a>
             </div>
+            <div class="icon-bar" onclick="toggleTheme();" title="Toggle Dark/Light Mode" id="theme-toggle-btn" aria-label="Toggle theme">
+                <a class="active" href="#"><i class="fas fa-moon" id="theme-icon"></i></a>
+            </div>
+            <div class="icon-bar" onclick="toggleSound();" title="Toggle Sound Effects" id="sound-toggle-btn" aria-label="Toggle sound" style="display: none;">
+                <a class="active" href="#"><i class="fas fa-volume-up" id="sound-icon"></i></a>
+            </div>
             <button class="btn btn-lg btn-rised align-middle btn-primary ml-auto mr-3 order-lg-last" type="button" onclick="logOut();" >Logout</button>
         </div>
         <div class="navbar-nav ms-auto mb-2 mb-lg-0" sec:authorize="isAnonymous()">

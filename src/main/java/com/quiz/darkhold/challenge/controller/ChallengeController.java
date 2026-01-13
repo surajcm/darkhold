@@ -107,14 +107,14 @@ public class ChallengeController {
     }
 
     /**
-     * Show the form to create a new challenge without Excel upload.
+     * Show the unified form to create a new challenge (with or without Excel upload).
      *
-     * @return the create challenge form view
+     * @return the unified create challenge form view
      */
     @GetMapping("/create_challenge_form")
     public String showCreateChallengeForm() {
-        logger.info("Showing create challenge form");
-        return "challenge/createchallengeform";
+        logger.info("Showing unified create challenge form");
+        return "challenge/createchallenge";
     }
 
     /**

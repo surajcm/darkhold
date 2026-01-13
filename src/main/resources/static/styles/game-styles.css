@@ -5,17 +5,25 @@ span {
 }
 a {
   text-decoration:none;
-  color: #0062cc;
-  border-bottom:2px solid #0062cc;
+  color: var(--color-primary);
+  border-bottom:2px solid var(--color-primary);
 }
 
 .card {
-    background:#FFF;
+    background: var(--color-card-bg);
+    border: 1px solid var(--color-card-border);
     border-radius:0;
     padding:20px 10px;
     margin:20px 0px;
     cursor: pointer;
+    box-shadow: var(--shadow-sm);
+    transition: box-shadow var(--transition-fast);
 }
+
+.card:hover {
+    box-shadow: var(--shadow-hover);
+}
+
 .card.background-block {
     float: left;
     width: 100%;
@@ -25,10 +33,11 @@ a {
 
 .text {
     margin:20px 0px;
+    color: var(--color-text-primary);
 }
 
 .fa {
-     color:#4183D7;
+     color: var(--color-primary-light);
 }
 
 .ribbon {
@@ -42,8 +51,8 @@ a {
  position: relative;
  //background: #ba89b6;
  //color: #fff;
- background:#FFF;
- border: .5em solid #000;
+ background: var(--color-card-bg);
+ border: .5em solid var(--color-border-dark);
  text-align: center;
  padding: 1em 2em; /* Adjust to suit */
  margin: 2em auto 3em;
@@ -56,7 +65,7 @@ a {
  position: absolute;
  display: block;
  bottom: -1em;
- border: 1.5em solid #FFF;
+ border: 1.5em solid var(--color-card-bg);
  z-index: -1;
 }
 .ribbon:before {
@@ -74,7 +83,7 @@ a {
  position: absolute;
  display: block;
  border-style: solid;
- border-color: #FFF transparent transparent transparent;
+ border-color: var(--color-card-bg) transparent transparent transparent;
  bottom: -1em;
 }
 .ribbon .ribbon-content:before {

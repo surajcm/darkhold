@@ -4,10 +4,19 @@
     <title>Darkhold classroom quiz experience</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="theme-color" content="#0062cc">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Darkhold Quiz">
     <link rel="shortcut icon" href="/images/favicon.png">
+    <link rel="manifest" href="/manifest.json">
+    <link rel="apple-touch-icon" href="/images/icons/icon-192.png">
     <link rel="stylesheet" href="/styles/game-styles.css"  />
     <link rel="stylesheet" href="/styles/core/flipclock.css" />
     <link rel="stylesheet" href="/styles/game-flipclock-custom.css" />
+    <script type="text/javascript" src="/scripts/theme-manager.js"></script>
+    <script type="text/javascript" src="/scripts/audio-manager.js"></script>
+    <script type="text/javascript" src="/scripts/accessibility.js"></script>
     <script type="text/javascript" src="/scripts/common-scripts.js"></script>
 </head>
 <body onload="connect()">
@@ -111,17 +120,23 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="row" id="answerSpace">
+                        <div class="row" id="answerSpace" role="main">
                             <!-- MULTIPLE_CHOICE and POLL: Show answer options -->
                             <th:block th:if="${question_type == 'MULTIPLE_CHOICE' or question_type == 'POLL'}">
-                                <div id="optionA" class="col-lg-6 col-md-6 col-sm-6 col-xs-12" onclick="waitAndShowAnswer(this)">
+                                <div id="optionA" class="col-lg-6 col-md-6 col-sm-6 col-xs-12 answer-option"
+                                     role="button" tabindex="0"
+                                     th:attr="aria-label='Answer option A: ' + ${challenge.QuestionSet.answer1}"
+                                     onclick="waitAndShowAnswer(this)">
                                     <div class="card">
                                         <div class="card-body text-center">
                                             <div class="title"><h4>[[${challenge.QuestionSet.answer1}]]</h4></div>
                                         </div>
                                     </div>
                                 </div>
-                                <div id="optionB" class="col-lg-6 col-md-6 col-sm-6 col-xs-12" onclick="waitAndShowAnswer(this)">
+                                <div id="optionB" class="col-lg-6 col-md-6 col-sm-6 col-xs-12 answer-option"
+                                     role="button" tabindex="0"
+                                     th:attr="aria-label='Answer option B: ' + ${challenge.QuestionSet.answer2}"
+                                     onclick="waitAndShowAnswer(this)">
                                     <div class="card">
                                         <div class="card-body text-center">
                                             <div class="title"><h4>[[${challenge.QuestionSet.answer2}]]</h4></div>
@@ -129,7 +144,10 @@
                                     </div>
                                 </div>
                                 <div id="optionC" th:if="${not #strings.isEmpty(challenge.QuestionSet.answer3)}"
-                                     class="col-lg-6 col-md-6 col-sm-6 col-xs-12" onclick="waitAndShowAnswer(this)">
+                                     class="col-lg-6 col-md-6 col-sm-6 col-xs-12 answer-option"
+                                     role="button" tabindex="0"
+                                     th:attr="aria-label='Answer option C: ' + ${challenge.QuestionSet.answer3}"
+                                     onclick="waitAndShowAnswer(this)">
                                     <div class="card">
                                         <div class="card-body text-center">
                                             <div class="title"><h4>[[${challenge.QuestionSet.answer3}]]</h4></div>
@@ -137,7 +155,10 @@
                                     </div>
                                 </div>
                                 <div id="optionD" th:if="${not #strings.isEmpty(challenge.QuestionSet.answer4)}"
-                                     class="col-lg-6 col-md-6 col-sm-6 col-xs-12" onclick="waitAndShowAnswer(this)">
+                                     class="col-lg-6 col-md-6 col-sm-6 col-xs-12 answer-option"
+                                     role="button" tabindex="0"
+                                     th:attr="aria-label='Answer option D: ' + ${challenge.QuestionSet.answer4}"
+                                     onclick="waitAndShowAnswer(this)">
                                     <div class="card">
                                         <div class="card-body text-center">
                                             <div class="title"><h4>[[${challenge.QuestionSet.answer4}]]</h4></div>
@@ -148,14 +169,18 @@
 
                             <!-- TRUE_FALSE: Show True/False options -->
                             <th:block th:if="${question_type == 'TRUE_FALSE'}">
-                                <div id="optionTRUE" class="col-lg-6 col-md-6 col-sm-6 col-xs-12" onclick="waitAndShowTrueFalse(this)">
+                                <div id="optionTRUE" class="col-lg-6 col-md-6 col-sm-6 col-xs-12 answer-option"
+                                     role="button" tabindex="0" aria-label="Answer: True"
+                                     onclick="waitAndShowTrueFalse(this)">
                                     <div class="card bg-primary text-white">
                                         <div class="card-body text-center">
                                             <div class="title"><h2>TRUE</h2></div>
                                         </div>
                                     </div>
                                 </div>
-                                <div id="optionFALSE" class="col-lg-6 col-md-6 col-sm-6 col-xs-12" onclick="waitAndShowTrueFalse(this)">
+                                <div id="optionFALSE" class="col-lg-6 col-md-6 col-sm-6 col-xs-12 answer-option"
+                                     role="button" tabindex="0" aria-label="Answer: False"
+                                     onclick="waitAndShowTrueFalse(this)">
                                     <div class="card bg-danger text-white">
                                         <div class="card-body text-center">
                                             <div class="title"><h2>FALSE</h2></div>
@@ -169,10 +194,12 @@
                                 <div class="col-lg-8 col-md-10 col-sm-12 mx-auto">
                                     <div class="card">
                                         <div class="card-body text-center">
-                                            <h5 class="mb-3">Type your answer:</h5>
+                                            <label for="typeAnswerInput" class="form-label h5 mb-3">Type your answer:</label>
                                             <input type="text" id="typeAnswerInput" class="form-control form-control-lg text-center mb-3"
-                                                   placeholder="Enter your answer here..." maxlength="225" autocomplete="off"/>
-                                            <button type="button" class="btn btn-lg btn-primary" onclick="submitTypeAnswer()">
+                                                   placeholder="Enter your answer here..." maxlength="225" autocomplete="off"
+                                                   aria-label="Type your answer" aria-describedby="typeAnswerHelp"/>
+                                            <button type="button" class="btn btn-lg btn-primary" onclick="submitTypeAnswer()"
+                                                    aria-label="Submit your typed answer">
                                                 Submit Answer
                                             </button>
                                         </div>

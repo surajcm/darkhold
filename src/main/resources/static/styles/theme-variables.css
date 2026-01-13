@@ -1,0 +1,252 @@
+/**
+ * Darkhold Theme System - CSS Custom Properties
+ * Milestone 10: UI/UX Polish
+ *
+ * Defines all color, spacing, and design tokens for light and dark themes.
+ * Apply theme by setting data-theme="light" or data-theme="dark" on <html> element.
+ */
+
+/* ============================================
+   LIGHT THEME (Default)
+   ============================================ */
+:root,
+[data-theme="light"] {
+    /* Primary Colors */
+    --color-primary: #0062cc;
+    --color-primary-hover: #0056b3;
+    --color-primary-light: #4183D7;
+    --color-secondary: #60c7c1;
+    --color-accent: #ff7c0c;
+
+    /* Success, Error, Warning */
+    --color-success: #28a745;
+    --color-success-light: #47DE97;
+    --color-error: #f15e5e;
+    --color-error-dark: #dc3545;
+    --color-warning: #f39a3f;
+    --color-info: #34ADF6;
+
+    /* Background Colors */
+    --color-bg-primary: #ffffff;
+    --color-bg-secondary: #f8f9fa;
+    --color-bg-tertiary: #f7f7f7;
+    --color-bg-overlay: rgba(0, 0, 0, 0.5);
+
+    /* Text Colors */
+    --color-text-primary: #323232;
+    --color-text-secondary: #666666;
+    --color-text-tertiary: #999999;
+    --color-text-muted: #aeaeae;
+    --color-text-inverse: #ffffff;
+
+    /* Border Colors */
+    --color-border-light: #eaeaea;
+    --color-border-medium: #aeaeae;
+    --color-border-dark: #323232;
+
+    /* Card & Component Colors */
+    --color-card-bg: #ffffff;
+    --color-card-border: #eaeaea;
+    --color-card-shadow: rgba(0, 0, 0, 0.1);
+    --color-card-hover-shadow: rgba(0, 0, 0, 0.15);
+
+    /* Button Colors */
+    --color-btn-primary-bg: #0062cc;
+    --color-btn-primary-hover: #0056b3;
+    --color-btn-primary-text: #ffffff;
+    --color-btn-secondary-bg: #6c757d;
+    --color-btn-secondary-hover: #5a6268;
+    --color-btn-danger-bg: #dc3545;
+    --color-btn-danger-hover: #c82333;
+
+    /* Input Colors */
+    --color-input-bg: #f7f7f7;
+    --color-input-border: #aeaeae;
+    --color-input-focus-border: #0062cc;
+    --color-input-text: #323232;
+
+    /* Game-Specific Colors */
+    --color-correct-answer: #47DE97;
+    --color-incorrect-answer: #f15e5e;
+    --color-timer-primary: #ff7c0c;
+    --color-timer-secondary: #f39a3f;
+    --color-podium-gold: #FFD700;
+    --color-podium-silver: #C0C0C0;
+    --color-podium-bronze: #CD7F32;
+
+    /* Status Colors */
+    --color-status-waiting: #ffc107;
+    --color-status-active: #28a745;
+    --color-status-paused: #17a2b8;
+    --color-status-finished: #6c757d;
+
+    /* Spacing */
+    --spacing-xs: 0.25rem;
+    --spacing-sm: 0.5rem;
+    --spacing-md: 1rem;
+    --spacing-lg: 1.5rem;
+    --spacing-xl: 2rem;
+    --spacing-2xl: 3rem;
+
+    /* Shadows */
+    --shadow-sm: 0 2px 4px var(--color-card-shadow);
+    --shadow-md: 0 4px 6px var(--color-card-shadow);
+    --shadow-lg: 0 10px 15px var(--color-card-shadow);
+    --shadow-hover: 0 8px 16px var(--color-card-hover-shadow);
+
+    /* Border Radius */
+    --radius-sm: 0.25rem;
+    --radius-md: 0.5rem;
+    --radius-lg: 1rem;
+    --radius-xl: 1.5rem;
+    --radius-full: 9999px;
+
+    /* Transitions */
+    --transition-fast: 150ms ease-in-out;
+    --transition-normal: 300ms ease-in-out;
+    --transition-slow: 500ms ease-in-out;
+
+    /* Focus Ring */
+    --focus-ring-color: #0062cc;
+    --focus-ring-width: 3px;
+    --focus-ring-offset: 2px;
+}
+
+/* ============================================
+   DARK THEME
+   ============================================ */
+[data-theme="dark"] {
+    /* Primary Colors - Slightly muted for dark backgrounds */
+    --color-primary: #4183D7;
+    --color-primary-hover: #5a9de8;
+    --color-primary-light: #6db3ff;
+    --color-secondary: #4db8b3;
+    --color-accent: #ff8c2e;
+
+    /* Success, Error, Warning - Adjusted for contrast */
+    --color-success: #5fdc7f;
+    --color-success-light: #6ef090;
+    --color-error: #ff6b6b;
+    --color-error-dark: #e63946;
+    --color-warning: #ffa94d;
+    --color-info: #4fc3f7;
+
+    /* Background Colors - Dark grays */
+    --color-bg-primary: #1a1a1a;
+    --color-bg-secondary: #2d2d2d;
+    --color-bg-tertiary: #3a3a3a;
+    --color-bg-overlay: rgba(0, 0, 0, 0.7);
+
+    /* Text Colors - Light for readability */
+    --color-text-primary: #f0f0f0;
+    --color-text-secondary: #c0c0c0;
+    --color-text-tertiary: #999999;
+    --color-text-muted: #757575;
+    --color-text-inverse: #1a1a1a;
+
+    /* Border Colors */
+    --color-border-light: #3a3a3a;
+    --color-border-medium: #4a4a4a;
+    --color-border-dark: #5a5a5a;
+
+    /* Card & Component Colors */
+    --color-card-bg: #2d2d2d;
+    --color-card-border: #3a3a3a;
+    --color-card-shadow: rgba(0, 0, 0, 0.3);
+    --color-card-hover-shadow: rgba(0, 0, 0, 0.5);
+
+    /* Button Colors */
+    --color-btn-primary-bg: #4183D7;
+    --color-btn-primary-hover: #5a9de8;
+    --color-btn-primary-text: #ffffff;
+    --color-btn-secondary-bg: #4a5568;
+    --color-btn-secondary-hover: #5a6578;
+    --color-btn-danger-bg: #e63946;
+    --color-btn-danger-hover: #d62839;
+
+    /* Input Colors */
+    --color-input-bg: #3a3a3a;
+    --color-input-border: #4a4a4a;
+    --color-input-focus-border: #4183D7;
+    --color-input-text: #f0f0f0;
+
+    /* Game-Specific Colors */
+    --color-correct-answer: #5fdc7f;
+    --color-incorrect-answer: #ff6b6b;
+    --color-timer-primary: #ff8c2e;
+    --color-timer-secondary: #ffa94d;
+    --color-podium-gold: #FFD700;
+    --color-podium-silver: #C0C0C0;
+    --color-podium-bronze: #CD7F32;
+
+    /* Status Colors */
+    --color-status-waiting: #ffa726;
+    --color-status-active: #66bb6a;
+    --color-status-paused: #29b6f6;
+    --color-status-finished: #78909c;
+
+    /* Focus Ring - Brighter for dark backgrounds */
+    --focus-ring-color: #6db3ff;
+}
+
+/* ============================================
+   REDUCED MOTION PREFERENCE
+   ============================================ */
+@media (prefers-reduced-motion: reduce) {
+    :root {
+        --transition-fast: 0ms;
+        --transition-normal: 0ms;
+        --transition-slow: 0ms;
+    }
+}
+
+/* ============================================
+   GLOBAL THEME TRANSITIONS
+   ============================================ */
+*,
+*::before,
+*::after {
+    transition:
+        background-color var(--transition-normal),
+        border-color var(--transition-normal),
+        color var(--transition-normal),
+        box-shadow var(--transition-normal);
+}
+
+/* Exclude animations and transforms from theme transitions */
+.animated,
+.flipclock,
+[class*="animate__"] {
+    transition: none;
+}
+
+/* ============================================
+   COLORBLIND MODE ADJUSTMENTS
+   ============================================ */
+[data-colorblind="deuteranopia"],
+[data-colorblind="protanopia"] {
+    /* Replace green/red with blue/orange for red-green colorblindness */
+    --color-correct-answer: #4fc3f7;
+    --color-incorrect-answer: #ff6f00;
+    --color-success: #42a5f5;
+    --color-success-light: #64b5f6;
+    --color-error: #fb8c00;
+    --color-error-dark: #f57c00;
+}
+
+[data-colorblind="tritanopia"] {
+    /* Replace blue/yellow for blue-yellow colorblindness */
+    --color-primary: #e91e63;
+    --color-primary-hover: #c2185b;
+    --color-primary-light: #f06292;
+    --color-info: #9c27b0;
+}
+
+/* ============================================
+   UTILITY CLASSES
+   ============================================ */
+.theme-bg-primary { background-color: var(--color-bg-primary); }
+.theme-bg-secondary { background-color: var(--color-bg-secondary); }
+.theme-text-primary { color: var(--color-text-primary); }
+.theme-text-secondary { color: var(--color-text-secondary); }
+.theme-border { border-color: var(--color-border-light); }

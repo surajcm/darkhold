@@ -4,8 +4,18 @@
     <title>Getting Started: Darkhold classroom quiz experience</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="theme-color" content="#0062cc">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Darkhold Quiz">
     <link rel="shortcut icon" href="/images/favicon.png">
+    <link rel="manifest" href="/manifest.json">
+    <link rel="apple-touch-icon" href="/images/icons/icon-192.png">
     <link href="/styles/homepage.css" rel="stylesheet" />
+    <link href="/styles/theme-variables.css" rel="stylesheet" />
+    <script type="text/javascript" src="/scripts/theme-manager.js"></script>
+    <script type="text/javascript" src="/scripts/audio-manager.js"></script>
+    <script type="text/javascript" src="/scripts/accessibility.js"></script>
     <script type="text/javascript" src="/scripts/core/sockjs.min.js"></script>
     <script type="text/javascript" src="/scripts/core/stomp.min.js"></script>
     <script type="text/javascript" src="/scripts/scoreboard-scripts.js"></script>
@@ -45,12 +55,16 @@
                     <div class="row justify-content-center align-items-center d-flex text-center h-100">
                         <div class="col-12 col-md-8 h-50">
                             <div class="jumbotron vertical-center text-center m-0 d-flex flex-column justify-content-center py-5">
-                                <table class="table table-striped">
+                                <!-- Scoreboard live region for accessibility -->
+                                <div class="sr-only" aria-live="polite" aria-atomic="false" id="scoreboardAnnouncements">
+                                    Scoreboard updated
+                                </div>
+                                <table class="table table-striped" role="main" aria-label="Game scoreboard">
                                     <thead>
                                         <tr>
-                                            <th class="rank-cell">Rank</th>
-                                            <th class="username-cell">Player</th>
-                                            <th class="score-cell">Score</th>
+                                            <th class="rank-cell" scope="col">Rank</th>
+                                            <th class="username-cell" scope="col">Player</th>
+                                            <th class="score-cell" scope="col">Score</th>
                                         </tr>
                                     </thead>
                                     <tbody>

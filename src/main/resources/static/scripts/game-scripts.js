@@ -8,10 +8,21 @@ $(document).ready(function () {
     let timer = new FlipClock.Timer(clock2, {
         callbacks: {
             interval: function () {
-                if (clock2.getTime().time <= 0) {
+                let timeRemaining = clock2.getTime().time;
+
+                if (timeRemaining <= 0) {
                     clock2.stop();
                     timer.stop();
                     callTimeOut();
+                } else {
+                    // Play countdown warning at 5 seconds
+                    if (timeRemaining === 5 && typeof AudioManager !== 'undefined') {
+                        AudioManager.playCountdown();
+                    }
+                    // Play tick sound every second (optional, can be disabled if too annoying)
+                    // if (typeof AudioManager !== 'undefined') {
+                    //     AudioManager.playTick();
+                    // }
                 }
                 clock2.decrement()
             }
@@ -20,6 +31,11 @@ $(document).ready(function () {
     timer.start();
 
     $("span.flip-clock-divider").remove();
+
+    // Setup keyboard navigation for answer options
+    if (typeof A11y !== 'undefined') {
+        A11y.setupAnswerNavigation('#answerSpace');
+    }
 });
 
 function callTimeOut() {
@@ -71,6 +87,8 @@ function highlightGreen() {
         let toGreenChild = document.getElementById(correctDiv);
         if (toGreenChild) {
             toGreenChild.children[0].setAttribute('class', 'card text-white bg-success');
+            // Add animation class
+            toGreenChild.classList.add('answer-correct');
         }
     } else if (questionType === 'TYPE_ANSWER') {
         // For TYPE_ANSWER, feedback is shown inline via input styling
@@ -81,7 +99,14 @@ function highlightGreen() {
         let toGreenChild = document.getElementById(correctDiv);
         if (toGreenChild) {
             toGreenChild.children[0].setAttribute('class', 'card text-white bg-success');
+            // Add animation class
+            toGreenChild.classList.add('answer-correct');
         }
+    }
+
+    // Announce correct answer for screen readers
+    if (typeof A11y !== 'undefined') {
+        A11y.announce('The correct answer has been revealed: Option ' + correctAnswer);
     }
 }
 
@@ -101,6 +126,8 @@ function highlightRedOnIncorrectSelection() {
         let toRedChild = document.getElementById(inCorrectDiv);
         if (toRedChild) {
             toRedChild.children[0].setAttribute('class', 'card text-white bg-danger');
+            // Add animation class
+            toRedChild.classList.add('answer-incorrect');
         }
     } else if (questionType === 'TYPE_ANSWER') {
         // Already handled in validateTypeAnswerOnServer
@@ -111,7 +138,17 @@ function highlightRedOnIncorrectSelection() {
         let toRedChild = document.getElementById(inCorrectDiv);
         if (toRedChild) {
             toRedChild.children[0].setAttribute('class', 'card text-white bg-danger');
+            // Add animation class
+            toRedChild.classList.add('answer-incorrect');
         }
+    }
+
+    // Play incorrect sound and announce
+    if (typeof AudioManager !== 'undefined') {
+        AudioManager.playIncorrect();
+    }
+    if (typeof A11y !== 'undefined') {
+        A11y.announce('Incorrect answer selected');
     }
 }
 
@@ -169,9 +206,19 @@ function realWaitAndShowAnswer(elem) {
     if (correct) {
         document.getElementById('selectedOptions').value = "correct";
         hideOptions();
+
+        // Play correct sound and announce
+        if (typeof AudioManager !== 'undefined') {
+            AudioManager.playCorrect();
+        }
+        if (typeof A11y !== 'undefined') {
+            A11y.announce('Correct answer! Answer submitted.');
+        }
     } else {
         document.getElementById('selectedOptions').value = "incorrect";
         hideOptions();
+
+        // Sounds and announcements will be played later in highlightRedOnIncorrectSelection
     }
     endTime = new Date().getTime();
     let timeTookForFirstClick = endTime - startTime;

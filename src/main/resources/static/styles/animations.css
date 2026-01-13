@@ -1,0 +1,458 @@
+/**
+ * Animations CSS - Darkhold Quiz Application
+ * Milestone 10: UI/UX Polish
+ *
+ * Victory/defeat animations, focus indicators, and visual feedback
+ */
+
+/* ============================================
+   FOCUS INDICATORS (Accessibility)
+   ============================================ */
+
+/* High contrast focus ring for keyboard navigation */
+*:focus-visible {
+    outline: var(--focus-ring-width) solid var(--focus-ring-color);
+    outline-offset: var(--focus-ring-offset);
+    border-radius: var(--radius-sm);
+}
+
+/* Remove default outline, rely on focus-visible */
+*:focus:not(:focus-visible) {
+    outline: none;
+}
+
+/* Button focus styles */
+button:focus-visible,
+.btn:focus-visible {
+    outline: var(--focus-ring-width) solid var(--focus-ring-color);
+    outline-offset: 2px;
+    box-shadow: 0 0 0 4px rgba(65, 131, 215, 0.25);
+}
+
+/* Link focus styles */
+a:focus-visible {
+    outline: var(--focus-ring-width) solid var(--focus-ring-color);
+    outline-offset: 2px;
+    text-decoration: underline;
+}
+
+/* Input focus styles */
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+    outline: var(--focus-ring-width) solid var(--color-input-focus-border);
+    outline-offset: 0;
+    border-color: var(--color-input-focus-border);
+    box-shadow: 0 0 0 3px rgba(65, 131, 215, 0.15);
+}
+
+/* Card focus styles (for clickable cards) */
+.card:focus-visible {
+    outline: var(--focus-ring-width) solid var(--focus-ring-color);
+    outline-offset: 4px;
+    transform: translateY(-2px);
+}
+
+/* ============================================
+   SCREEN READER ONLY (SR-Only)
+   ============================================ */
+
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
+}
+
+.sr-only-focusable:focus {
+    position: static;
+    width: auto;
+    height: auto;
+    padding: 0.5rem 1rem;
+    margin: 0;
+    overflow: visible;
+    clip: auto;
+    white-space: normal;
+}
+
+/* ============================================
+   ANSWER FEEDBACK ANIMATIONS
+   ============================================ */
+
+/* Correct answer - Green pulse and scale */
+@keyframes correctAnswer {
+    0% {
+        background-color: var(--color-correct-answer);
+        transform: scale(1);
+    }
+    50% {
+        background-color: var(--color-success-light);
+        transform: scale(1.05);
+    }
+    100% {
+        background-color: var(--color-correct-answer);
+        transform: scale(1);
+    }
+}
+
+.answer-correct {
+    animation: correctAnswer 0.6s ease-in-out;
+    background-color: var(--color-correct-answer) !important;
+    color: white !important;
+    border-color: var(--color-success) !important;
+}
+
+/* Incorrect answer - Red shake */
+@keyframes incorrectAnswer {
+    0%, 100% {
+        transform: translateX(0);
+    }
+    10%, 30%, 50%, 70%, 90% {
+        transform: translateX(-10px);
+    }
+    20%, 40%, 60%, 80% {
+        transform: translateX(10px);
+    }
+}
+
+.answer-incorrect {
+    animation: incorrectAnswer 0.5s ease-in-out;
+    background-color: var(--color-incorrect-answer) !important;
+    color: white !important;
+    border-color: var(--color-error) !important;
+}
+
+/* Answer selection hover effect */
+.answer-option:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-hover);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+}
+
+/* Answer selection active/press effect */
+.answer-option:active {
+    transform: scale(0.98);
+    transition: transform 0.1s;
+}
+
+/* ============================================
+   VICTORY ANIMATIONS
+   ============================================ */
+
+/* Confetti particles */
+@keyframes confetti-fall {
+    0% {
+        transform: translateY(-100vh) rotate(0deg);
+        opacity: 1;
+    }
+    100% {
+        transform: translateY(100vh) rotate(720deg);
+        opacity: 0;
+    }
+}
+
+.confetti {
+    position: fixed;
+    width: 10px;
+    height: 10px;
+    top: -10px;
+    z-index: 9999;
+    animation: confetti-fall 3s linear forwards;
+}
+
+/* Podium reveal - Slide up */
+@keyframes podiumReveal {
+    from {
+        transform: translateY(100px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+.podium-place {
+    animation: podiumReveal 0.8s ease-out forwards;
+}
+
+.podium-place:nth-child(1) {
+    animation-delay: 0.2s;
+}
+
+.podium-place:nth-child(2) {
+    animation-delay: 0.4s;
+}
+
+.podium-place:nth-child(3) {
+    animation-delay: 0.6s;
+}
+
+/* Trophy pulse */
+@keyframes trophyPulse {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.2);
+    }
+}
+
+.trophy-icon {
+    animation: trophyPulse 2s ease-in-out infinite;
+}
+
+/* Victory message fade-in */
+@keyframes victoryFadeIn {
+    from {
+        opacity: 0;
+        transform: scale(0.8);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.victory-message {
+    animation: victoryFadeIn 0.8s ease-out;
+}
+
+/* ============================================
+   DEFEAT ANIMATIONS
+   ============================================ */
+
+/* Defeat fade-in with slight drop */
+@keyframes defeatFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.defeat-message {
+    animation: defeatFadeIn 1s ease-out;
+}
+
+/* ============================================
+   STREAK BADGE ANIMATIONS
+   ============================================ */
+
+/* Streak badge pop-in */
+@keyframes streakPop {
+    0% {
+        transform: scale(0);
+        opacity: 0;
+    }
+    50% {
+        transform: scale(1.2);
+    }
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+.streak-badge {
+    animation: streakPop 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+/* Streak multiplier glow */
+@keyframes streakGlow {
+    0%, 100% {
+        box-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+    }
+    50% {
+        box-shadow: 0 0 20px rgba(255, 215, 0, 0.8);
+    }
+}
+
+.streak-active {
+    animation: streakGlow 1.5s ease-in-out infinite;
+}
+
+/* ============================================
+   SCORE CHANGE ANIMATIONS
+   ============================================ */
+
+/* Score count-up (apply to number spans) */
+@keyframes scoreCountUp {
+    from {
+        transform: translateY(20px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+.score-change {
+    animation: scoreCountUp 0.5s ease-out;
+}
+
+/* Rank change indicator - Slide in */
+@keyframes rankChange {
+    from {
+        transform: translateX(-30px);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+.rank-up,
+.rank-down {
+    animation: rankChange 0.4s ease-out;
+}
+
+/* ============================================
+   LOADING & TRANSITIONS
+   ============================================ */
+
+/* Spinner */
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.spinner {
+    display: inline-block;
+    width: 40px;
+    height: 40px;
+    border: 4px solid var(--color-border-light);
+    border-top-color: var(--color-primary);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+/* Fade in general purpose */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+.fade-in {
+    animation: fadeIn 0.5s ease-in;
+}
+
+/* Slide in from bottom */
+@keyframes slideInUp {
+    from {
+        transform: translateY(50px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+.slide-in-up {
+    animation: slideInUp 0.5s ease-out;
+}
+
+/* ============================================
+   TOUCH FEEDBACK (Mobile)
+   ============================================ */
+
+/* Touch ripple effect */
+@keyframes ripple {
+    to {
+        transform: scale(4);
+        opacity: 0;
+    }
+}
+
+.ripple-effect {
+    position: relative;
+    overflow: hidden;
+}
+
+.ripple-effect::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.5);
+    transform: translate(-50%, -50%);
+}
+
+.ripple-effect:active::after {
+    width: 100px;
+    height: 100px;
+    animation: ripple 0.6s ease-out;
+}
+
+/* ============================================
+   REDUCED MOTION
+   ============================================ */
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+
+    .confetti {
+        display: none;
+    }
+}
+
+/* ============================================
+   MOBILE OPTIMIZATIONS
+   ============================================ */
+
+/* Larger touch targets on mobile */
+@media (max-width: 768px) {
+    .answer-option,
+    .btn,
+    button {
+        min-height: 48px;
+        min-width: 48px;
+        padding: 12px 20px;
+    }
+
+    .icon-bar a {
+        min-height: 48px;
+        min-width: 48px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+    *:focus-visible {
+        outline-width: 4px;
+        outline-offset: 4px;
+    }
+
+    .card {
+        border-width: 2px;
+    }
+}

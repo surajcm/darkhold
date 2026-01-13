@@ -12,19 +12,20 @@
     background: none
 }
 .form-control {
-  background: #f7f7f7 none repeat scroll 0 0;
-  border: 3px solid #d4d4d4;
+  background: var(--color-input-bg) none repeat scroll 0 0;
+  border: 3px solid var(--color-input-border);
   border-radius: 4px;
   font-size: 30px;
   height: 80px;
   line-height: 50px;
   width: 180px;
+  color: var(--color-input-text);
 }
 input[type=number]:focus {
-  border: 3px solid #555;
+  border: 3px solid var(--color-input-focus-border);
 }
 #message_disp {
-    color: red;
+    color: var(--color-error);
 }
 .vertical-center {
   min-height: 100%;  /* Fallback for browsers do NOT support vh unit */

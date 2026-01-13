@@ -1,20 +1,24 @@
 <!DOCTYPE HTML>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
 <head>
-    <title>Getting Started: Darkhold classroom quiz experience</title>
+    <title>Create Challenge - Darkhold</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <meta name="_csrf" content="${_csrf.token}"/>
     <meta name="_csrf_header" content="${_csrf.headerName}"/>
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="shortcut icon" href="/images/favicon.png">
     <link href="/styles/create-challenge-styles.css" rel="stylesheet" />
+    <link href="/styles/theme-variables.css" rel="stylesheet" />
+    <script type="text/javascript" src="/scripts/theme-manager.js"></script>
+    <script type="text/javascript" src="/scripts/audio-manager.js"></script>
+    <script type="text/javascript" src="/scripts/accessibility.js"></script>
     <script type="text/javascript" src="/scripts/create-challenge-scripts.js"></script>
+    <script type="text/javascript" src="/scripts/common-scripts.js"></script>
 </head>
 <body>
     <div th:insert="~{navbar :: navbar}"></div>
-    <form  method="POST" id="fileUploadForm" action="${contextPath}/exams/upload_pdf" enctype="multipart/form-data">
+    <form method="POST" id="fileUploadForm" enctype="multipart/form-data">
         <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-        <input type="hidden" th:name="challenges" id="challenges"/>
         <main class="my-form">
             <div class="container">
                 <div class="row justify-content-center">
@@ -22,52 +26,122 @@
                         <div class="card">
                             <div class="card-header">Create Challenge</div>
                             <div class="card-body">
-                                <form>
-                                    <div class="input-group mb-3">
-                                        <label for="title" class="col-md-4 col-form-label text-md-right">Challenge title</label>
-                                        <div class="col-md-6">
-                                            <input type="text" id="title" class="form-control" name="title">
-                                        </div>
-                                    </div>
+                                <!-- Title Field -->
+                                <div class="mb-3">
+                                    <label for="title" class="form-label">Challenge Title *</label>
+                                    <input type="text" id="title" class="form-control" name="title"
+                                           maxlength="100" required placeholder="Enter challenge title">
+                                    <small class="form-text text-muted">Required, maximum 100 characters</small>
+                                </div>
 
-                                    <div class="input-group mb-3">
-                                        <label for="description" class="col-md-4 col-form-label text-md-right">Description</label>
-                                        <div class="col-md-6">
-                                            <textarea id="description" class="form-control" name="description" rows="4" cols="50" ></textarea>
-                                        </div>
-                                    </div>
-                                    <div class="input-group mb-3">
-                                        <div class="alert alert-info alert-dismissible">
-                                            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-                                            Please use the following format for Excel sheet creation
-                                            <table>
+                                <!-- Description Field -->
+                                <div class="mb-3">
+                                    <label for="description" class="form-label">Description</label>
+                                    <textarea id="description" class="form-control" name="description"
+                                              rows="3" maxlength="250" placeholder="Enter challenge description (optional)"></textarea>
+                                    <small class="form-text text-muted">Optional, maximum 250 characters</small>
+                                </div>
+
+                                <!-- Excel Upload Section (Optional) -->
+                                <div class="mb-3">
+                                    <label for="upload" class="form-label">Upload Questions (Optional)</label>
+                                    <input class="form-control" type="file" name="upload" id="upload" accept=".xlsx" />
+                                    <small class="form-text text-muted">
+                                        Upload an Excel file to bulk-add questions, or leave empty to add questions manually later.
+                                    </small>
+                                </div>
+
+                                <!-- Excel Format Instructions (Collapsible) -->
+                                <div class="mb-3">
+                                    <button class="btn btn-sm btn-outline-info" type="button" data-bs-toggle="collapse"
+                                            data-bs-target="#excelFormatHelp" aria-expanded="false" aria-controls="excelFormatHelp">
+                                        <i class="fas fa-info-circle"></i> Show Excel Format Guide
+                                    </button>
+                                    <div class="collapse mt-2" id="excelFormatHelp">
+                                        <div class="alert alert-info">
+                                            <strong>Excel Format Requirements:</strong>
+                                            <table class="table table-sm table-bordered mt-2">
                                                 <thead>
-                                                <tr>
-                                                    <th>Question - max 120 characters</th>
-                                                    <th>Answer 1 - max 75 characters</th>
-                                                    <th>Answer 2 - max 75 characters</th>
-                                                    <th>Answer 3 - max 75 characters</th>
-                                                    <th>Answer 4 - max 75 characters</th>
-                                                    <th>Correct answer(s) - choose at least one</th>
-                                                </tr>
+                                                    <tr>
+                                                        <th>Column</th>
+                                                        <th>Field</th>
+                                                        <th>Description</th>
+                                                    </tr>
                                                 </thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <td>0</td>
+                                                        <td>Question</td>
+                                                        <td>Max 120 characters</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>1-4</td>
+                                                        <td>Answer 1-4</td>
+                                                        <td>Max 75 characters each</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>5</td>
+                                                        <td>Correct Options</td>
+                                                        <td>Comma-separated: A, B, C, D</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>6</td>
+                                                        <td>Question Type</td>
+                                                        <td>MULTIPLE_CHOICE, TRUE_FALSE, TYPE_ANSWER, POLL (optional)</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>7</td>
+                                                        <td>Time Limit</td>
+                                                        <td>Seconds (optional)</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>8</td>
+                                                        <td>Points</td>
+                                                        <td>Integer, defaults to 1000 (optional)</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>9</td>
+                                                        <td>Acceptable Answers</td>
+                                                        <td>For TYPE_ANSWER questions (optional)</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>10</td>
+                                                        <td>Image URL</td>
+                                                        <td>Question image (optional)</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>11</td>
+                                                        <td>Video URL</td>
+                                                        <td>Question video (optional)</td>
+                                                    </tr>
+                                                </tbody>
                                             </table>
                                         </div>
                                     </div>
-                                    <div class="input-group mb-3">
-                                        <label for="upload" class="col-md-4 col-form-label text-md-right">Upload questions as file</label>
-                                        <div class="col-md-6">
-                                            <input class="form-control" type="file" name="upload" id="upload" accept=".xlsx" />
+                                </div>
+
+                                <!-- Progress Bar -->
+                                <div class="mb-3">
+                                    <div id="progressdiv" style="display: none;">
+                                        <div class="progress">
+                                            <div id="progress" class="progress-bar progress-bar-striped progress-bar-animated"
+                                                 role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">0%</div>
                                         </div>
                                     </div>
-                                    <div class="input-group mb-3">
-                                        <p id="progressdiv"><progress max="100" value="0" id="progress" style="display: none;"></progress></p>
-                                    </div>
+                                </div>
 
-                                    <div class="col-md-6 offset-md-4">
-                                        <input class="btn btn-primary" value="Submit" type="button" id="btnSubmit" onclick="uploadPDF()"/>
-                                    </div>
-                                </form>
+                                <!-- Result Message -->
+                                <div id="resultMessage" class="mb-3"></div>
+
+                                <!-- Action Buttons -->
+                                <div class="d-flex gap-2">
+                                    <button class="btn btn-primary" type="button" id="btnSubmit" onclick="uploadPDF()">
+                                        Create Challenge
+                                    </button>
+                                    <button type="button" class="btn btn-secondary" onclick="toOptions()">
+                                        Cancel
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     </div>
