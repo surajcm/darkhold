@@ -11,8 +11,8 @@
     font-family:Sans-serif;
 }
 .button-style {
-    color:white;
-    background-color:#34ADF6;
+    color: var(--color-text-inverse);
+    background-color: var(--color-info);
     padding: 10px 20px;
     text-align: center;
     text-decoration: none;

@@ -3,18 +3,18 @@ body {
     font-size: .9rem;
 }
 .bg-gray {
-    background-color: #f8f9fa;
+    background-color: var(--color-bg-secondary);
 }
 .text-green {
-    color: #28a745;
+    color: var(--color-success);
 }
 section{
     padding: 60px 0;
 }
 
 .checkout {
-    background-color: #fff;
-    border:1px solid #eaefe9;
+    background-color: var(--color-card-bg);
+    border: 1px solid var(--color-border-light);
     font-size: 14px;
 }
 
@@ -23,8 +23,8 @@ section{
 }
 
 .checkout-step {
-    border-top: 1px solid #f2f2f2;
-    color: #666;
+    border-top: 1px solid var(--color-border-light);
+    color: var(--color-text-secondary);
     font-size: 14px;
     padding: 30px;
     position: relative;
@@ -32,7 +32,7 @@ section{
 
 .checkout-step-number {
     border-radius: 50%;
-    border: 1px solid #666;
+    border: 1px solid var(--color-text-secondary);
     display: inline-block;
     font-size: 12px;
     height: 32px;
@@ -54,11 +54,11 @@ section{
 }
 
 p.title {
-  color: #323232;
+  color: var(--color-text-primary);
   font-weight: 500;
 }
 p.title_correct {
-  color: #228524;
+  color: var(--color-success);
   font-weight: 500;
 }
 

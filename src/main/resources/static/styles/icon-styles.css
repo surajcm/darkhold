@@ -1,4 +1,4 @@
-.icon-white {color: white;}
-.icon-silver {color: silver;}
-.icon-green {color: green;}
-.icon-dark {color: grey;}
+.icon-white {color: var(--color-text-inverse);}
+.icon-silver {color: var(--color-text-muted);}
+.icon-green {color: var(--color-success);}
+.icon-dark {color: var(--color-text-tertiary);}

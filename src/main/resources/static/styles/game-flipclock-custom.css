@@ -21,7 +21,7 @@ ul.flip {
     border-radius: 0px 6px 6px 0px !important;
 }
 .flip-clock-wrapper ul.flip:nth-child(even) li a div div.inn{
-    background-color: #ff7c0c !important;
+    background-color: var(--color-timer-primary) !important;
     border-radius: 0px 6px 6px 0px !important;
 }
 
@@ -30,6 +30,6 @@ ul.flip {
     border-radius: 6px 0px 0px 6px !important;
 }
 .flip-clock-wrapper ul.flip:nth-child(odd) li a div div.inn{
-    background-color: #f39a3f !important;
+    background-color: var(--color-timer-secondary) !important;
     border-radius: 6px 0px 0px 6px !important;
 }
