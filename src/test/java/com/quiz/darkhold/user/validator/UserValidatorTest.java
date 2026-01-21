@@ -103,7 +103,7 @@ class UserValidatorTest {
             errors = new BeanPropertyBindingResult(formDto, "userFormDto");
             // Set default valid email and password to prevent NPE in validator
             user.setEmail("default@email.com");
-            user.setPassword("DefaultPass123");
+            user.setPassword("DefaultPass123!");
         }
 
         @Test
@@ -296,7 +296,7 @@ class UserValidatorTest {
             errors = new BeanPropertyBindingResult(formDto, "userFormDto");
             // Set default valid email and password to prevent NPE in validator
             user.setEmail("default@email.com");
-            user.setPassword("DefaultPass123");
+            user.setPassword("DefaultPass123!");
         }
 
         @Test
@@ -405,9 +405,9 @@ class UserValidatorTest {
         @DisplayName("Should accept valid password with valid length")
         void shouldAcceptValidPassword() {
             user.setEmail("validuser@email.com");
-            user.setPassword("ValidPassword123");
+            user.setPassword("ValidPassword123!");
 
-            UserFormDto formDto = new UserFormDto("validuser@email.com", "ValidPassword123");
+            UserFormDto formDto = new UserFormDto("validuser@email.com", "ValidPassword123!");
             errors = new BeanPropertyBindingResult(formDto, "userFormDto");
 
             when(userService.findByUsername("validuser@email.com")).thenReturn(null);
@@ -422,9 +422,9 @@ class UserValidatorTest {
         @DisplayName("Should accept password at minimum valid length (8 characters)")
         void shouldAcceptPasswordAtMinLength() {
             user.setEmail("validuser@email.com");
-            user.setPassword("Pass1234");  // exactly 8 characters
+            user.setPassword("Pass123!");  // exactly 8 characters with special char
 
-            UserFormDto formDto = new UserFormDto("validuser@email.com", "Pass1234");
+            UserFormDto formDto = new UserFormDto("validuser@email.com", "Pass123!");
             errors = new BeanPropertyBindingResult(formDto, "userFormDto");
 
             when(userService.findByUsername("validuser@email.com")).thenReturn(null);
@@ -438,7 +438,7 @@ class UserValidatorTest {
         @Test
         @DisplayName("Should accept password at maximum valid length (32 characters)")
         void shouldAcceptPasswordAtMaxLength() {
-            String maxLengthPassword = "Pass".repeat(8);  // exactly 32 characters
+            String maxLengthPassword = "Pass1!".repeat(5) + "Pa";  // exactly 32 characters with special char
             user.setEmail("validuser@email.com");
             user.setPassword(maxLengthPassword);
 
@@ -469,16 +469,16 @@ class UserValidatorTest {
             errors = new BeanPropertyBindingResult(formDto, "userFormDto");
             // Set default valid email and password to prevent NPE in validator
             user.setEmail("default@email.com");
-            user.setPassword("DefaultPass123");
+            user.setPassword("DefaultPass123!");
         }
 
         @Test
         @DisplayName("Should validate both username and password together")
         void shouldValidateBothFieldsTogether() {
             user.setEmail("validuser@email.com");
-            user.setPassword("ValidPassword123");
+            user.setPassword("ValidPassword123!");
 
-            UserFormDto formDto = new UserFormDto("validuser@email.com", "ValidPassword123");
+            UserFormDto formDto = new UserFormDto("validuser@email.com", "ValidPassword123!");
             errors = new BeanPropertyBindingResult(formDto, "userFormDto");
 
             when(userService.findByUsername("validuser@email.com")).thenReturn(null);

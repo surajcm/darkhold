@@ -2,8 +2,10 @@ package com.quiz.darkhold.home.controller;
 
 import com.quiz.darkhold.home.model.GameInfo;
 import com.quiz.darkhold.home.service.HomeService;
+import com.quiz.darkhold.init.RateLimitingService;
 import com.quiz.darkhold.user.service.SecurityService;
 import com.quiz.darkhold.util.CommonUtils;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.apache.logging.log4j.LogManager;
@@ -26,9 +28,13 @@ public class HomeController {
 
     private final SecurityService securityService;
 
-    public HomeController(final HomeService homeService, final SecurityService securityService) {
+    private final RateLimitingService rateLimitingService;
+
+    public HomeController(final HomeService homeService, final SecurityService securityService,
+                          final RateLimitingService rateLimitingService) {
         this.homeService = homeService;
         this.securityService = securityService;
+        this.rateLimitingService = rateLimitingService;
     }
 
     /**
@@ -59,16 +65,62 @@ public class HomeController {
 
     /**
      * Validate the user entered pin and direct the user to name entering screen.
+     * Protected by rate limiting to prevent brute-force PIN guessing.
      *
      * @param gamePin pin
+     * @param request HTTP request to get client IP
      * @return ajax call to same page
      */
     @PostMapping("/enterGame")
     public @ResponseBody
-    Boolean enterGame(@ModelAttribute("gamePin") final String gamePin) {
+    Boolean enterGame(@ModelAttribute("gamePin") final String gamePin,
+                      final HttpServletRequest request) {
         var sanitizedPin = CommonUtils.sanitizedString(gamePin);
-        logger.info("Game pin is : {}", sanitizedPin);
-        return homeService.validateGamePin(gamePin);
+        var clientIp = getClientIpAddress(request);
+
+        // Check rate limiting
+        if (!rateLimitingService.isAllowed(clientIp)) {
+            logger.warn("Rate limit exceeded for IP: {}", clientIp);
+            return false;
+        }
+
+        logger.info("Game pin attempt: {} from IP: {}", sanitizedPin, clientIp);
+        var isValid = homeService.validateGamePin(gamePin);
+
+        // Record attempt result
+        if (isValid) {
+            rateLimitingService.recordSuccessfulAttempt(clientIp);
+        } else {
+            rateLimitingService.recordFailedAttempt(clientIp);
+        }
+
+        return isValid;
+    }
+
+    /**
+     * Get the client's IP address from the request.
+     * Handles X-Forwarded-For header for proxied requests.
+     *
+     * @param request HTTP request
+     * @return client IP address
+     */
+    private String getClientIpAddress(final HttpServletRequest request) {
+        // Check for X-Forwarded-For header (proxy/load balancer)
+        var xForwardedFor = request.getHeader("X-Forwarded-For");
+        if (xForwardedFor != null && !xForwardedFor.isEmpty()) {
+            // Take first IP if multiple are present
+            var commaIndex = xForwardedFor.indexOf(',');
+            return commaIndex > 0 ? xForwardedFor.substring(0, commaIndex).trim() : xForwardedFor.trim();
+        }
+
+        // Check for X-Real-IP header (nginx)
+        var xRealIp = request.getHeader("X-Real-IP");
+        if (xRealIp != null && !xRealIp.isEmpty()) {
+            return xRealIp;
+        }
+
+        // Fall back to remote address
+        return request.getRemoteAddr();
     }
 
     /**
