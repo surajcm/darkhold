@@ -62,6 +62,15 @@ public class GameResult {
     @Column
     private Integer winnerScore;
 
+    @Column
+    private Boolean teamMode = false;
+
+    @Column(length = 100)
+    private String winningTeamName;
+
+    @Column
+    private Integer winningTeamScore;
+
     @OneToMany(mappedBy = "gameResult", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ParticipantResult> participantResults = new ArrayList<>();
 
@@ -175,6 +184,30 @@ public class GameResult {
 
     public void setWinnerScore(final Integer winnerScore) {
         this.winnerScore = winnerScore;
+    }
+
+    public Boolean getTeamMode() {
+        return teamMode != null ? teamMode : false;
+    }
+
+    public void setTeamMode(final Boolean teamMode) {
+        this.teamMode = teamMode;
+    }
+
+    public String getWinningTeamName() {
+        return winningTeamName;
+    }
+
+    public void setWinningTeamName(final String winningTeamName) {
+        this.winningTeamName = winningTeamName;
+    }
+
+    public Integer getWinningTeamScore() {
+        return winningTeamScore;
+    }
+
+    public void setWinningTeamScore(final Integer winningTeamScore) {
+        this.winningTeamScore = winningTeamScore;
     }
 
     public List<ParticipantResult> getParticipantResults() {

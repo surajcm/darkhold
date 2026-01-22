@@ -13,6 +13,9 @@ import com.quiz.darkhold.analytics.service.ResultService;
 import com.quiz.darkhold.game.service.AnswerValidationService;
 import com.quiz.darkhold.game.service.GameService;
 import com.quiz.darkhold.init.GameConfig;
+import com.quiz.darkhold.team.dto.TeamScoreResult;
+import com.quiz.darkhold.team.model.TeamInfo;
+import com.quiz.darkhold.team.service.TeamService;
 import com.quiz.darkhold.util.CommonUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
@@ -38,17 +41,20 @@ public class GameController {
     private final AnswerValidationService answerValidationService;
     private final SimpMessagingTemplate messagingTemplate;
     private final ResultService resultService;
+    private final TeamService teamService;
 
     public GameController(final GameService gameService,
                           final GameConfig gameConfig,
                           final AnswerValidationService answerValidationService,
                           final SimpMessagingTemplate messagingTemplate,
-                          final ResultService resultService) {
+                          final ResultService resultService,
+                          final TeamService teamService) {
         this.gameService = gameService;
         this.gameConfig = gameConfig;
         this.answerValidationService = answerValidationService;
         this.messagingTemplate = messagingTemplate;
         this.resultService = resultService;
+        this.teamService = teamService;
     }
 
     @PostMapping("/interstitial")
@@ -104,6 +110,17 @@ public class GameController {
         var scores = gameService.getCurrentScore();
         score.setScore(scores);
         model.addAttribute("score", score);
+
+        // Check if team mode and add team scores
+        if (quizPin != null && gameService.isTeamMode(quizPin)) {
+            var teamScores = gameService.getTeamScores(quizPin);
+            model.addAttribute("teamScores", teamScores);
+            model.addAttribute("isTeamMode", true);
+            var teams = teamService.getTeams(quizPin);
+            model.addAttribute("teams", teams);
+        } else {
+            model.addAttribute("isTeamMode", false);
+        }
 
         // Save game results for analytics
         saveGameResultIfAvailable(quizPin);
@@ -452,5 +469,57 @@ public class GameController {
     public void getParticipantCount(final String pin) {
         Integer count = gameService.getParticipantCount();
         messagingTemplate.convertAndSend("/topic/" + pin + "/participant_count", count);
+    }
+
+    // ==================== Team Mode WebSocket Endpoints ====================
+
+    /**
+     * Assign a player to a team.
+     * Sends to PIN-scoped topic for concurrent game support.
+     *
+     * @param message format: "pin:username:teamName"
+     */
+    @MessageMapping("/team/assign")
+    public void assignToTeam(final String message) {
+        String[] parts = message.split(":", 3);
+        if (parts.length != 3) {
+            logger.warn("Invalid team assign message format: {}", message);
+            return;
+        }
+        String pin = parts[0];
+        String username = parts[1];
+        String teamName = parts[2];
+
+        logger.info("Assigning player {} to team {} in game {}", username, teamName, pin);
+        teamService.assignPlayerToTeam(pin, username, teamName);
+
+        java.util.List<TeamInfo> teams = teamService.getTeams(pin);
+        messagingTemplate.convertAndSend("/topic/" + pin + "/team_update", teams);
+    }
+
+    /**
+     * Get current team configuration.
+     * Sends to PIN-scoped topic for concurrent game support.
+     *
+     * @param pin game pin
+     */
+    @MessageMapping("/team/list")
+    public void getTeams(final String pin) {
+        logger.info("Fetching teams for game: {}", pin);
+        java.util.List<TeamInfo> teams = teamService.getTeams(pin);
+        messagingTemplate.convertAndSend("/topic/" + pin + "/team_list", teams);
+    }
+
+    /**
+     * Fetch team scores.
+     * Sends to PIN-scoped topic for concurrent game support.
+     *
+     * @param pin game pin
+     */
+    @MessageMapping("/team/scores")
+    public void getTeamScores(final String pin) {
+        logger.info("Fetching team scores for game: {}", pin);
+        java.util.Map<String, Integer> teamScores = teamService.calculateTeamScores(pin);
+        messagingTemplate.convertAndSend("/topic/" + pin + "/team_scores", teamScores);
     }
 }

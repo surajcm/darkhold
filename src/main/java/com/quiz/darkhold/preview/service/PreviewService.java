@@ -78,7 +78,22 @@ public class PreviewService {
      */
     public PublishInfo generateQuizPin(final String challengeId, final String currentUser) {
         String uniquePin = generateUniquePin();
-        Game game = createAndSaveGame(uniquePin, challengeId, currentUser);
+        Game game = createAndSaveGame(uniquePin, challengeId, currentUser, false);
+        return createPublishInfo(game, currentUser);
+    }
+
+    /**
+     * Generate a unique PIN for a new game with team mode option.
+     *
+     * @param challengeId of game
+     * @param currentUser who starts it
+     * @param teamMode whether to enable team mode
+     * @return game info
+     */
+    public PublishInfo generateQuizPin(final String challengeId, final String currentUser,
+                                       final boolean teamMode) {
+        String uniquePin = generateUniquePin();
+        Game game = createAndSaveGame(uniquePin, challengeId, currentUser, teamMode);
         return createPublishInfo(game, currentUser);
     }
 
@@ -93,12 +108,14 @@ public class PreviewService {
         throw new IllegalStateException("Failed to generate unique PIN after " + maxAttempts + " attempts");
     }
 
-    private Game createAndSaveGame(final String pin, final String challengeId, final String moderator) {
+    private Game createAndSaveGame(final String pin, final String challengeId,
+                                   final String moderator, final boolean teamMode) {
         var game = new Game();
         game.setPin(pin);
         game.setGameStatus(GameStatus.WAITING.name());
         game.setChallengeId(challengeId);
         game.setModerator(moderator);
+        game.setTeamMode(teamMode);
         return gameRepository.save(game);
     }
 

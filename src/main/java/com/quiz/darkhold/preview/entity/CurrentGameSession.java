@@ -53,6 +53,12 @@ public class CurrentGameSession {
     @Column(columnDefinition = "TEXT")
     private String previousScoresJson;
 
+    @Column(columnDefinition = "TEXT")
+    private String teamsJson;
+
+    @Column(columnDefinition = "TEXT")
+    private String playerTeamsJson;
+
     @Enumerated(EnumType.STRING)
     @Column(length = 20)
     private GameStatus gameStatus = GameStatus.WAITING;
@@ -297,6 +303,72 @@ public class CurrentGameSession {
 
     public void setPausedAt(final Long pausedAt) {
         this.pausedAt = pausedAt;
+    }
+
+    // Team JSON helpers
+    public String getTeamsJson() {
+        return teamsJson;
+    }
+
+    public void setTeamsJson(final String teamsJson) {
+        this.teamsJson = teamsJson;
+    }
+
+    public String getPlayerTeamsJson() {
+        return playerTeamsJson;
+    }
+
+    public void setPlayerTeamsJson(final String playerTeamsJson) {
+        this.playerTeamsJson = playerTeamsJson;
+    }
+
+    public Map<String, Object> getTeamsMap() {
+        if (teamsJson == null || teamsJson.isEmpty()) {
+            return new HashMap<>();
+        }
+        try {
+            return objectMapper.readValue(teamsJson, new TypeReference<Map<String, Object>>() { });
+        } catch (JacksonException ex) {
+            logger.error("Error deserializing teams map", ex);
+            return new HashMap<>();
+        }
+    }
+
+    public void setTeamsMap(final Map<String, Object> teams) {
+        if (teams == null) {
+            this.teamsJson = null;
+        } else {
+            try {
+                this.teamsJson = objectMapper.writeValueAsString(teams);
+            } catch (JacksonException ex) {
+                logger.error("Error serializing teams map", ex);
+            }
+        }
+    }
+
+    public Map<String, String> getPlayerTeamsMap() {
+        if (playerTeamsJson == null || playerTeamsJson.isEmpty()) {
+            return new HashMap<>();
+        }
+        try {
+            return objectMapper.readValue(playerTeamsJson,
+                    new TypeReference<Map<String, String>>() { });
+        } catch (JacksonException ex) {
+            logger.error("Error deserializing player teams map", ex);
+            return new HashMap<>();
+        }
+    }
+
+    public void setPlayerTeamsMap(final Map<String, String> playerTeams) {
+        if (playerTeams == null) {
+            this.playerTeamsJson = null;
+        } else {
+            try {
+                this.playerTeamsJson = objectMapper.writeValueAsString(playerTeams);
+            } catch (JacksonException ex) {
+                logger.error("Error serializing player teams map", ex);
+            }
+        }
     }
 }
 

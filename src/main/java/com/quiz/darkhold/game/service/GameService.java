@@ -7,6 +7,7 @@ import com.quiz.darkhold.game.model.ScoreResult;
 import com.quiz.darkhold.preview.model.PublishInfo;
 import com.quiz.darkhold.preview.repository.CurrentGame;
 import com.quiz.darkhold.preview.service.PreviewService;
+import com.quiz.darkhold.team.service.TeamService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import org.apache.logging.log4j.LogManager;
@@ -26,9 +27,13 @@ public class GameService {
 
     private final PreviewService previewService;
 
-    public GameService(final CurrentGame currentGame, final PreviewService previewService) {
+    private final TeamService teamService;
+
+    public GameService(final CurrentGame currentGame, final PreviewService previewService,
+                       final TeamService teamService) {
         this.currentGame = currentGame;
         this.previewService = previewService;
+        this.teamService = teamService;
     }
 
     public PublishInfo getActiveChallenge() {
@@ -291,5 +296,47 @@ public class GameService {
      */
     public boolean isPracticeMode() {
         return getGameMode() == GameMode.PRACTICE;
+    }
+
+    // ==================== Team Mode Methods ====================
+
+    /**
+     * Check if current game is in team mode.
+     *
+     * @return true if team mode, false otherwise
+     */
+    public boolean isTeamMode() {
+        var pin = currentPin();
+        return teamService.isTeamMode(pin);
+    }
+
+    /**
+     * Check if a specific game is in team mode.
+     *
+     * @param pin game PIN
+     * @return true if team mode, false otherwise
+     */
+    public boolean isTeamMode(final String pin) {
+        return teamService.isTeamMode(pin);
+    }
+
+    /**
+     * Get team scores for current game.
+     *
+     * @return map of team name to total score
+     */
+    public Map<String, Integer> getTeamScores() {
+        var pin = currentPin();
+        return teamService.calculateTeamScores(pin);
+    }
+
+    /**
+     * Get team scores for a specific game.
+     *
+     * @param pin game PIN
+     * @return map of team name to total score
+     */
+    public Map<String, Integer> getTeamScores(final String pin) {
+        return teamService.calculateTeamScores(pin);
     }
 }

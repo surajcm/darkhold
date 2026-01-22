@@ -37,6 +37,9 @@ public class Game {
     @Column
     private String moderator;
 
+    @Column(name = "team_mode")
+    private Boolean teamMode = false;
+
     @CreatedDate
     @Column(name = "createdOn")
     private LocalDateTime createdOn;
@@ -107,6 +110,14 @@ public class Game {
 
     public void setModerator(final String moderator) {
         this.moderator = moderator;
+    }
+
+    public Boolean getTeamMode() {
+        return teamMode != null ? teamMode : false;
+    }
+
+    public void setTeamMode(final Boolean teamMode) {
+        this.teamMode = teamMode;
     }
 
 }

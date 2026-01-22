@@ -45,6 +45,12 @@ public class ParticipantResult {
     @Column
     private Integer averageAnswerTimeSeconds;
 
+    @Column(length = 100)
+    private String teamName;
+
+    @Column(length = 20)
+    private String teamColor;
+
     // Constructors
     public ParticipantResult() {
     }
@@ -120,6 +126,22 @@ public class ParticipantResult {
 
     public void setAverageAnswerTimeSeconds(final Integer averageAnswerTimeSeconds) {
         this.averageAnswerTimeSeconds = averageAnswerTimeSeconds;
+    }
+
+    public String getTeamName() {
+        return teamName;
+    }
+
+    public void setTeamName(final String teamName) {
+        this.teamName = teamName;
+    }
+
+    public String getTeamColor() {
+        return teamColor;
+    }
+
+    public void setTeamColor(final String teamColor) {
+        this.teamColor = teamColor;
     }
 
     /**
