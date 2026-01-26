@@ -46,4 +46,15 @@ public class HomeService {
     public String getModerator(final String pin) {
         return currentGame.findModerator(pin);
     }
+
+    /**
+     * Check if a game is in team mode.
+     *
+     * @param pin game pin
+     * @return true if team mode is enabled
+     */
+    public boolean isTeamMode(final String pin) {
+        var game = gameRepository.findByPin(pin);
+        return game != null && Boolean.TRUE.equals(game.getTeamMode());
+    }
 }

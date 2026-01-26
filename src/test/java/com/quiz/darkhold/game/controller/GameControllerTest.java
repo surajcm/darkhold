@@ -65,6 +65,9 @@ class GameControllerTest {
     private ResultService resultService;
 
     @Mock
+    private com.quiz.darkhold.team.service.TeamService teamService;
+
+    @Mock
     private Model model;
 
     @Mock
@@ -76,7 +79,7 @@ class GameControllerTest {
     void setUp() {
         when(gameConfig.getTimerSeconds()).thenReturn(20);
         gameController = new GameController(gameService, gameConfig, answerValidationService,
-                messagingTemplate, resultService);
+                messagingTemplate, resultService, teamService);
     }
 
     @Nested

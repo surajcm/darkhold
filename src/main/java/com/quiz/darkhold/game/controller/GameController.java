@@ -13,7 +13,6 @@ import com.quiz.darkhold.analytics.service.ResultService;
 import com.quiz.darkhold.game.service.AnswerValidationService;
 import com.quiz.darkhold.game.service.GameService;
 import com.quiz.darkhold.init.GameConfig;
-import com.quiz.darkhold.team.dto.TeamScoreResult;
 import com.quiz.darkhold.team.model.TeamInfo;
 import com.quiz.darkhold.team.service.TeamService;
 import com.quiz.darkhold.util.CommonUtils;

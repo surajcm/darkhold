@@ -1,54 +1,303 @@
+/**
+ * Darkhold Login Page - Modern Design
+ * Milestone 10.5: Authentication Pages Redesign
+ */
+
 @import url('darkhold-styles.css');
 
-.login-container{
-    margin-top: 5%;
-    margin-bottom: 5%;
+/* ============================================
+   PAGE LAYOUT
+   ============================================ */
+.login-page {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, var(--color-primary) 0%, #1a1a2e 50%, var(--color-bg-primary) 100%);
+    padding: var(--spacing-lg);
+    position: relative;
+    overflow: hidden;
 }
 
-.login-form-1{
-    padding: 5%;
-    box-shadow: 0 5px 8px 0 rgba(0, 0, 0, 0.2), 0 9px 26px 0 rgba(0, 0, 0, 0.19);
+.login-page::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(255,255,255,0.05) 0%, transparent 60%);
+    animation: pulse 15s ease-in-out infinite;
 }
-.login-form-1 h3{
+
+@keyframes pulse {
+    0%, 100% { transform: scale(1); opacity: 0.5; }
+    50% { transform: scale(1.1); opacity: 0.3; }
+}
+
+/* ============================================
+   LOGIN CARD
+   ============================================ */
+.login-card {
+    background: var(--color-card-bg);
+    border-radius: var(--radius-xl);
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    width: 100%;
+    max-width: 420px;
+    padding: var(--spacing-2xl);
+    position: relative;
+    z-index: 1;
+    animation: slideUp 0.5s ease-out;
+}
+
+@keyframes slideUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* ============================================
+   BRAND HEADER
+   ============================================ */
+.login-brand {
     text-align: center;
+    margin-bottom: var(--spacing-xl);
+}
+
+.login-logo {
+    width: 72px;
+    height: 72px;
+    margin-bottom: var(--spacing-md);
+    filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.1));
+}
+
+.login-title {
+    font-size: 1.75rem;
+    font-weight: 700;
     color: var(--color-text-primary);
+    margin: 0 0 var(--spacing-xs) 0;
 }
-.login-form-2{
-    padding: 5%;
-    background: var(--color-primary);
-    box-shadow: 0 5px 8px 0 rgba(0, 0, 0, 0.2), 0 9px 26px 0 rgba(0, 0, 0, 0.19);
+
+.login-subtitle {
+    color: var(--color-text-secondary);
+    font-size: 0.95rem;
+    margin: 0;
 }
-.login-form-2 h3{
-    text-align: center;
-    color: var(--color-text-inverse);
+
+/* ============================================
+   FORM STYLING
+   ============================================ */
+.login-form {
+    margin-top: var(--spacing-lg);
 }
-.login-container form{
-    padding: 10%;
+
+/* Floating Label Input Group */
+.form-floating {
+    position: relative;
+    margin-bottom: var(--spacing-lg);
 }
-.btnSubmit{
-    width: 50%;
-    border-radius: 1rem;
-    padding: 1.5%;
-    border: none;
+
+.form-floating input {
+    width: 100%;
+    padding: 1.25rem 1rem 0.5rem 1rem;
+    font-size: 1rem;
+    border: 2px solid var(--color-border-light);
+    border-radius: var(--radius-md);
+    background: var(--color-input-bg);
+    color: var(--color-input-text);
+    transition: all var(--transition-normal);
+    outline: none;
+}
+
+.form-floating input:focus {
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px rgba(0, 98, 204, 0.15);
+}
+
+.form-floating input::placeholder {
+    color: transparent;
+}
+
+.form-floating label {
+    position: absolute;
+    left: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--color-text-tertiary);
+    font-size: 1rem;
+    pointer-events: none;
+    transition: all var(--transition-fast);
+    background: transparent;
+    padding: 0 0.25rem;
+}
+
+.form-floating input:focus ~ label,
+.form-floating input:not(:placeholder-shown) ~ label {
+    top: 0.5rem;
+    transform: translateY(0);
+    font-size: 0.75rem;
+    color: var(--color-primary);
+    background: var(--color-card-bg);
+}
+
+/* Input Icons */
+.input-icon {
+    position: absolute;
+    right: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--color-text-tertiary);
+    pointer-events: none;
+}
+
+/* ============================================
+   REMEMBER ME & FORGOT PASSWORD
+   ============================================ */
+.login-options {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--spacing-lg);
+    font-size: 0.9rem;
+}
+
+.remember-me {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    cursor: pointer;
+    color: var(--color-text-secondary);
+}
+
+.remember-me input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    accent-color: var(--color-primary);
     cursor: pointer;
 }
-.login-form-1 .btnSubmit{
+
+.forgot-link {
+    color: var(--color-primary);
+    text-decoration: none;
+    font-weight: 500;
+    transition: color var(--transition-fast);
+}
+
+.forgot-link:hover {
+    color: var(--color-primary-hover);
+    text-decoration: underline;
+}
+
+/* ============================================
+   SUBMIT BUTTON
+   ============================================ */
+.login-btn {
+    width: 100%;
+    padding: 1rem;
+    font-size: 1rem;
     font-weight: 600;
     color: var(--color-btn-primary-text);
-    background-color: var(--color-btn-primary-bg);
+    background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-hover) 100%);
+    border: none;
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    transition: all var(--transition-normal);
+    position: relative;
+    overflow: hidden;
 }
-.login-form-2 .btnSubmit{
-    font-weight: 600;
+
+.login-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px rgba(0, 98, 204, 0.3);
+}
+
+.login-btn:active {
+    transform: translateY(0);
+}
+
+.login-btn:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(0, 98, 204, 0.4);
+}
+
+/* ============================================
+   ERROR MESSAGE
+   ============================================ */
+.login-error {
+    background: var(--color-error);
+    color: white;
+    padding: var(--spacing-sm) var(--spacing-md);
+    border-radius: var(--radius-md);
+    margin-bottom: var(--spacing-md);
+    font-size: 0.9rem;
+    text-align: center;
+    animation: shake 0.5s ease-in-out;
+}
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-5px); }
+    75% { transform: translateX(5px); }
+}
+
+/* ============================================
+   FOOTER / SIGN UP LINK
+   ============================================ */
+.login-footer {
+    text-align: center;
+    margin-top: var(--spacing-xl);
+    padding-top: var(--spacing-lg);
+    border-top: 1px solid var(--color-border-light);
+    color: var(--color-text-secondary);
+    font-size: 0.95rem;
+}
+
+.login-footer a {
     color: var(--color-primary);
-    background-color: var(--color-bg-primary);
-}
-.login-form-2 .ForgetPwd{
-    color: var(--color-text-inverse);
     font-weight: 600;
     text-decoration: none;
+    transition: color var(--transition-fast);
 }
-.login-form-1 .ForgetPwd{
-    color: var(--color-primary);
-    font-weight: 600;
-    text-decoration: none;
+
+.login-footer a:hover {
+    color: var(--color-primary-hover);
+    text-decoration: underline;
+}
+
+/* ============================================
+   DARK MODE ADJUSTMENTS
+   ============================================ */
+[data-theme="dark"] .login-page {
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, var(--color-bg-primary) 100%);
+}
+
+[data-theme="dark"] .login-card {
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+}
+
+[data-theme="dark"] .login-btn {
+    background: linear-gradient(135deg, var(--color-primary) 0%, #2d5aa3 100%);
+}
+
+[data-theme="dark"] .login-btn:hover {
+    box-shadow: 0 10px 20px rgba(65, 131, 215, 0.3);
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+@media (max-width: 480px) {
+    .login-card {
+        padding: var(--spacing-xl);
+        margin: var(--spacing-md);
+        border-radius: var(--radius-lg);
+    }
+
+    .login-logo {
+        width: 56px;
+        height: 56px;
+    }
+
+    .login-title {
+        font-size: 1.5rem;
+    }
 }

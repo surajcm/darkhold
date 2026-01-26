@@ -3,6 +3,8 @@ package com.quiz.darkhold.score.controller;
 import com.quiz.darkhold.game.model.CurrentScore;
 import com.quiz.darkhold.game.model.ScoreResult;
 import com.quiz.darkhold.game.service.GameService;
+import com.quiz.darkhold.team.dto.TeamScoreResult;
+import com.quiz.darkhold.team.service.TeamService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.messaging.handler.annotation.MessageMapping;
@@ -23,11 +25,14 @@ public class ScoreController {
 
     private final GameService gameService;
     private final SimpMessagingTemplate messagingTemplate;
+    private final TeamService teamService;
 
     public ScoreController(final GameService gameService,
-                           final SimpMessagingTemplate messagingTemplate) {
+                           final SimpMessagingTemplate messagingTemplate,
+                           final TeamService teamService) {
         this.gameService = gameService;
         this.messagingTemplate = messagingTemplate;
+        this.teamService = teamService;
     }
 
     /**
@@ -42,19 +47,29 @@ public class ScoreController {
                              @RequestParam(value = "quizPin", required = false) final String quizPin) {
         logger.info("On to the scoreboard screen for game: {}", quizPin);
         var scores = gameService.getCurrentScore();
-        var previousScores = gameService.getPreviousScores();
-        logger.info("Current score count: {}", scores.size());
+        List<ScoreResult> scoreResults = buildScoreResults(scores, gameService.getPreviousScores());
+        addScoreAttributes(model, scores, scoreResults, quizPin);
+        addTeamScoresIfEnabled(model, quizPin, scoreResults);
+        return "scoreboard";
+    }
 
-        // Build enhanced score results with rank and streak info
-        List<ScoreResult> scoreResults = buildScoreResults(scores, previousScores);
-
-        // Also keep the simple score for backwards compatibility
+    private void addScoreAttributes(final Model model, final Map<String, Integer> scores,
+                                     final List<ScoreResult> scoreResults, final String quizPin) {
         var score = new CurrentScore();
         score.setScore(scores);
         model.addAttribute("score", score);
         model.addAttribute("scoreResults", scoreResults);
         model.addAttribute("quizPin", quizPin);
-        return "scoreboard";
+    }
+
+    private void addTeamScoresIfEnabled(final Model model, final String pin, final List<ScoreResult> results) {
+        boolean isTeamMode = teamService.isTeamMode(pin);
+        model.addAttribute("isTeamMode", isTeamMode);
+        if (isTeamMode) {
+            List<TeamScoreResult> teamScores = teamService.getTeamScoreResults(pin, results);
+            model.addAttribute("teamScores", teamScores);
+            logger.info("Team scores: {} teams", teamScores.size());
+        }
     }
 
     private List<ScoreResult> buildScoreResults(final Map<String, Integer> scores,

@@ -13,6 +13,7 @@
     <link rel="apple-touch-icon" href="/images/icons/icon-192.png">
     <link href="/styles/homepage.css" rel="stylesheet" />
     <link href="/styles/theme-variables.css" rel="stylesheet" />
+    <link href="/styles/team-styles.css" rel="stylesheet" />
     <script type="text/javascript" src="/scripts/theme-manager.js"></script>
     <script type="text/javascript" src="/scripts/audio-manager.js"></script>
     <script type="text/javascript" src="/scripts/accessibility.js"></script>
@@ -49,6 +50,7 @@
     </nav>
     <form action="#" th:object="${score}" method="post">
         <input type="hidden" th:value="${quizPin}" id="quizPin" name="quizPin"/>
+        <input type="hidden" th:value="${isTeamMode}" id="isTeamMode"/>
         <div id="wrapper">
             <div id="page-content-wrapper">
                 <div class="container-fluid">
@@ -59,6 +61,33 @@
                                 <div class="sr-only" aria-live="polite" aria-atomic="false" id="scoreboardAnnouncements">
                                     Scoreboard updated
                                 </div>
+
+                                <!-- Team/Individual Toggle (only shown in team mode) -->
+                                <div th:if="${isTeamMode}" class="scoreboard-toggle mb-3">
+                                    <div class="btn-group" role="group" aria-label="Scoreboard view">
+                                        <button type="button" class="btn btn-primary" id="btnIndividual" onclick="showIndividualScores()">Individual</button>
+                                        <button type="button" class="btn btn-outline-primary" id="btnTeams" onclick="showTeamScores()">Teams</button>
+                                    </div>
+                                </div>
+
+                                <!-- Team Scoreboard (hidden by default) -->
+                                <div th:if="${isTeamMode}" id="teamScoreboard" class="team-scoreboard" style="display:none;">
+                                    <div th:each="team, stat : ${teamScores}"
+                                         th:class="'team-score-card team-card-' + ${team.color} + (${stat.index == 0} ? ' winner' : '')">
+                                        <div class="team-card-header">
+                                            <span th:class="'team-color-dot team-color-dot-' + ${team.color}"></span>
+                                            <span th:text="${team.teamName}">Team Name</span>
+                                        </div>
+                                        <div class="team-score-value" th:text="${team.totalScore}">0</div>
+                                        <div class="team-score-label">
+                                            <span th:text="'Rank #' + ${team.rank}"></span> |
+                                            <span th:text="${team.memberCount} + ' members'"></span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Individual Scoreboard -->
+                                <div id="individualScoreboard">
                                 <table class="table table-striped" role="main" aria-label="Game scoreboard">
                                     <thead>
                                         <tr>
@@ -88,6 +117,7 @@
                                         </tr>
                                     </tbody>
                                 </table>
+                                </div>
                             </div>
                         </div>
                     </div>

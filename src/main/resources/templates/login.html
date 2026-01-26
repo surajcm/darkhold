@@ -1,69 +1,90 @@
 <!DOCTYPE HTML>
 <html lang="en">
 <head>
-    <title>Log in: Darkhold classroom quiz experience</title>
+    <title>Sign In - Darkhold Quiz</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="Sign in to Darkhold - The interactive classroom quiz experience">
     <link rel="manifest" href="/manifest.json">
-    <link href="/styles/login.css" rel="stylesheet" />
-    <link href="/styles/theme-variables.css" rel="stylesheet" />
     <link rel="shortcut icon" href="/images/favicon.png">
+    <link rel="apple-touch-icon" href="/images/icons/icon-192.png">
+    <link href="/styles/theme-variables.css" rel="stylesheet" />
+    <link href="/styles/login.css" rel="stylesheet" />
     <script type="text/javascript" src="/scripts/theme-manager.js"></script>
-    <script type="text/javascript" src="/scripts/common-scripts.js"></script>
-    <script type="text/javascript" src="/scripts/audio-manager.js"></script>
-    <script type="text/javascript" src="/scripts/accessibility.js"></script>
 </head>
 <body>
-    <main>
-        <section class="d-flex align-items-center my-5 mt-lg-6 mb-lg-5">
-            <div class="container">
-                <div class="row justify-content-center">
-                    <div class="col-12 d-flex align-items-center justify-content-center">
-                        <div class="bg-white shadow-soft border rounded border-light p-4 p-lg-5 w-100 fmxw-500" style="opacity: 0.9;">
-                            <div class="text-center text-md-center mb-4 mt-md-0">
-                                <h1 class="mb-0 h3">Sign in</h1>
-                            </div>
-                            <form th:action="@{/login}" method="post" class="mt-4">
-                                <span th:text="${message}"></span>
-                                <div class="form-group mb-4"><label for="username">Your Email</label>
-                                    <div class="input-group">
-                                        <span class="input-group-text" id="basic-addon1"><span class="fas fa-envelope"></span></span>
-                                        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-                                        <input id="username" name="username" type="text" class="form-control" placeholder="example@company.com" autofocus="true" required="true" />
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <div class="form-group mb-4"><label for="password">Your Password</label>
-                                        <div class="input-group">
-                                            <span class="input-group-text" id="basic-addon2">
-                                                <span class="fas fa-unlock-alt"></span>
-                                            </span>
-                                            <input type="password" placeholder="Password" class="form-control" id="password" name="password" required="true" />
-                                        </div>
-                                    </div>
-                                    <span class="has-error" th:text="${danger}"></span>
-                                    <div class="d-flex justify-content-between align-items-top mb-4">
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" value="" id="remember"> <label class="form-check-label mb-0" for="remember">Remember me</label>
-                                        </div>
-                                        <div>
-                                            <a data-bs-toggle="modal" data-bs-target="#forgetPass" class="small text-right">Lost password?</a>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="d-grid">
-                                    <button type="submit" class="btn btn-dark">Sign in</button>
-                                </div>
-                                <div class="form-group mb-4">
-                                    <div class="fw-light">Please Log In, or <a href="/" th:href="@{/registration}">Sign Up</a></div>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                </div>
+    <main class="login-page">
+        <div class="login-card">
+            <!-- Brand Header -->
+            <div class="login-brand">
+                <img src="/images/icons/icon-192.png" alt="Darkhold Logo" class="login-logo">
+                <h1 class="login-title">Darkhold</h1>
+                <p class="login-subtitle">Interactive Quiz Platform</p>
             </div>
-        </section>
+
+            <!-- Error Message -->
+            <div th:if="${danger}" class="login-error" role="alert">
+                <span th:text="${danger}">Invalid credentials</span>
+            </div>
+
+            <!-- Login Form -->
+            <form th:action="@{/login}" method="post" class="login-form">
+                <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+
+                <!-- Email Input -->
+                <div class="form-floating">
+                    <input
+                        type="email"
+                        id="username"
+                        name="username"
+                        placeholder="Email address"
+                        autocomplete="email"
+                        autofocus
+                        required
+                        aria-label="Email address"
+                    />
+                    <label for="username">Email address</label>
+                </div>
+
+                <!-- Password Input -->
+                <div class="form-floating">
+                    <input
+                        type="password"
+                        id="password"
+                        name="password"
+                        placeholder="Password"
+                        autocomplete="current-password"
+                        required
+                        aria-label="Password"
+                    />
+                    <label for="password">Password</label>
+                </div>
+
+                <!-- Options Row -->
+                <div class="login-options">
+                    <label class="remember-me">
+                        <input type="checkbox" id="remember" name="remember-me">
+                        <span>Remember me</span>
+                    </label>
+                    <a href="#" class="forgot-link" data-bs-toggle="modal" data-bs-target="#forgetPass">
+                        Forgot password?
+                    </a>
+                </div>
+
+                <!-- Submit Button -->
+                <button type="submit" class="login-btn">
+                    Sign In
+                </button>
+
+                <!-- Sign Up Link -->
+                <div class="login-footer">
+                    <span>Don't have an account?</span>
+                    <a th:href="@{/registration}">Create one</a>
+                </div>
+            </form>
+        </div>
     </main>
+
     <script type="text/javascript" src="/scripts/core/popper.min.js"></script>
     <script type="text/javascript" src="/scripts/core/bootstrap-5.3.1/bootstrap.min.js"></script>
 </body>

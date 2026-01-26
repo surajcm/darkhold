@@ -8,6 +8,7 @@
     <link rel="shortcut icon" href="/images/favicon.png">
     <link href="/styles/preview-styles.css" rel="stylesheet" />
     <link href="/styles/theme-variables.css" rel="stylesheet" />
+    <link href="/styles/team-styles.css" rel="stylesheet" />
     <link rel="stylesheet" href="/styles/core/font-awesome-all.5.15.4.min.css">
     <link rel="stylesheet" href="/styles/icon-styles.css">
     <script type="text/javascript" src="/scripts/theme-manager.js"></script>
@@ -58,6 +59,9 @@
     <form action="#" th:object="${previewInfo}" method="post">
     <input type="hidden" th:value="${previewInfo.challengeId}" id="challengeId"/>
     <input type="hidden" th:name="challenge_id" id="challenge_id"/>
+    <input type="hidden" name="team_mode" id="team_mode" value="false"/>
+    <input type="hidden" name="team_count" id="team_count" value="2"/>
+    <input type="hidden" name="assignment_method" id="assignment_method" value="BALANCED"/>
     <div class="container-fluid bg-gray" id="accordion-style-1">
         <div class="container">
             <section>
@@ -95,7 +99,31 @@
                                             <div class="mode-icon">🎮</div>
                                             <h5>Multiplayer</h5>
                                             <p class="small">Live game with PIN. Moderator controls pace. Real-time competition.</p>
-                                            <button type="button" class="btn btn-primary btn-block">Start Multiplayer</button>
+                                            <div class="team-mode-toggle" onclick="event.stopPropagation();">
+                                                <input type="checkbox" class="form-check-input" id="teamModeCheckbox" onchange="toggleTeamConfig()">
+                                                <label for="teamModeCheckbox">Team Mode</label>
+                                            </div>
+                                            <div id="teamConfigPanel" style="display:none; margin-top:10px;" onclick="event.stopPropagation();">
+                                                <div class="mb-2">
+                                                    <label class="small">Teams:</label>
+                                                    <select id="teamCountSelect" class="form-select form-select-sm" onchange="updateTeamCount()">
+                                                        <option value="2">2 Teams</option>
+                                                        <option value="3">3 Teams</option>
+                                                        <option value="4">4 Teams</option>
+                                                        <option value="5">5 Teams</option>
+                                                        <option value="6">6 Teams</option>
+                                                    </select>
+                                                </div>
+                                                <div class="mb-2">
+                                                    <label class="small">Assignment:</label>
+                                                    <select id="assignmentSelect" class="form-select form-select-sm" onchange="updateAssignment()">
+                                                        <option value="BALANCED">Balanced</option>
+                                                        <option value="RANDOM">Random</option>
+                                                        <option value="MANUAL">Manual</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <button type="button" class="btn btn-primary btn-block mt-2">Start Multiplayer</button>
                                         </div>
                                     </div>
                                     <div class="col-md-6 col-lg-3 mb-3">

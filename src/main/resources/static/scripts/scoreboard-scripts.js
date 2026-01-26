@@ -9,6 +9,26 @@ function askQuestion() {
     });
 }
 
+function showIndividualScores() {
+    document.getElementById('individualScoreboard').style.display = 'block';
+    let teamScoreboard = document.getElementById('teamScoreboard');
+    if (teamScoreboard) {
+        teamScoreboard.style.display = 'none';
+    }
+    document.getElementById('btnIndividual').className = 'btn btn-primary';
+    document.getElementById('btnTeams').className = 'btn btn-outline-primary';
+}
+
+function showTeamScores() {
+    document.getElementById('individualScoreboard').style.display = 'none';
+    let teamScoreboard = document.getElementById('teamScoreboard');
+    if (teamScoreboard) {
+        teamScoreboard.style.display = 'grid';
+    }
+    document.getElementById('btnIndividual').className = 'btn btn-outline-primary';
+    document.getElementById('btnTeams').className = 'btn btn-primary';
+}
+
 function connect() {
     let pin = document.getElementById('quizPin').value;
     let socket = new SockJS('/darkhold-websocket');

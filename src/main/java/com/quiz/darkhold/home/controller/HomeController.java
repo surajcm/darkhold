@@ -156,6 +156,11 @@ public class HomeController {
         // Store PIN in session for concurrent game support
         session.setAttribute("gamePin", gameInfo.getGamePin());
         logger.info("Stored gamePin in session: {}", gameInfo.getGamePin());
+
+        // Check if game is in team mode
+        boolean teamMode = homeService.isTeamMode(gameInfo.getGamePin());
+        model.addAttribute("teamMode", teamMode);
+
         model.addAttribute(GAME_INFO, gameInfo);
         return "game/gamewait";
     }

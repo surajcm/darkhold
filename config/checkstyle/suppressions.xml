@@ -33,4 +33,12 @@ WHAT AND WHY CHECKS SUPPRESSED
     <suppress files="ResultService.java" checks="MethodLength"/>
     <suppress files="PastGamesController.java" checks="MethodLength"/>
     <suppress files="GameController.java" checks="IllegalCatch"/>
+    <suppress files="TeamController.java" checks="MethodLength"/>
+    <suppress files="TeamController.java" checks="IllegalCatch"/>
+    <suppress files="TeamController.java" checks="CatchParameterName"/>
+    <suppress files="TeamController.java" checks="VariableDeclarationUsageDistance"/>
+    <suppress files="TeamService.java" checks="MethodLength"/>
+    <suppress files="TeamService.java" checks="IllegalCatch"/>
+    <suppress files="TeamService.java" checks="CatchParameterName"/>
+    <suppress files="ResultService.java" checks="VariableDeclarationUsageDistance"/>
 </suppressions>

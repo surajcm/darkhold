@@ -12,6 +12,7 @@
     <link rel="manifest" href="/manifest.json">
     <link rel="apple-touch-icon" href="/images/icons/icon-192.png">
     <link href="/styles/darkhold-styles.css" rel="stylesheet" />
+    <link href="/styles/team-styles.css" rel="stylesheet" />
     <script type="text/javascript" src="/scripts/theme-manager.js"></script>
     <script type="text/javascript" src="/scripts/audio-manager.js"></script>
     <script type="text/javascript" src="/scripts/accessibility.js"></script>
@@ -50,10 +51,62 @@
             <div id="page-content-wrapper">
                 <div class="container-fluid">
                     <div class="container">
+                        <!-- Team Mode Badge -->
+                        <div th:if="${isTeamMode}" class="text-center mb-3">
+                            <span class="badge bg-info" style="font-size: 1rem;">Team Mode Results</span>
+                        </div>
+
                         <!-- Winner Announcement -->
                         <div class="winner-announcement victory-message" th:if="${score.score != null and !score.score.isEmpty()}" role="status" aria-live="polite">
-                            Congratulations to our winner!
+                            <span th:if="${isTeamMode and teamScores != null and !teamScores.isEmpty()}">
+                                Congratulations to the winning team!
+                            </span>
+                            <span th:unless="${isTeamMode and teamScores != null and !teamScores.isEmpty()}">
+                                Congratulations to our winner!
+                            </span>
                         </div>
+
+                        <!-- Team Podium (shown when team mode is enabled) -->
+                        <div th:if="${isTeamMode and teamScores != null and !teamScores.isEmpty()}">
+                            <h4 class="text-center mb-3">Team Results</h4>
+                            <div class="team-podium-container">
+                                <!-- 2nd Place Team -->
+                                <div class="team-podium-place second" th:if="${#lists.size(teamScores) > 1}">
+                                    <div class="trophy">&#129352;</div>
+                                    <div th:class="'team-podium-block silver team-card-' + ${teamScores[1].color}">
+                                        <div class="team-podium-rank">2nd</div>
+                                        <div class="team-podium-name" th:text="${teamScores[1].teamName}"></div>
+                                        <div class="team-podium-score" th:text="${teamScores[1].totalScore} + ' pts'"></div>
+                                        <div class="team-podium-members" th:text="${teamScores[1].memberCount} + ' members'"></div>
+                                    </div>
+                                </div>
+
+                                <!-- 1st Place Team -->
+                                <div class="team-podium-place first" th:if="${#lists.size(teamScores) > 0}">
+                                    <div class="trophy">&#127942;</div>
+                                    <div th:class="'team-podium-block gold team-card-' + ${teamScores[0].color}">
+                                        <div class="team-podium-rank">1st</div>
+                                        <div class="team-podium-name" th:text="${teamScores[0].teamName}"></div>
+                                        <div class="team-podium-score" th:text="${teamScores[0].totalScore} + ' pts'"></div>
+                                        <div class="team-podium-members" th:text="${teamScores[0].memberCount} + ' members'"></div>
+                                    </div>
+                                </div>
+
+                                <!-- 3rd Place Team -->
+                                <div class="team-podium-place third" th:if="${#lists.size(teamScores) > 2}">
+                                    <div class="trophy">&#129353;</div>
+                                    <div th:class="'team-podium-block bronze team-card-' + ${teamScores[2].color}">
+                                        <div class="team-podium-rank">3rd</div>
+                                        <div class="team-podium-name" th:text="${teamScores[2].teamName}"></div>
+                                        <div class="team-podium-score" th:text="${teamScores[2].totalScore} + ' pts'"></div>
+                                        <div class="team-podium-members" th:text="${teamScores[2].memberCount} + ' members'"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Individual Podium Header -->
+                        <h4 th:if="${isTeamMode}" class="text-center mb-3 mt-4">Individual Results</h4>
 
                         <!-- Podium for top 3 -->
                         <div class="podium-container" th:if="${score.sortedScores != null and !score.sortedScores.isEmpty()}">

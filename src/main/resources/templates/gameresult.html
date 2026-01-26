@@ -8,6 +8,7 @@
     <link rel="shortcut icon" href="/images/favicon.png">
     <link href="/styles/darkhold-styles.css" rel="stylesheet" />
     <link href="/styles/theme-variables.css" rel="stylesheet" />
+    <link href="/styles/team-styles.css" rel="stylesheet" />
     <script type="text/javascript" src="/scripts/theme-manager.js"></script>
     <script type="text/javascript" src="/scripts/common-scripts.js"></script>
     <script type="text/javascript" src="/scripts/audio-manager.js"></script>
@@ -70,11 +71,21 @@
     <div class="container mt-4">
         <!-- Summary Section -->
         <div class="summary-card">
-            <h3 th:text="${gameResult.challengeName}">Challenge Name</h3>
+            <h3>
+                <span th:text="${gameResult.challengeName}">Challenge Name</span>
+                <span th:if="${gameResult.teamMode}" class="badge bg-info ms-2" style="font-size: 0.6em;">Team Mode</span>
+            </h3>
             <p class="text-muted">
                 PIN: <strong th:text="${gameResult.pin}"></strong> |
                 Completed: <span th:text="${#temporals.format(gameResult.completedAt, 'MMM dd, yyyy HH:mm')}"></span>
             </p>
+
+            <!-- Winning Team Display (if team mode) -->
+            <div th:if="${gameResult.teamMode and gameResult.winningTeamName != null}" class="alert alert-success text-center mb-3">
+                <strong>Winning Team:</strong>
+                <span th:text="${gameResult.winningTeamName}"></span>
+                (<span th:text="${gameResult.winningTeamScore}"></span> pts)
+            </div>
 
             <div class="row">
                 <div class="col-md-3">

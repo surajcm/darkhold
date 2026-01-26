@@ -7,6 +7,7 @@ import com.quiz.darkhold.preview.controller.PreviewController;
 import com.quiz.darkhold.preview.repository.CurrentGame;
 import com.quiz.darkhold.preview.repository.CurrentGameSessionRepository;
 import com.quiz.darkhold.preview.service.PreviewService;
+import com.quiz.darkhold.team.service.TeamService;
 import org.mockito.Mockito;
 import org.springframework.context.annotation.Bean;
 import org.springframework.test.context.ContextConfiguration;
@@ -16,7 +17,8 @@ public class PreviewConfigurations {
     @Bean
     public PreviewController previewController() {
         return new PreviewController(Mockito.mock(PreviewService.class),
-                Mockito.mock(PracticeService.class));
+                Mockito.mock(PracticeService.class),
+                Mockito.mock(TeamService.class));
     }
 
     @Bean
