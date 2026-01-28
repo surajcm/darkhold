@@ -390,3 +390,246 @@
 .team-score-updated {
     animation: teamPulse 0.5s ease-in-out;
 }
+
+/* ============================================
+   DRAG AND DROP STYLES
+   ============================================ */
+.draggable-player {
+    cursor: grab;
+    user-select: none;
+    transition: all 0.2s ease;
+}
+
+.draggable-player:hover {
+    background: var(--color-primary-light);
+    transform: translateX(2px);
+}
+
+.draggable-player.dragging {
+    opacity: 0.5;
+    cursor: grabbing;
+}
+
+.drop-zone {
+    transition: all 0.3s ease;
+    min-height: 100px;
+}
+
+.drop-zone.drag-over {
+    background: var(--color-primary-light);
+    border-color: var(--color-primary);
+    box-shadow: 0 0 10px rgba(0, 98, 204, 0.3);
+}
+
+.unassigned-players-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--spacing-sm);
+}
+
+.unassigned-player {
+    display: inline-flex;
+    align-items: center;
+    padding: var(--spacing-sm) var(--spacing-md);
+    background: var(--color-card-bg);
+    border: 1px solid var(--color-border-medium);
+    border-radius: var(--radius-md);
+    cursor: grab;
+}
+
+.unassigned-player:hover {
+    background: var(--color-primary-light);
+    border-color: var(--color-primary);
+}
+
+/* ============================================
+   TEAM CELEBRATION ANIMATIONS
+   ============================================ */
+@keyframes confettiFall {
+    0% {
+        transform: translateY(-100vh) rotate(0deg);
+        opacity: 1;
+    }
+    100% {
+        transform: translateY(100vh) rotate(720deg);
+        opacity: 0;
+    }
+}
+
+@keyframes teamGlow {
+    0%, 100% {
+        box-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+    }
+    50% {
+        box-shadow: 0 0 40px rgba(255, 215, 0, 0.8),
+                    0 0 60px rgba(255, 215, 0, 0.4);
+    }
+}
+
+@keyframes trophyBounce {
+    0%, 100% {
+        transform: translateY(0) scale(1);
+    }
+    25% {
+        transform: translateY(-10px) scale(1.1);
+    }
+    50% {
+        transform: translateY(0) scale(1);
+    }
+    75% {
+        transform: translateY(-5px) scale(1.05);
+    }
+}
+
+@keyframes winnerPulse {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.02);
+    }
+}
+
+.team-winner-celebration {
+    position: relative;
+    animation: winnerPulse 2s ease-in-out infinite;
+}
+
+.team-winner-celebration::before {
+    content: '';
+    position: absolute;
+    top: -10px;
+    left: -10px;
+    right: -10px;
+    bottom: -10px;
+    border-radius: inherit;
+    animation: teamGlow 2s ease-in-out infinite;
+    z-index: -1;
+}
+
+.team-podium-place.first .trophy {
+    animation: trophyBounce 1.5s ease-in-out infinite;
+}
+
+.team-podium-place.first .team-podium-block {
+    animation: teamGlow 2s ease-in-out infinite;
+}
+
+/* Confetti container */
+.confetti-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    overflow: hidden;
+    z-index: 1000;
+}
+
+.confetti-piece {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    animation: confettiFall 3s linear forwards;
+}
+
+/* Team color-specific winner glow */
+.team-winner-red::before { box-shadow: 0 0 30px var(--team-red); }
+.team-winner-blue::before { box-shadow: 0 0 30px var(--team-blue); }
+.team-winner-green::before { box-shadow: 0 0 30px var(--team-green); }
+.team-winner-yellow::before { box-shadow: 0 0 30px var(--team-yellow); }
+.team-winner-purple::before { box-shadow: 0 0 30px var(--team-purple); }
+.team-winner-orange::before { box-shadow: 0 0 30px var(--team-orange); }
+
+/* Victory badge */
+.team-victory-badge {
+    display: inline-block;
+    padding: 4px 12px;
+    background: linear-gradient(135deg, #FFD700, #FFA500);
+    color: white;
+    border-radius: 20px;
+    font-weight: bold;
+    font-size: 0.9rem;
+    margin-top: 10px;
+    animation: winnerPulse 1s ease-in-out infinite;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+}
+
+/* ============================================
+   EXPANDABLE TEAM SCOREBOARD
+   ============================================ */
+.expandable-team {
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.expandable-team:hover {
+    transform: translateY(-2px);
+}
+
+.expandable-team.expanded {
+    grid-column: span 1;
+}
+
+.expand-indicator {
+    margin-left: auto;
+    font-size: 0.8rem;
+    opacity: 0.7;
+    transition: transform 0.3s ease;
+}
+
+.expandable-team.expanded .expand-indicator {
+    transform: rotate(180deg);
+}
+
+.team-members-detail {
+    margin-top: var(--spacing-md);
+    padding-top: var(--spacing-md);
+    border-top: 1px solid var(--color-border-light);
+    text-align: left;
+}
+
+.team-members-header {
+    display: flex;
+    justify-content: space-between;
+    font-weight: 600;
+    font-size: 0.85rem;
+    color: var(--color-text-secondary);
+    margin-bottom: var(--spacing-sm);
+    padding-bottom: var(--spacing-xs);
+    border-bottom: 1px solid var(--color-border-light);
+}
+
+.team-member-score {
+    display: flex;
+    justify-content: space-between;
+    padding: var(--spacing-xs) 0;
+    font-size: 0.9rem;
+}
+
+.team-member-score.top-contributor {
+    font-weight: 600;
+    color: var(--color-primary);
+    position: relative;
+}
+
+.team-member-score.top-contributor::after {
+    content: 'MVP';
+    position: absolute;
+    right: -35px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 0.65rem;
+    background: linear-gradient(135deg, #FFD700, #FFA500);
+    color: white;
+    padding: 2px 6px;
+    border-radius: 8px;
+}
+
+.no-members {
+    text-align: center;
+    color: var(--color-text-secondary);
+    font-style: italic;
+    padding: var(--spacing-sm);
+}

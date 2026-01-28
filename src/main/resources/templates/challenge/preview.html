@@ -62,6 +62,7 @@
     <input type="hidden" name="team_mode" id="team_mode" value="false"/>
     <input type="hidden" name="team_count" id="team_count" value="2"/>
     <input type="hidden" name="assignment_method" id="assignment_method" value="BALANCED"/>
+    <input type="hidden" name="team_names" id="team_names" value=""/>
     <div class="container-fluid bg-gray" id="accordion-style-1">
         <div class="container">
             <section>
@@ -121,6 +122,37 @@
                                                         <option value="RANDOM">Random</option>
                                                         <option value="MANUAL">Manual</option>
                                                     </select>
+                                                </div>
+                                                <div class="mb-2">
+                                                    <a href="#" class="small text-primary" onclick="event.preventDefault(); toggleCustomNames();" id="customNamesToggle">
+                                                        + Customize team names
+                                                    </a>
+                                                </div>
+                                                <div id="customNamesPanel" style="display:none;">
+                                                    <div class="team-name-input mb-1">
+                                                        <span class="team-color-dot team-color-dot-red"></span>
+                                                        <input type="text" class="form-control form-control-sm" id="teamName_red" placeholder="Team Red" maxlength="30">
+                                                    </div>
+                                                    <div class="team-name-input mb-1">
+                                                        <span class="team-color-dot team-color-dot-blue"></span>
+                                                        <input type="text" class="form-control form-control-sm" id="teamName_blue" placeholder="Team Blue" maxlength="30">
+                                                    </div>
+                                                    <div class="team-name-input mb-1" id="teamName_green_row">
+                                                        <span class="team-color-dot team-color-dot-green"></span>
+                                                        <input type="text" class="form-control form-control-sm" id="teamName_green" placeholder="Team Green" maxlength="30">
+                                                    </div>
+                                                    <div class="team-name-input mb-1" id="teamName_yellow_row">
+                                                        <span class="team-color-dot team-color-dot-yellow"></span>
+                                                        <input type="text" class="form-control form-control-sm" id="teamName_yellow" placeholder="Team Yellow" maxlength="30">
+                                                    </div>
+                                                    <div class="team-name-input mb-1" id="teamName_purple_row">
+                                                        <span class="team-color-dot team-color-dot-purple"></span>
+                                                        <input type="text" class="form-control form-control-sm" id="teamName_purple" placeholder="Team Purple" maxlength="30">
+                                                    </div>
+                                                    <div class="team-name-input mb-1" id="teamName_orange_row">
+                                                        <span class="team-color-dot team-color-dot-orange"></span>
+                                                        <input type="text" class="form-control form-control-sm" id="teamName_orange" placeholder="Team Orange" maxlength="30">
+                                                    </div>
                                                 </div>
                                             </div>
                                             <button type="button" class="btn btn-primary btn-block mt-2">Start Multiplayer</button>

@@ -556,18 +556,19 @@ class GameControllerTest {
         @DisplayName("should send user response to PIN-scoped topic")
         void testGetGame_ShouldSendUserResponseToPinScopedTopic() {
             // Given
-            Game game = new Game();
+            Game game = new Game("testUser");
             game.setPin("ABC123");
             List<String> participants = new ArrayList<>();
             participants.add("user1");
             participants.add("user2");
-            when(gameService.getAllParticipants("ABC123")).thenReturn(participants);
+            when(gameService.saveAndGetAllParticipants("ABC123", "testUser")).thenReturn(participants);
+            when(teamService.isTeamMode("ABC123")).thenReturn(false);
 
             // When
             gameController.getGame(game);
 
             // Then
-            verify(gameService).getAllParticipants("ABC123");
+            verify(gameService).saveAndGetAllParticipants("ABC123", "testUser");
             verify(messagingTemplate).convertAndSend(
                     ArgumentMatchers.eq("/topic/ABC123/user"),
                     ArgumentMatchers.any(UserResponse.class));
@@ -577,24 +578,26 @@ class GameControllerTest {
         @DisplayName("should call gameService with correct game pin")
         void testGetGame_ShouldCallServiceWithCorrectPin() {
             // Given
-            Game game = new Game();
+            Game game = new Game("player1");
             game.setPin("XYZ789");
-            when(gameService.getAllParticipants("XYZ789")).thenReturn(new ArrayList<>());
+            when(gameService.saveAndGetAllParticipants("XYZ789", "player1")).thenReturn(new ArrayList<>());
+            when(teamService.isTeamMode("XYZ789")).thenReturn(false);
 
             // When
             gameController.getGame(game);
 
             // Then
-            verify(gameService).getAllParticipants("XYZ789");
+            verify(gameService).saveAndGetAllParticipants("XYZ789", "player1");
         }
 
         @Test
         @DisplayName("should handle empty participants list")
         void testGetGame_WithEmptyParticipants_ShouldSendResponse() {
             // Given
-            Game game = new Game();
+            Game game = new Game("player");
             game.setPin("GAME1");
-            when(gameService.getAllParticipants("GAME1")).thenReturn(new ArrayList<>());
+            when(gameService.saveAndGetAllParticipants("GAME1", "player")).thenReturn(new ArrayList<>());
+            when(teamService.isTeamMode("GAME1")).thenReturn(false);
 
             // When
             gameController.getGame(game);

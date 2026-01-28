@@ -47,7 +47,23 @@ public class TeamService {
             teams.add(team);
         }
 
+        // Store the assignment method for auto-assigning players when they join
+        session.setTeamAssignmentMethod(config.getAssignmentMethod());
         saveTeamsToSession(session, teams);
+    }
+
+    public TeamAssignmentMethod getAssignmentMethod(final String pin) {
+        CurrentGameSession session = currentGameRepository.findByPin(pin)
+                .orElseThrow(() -> new IllegalArgumentException("Game not found"));
+        TeamAssignmentMethod method = session.getTeamAssignmentMethod();
+        return method != null ? method : TeamAssignmentMethod.BALANCED;
+    }
+
+    public void setAssignmentMethod(final String pin, final TeamAssignmentMethod method) {
+        CurrentGameSession session = currentGameRepository.findByPin(pin)
+                .orElseThrow(() -> new IllegalArgumentException("Game not found"));
+        session.setTeamAssignmentMethod(method);
+        currentGameRepository.save(session);
     }
 
     public void assignPlayerToTeam(final String pin, final String username, final String teamName) {

@@ -13,6 +13,7 @@ import com.quiz.darkhold.analytics.service.ResultService;
 import com.quiz.darkhold.game.service.AnswerValidationService;
 import com.quiz.darkhold.game.service.GameService;
 import com.quiz.darkhold.init.GameConfig;
+import com.quiz.darkhold.team.model.TeamAssignmentMethod;
 import com.quiz.darkhold.team.model.TeamInfo;
 import com.quiz.darkhold.team.service.TeamService;
 import com.quiz.darkhold.util.CommonUtils;
@@ -316,15 +317,46 @@ public class GameController {
     /**
      * Always active, will add the new user and give it back in response.
      * Sends to PIN-scoped topic for concurrent game support.
+     * Auto-assigns player to team if team mode is enabled with BALANCED or RANDOM assignment.
      *
      * @param game game
      */
     @MessageMapping("/user")
     public void getGame(final Game game) {
         logger.info("On to getGame : {}", game);
-        var users = gameService.getAllParticipants(game.getPin());
+        var users = gameService.saveAndGetAllParticipants(game.getPin(), game.getName());
+
+        // Auto-assign to team if team mode enabled and not MANUAL assignment
+        autoAssignToTeamIfEnabled(game.getPin(), game.getName());
+
         var response = new UserResponse(users);
         messagingTemplate.convertAndSend("/topic/" + game.getPin() + "/user", response);
+    }
+
+    private void autoAssignToTeamIfEnabled(final String pin, final String username) {
+        if (!teamService.isTeamMode(pin)) {
+            return;
+        }
+
+        TeamAssignmentMethod method = teamService.getAssignmentMethod(pin);
+        if (method == TeamAssignmentMethod.MANUAL) {
+            logger.info("Team mode is MANUAL, skipping auto-assignment for {}", username);
+            return;
+        }
+
+        // Check if player is already assigned to a team
+        String existingTeam = teamService.getPlayerTeam(pin, username);
+        if (existingTeam != null) {
+            logger.info("Player {} already assigned to team {}", username, existingTeam);
+            return;
+        }
+
+        logger.info("Auto-assigning player {} to team using {} method", username, method);
+        teamService.autoAssignPlayer(pin, username, method);
+
+        // Broadcast team update to all clients
+        java.util.List<TeamInfo> teams = teamService.getTeams(pin);
+        messagingTemplate.convertAndSend("/topic/" + pin + "/team_update", teams);
     }
 
     /**

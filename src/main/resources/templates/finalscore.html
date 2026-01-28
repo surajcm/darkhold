@@ -81,14 +81,16 @@
                                     </div>
                                 </div>
 
-                                <!-- 1st Place Team -->
+                                <!-- 1st Place Team (with celebration effects) -->
                                 <div class="team-podium-place first" th:if="${#lists.size(teamScores) > 0}">
                                     <div class="trophy">&#127942;</div>
-                                    <div th:class="'team-podium-block gold team-card-' + ${teamScores[0].color}">
+                                    <div th:class="'team-podium-block gold team-card-' + ${teamScores[0].color} + ' team-winner-celebration team-winner-' + ${teamScores[0].color}"
+                                         th:data-winner-color="${teamScores[0].color}">
                                         <div class="team-podium-rank">1st</div>
                                         <div class="team-podium-name" th:text="${teamScores[0].teamName}"></div>
                                         <div class="team-podium-score" th:text="${teamScores[0].totalScore} + ' pts'"></div>
                                         <div class="team-podium-members" th:text="${teamScores[0].memberCount} + ' members'"></div>
+                                        <div class="team-victory-badge">WINNERS!</div>
                                     </div>
                                 </div>
 
@@ -103,6 +105,8 @@
                                     </div>
                                 </div>
                             </div>
+                            <!-- Confetti container for team wins -->
+                            <div id="teamConfetti" class="confetti-container"></div>
                         </div>
 
                         <!-- Individual Podium Header -->
@@ -197,10 +201,24 @@
                 AudioManager.playVictory();
             }
 
+            // Team win celebration
+            const teamWinner = document.querySelector('.team-winner-celebration');
+            if (teamWinner) {
+                createTeamConfetti(teamWinner.getAttribute('data-winner-color'));
+                // Play team victory sound
+                if (typeof AudioManager !== 'undefined') {
+                    AudioManager.playVictory();
+                }
+            }
+
             // Announce results for screen readers
             if (typeof A11y !== 'undefined') {
+                const teamWinnerName = document.querySelector('.team-winner-celebration .team-podium-name');
                 const winnerElement = document.querySelector('.podium-name');
-                if (winnerElement) {
+                if (teamWinnerName) {
+                    const name = teamWinnerName.textContent.trim();
+                    A11y.announce('Game complete! The winning team is ' + name);
+                } else if (winnerElement) {
                     const winnerName = winnerElement.textContent.trim();
                     A11y.announce('Game complete! The winner is ' + winnerName);
                 } else {
@@ -208,6 +226,44 @@
                 }
             }
         });
+
+        function createTeamConfetti(teamColor) {
+            const container = document.getElementById('teamConfetti');
+            if (!container) return;
+
+            const colors = getConfettiColors(teamColor);
+            const pieceCount = 50;
+
+            for (let i = 0; i < pieceCount; i++) {
+                setTimeout(() => {
+                    const piece = document.createElement('div');
+                    piece.className = 'confetti-piece';
+                    piece.style.left = Math.random() * 100 + '%';
+                    piece.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                    piece.style.animationDelay = Math.random() * 0.5 + 's';
+                    piece.style.animationDuration = (2 + Math.random() * 2) + 's';
+                    piece.style.width = (5 + Math.random() * 10) + 'px';
+                    piece.style.height = (5 + Math.random() * 10) + 'px';
+                    piece.style.borderRadius = Math.random() > 0.5 ? '50%' : '0';
+                    container.appendChild(piece);
+
+                    // Remove after animation
+                    setTimeout(() => piece.remove(), 5000);
+                }, i * 50);
+            }
+        }
+
+        function getConfettiColors(teamColor) {
+            const teamColors = {
+                'red': ['#dc3545', '#ff6b7a', '#ffd700', '#ffffff'],
+                'blue': ['#0062cc', '#4d94ff', '#ffd700', '#ffffff'],
+                'green': ['#28a745', '#5cd65c', '#ffd700', '#ffffff'],
+                'yellow': ['#ffc107', '#ffdb4d', '#ff9500', '#ffffff'],
+                'purple': ['#9c27b0', '#ce93d8', '#ffd700', '#ffffff'],
+                'orange': ['#ff7c0c', '#ffa64d', '#ffd700', '#ffffff']
+            };
+            return teamColors[teamColor] || ['#ffd700', '#ff9500', '#ffffff', '#ffeb3b'];
+        }
     </script>
 </body>
 </html>

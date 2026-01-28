@@ -3,6 +3,7 @@ package com.quiz.darkhold.preview.entity;
 import com.quiz.darkhold.challenge.entity.QuestionSet;
 import com.quiz.darkhold.game.model.GameMode;
 import com.quiz.darkhold.game.model.GameStatus;
+import com.quiz.darkhold.team.model.TeamAssignmentMethod;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -58,6 +59,10 @@ public class CurrentGameSession {
 
     @Column(columnDefinition = "TEXT")
     private String playerTeamsJson;
+
+    @Enumerated(EnumType.STRING)
+    @Column(length = 20)
+    private TeamAssignmentMethod teamAssignmentMethod;
 
     @Enumerated(EnumType.STRING)
     @Column(length = 20)
@@ -369,6 +374,14 @@ public class CurrentGameSession {
                 logger.error("Error serializing player teams map", ex);
             }
         }
+    }
+
+    public TeamAssignmentMethod getTeamAssignmentMethod() {
+        return teamAssignmentMethod;
+    }
+
+    public void setTeamAssignmentMethod(final TeamAssignmentMethod teamAssignmentMethod) {
+        this.teamAssignmentMethod = teamAssignmentMethod;
     }
 }
 

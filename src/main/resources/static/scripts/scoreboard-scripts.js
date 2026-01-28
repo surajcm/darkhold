@@ -29,6 +29,21 @@ function showTeamScores() {
     document.getElementById('btnTeams').className = 'btn btn-primary';
 }
 
+function toggleTeamExpansion(element) {
+    let detail = element.querySelector('.team-members-detail');
+    let indicator = element.querySelector('.expand-indicator');
+
+    if (detail.style.display === 'none') {
+        detail.style.display = 'block';
+        indicator.innerHTML = '&#9650;';
+        element.classList.add('expanded');
+    } else {
+        detail.style.display = 'none';
+        indicator.innerHTML = '&#9660;';
+        element.classList.remove('expanded');
+    }
+}
+
 function connect() {
     let pin = document.getElementById('quizPin').value;
     let socket = new SockJS('/darkhold-websocket');

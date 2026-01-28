@@ -3,6 +3,7 @@ package com.quiz.darkhold.home.controller;
 import com.quiz.darkhold.home.model.GameInfo;
 import com.quiz.darkhold.home.service.HomeService;
 import com.quiz.darkhold.init.RateLimitingService;
+import com.quiz.darkhold.team.service.TeamService;
 import com.quiz.darkhold.user.service.SecurityService;
 import com.quiz.darkhold.util.CommonUtils;
 import jakarta.servlet.http.HttpServletRequest;
@@ -30,11 +31,14 @@ public class HomeController {
 
     private final RateLimitingService rateLimitingService;
 
+    private final TeamService teamService;
+
     public HomeController(final HomeService homeService, final SecurityService securityService,
-                          final RateLimitingService rateLimitingService) {
+                          final RateLimitingService rateLimitingService, final TeamService teamService) {
         this.homeService = homeService;
         this.securityService = securityService;
         this.rateLimitingService = rateLimitingService;
+        this.teamService = teamService;
     }
 
     /**
@@ -160,6 +164,12 @@ public class HomeController {
         // Check if game is in team mode
         boolean teamMode = homeService.isTeamMode(gameInfo.getGamePin());
         model.addAttribute("teamMode", teamMode);
+
+        // Pass assignment method for drag-drop UI
+        if (teamMode) {
+            var assignmentMethod = teamService.getAssignmentMethod(gameInfo.getGamePin());
+            model.addAttribute("assignmentMethod", assignmentMethod.name());
+        }
 
         model.addAttribute(GAME_INFO, gameInfo);
         return "game/gamewait";

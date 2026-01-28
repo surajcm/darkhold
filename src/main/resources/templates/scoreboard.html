@@ -73,15 +73,33 @@
                                 <!-- Team Scoreboard (hidden by default) -->
                                 <div th:if="${isTeamMode}" id="teamScoreboard" class="team-scoreboard" style="display:none;">
                                     <div th:each="team, stat : ${teamScores}"
-                                         th:class="'team-score-card team-card-' + ${team.color} + (${stat.index == 0} ? ' winner' : '')">
+                                         th:class="'team-score-card team-card-' + ${team.color} + (${stat.index == 0} ? ' winner' : '') + ' expandable-team'"
+                                         th:data-team-index="${stat.index}"
+                                         onclick="toggleTeamExpansion(this)">
                                         <div class="team-card-header">
                                             <span th:class="'team-color-dot team-color-dot-' + ${team.color}"></span>
                                             <span th:text="${team.teamName}">Team Name</span>
+                                            <span class="expand-indicator">&#9660;</span>
                                         </div>
                                         <div class="team-score-value" th:text="${team.totalScore}">0</div>
                                         <div class="team-score-label">
                                             <span th:text="'Rank #' + ${team.rank}"></span> |
                                             <span th:text="${team.memberCount} + ' members'"></span>
+                                        </div>
+                                        <!-- Expandable member list -->
+                                        <div class="team-members-detail" style="display:none;">
+                                            <div class="team-members-header">
+                                                <span>Player</span>
+                                                <span>Score</span>
+                                            </div>
+                                            <div th:each="member : ${team.individualScores}"
+                                                 th:class="'team-member-score' + (${memberStat.index == 0} ? ' top-contributor' : '')">
+                                                <span th:text="${member.username}">Player</span>
+                                                <span th:text="${member.currentScore}">0</span>
+                                            </div>
+                                            <div th:if="${team.individualScores == null or team.individualScores.isEmpty()}" class="no-members">
+                                                No scores yet
+                                            </div>
                                         </div>
                                     </div>
                                 </div>

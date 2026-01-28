@@ -34,6 +34,7 @@
         <input type="hidden" th:name="quiz_pin" id="quiz_pin"/>
         <input type="hidden" th:value="${gameinfo.moderator}" id="moderator"/>
         <input type="hidden" th:value="${teamMode}" id="teamMode"/>
+        <input type="hidden" th:value="${assignmentMethod}" id="assignmentMethod"/>
         <div class="container-fluid">
             <div class="row justify-content-center align-items-center d-flex text-center h-100">
                 <div class="col-12 col-md-8  h-50">
@@ -56,6 +57,13 @@
         </div>
         <!-- Team Mode View -->
         <div th:if="${teamMode}" id="teamModeView" class="container">
+            <!-- Unassigned Players (shown for moderator in MANUAL mode) -->
+            <div id="unassignedSection" class="unassigned-section" style="display:none;">
+                <h5>Unassigned Players</h5>
+                <div id="unassignedPlayers" class="unassigned-players-list">
+                    <!-- Populated by JavaScript -->
+                </div>
+            </div>
             <div id="teamColumns" class="team-columns">
                 <!-- Populated by JavaScript -->
             </div>

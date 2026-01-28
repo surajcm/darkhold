@@ -1,8 +1,21 @@
 var teamData = [];
+var allUsers = [];
+var draggedPlayer = null;
 
 function toOptions() {
     document.forms[0].action = "/options";
     document.forms[0].submit();
+}
+
+function isModerator() {
+    let currentUser = document.getElementById('name').value;
+    let moderator = document.getElementById('moderator').value;
+    return currentUser === moderator;
+}
+
+function isManualAssignment() {
+    let method = document.getElementById('assignmentMethod')?.value;
+    return method === 'MANUAL';
 }
 
 function connect() {
@@ -16,7 +29,11 @@ function connect() {
         stompClient.send("/app/user", {}, JSON.stringify({'name': name_val, 'pin': pin_val}));
         // Subscribe to PIN-scoped topics for concurrent game support
         stompClient.subscribe('/topic/' + pin_val + '/user', function (greeting) {
-            showGreeting(JSON.parse(greeting.body).users);
+            allUsers = JSON.parse(greeting.body).users;
+            showGreeting(allUsers);
+            if (teamMode && isManualAssignment()) {
+                renderUnassignedPlayers();
+            }
         });
 
         stompClient.subscribe('/topic/' + pin_val + '/start', function (greeting) {
@@ -54,6 +71,7 @@ function loadTeamsAndRender() {
             teamData = teams;
             renderTeamView();
             updateMyTeamDisplay();
+            renderUnassignedPlayers();
         })
         .catch(err => console.error('Error loading teams:', err));
 }
@@ -62,10 +80,19 @@ function renderTeamView() {
     let teamColumns = document.getElementById('teamColumns');
     if (!teamColumns) return;
 
+    let canDrag = isModerator() && isManualAssignment();
+
     teamColumns.innerHTML = '';
     teamData.forEach(team => {
         let column = document.createElement('div');
         column.className = 'team-column team-column-' + team.color;
+        if (canDrag) {
+            column.classList.add('drop-zone');
+            column.setAttribute('data-team', team.name);
+            column.ondragover = handleDragOver;
+            column.ondragleave = handleDragLeave;
+            column.ondrop = handleDrop;
+        }
         column.innerHTML = `
             <div class="team-column-header">
                 <h5 class="team-column-title">
@@ -75,15 +102,104 @@ function renderTeamView() {
                 <div class="team-column-count">${(team.members || []).length} members</div>
             </div>
             <div class="team-members-list">
-                ${(team.members || []).map(m => `
-                    <div class="team-member-item">
-                        <span>${escapeHtmlPlayer(m)}</span>
-                    </div>
-                `).join('')}
+                ${(team.members || []).map(m => renderTeamMember(m, canDrag)).join('')}
             </div>
         `;
         teamColumns.appendChild(column);
     });
+}
+
+function renderTeamMember(username, canDrag) {
+    if (canDrag) {
+        return `
+            <div class="team-member-item draggable-player" draggable="true"
+                 data-username="${escapeHtmlPlayer(username)}"
+                 ondragstart="handleDragStart(event)"
+                 ondragend="handleDragEnd(event)">
+                <span>${escapeHtmlPlayer(username)}</span>
+            </div>
+        `;
+    }
+    return `
+        <div class="team-member-item">
+            <span>${escapeHtmlPlayer(username)}</span>
+        </div>
+    `;
+}
+
+function renderUnassignedPlayers() {
+    let section = document.getElementById('unassignedSection');
+    let container = document.getElementById('unassignedPlayers');
+    if (!section || !container || !isModerator() || !isManualAssignment()) {
+        if (section) section.style.display = 'none';
+        return;
+    }
+
+    // Find unassigned players
+    let assignedPlayers = new Set();
+    teamData.forEach(team => {
+        (team.members || []).forEach(m => assignedPlayers.add(m));
+    });
+
+    let moderator = document.getElementById('moderator').value;
+    let unassigned = allUsers.filter(u => !assignedPlayers.has(u) && u !== moderator);
+
+    if (unassigned.length === 0) {
+        section.style.display = 'none';
+        return;
+    }
+
+    section.style.display = 'block';
+    container.innerHTML = unassigned.map(username => `
+        <div class="unassigned-player draggable-player" draggable="true"
+             data-username="${escapeHtmlPlayer(username)}"
+             ondragstart="handleDragStart(event)"
+             ondragend="handleDragEnd(event)">
+            <span>${escapeHtmlPlayer(username)}</span>
+        </div>
+    `).join('');
+}
+
+function handleDragStart(event) {
+    draggedPlayer = event.target.getAttribute('data-username');
+    event.target.classList.add('dragging');
+    event.dataTransfer.effectAllowed = 'move';
+    event.dataTransfer.setData('text/plain', draggedPlayer);
+}
+
+function handleDragEnd(event) {
+    event.target.classList.remove('dragging');
+    draggedPlayer = null;
+    // Remove all drag-over states
+    document.querySelectorAll('.drag-over').forEach(el => el.classList.remove('drag-over'));
+}
+
+function handleDragOver(event) {
+    event.preventDefault();
+    event.dataTransfer.dropEffect = 'move';
+    event.currentTarget.classList.add('drag-over');
+}
+
+function handleDragLeave(event) {
+    event.currentTarget.classList.remove('drag-over');
+}
+
+function handleDrop(event) {
+    event.preventDefault();
+    event.currentTarget.classList.remove('drag-over');
+
+    let teamName = event.currentTarget.getAttribute('data-team');
+    let username = event.dataTransfer.getData('text/plain');
+
+    if (username && teamName) {
+        assignPlayerToTeam(username, teamName);
+    }
+}
+
+function assignPlayerToTeam(username, teamName) {
+    let pin = document.getElementById('quizPin').value;
+    console.log('Assigning', username, 'to team', teamName);
+    stompClient.send("/app/team/assign", {}, pin + ':' + username + ':' + teamName);
 }
 
 function updateMyTeamDisplay() {
