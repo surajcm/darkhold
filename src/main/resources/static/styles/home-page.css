@@ -1,0 +1,825 @@
+/* ============================================
+   DARKHOLD HOME PAGE STYLES
+   Bold, geometric design with portal aesthetic
+   ============================================ */
+
+/* ----------------------------------------
+   Layout & Structure
+   ---------------------------------------- */
+.home-page {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    overflow-x: hidden;
+}
+
+.home-main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+}
+
+.hero-section {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem 1rem 4rem;
+    position: relative;
+    z-index: 1;
+}
+
+.hero-section .container {
+    max-width: 800px;
+    width: 100%;
+}
+
+/* ----------------------------------------
+   Skip Link (Accessibility)
+   ---------------------------------------- */
+.skip-link {
+    position: absolute;
+    top: -100px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--color-primary);
+    color: white;
+    padding: 0.75rem 1.5rem;
+    border-radius: var(--radius-md);
+    z-index: 9999;
+    font-weight: 600;
+    text-decoration: none;
+    transition: top 0.3s ease;
+}
+
+.skip-link:focus {
+    top: 1rem;
+}
+
+/* ----------------------------------------
+   Decorative Geometric Elements
+   ---------------------------------------- */
+.hero-decoration {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    overflow: hidden;
+    z-index: 0;
+}
+
+.geo-shape {
+    position: absolute;
+    opacity: 0.08;
+    animation: float 20s ease-in-out infinite;
+}
+
+.geo-shape-1 {
+    width: 400px;
+    height: 400px;
+    top: -100px;
+    right: -100px;
+    background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%);
+    clip-path: polygon(50% 0%, 100% 38%, 82% 100%, 18% 100%, 0% 38%);
+    animation-delay: 0s;
+}
+
+.geo-shape-2 {
+    width: 300px;
+    height: 300px;
+    bottom: 10%;
+    left: -80px;
+    background: linear-gradient(45deg, var(--color-accent) 0%, var(--color-primary) 100%);
+    clip-path: polygon(30% 0%, 70% 0%, 100% 30%, 100% 70%, 70% 100%, 30% 100%, 0% 70%, 0% 30%);
+    animation-delay: -7s;
+    animation-duration: 25s;
+}
+
+.geo-shape-3 {
+    width: 200px;
+    height: 200px;
+    top: 40%;
+    right: 5%;
+    background: var(--color-secondary);
+    clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+    animation-delay: -14s;
+    animation-duration: 30s;
+}
+
+.geo-ring {
+    position: absolute;
+    border: 2px solid var(--color-primary);
+    border-radius: 50%;
+    opacity: 0.1;
+    animation: pulse-ring 8s ease-in-out infinite;
+}
+
+.geo-ring-1 {
+    width: 500px;
+    height: 500px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    animation-delay: 0s;
+}
+
+.geo-ring-2 {
+    width: 700px;
+    height: 700px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    animation-delay: -4s;
+}
+
+@keyframes float {
+    0%, 100% {
+        transform: translateY(0) rotate(0deg);
+    }
+    25% {
+        transform: translateY(-20px) rotate(5deg);
+    }
+    50% {
+        transform: translateY(0) rotate(0deg);
+    }
+    75% {
+        transform: translateY(20px) rotate(-5deg);
+    }
+}
+
+@keyframes pulse-ring {
+    0%, 100% {
+        opacity: 0.05;
+        transform: translate(-50%, -50%) scale(1);
+    }
+    50% {
+        opacity: 0.15;
+        transform: translate(-50%, -50%) scale(1.05);
+    }
+}
+
+/* ----------------------------------------
+   Brand Header
+   ---------------------------------------- */
+.brand-header {
+    text-align: center;
+    margin-bottom: 2.5rem;
+}
+
+.brand-logo {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 1rem;
+}
+
+.logo-icon {
+    width: 80px;
+    height: 80px;
+    color: var(--color-primary);
+    filter: drop-shadow(0 4px 20px rgba(var(--color-primary-rgb), 0.3));
+    animation: logo-pulse 3s ease-in-out infinite;
+}
+
+@keyframes logo-pulse {
+    0%, 100% {
+        transform: scale(1);
+        filter: drop-shadow(0 4px 20px rgba(var(--color-primary-rgb), 0.3));
+    }
+    50% {
+        transform: scale(1.05);
+        filter: drop-shadow(0 8px 30px rgba(var(--color-primary-rgb), 0.5));
+    }
+}
+
+.brand-name {
+    font-size: clamp(2.5rem, 8vw, 4rem);
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    margin: 0;
+    background: linear-gradient(135deg, var(--color-text-primary) 0%, var(--color-primary) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.brand-tagline {
+    font-size: 1.1rem;
+    color: var(--color-text-secondary);
+    margin: 0.5rem 0 0;
+    font-weight: 500;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+}
+
+/* ----------------------------------------
+   PIN Entry Card
+   ---------------------------------------- */
+.pin-card {
+    background: var(--color-bg-card);
+    border-radius: var(--radius-xl);
+    padding: 2.5rem;
+    box-shadow:
+        0 4px 6px rgba(0, 0, 0, 0.05),
+        0 20px 50px rgba(0, 0, 0, 0.1),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    border: 1px solid var(--color-border);
+    position: relative;
+    overflow: hidden;
+}
+
+.pin-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, var(--color-primary), var(--color-secondary), var(--color-accent));
+}
+
+.pin-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+/* Form Steps */
+.form-step {
+    display: none;
+    animation: step-enter 0.4s ease-out;
+}
+
+.form-step.active {
+    display: block;
+}
+
+@keyframes step-enter {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Form Label */
+.form-label {
+    display: block;
+    margin-bottom: 0.75rem;
+}
+
+.label-text {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--color-text-primary);
+    letter-spacing: -0.01em;
+}
+
+/* Input Wrapper */
+.input-wrapper {
+    position: relative;
+}
+
+.pin-input {
+    width: 100%;
+    padding: 1.25rem 1.5rem;
+    padding-left: 3.5rem;
+    font-size: 1.5rem;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    text-align: center;
+    border: 2px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    background: var(--color-bg-primary);
+    color: var(--color-text-primary);
+    transition: all 0.2s ease;
+}
+
+.pin-input::placeholder {
+    color: var(--color-text-muted);
+    font-weight: 400;
+    letter-spacing: 0.05em;
+}
+
+.pin-input:focus {
+    outline: none;
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 4px rgba(var(--color-primary-rgb), 0.15);
+}
+
+.pin-input:hover:not(:focus) {
+    border-color: var(--color-text-muted);
+}
+
+.name-input {
+    letter-spacing: 0.02em;
+    text-align: left;
+    padding-left: 3.5rem;
+}
+
+.input-icon {
+    position: absolute;
+    left: 1.25rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--color-text-muted);
+    font-size: 1.25rem;
+    pointer-events: none;
+    transition: color 0.2s ease;
+}
+
+.pin-input:focus ~ .input-icon,
+.input-wrapper:focus-within .input-icon {
+    color: var(--color-primary);
+}
+
+/* Form Help Text */
+.form-help {
+    display: block;
+    margin-top: 0.5rem;
+    font-size: 0.875rem;
+    color: var(--color-text-muted);
+    text-align: center;
+}
+
+/* Error Message */
+.error-container {
+    min-height: 1.5rem;
+}
+
+.error-message {
+    margin: 0;
+    padding: 0.75rem 1rem;
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--color-danger);
+    background: rgba(var(--color-danger-rgb), 0.1);
+    border-radius: var(--radius-md);
+    text-align: center;
+    animation: shake 0.4s ease-out;
+}
+
+.error-message:empty {
+    display: none;
+}
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    20% { transform: translateX(-8px); }
+    40% { transform: translateX(8px); }
+    60% { transform: translateX(-4px); }
+    80% { transform: translateX(4px); }
+}
+
+/* Alert Banner */
+.alert-banner {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1rem 1.25rem;
+    border-radius: var(--radius-md);
+    font-weight: 500;
+    margin-bottom: 1rem;
+}
+
+.alert-banner.alert-success {
+    background: rgba(var(--color-success-rgb), 0.1);
+    color: var(--color-success);
+    border: 1px solid rgba(var(--color-success-rgb), 0.2);
+}
+
+.alert-close {
+    margin-left: auto;
+    background: none;
+    border: none;
+    font-size: 1.25rem;
+    cursor: pointer;
+    opacity: 0.6;
+    color: inherit;
+    line-height: 1;
+    padding: 0;
+}
+
+.alert-close:hover {
+    opacity: 1;
+}
+
+/* Join Button */
+.btn-join {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    width: 100%;
+    padding: 1.25rem 2rem;
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: white;
+    background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%);
+    border: none;
+    border-radius: var(--radius-lg);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.btn-join::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, var(--color-secondary) 0%, var(--color-accent) 100%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.btn-join:hover::before {
+    opacity: 1;
+}
+
+.btn-join:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 30px rgba(var(--color-primary-rgb), 0.4);
+}
+
+.btn-join:active {
+    transform: translateY(0);
+}
+
+.btn-text,
+.btn-icon {
+    position: relative;
+    z-index: 1;
+}
+
+.btn-icon {
+    transition: transform 0.3s ease;
+}
+
+.btn-join:hover .btn-icon {
+    transform: translateX(4px);
+}
+
+.btn-loading {
+    display: none;
+    align-items: center;
+    gap: 0.5rem;
+    position: relative;
+    z-index: 1;
+}
+
+.btn-join.loading .btn-text,
+.btn-join.loading .btn-icon {
+    display: none;
+}
+
+.btn-join.loading .btn-loading {
+    display: flex;
+}
+
+/* ----------------------------------------
+   How It Works Section
+   ---------------------------------------- */
+.how-it-works {
+    margin-top: 3rem;
+    text-align: center;
+}
+
+.section-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--color-text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 1.5rem;
+}
+
+.steps-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+}
+
+.step-item {
+    text-align: center;
+    padding: 1rem;
+}
+
+.step-number {
+    width: 48px;
+    height: 48px;
+    margin: 0 auto 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.25rem;
+    font-weight: 800;
+    color: var(--color-primary);
+    background: rgba(var(--color-primary-rgb), 0.1);
+    border: 2px solid rgba(var(--color-primary-rgb), 0.2);
+    border-radius: 50%;
+}
+
+.step-title {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--color-text-primary);
+    margin: 0 0 0.5rem;
+}
+
+.step-desc {
+    font-size: 0.875rem;
+    color: var(--color-text-muted);
+    margin: 0;
+    line-height: 1.5;
+}
+
+/* ----------------------------------------
+   Quick Actions (Authenticated Users)
+   ---------------------------------------- */
+.quick-actions {
+    margin-top: 3rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--color-border);
+}
+
+.quick-actions .section-title {
+    text-transform: none;
+    letter-spacing: normal;
+    font-size: 1.25rem;
+}
+
+.user-name {
+    color: var(--color-primary);
+}
+
+.actions-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+}
+
+.action-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1.5rem 1rem;
+    background: var(--color-bg-secondary);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    text-decoration: none;
+    transition: all 0.2s ease;
+}
+
+.action-card:hover {
+    background: var(--color-bg-card);
+    border-color: var(--color-primary);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+}
+
+.action-icon {
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    color: var(--color-primary);
+    background: rgba(var(--color-primary-rgb), 0.1);
+    border-radius: var(--radius-md);
+    transition: all 0.2s ease;
+}
+
+.action-card:hover .action-icon {
+    background: var(--color-primary);
+    color: white;
+}
+
+.action-text {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--color-text-primary);
+}
+
+/* ----------------------------------------
+   Footer
+   ---------------------------------------- */
+.home-footer {
+    padding: 1.5rem;
+    text-align: center;
+    border-top: 1px solid var(--color-border);
+    background: var(--color-bg-secondary);
+}
+
+.footer-content {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.copyright {
+    font-size: 0.875rem;
+    color: var(--color-text-muted);
+    margin: 0;
+}
+
+/* ----------------------------------------
+   Animations
+   ---------------------------------------- */
+.animate-fade-in {
+    animation: fade-in 0.6s ease-out;
+}
+
+.animate-slide-up {
+    animation: slide-up 0.6s ease-out 0.2s both;
+}
+
+.animate-fade-in-delayed {
+    animation: fade-in 0.6s ease-out 0.4s both;
+}
+
+@keyframes fade-in {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes slide-up {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ----------------------------------------
+   Responsive Design
+   ---------------------------------------- */
+@media (max-width: 768px) {
+    .hero-section {
+        padding: 1.5rem 1rem 3rem;
+    }
+
+    .brand-name {
+        font-size: 2.5rem;
+    }
+
+    .brand-tagline {
+        font-size: 0.9rem;
+    }
+
+    .logo-icon {
+        width: 64px;
+        height: 64px;
+    }
+
+    .pin-card {
+        padding: 1.75rem;
+    }
+
+    .pin-input {
+        font-size: 1.25rem;
+        padding: 1rem 1.25rem;
+        padding-left: 3rem;
+    }
+
+    .input-icon {
+        left: 1rem;
+        font-size: 1rem;
+    }
+
+    .btn-join {
+        font-size: 1.1rem;
+        padding: 1rem 1.5rem;
+    }
+
+    .steps-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+
+    .step-item {
+        display: flex;
+        align-items: flex-start;
+        text-align: left;
+        gap: 1rem;
+        padding: 0.5rem;
+    }
+
+    .step-number {
+        flex-shrink: 0;
+        margin: 0;
+        width: 40px;
+        height: 40px;
+        font-size: 1rem;
+    }
+
+    .step-content {
+        flex: 1;
+    }
+
+    .actions-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .action-card {
+        flex-direction: row;
+        justify-content: flex-start;
+        padding: 1rem 1.25rem;
+    }
+
+    .action-icon {
+        width: 40px;
+        height: 40px;
+        font-size: 1.25rem;
+    }
+
+    /* Hide large decorative shapes on mobile */
+    .geo-shape-1,
+    .geo-shape-3 {
+        display: none;
+    }
+
+    .geo-shape-2 {
+        width: 200px;
+        height: 200px;
+        bottom: 5%;
+        left: -50px;
+    }
+
+    .geo-ring-1 {
+        width: 300px;
+        height: 300px;
+    }
+
+    .geo-ring-2 {
+        display: none;
+    }
+}
+
+@media (max-width: 480px) {
+    .brand-header {
+        margin-bottom: 1.5rem;
+    }
+
+    .brand-name {
+        font-size: 2rem;
+    }
+
+    .pin-card {
+        padding: 1.25rem;
+        border-radius: var(--radius-lg);
+    }
+
+    .label-text {
+        font-size: 1.1rem;
+    }
+
+    .pin-input {
+        font-size: 1.1rem;
+    }
+
+    .how-it-works {
+        margin-top: 2rem;
+    }
+
+    .quick-actions {
+        margin-top: 2rem;
+        padding-top: 1.5rem;
+    }
+}
+
+/* ----------------------------------------
+   Reduced Motion
+   ---------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+    .geo-shape,
+    .geo-ring,
+    .logo-icon {
+        animation: none;
+    }
+
+    .animate-fade-in,
+    .animate-slide-up,
+    .animate-fade-in-delayed {
+        animation: none;
+        opacity: 1;
+    }
+
+    .btn-join:hover {
+        transform: none;
+    }
+
+    .action-card:hover {
+        transform: none;
+    }
+}

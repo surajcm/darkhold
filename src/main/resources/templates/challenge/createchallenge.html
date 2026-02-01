@@ -1,22 +1,22 @@
 <!DOCTYPE HTML>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
 <head>
-    <title>Create Challenge - Darkhold</title>
+    <title th:text="#{challenge.create.title}">Create Challenge - Darkhold</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <meta name="_csrf" content="${_csrf.token}"/>
     <meta name="_csrf_header" content="${_csrf.headerName}"/>
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="manifest" href="/manifest.json">
     <link rel="shortcut icon" href="/images/favicon.png">
-    <link href="/styles/create-challenge-styles.css" rel="stylesheet" />
-    <link href="/styles/theme-variables.css" rel="stylesheet" />
+    <link href="/styles/darkhold-styles.css" rel="stylesheet" />
     <script type="text/javascript" src="/scripts/theme-manager.js"></script>
     <script type="text/javascript" src="/scripts/audio-manager.js"></script>
+    <script type="text/javascript" src="/scripts/language-manager.js"></script>
     <script type="text/javascript" src="/scripts/accessibility.js"></script>
     <script type="text/javascript" src="/scripts/create-challenge-scripts.js"></script>
     <script type="text/javascript" src="/scripts/common-scripts.js"></script>
 </head>
-<body>
+<body class="bg-admin">
     <div th:insert="~{navbar :: navbar}"></div>
     <form method="POST" id="fileUploadForm" enctype="multipart/form-data">
         <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
@@ -25,29 +25,29 @@
                 <div class="row justify-content-center">
                     <div class="col-md-8">
                         <div class="card">
-                            <div class="card-header">Create Challenge</div>
+                            <div class="card-header" th:text="#{challenge.create.header}">Create Challenge</div>
                             <div class="card-body">
                                 <!-- Title Field -->
                                 <div class="mb-3">
-                                    <label for="title" class="form-label">Challenge Title *</label>
+                                    <label for="title" class="form-label" th:text="#{challenge.create.titleLabel}">Challenge Title *</label>
                                     <input type="text" id="title" class="form-control" name="title"
-                                           maxlength="100" required placeholder="Enter challenge title">
-                                    <small class="form-text text-muted">Required, maximum 100 characters</small>
+                                           maxlength="100" required th:placeholder="#{challenge.create.titlePlaceholder}" placeholder="Enter challenge title">
+                                    <small class="form-text text-muted" th:text="#{challenge.create.titleHint}">Required, maximum 100 characters</small>
                                 </div>
 
                                 <!-- Description Field -->
                                 <div class="mb-3">
-                                    <label for="description" class="form-label">Description</label>
+                                    <label for="description" class="form-label" th:text="#{challenge.create.description}">Description</label>
                                     <textarea id="description" class="form-control" name="description"
-                                              rows="3" maxlength="250" placeholder="Enter challenge description (optional)"></textarea>
-                                    <small class="form-text text-muted">Optional, maximum 250 characters</small>
+                                              rows="3" maxlength="250" th:placeholder="#{challenge.create.descriptionPlaceholder}" placeholder="Enter challenge description (optional)"></textarea>
+                                    <small class="form-text text-muted" th:text="#{challenge.create.descriptionHint}">Optional, maximum 250 characters</small>
                                 </div>
 
                                 <!-- Excel Upload Section (Optional) -->
                                 <div class="mb-3">
-                                    <label for="upload" class="form-label">Upload Questions (Optional)</label>
+                                    <label for="upload" class="form-label" th:text="#{challenge.create.uploadQuestions}">Upload Questions (Optional)</label>
                                     <input class="form-control" type="file" name="upload" id="upload" accept=".xlsx" />
-                                    <small class="form-text text-muted">
+                                    <small class="form-text text-muted" th:text="#{challenge.create.uploadHint}">
                                         Upload an Excel file to bulk-add questions, or leave empty to add questions manually later.
                                     </small>
                                 </div>
@@ -56,64 +56,64 @@
                                 <div class="mb-3">
                                     <button class="btn btn-sm btn-outline-info" type="button" data-bs-toggle="collapse"
                                             data-bs-target="#excelFormatHelp" aria-expanded="false" aria-controls="excelFormatHelp">
-                                        <i class="fas fa-info-circle"></i> Show Excel Format Guide
+                                        <i class="fas fa-info-circle"></i> <span th:text="#{challenge.create.showExcelFormat}">Show Excel Format Guide</span>
                                     </button>
                                     <div class="collapse mt-2" id="excelFormatHelp">
                                         <div class="alert alert-info">
-                                            <strong>Excel Format Requirements:</strong>
+                                            <strong th:text="#{challenge.create.excelFormatTitle}">Excel Format Requirements:</strong>
                                             <table class="table table-sm table-bordered mt-2">
                                                 <thead>
                                                     <tr>
-                                                        <th>Column</th>
-                                                        <th>Field</th>
-                                                        <th>Description</th>
+                                                        <th th:text="#{challenge.create.column}">Column</th>
+                                                        <th th:text="#{challenge.create.field}">Field</th>
+                                                        <th th:text="#{challenge.create.excelDescription}">Description</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
                                                     <tr>
                                                         <td>0</td>
-                                                        <td>Question</td>
-                                                        <td>Max 120 characters</td>
+                                                        <td th:text="#{excel.question}">Question</td>
+                                                        <td th:text="#{excel.maxChars120}">Max 120 characters</td>
                                                     </tr>
                                                     <tr>
                                                         <td>1-4</td>
-                                                        <td>Answer 1-4</td>
-                                                        <td>Max 75 characters each</td>
+                                                        <td th:text="#{excel.answer1to4}">Answer 1-4</td>
+                                                        <td th:text="#{excel.maxChars75}">Max 75 characters each</td>
                                                     </tr>
                                                     <tr>
                                                         <td>5</td>
-                                                        <td>Correct Options</td>
-                                                        <td>Comma-separated: A, B, C, D</td>
+                                                        <td th:text="#{excel.correctOptions}">Correct Options</td>
+                                                        <td th:text="#{excel.correctOptionsDesc}">Comma-separated: A, B, C, D</td>
                                                     </tr>
                                                     <tr>
                                                         <td>6</td>
-                                                        <td>Question Type</td>
-                                                        <td>MULTIPLE_CHOICE, TRUE_FALSE, TYPE_ANSWER, POLL (optional)</td>
+                                                        <td th:text="#{excel.questionType}">Question Type</td>
+                                                        <td th:text="#{excel.questionTypeDesc}">MULTIPLE_CHOICE, TRUE_FALSE, TYPE_ANSWER, POLL (optional)</td>
                                                     </tr>
                                                     <tr>
                                                         <td>7</td>
-                                                        <td>Time Limit</td>
-                                                        <td>Seconds (optional)</td>
+                                                        <td th:text="#{excel.timeLimit}">Time Limit</td>
+                                                        <td th:text="#{excel.timeLimitDesc}">Seconds (optional)</td>
                                                     </tr>
                                                     <tr>
                                                         <td>8</td>
-                                                        <td>Points</td>
-                                                        <td>Integer, defaults to 1000 (optional)</td>
+                                                        <td th:text="#{excel.points}">Points</td>
+                                                        <td th:text="#{excel.pointsDesc}">Integer, defaults to 1000 (optional)</td>
                                                     </tr>
                                                     <tr>
                                                         <td>9</td>
-                                                        <td>Acceptable Answers</td>
-                                                        <td>For TYPE_ANSWER questions (optional)</td>
+                                                        <td th:text="#{excel.acceptableAnswers}">Acceptable Answers</td>
+                                                        <td th:text="#{excel.acceptableAnswersDesc}">For TYPE_ANSWER questions (optional)</td>
                                                     </tr>
                                                     <tr>
                                                         <td>10</td>
-                                                        <td>Image URL</td>
-                                                        <td>Question image (optional)</td>
+                                                        <td th:text="#{excel.imageUrl}">Image URL</td>
+                                                        <td th:text="#{excel.imageUrlDesc}">Question image (optional)</td>
                                                     </tr>
                                                     <tr>
                                                         <td>11</td>
-                                                        <td>Video URL</td>
-                                                        <td>Question video (optional)</td>
+                                                        <td th:text="#{excel.videoUrl}">Video URL</td>
+                                                        <td th:text="#{excel.videoUrlDesc}">Question video (optional)</td>
                                                     </tr>
                                                 </tbody>
                                             </table>
@@ -136,10 +136,10 @@
 
                                 <!-- Action Buttons -->
                                 <div class="d-flex gap-2">
-                                    <button class="btn btn-primary" type="button" id="btnSubmit" onclick="uploadPDF()">
+                                    <button class="btn btn-primary" type="button" id="btnSubmit" onclick="uploadPDF()" th:text="#{challenge.create.createButton}">
                                         Create Challenge
                                     </button>
-                                    <button type="button" class="btn btn-secondary" onclick="toOptions()">
+                                    <button type="button" class="btn btn-secondary" onclick="toOptions()" th:text="#{button.cancel}">
                                         Cancel
                                     </button>
                                 </div>

@@ -1,5 +1,5 @@
 <!DOCTYPE HTML>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -7,20 +7,19 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <meta name="description" content="darkhold create user page" />
         <meta name="author" content="Suraj" />
-        <title>Getting Started: Darkhold classroom quiz experience</title>
+        <title th:text="#{user.title} + ' - Darkhold'">User Management - Darkhold</title>
         <link rel="manifest" href="/manifest.json">
         <link rel="shortcut icon" href="/images/favicon.png">
-        <link href="/styles/error-styles.css" rel="stylesheet" />
-        <link href="/styles/theme-variables.css" rel="stylesheet" />
-        <link href="/styles/core/fontawesome-6.2.1/css/all.min.css" rel="stylesheet">
+        <link href="/styles/darkhold-styles.css" rel="stylesheet" />
         <script type="text/javascript" src="/scripts/theme-manager.js"></script>
         <script type="text/javascript" src="/scripts/audio-manager.js"></script>
+        <script type="text/javascript" src="/scripts/language-manager.js"></script>
         <script type="text/javascript" src="/scripts/accessibility.js"></script>
         <script type="text/javascript" src="/scripts/common-scripts.js"></script>
         <script type="text/javascript" src="/scripts/user-management-scripts.js"></script>
         <script type="text/javascript" src="/scripts/core/bootstrap-5.3.1/bootstrap.min.js"></script>
     </head>
-    <body>
+    <body class="bg-admin">
         <main>
             <div th:insert="~{navbar :: navbar}"></div>
             <div class="container">
@@ -35,25 +34,25 @@
                     <input type="hidden" th:field="*{id}" />
                     <div class="border border-secondary rounded p-3">
                         <div class="input-group mb-3">
-                            <label class="col-sm-4 col-form-label">First Name : </label>
+                            <label class="col-sm-4 col-form-label" th:text="#{user.firstName} + ' : '">First Name : </label>
                             <div class="col-sm-8">
                                 <input type="text" class="form-control" th:field="*{firstName}" required minlength="8" maxlength="90" />
                             </div>
                         </div>
                         <div class="input-group mb-3">
-                            <label class="col-sm-4 col-form-label">Last Name : </label>
+                            <label class="col-sm-4 col-form-label" th:text="#{user.lastName} + ' : '">Last Name : </label>
                             <div class="col-sm-8">
                                 <input type="text" class="form-control" th:field="*{lastName}" required minlength="8" maxlength="90" />
                             </div>
                         </div>
                         <div class="input-group mb-3">
-                            <label class="col-sm-4 col-form-label">E-mail : </label>
+                            <label class="col-sm-4 col-form-label" th:text="#{user.email} + ' : '">E-mail : </label>
                             <div class="col-sm-8">
                                 <input type="email" class="form-control" th:field="*{email}" required minlength="8" maxlength="128" />
                             </div>
                         </div>
                         <div class="input-group mb-3">
-                            <label class="col-sm-4 col-form-label">Password : </label>
+                            <label class="col-sm-4 col-form-label" th:text="#{user.password} + ' : '">Password : </label>
                             <div class="col-sm-8">
                                 <input type="password" th:if="${userForm.id == null}" class="form-control"
                                        th:field="*{password}" required minlength="8" maxlength="20" />
@@ -62,7 +61,7 @@
                             </div>
                         </div>
                         <div class="input-group mb-3">
-                            <label class="col-sm-4 col-form-label">Roles : </label>
+                            <label class="col-sm-4 col-form-label" th:text="#{user.roles} + ' : '">Roles : </label>
                             <div class="col-sm-8">
                                 <th:block th:each="role : ${listRoles}">
                                     <div class="form-check">
@@ -73,24 +72,24 @@
                             </div>
                         </div>
                         <div class="input-group mb-3">
-                            <label class="col-sm-4 col-form-label">Enabled : </label>
+                            <label class="col-sm-4 col-form-label" th:text="#{user.enabled} + ' : '">Enabled : </label>
                             <div class="col-sm-8">
                                 <input type="checkbox" th:field="*{enabled}" />
                             </div>
                         </div>
                         <div class="input-group mb-3">
-                            <label class="col-sm-4 col-form-label">Photos : </label>
+                            <label class="col-sm-4 col-form-label" th:text="#{user.photos} + ' : '">Photos : </label>
                             <div class="col-sm-8">
                                 <input type="hidden" th:field="*{photo}" />
                                 <input type="file" id="fileImage" name="image" accept="image/png, image/jpeg"
                                        onchange="changeThumbnail(this);" class="mb-2"/>
-                                <img id="thumbnail" alt="Photos preview" th:src="@{${userForm.photosImagePath}}"
+                                <img id="thumbnail" th:alt="#{user.photosPreview}" alt="Photos preview" th:src="@{${userForm.photosImagePath}}"
                                      class="img-fluid"/>
                             </div>
                         </div>
                         <div class="text-center">
-                            <input type="submit" value="Save" class="btn btn-primary m-3" />
-                            <input type="button" value="Cancel" id="cancelButton" onclick="toUsers()" class="btn border-secondary" />
+                            <input type="submit" th:value="#{user.save}" value="Save" class="btn btn-primary m-3" />
+                            <input type="button" th:value="#{user.cancel}" value="Cancel" id="cancelButton" onclick="toUsers()" class="btn border-secondary" />
                         </div>
                     </div>
                 </form>
@@ -98,14 +97,14 @@
                     <div class="modal-dialog">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <h4 class="modal-title" id="modalTitle">Warning</h4>
+                                <h4 class="modal-title" id="modalTitle" th:text="#{user.warning}">Warning</h4>
                                 <button type="button" class="btn-close" data-bs-dismiss="modal">&times;</button>
                             </div>
                             <div class="modal-body">
                                 <span id="modalBody"></span>
                             </div>
                             <div class="modal-footer">
-                                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+                                <button type="button" class="btn btn-danger" data-bs-dismiss="modal" th:text="#{user.close}">Close</button>
                             </div>
                         </div>
                     </div>

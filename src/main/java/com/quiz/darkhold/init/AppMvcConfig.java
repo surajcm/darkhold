@@ -5,17 +5,22 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
 
 import java.nio.file.Paths;
 
 @Configuration
 public class AppMvcConfig implements WebMvcConfigurer {
     @Autowired
-    AppMvcInterceptor appMvcInterceptor;
+    private AppMvcInterceptor appMvcInterceptor;
+
+    @Autowired
+    private LocaleChangeInterceptor localeChangeInterceptor;
 
     @Override
     public void addInterceptors(final InterceptorRegistry registry) {
         registry.addInterceptor(appMvcInterceptor);
+        registry.addInterceptor(localeChangeInterceptor);
     }
 
     @Override

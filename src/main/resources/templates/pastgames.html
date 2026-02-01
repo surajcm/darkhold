@@ -1,14 +1,14 @@
 <!DOCTYPE HTML>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Past Games - Darkhold</title>
+    <title th:text="#{pastgames.title} + ' - Darkhold'">Past Games - Darkhold</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="manifest" href="/manifest.json">
     <link rel="shortcut icon" href="/images/favicon.png">
     <link href="/styles/darkhold-styles.css" rel="stylesheet" />
-    <link href="/styles/theme-variables.css" rel="stylesheet" />
     <script type="text/javascript" src="/scripts/theme-manager.js"></script>
+    <script type="text/javascript" src="/scripts/language-manager.js"></script>
     <script type="text/javascript" src="/scripts/common-scripts.js"></script>
     <script type="text/javascript" src="/scripts/audio-manager.js"></script>
     <script type="text/javascript" src="/scripts/accessibility.js"></script>
@@ -63,12 +63,12 @@
         }
     </style>
 </head>
-<body>
+<body class="bg-admin">
     <div th:insert="~{navbar :: navbar}"></div>
     <nav class="navbar transparent">
         <ul class="navbar-nav mx-auto">
             <li class="nav-item">
-                <span class="badge badge-pill badge-primary" style="font-size: 1.5rem;">Past Games</span>
+                <span class="badge badge-pill badge-primary" style="font-size: 1.5rem;" th:text="#{pastgames.title}">Past Games</span>
             </li>
         </ul>
     </nav>
@@ -79,7 +79,7 @@
             <div class="row mb-3">
                 <div class="col-12">
                     <p class="text-muted">
-                        Showing <strong th:text="${#lists.size(pastGames)}"></strong> completed game(s)
+                        <span th:text="#{pastgames.showing}">Showing</span> <strong th:text="${#lists.size(pastGames)}"></strong> <span th:text="#{pastgames.completedGames}">completed game(s)</span>
                     </p>
                 </div>
             </div>
@@ -87,14 +87,14 @@
             <table class="games-table table table-hover">
                 <thead>
                     <tr>
-                        <th>Date & Time</th>
-                        <th>Challenge</th>
-                        <th>Mode</th>
-                        <th>Duration</th>
-                        <th>Questions</th>
-                        <th>Participants</th>
-                        <th>Winner</th>
-                        <th>Actions</th>
+                        <th th:text="#{pastgames.dateTime}">Date & Time</th>
+                        <th th:text="#{pastgames.challenge}">Challenge</th>
+                        <th th:text="#{pastgames.mode}">Mode</th>
+                        <th th:text="#{pastgames.duration}">Duration</th>
+                        <th th:text="#{pastgames.questions}">Questions</th>
+                        <th th:text="#{pastgames.participants}">Participants</th>
+                        <th th:text="#{pastgames.winner}">Winner</th>
+                        <th th:text="#{pastgames.actions}">Actions</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -111,11 +111,11 @@
                         <td>
                             <span class="mode-badge"
                                   th:classappend="${game.gameMode == 'PRACTICE' ? 'mode-practice' : 'mode-multiplayer'}"
-                                  th:text="${game.gameMode == 'PRACTICE' ? 'Practice' : 'Multiplayer'}">
+                                  th:text="${game.gameMode == 'PRACTICE' ? #{pastgames.practice} : #{pastgames.multiplayer}}">
                             </span>
                         </td>
                         <td>
-                            <span th:text="${game.durationMinutes} + ' min'"></span>
+                            <span th:text="${game.durationMinutes} + ' ' + #{pastgames.min}"></span>
                         </td>
                         <td>
                             <span class="stats-badge" th:text="${game.totalQuestions}"></span>
@@ -131,7 +131,7 @@
                             <span th:if="${game.winnerUsername == null}" class="text-muted">-</span>
                         </td>
                         <td>
-                            <a th:href="@{/game-result/{id}(id=${game.id})}" class="btn btn-sm btn-primary">View</a>
+                            <a th:href="@{/game-result/{id}(id=${game.id})}" class="btn btn-sm btn-primary" th:text="#{pastgames.view}">View</a>
                             <a th:href="@{/game-result/{id}/export-csv(id=${game.id})}" class="btn btn-sm btn-secondary">CSV</a>
                         </td>
                     </tr>
@@ -142,9 +142,9 @@
         <!-- No Games Message -->
         <div th:if="${pastGames == null or pastGames.isEmpty()}" class="no-games">
             <div style="font-size: 4rem; margin-bottom: 20px;">📊</div>
-            <h3>No Past Games</h3>
-            <p>You haven't completed any games yet.</p>
-            <a href="/" class="btn btn-primary mt-3">Start a New Game</a>
+            <h3 th:text="#{pastgames.noPastGames}">No Past Games</h3>
+            <p th:text="#{pastgames.noPastGamesMessage}">You haven't completed any games yet.</p>
+            <a href="/" class="btn btn-primary mt-3" th:text="#{pastgames.startNewGame}">Start a New Game</a>
         </div>
     </div>
 

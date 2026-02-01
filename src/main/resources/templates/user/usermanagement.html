@@ -1,27 +1,26 @@
 <!DOCTYPE HTML>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>Getting Started: Darkhold classroom quiz experience</title>
+    <title th:text="#{user.title} + ' - Darkhold'">User Management - Darkhold</title>
     <link rel="manifest" href="/manifest.json">
     <link rel="shortcut icon" href="/images/favicon.png">
-    <link href="/styles/error-styles.css" rel="stylesheet" />
-    <link href="/styles/theme-variables.css" rel="stylesheet" />
-    <link href="/styles/core/fontawesome-6.2.1/css/all.min.css" rel="stylesheet">
+    <link href="/styles/darkhold-styles.css" rel="stylesheet" />
     <link href="/styles/icon-styles.css" rel="stylesheet">
     <script type="text/javascript" src="/scripts/theme-manager.js"></script>
     <script type="text/javascript" src="/scripts/audio-manager.js"></script>
+    <script type="text/javascript" src="/scripts/language-manager.js"></script>
     <script type="text/javascript" src="/scripts/accessibility.js"></script>
     <script type="text/javascript" src="/scripts/common-scripts.js"></script>
     <script type="text/javascript" src="/scripts/user-management-scripts.js"></script>
     <script type="text/javascript" src="/scripts/core/bootstrap-5.3.1/bootstrap.min.js"></script>
 </head>
-<body>
+<body class="bg-admin">
     <div th:insert="~{navbar :: navbar}"></div>
     <div>
-        <h2>Manage Users</h2>
-        <a th:href="@{/user/create}">Create New User</a>
+        <h2 th:text="#{user.manageUsers}">Manage Users</h2>
+        <a th:href="@{/user/create}" th:text="#{user.createNew}">Create New User</a>
     </div>
     <div th:if="${message != null}">
         <div class="alert alert-success text-center" role="alert">
@@ -33,13 +32,13 @@
             <table class="table table-bordered table-striped table-hover table-responsive-xl">
                 <thead class="thead-dark">
                     <tr>
-                        <th>User ID</th>
-                        <th>Photos</th>
-                        <th>Email</th>
-                        <th>First Name</th>
-                        <th>Last Name</th>
-                        <th>Roles</th>
-                        <th>Enabled</th>
+                        <th th:text="#{user.userId}">User ID</th>
+                        <th th:text="#{user.photos}">Photos</th>
+                        <th th:text="#{user.email}">Email</th>
+                        <th th:text="#{user.firstName}">First Name</th>
+                        <th th:text="#{user.lastName}">Last Name</th>
+                        <th th:text="#{user.roles}">Roles</th>
+                        <th th:text="#{user.enabled}">Enabled</th>
                         <th></th>
                     </tr>
                 </thead>
@@ -56,25 +55,25 @@
                         <td>[[${user.roles}]]</td>
                         <td>
                             <a th:if="${user.enabled == true}" class="fas fa-check-circle fa-2x icon-green"
-                               th:href="@{'/users/' + ${user.id} + '/enabled/false'}" title="Disable this user"></a>
+                               th:href="@{'/users/' + ${user.id} + '/enabled/false'}" th:title="#{user.disableUser}" title="Disable this user"></a>
                             <a th:if="${user.enabled == false}" class="fas fa-circle fa-2x icon-dark"
-                               th:href="@{'/users/' + ${user.id} + '/enabled/true'}" title="Enable this user"></a>
+                               th:href="@{'/users/' + ${user.id} + '/enabled/true'}" th:title="#{user.enableUser}" title="Enable this user"></a>
                         </td>
                         <td>
-                            <a class="fas fa-edit fa-2x icon-green" th:href="@{'/user/edit/' + ${user.id}}" title="Edit this user"></a>
+                            <a class="fas fa-edit fa-2x icon-green" th:href="@{'/user/edit/' + ${user.id}}" th:title="#{user.editUser}" title="Edit this user"></a>
                             &nbsp;
                             <a class="fas fa-trash fa-2x icon-dark" th:href="@{'/user/delete/' + ${user.id}}"
                                th:userId="${user.id}"
-                               title="Delete this user"></a>
+                               th:title="#{user.deleteUser}" title="Delete this user"></a>
                         </td>
                     </tr>
                 </tbody>
             </table>
             <div class="text-center m-1">
                     <span th:if="${totalItems > 0}">
-                        Showing users #[[${startCount}]] to [[${endCount}]] of [[${totalItems}]]
+                        <span th:text="#{user.showingUsers}">Showing users</span> #[[${startCount}]] <span th:text="#{user.to}">to</span> [[${endCount}]] <span th:text="#{user.of}">of</span> [[${totalItems}]]
                     </span>
-                <span th:unless="${totalItems > 0}">
+                <span th:unless="${totalItems > 0}" th:text="#{user.noUsersFound}">
                         No users found
                     </span>
             </div>
@@ -82,19 +81,19 @@
                 <nav>
                     <ul class="pagination justify-content-center">
                         <li th:class="${currentPage > 1 ? 'page-item' : 'page-item disabled'} " >
-                            <a class="page-link" th:href="@{/user/page/1}">First</a>
+                            <a class="page-link" th:href="@{/user/page/1}" th:text="#{user.first}">First</a>
                         </li>
                         <li th:class="${currentPage > 1 ? 'page-item' : 'page-item disabled'} " >
-                            <a class="page-link" th:href="@{'/user/page/' + ${currentPage - 1 }}">Previous</a>
+                            <a class="page-link" th:href="@{'/user/page/' + ${currentPage - 1 }}" th:text="#{user.previous}">Previous</a>
                         </li>
                         <li th:class="${currentPage != i ? 'page-item' : 'page-item active'} " th:each="i : ${#numbers.sequence(1, totalPages)}">
                             <a class="page-link" th:href="@{'/user/page/' + ${i}}">[[${i}]]</a>
                         </li>
                         <li th:class="${currentPage < totalPages ? 'page-item' : 'page-item disabled'}" >
-                            <a class="page-link" th:href="@{'/user/page/' + ${currentPage + 1 }}">Next</a>
+                            <a class="page-link" th:href="@{'/user/page/' + ${currentPage + 1 }}" th:text="#{user.next}">Next</a>
                         </li>
                         <li th:class="${currentPage < totalPages ? 'page-item' : 'page-item disabled'}">
-                            <a class="page-link" th:href="@{'/user/page/' + ${totalPages}}">Last</a>
+                            <a class="page-link" th:href="@{'/user/page/' + ${totalPages}}" th:text="#{user.last}">Last</a>
                         </li>
                     </ul>
                 </nav>
@@ -104,15 +103,15 @@
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h4 class="modal-title" id="modalTitle">Delete Confirmation</h4>
+                        <h4 class="modal-title" id="modalTitle" th:text="#{user.deleteConfirmation}">Delete Confirmation</h4>
                         <button type="button" class="btn-close" data-bs-dismiss="modal">&times;</button>
                     </div>
                     <div class="modal-body">
                         <span id="confirmText"></span>
                     </div>
                     <div class="modal-footer">
-                        <a class="btn btn-success" href="">Yes</a>
-                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">No</button>
+                        <a class="btn btn-success" href="" th:text="#{user.yes}">Yes</a>
+                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal" th:text="#{user.no}">No</button>
                     </div>
                 </div>
             </div>

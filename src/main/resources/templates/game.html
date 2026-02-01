@@ -11,15 +11,15 @@
     <link rel="shortcut icon" href="/images/favicon.png">
     <link rel="manifest" href="/manifest.json">
     <link rel="apple-touch-icon" href="/images/icons/icon-192.png">
-    <link rel="stylesheet" href="/styles/game-styles.css"  />
+    <link rel="stylesheet" href="/styles/darkhold-styles.css" />
     <link rel="stylesheet" href="/styles/core/flipclock.css" />
-    <link rel="stylesheet" href="/styles/game-flipclock-custom.css" />
     <script type="text/javascript" src="/scripts/theme-manager.js"></script>
     <script type="text/javascript" src="/scripts/audio-manager.js"></script>
+    <script type="text/javascript" src="/scripts/language-manager.js"></script>
     <script type="text/javascript" src="/scripts/accessibility.js"></script>
     <script type="text/javascript" src="/scripts/common-scripts.js"></script>
 </head>
-<body onload="connect()">
+<body class="bg-game" onload="connect()">
     <div th:insert="~{navbar :: navbar}"></div>
     <nav class="navbar transparent">
         <div class="navbar-brand">
@@ -30,24 +30,24 @@
         </div>
         <ul class="navbar-nav mx-auto">
             <li class="nav-item">
-                <span class="badge badge-secondary mr-2">Question [[${challenge.questionNumber}]] of [[${challenge.totalQuestions}]]</span>
+                <span class="badge badge-secondary mr-2" th:text="#{game.question} + ' ' + ${challenge.questionNumber} + ' of ' + ${challenge.totalQuestions}">Question [[${challenge.questionNumber}]] of [[${challenge.totalQuestions}]]</span>
                 <strong>[[${challenge.QuestionSet.question}]]</strong>
             </li>
         </ul>
         <span th:if="${not #sets.isEmpty(#authentication.getPrincipal().getAuthorities())}">
             <button id="pauseButton" class="btn btn-lg btn-warning mr-2" type="button"
-                    onclick="togglePause();">Pause</button>
+                    onclick="togglePause();" th:text="#{game.pause}">Pause</button>
             <button id="nextButton" class="btn btn-lg btn-rised align-middle btn-primary ml-auto mr-3 order-lg-last" type="button"
-                    style="display:none" onclick="showScoreboard();" >Next</button>
+                    style="display:none" onclick="showScoreboard();" th:text="#{game.next}">Next</button>
         </span>
     </nav>
     <!-- Pause overlay -->
     <div id="pauseOverlay" class="pause-overlay" style="display:none;">
         <div class="pause-content">
-            <h1>PAUSED</h1>
-            <p>The game has been paused by the moderator</p>
+            <h1 th:text="#{game.paused}">PAUSED</h1>
+            <p th:text="#{game.pausedMessage}">The game has been paused by the moderator</p>
             <span th:if="${not #sets.isEmpty(#authentication.getPrincipal().getAuthorities())}">
-                <button class="btn btn-lg btn-success" onclick="togglePause();">Resume</button>
+                <button class="btn btn-lg btn-success" onclick="togglePause();" th:text="#{game.resume}">Resume</button>
             </span>
         </div>
     </div>
@@ -174,7 +174,7 @@
                                      onclick="waitAndShowTrueFalse(this)">
                                     <div class="card bg-primary text-white">
                                         <div class="card-body text-center">
-                                            <div class="title"><h2>TRUE</h2></div>
+                                            <div class="title"><h2 th:text="#{game.true}">TRUE</h2></div>
                                         </div>
                                     </div>
                                 </div>
@@ -183,7 +183,7 @@
                                      onclick="waitAndShowTrueFalse(this)">
                                     <div class="card bg-danger text-white">
                                         <div class="card-body text-center">
-                                            <div class="title"><h2>FALSE</h2></div>
+                                            <div class="title"><h2 th:text="#{game.false}">FALSE</h2></div>
                                         </div>
                                     </div>
                                 </div>
@@ -194,12 +194,12 @@
                                 <div class="col-lg-8 col-md-10 col-sm-12 mx-auto">
                                     <div class="card">
                                         <div class="card-body text-center">
-                                            <label for="typeAnswerInput" class="form-label h5 mb-3">Type your answer:</label>
+                                            <label for="typeAnswerInput" class="form-label h5 mb-3" th:text="#{game.typeYourAnswer}">Type your answer:</label>
                                             <input type="text" id="typeAnswerInput" class="form-control form-control-lg text-center mb-3"
-                                                   placeholder="Enter your answer here..." maxlength="225" autocomplete="off"
+                                                   th:placeholder="#{game.enterAnswerPlaceholder}" placeholder="Enter your answer here..." maxlength="225" autocomplete="off"
                                                    aria-label="Type your answer" aria-describedby="typeAnswerHelp"/>
                                             <button type="button" class="btn btn-lg btn-primary" onclick="submitTypeAnswer()"
-                                                    aria-label="Submit your typed answer">
+                                                    aria-label="Submit your typed answer" th:text="#{game.submitAnswer}">
                                                 Submit Answer
                                             </button>
                                         </div>
@@ -211,8 +211,8 @@
                         <div class="row mt-4" id="waitingMessage" style="display:none;">
                             <div class="col-12 text-center">
                                 <div class="alert alert-info" role="alert">
-                                    <h4 class="mb-2">Answer Submitted!</h4>
-                                    <p class="mb-0">Waiting for other players to finish...</p>
+                                    <h4 class="mb-2" th:text="#{game.answerSubmitted}">Answer Submitted!</h4>
+                                    <p class="mb-0" th:text="#{game.waitingForOthers}">Waiting for other players to finish...</p>
                                     <div class="spinner-border text-info mt-2" role="status">
                                         <span class="visually-hidden">Loading...</span>
                                     </div>
@@ -222,7 +222,7 @@
                         <!-- Practice Mode: Next Question Button -->
                         <div class="row mt-4" id="practiceNextContainer" style="display:none;">
                             <div class="col-12 text-center">
-                                <button type="button" class="btn btn-lg btn-success" onclick="goToNextQuestion()">
+                                <button type="button" class="btn btn-lg btn-success" onclick="goToNextQuestion()" th:text="#{game.nextQuestion}">
                                     Next Question
                                 </button>
                             </div>

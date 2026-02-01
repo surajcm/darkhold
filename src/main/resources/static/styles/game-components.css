@@ -1,0 +1,318 @@
+/**
+ * Game Components CSS
+ * Consolidated styles for all game/player-facing screens
+ *
+ * Includes styles for:
+ * - PIN entry (home page)
+ * - Game lobby / waiting room
+ * - Question display
+ * - Answer cards
+ * - Scoreboard
+ * - Timer (flipclock)
+ * - Interstitial/transition screens
+ */
+
+/* ============================================
+   LAYOUT UTILITIES
+   ============================================ */
+.vertical-center {
+    min-height: 100%;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+}
+
+.jumbotron {
+    background: none;
+}
+
+/* Transparent navbar for game screens */
+.navbar.transparent.navbar-inverse .navbar-inner {
+    border-width: 0px;
+    box-shadow: 0px 0px;
+    background-color: rgba(0, 0, 0, 0.0);
+    background-image: linear-gradient(180deg, rgba(0, 0, 0, 0.00) 0%, rgba(0, 0, 0, 0.00) 100%);
+}
+
+/* ============================================
+   PIN ENTRY INPUT
+   ============================================ */
+.pin-input {
+    background: var(--color-input-bg) none repeat scroll 0 0;
+    border: 3px solid var(--color-input-border);
+    border-radius: 4px;
+    font-family: var(--font-display);
+    font-size: 30px;
+    height: 80px;
+    line-height: 50px;
+    width: 180px;
+    color: var(--color-input-text);
+    text-align: center;
+}
+
+.pin-input:focus {
+    border: 3px solid var(--color-input-focus-border);
+    outline: none;
+}
+
+/* Legacy support for .form-control on game pages */
+.bg-game .form-control {
+    background: var(--color-input-bg) none repeat scroll 0 0;
+    border: 3px solid var(--color-input-border);
+    border-radius: 4px;
+    font-family: var(--font-display);
+    font-size: 30px;
+    height: 80px;
+    line-height: 50px;
+    width: 180px;
+    color: var(--color-input-text);
+}
+
+.bg-game .form-control:focus,
+.bg-game input[type=number]:focus {
+    border: 3px solid var(--color-input-focus-border);
+}
+
+/* ============================================
+   GAME MESSAGE DISPLAY
+   ============================================ */
+#message_disp {
+    color: var(--color-error);
+}
+
+/* ============================================
+   ANSWER CARDS
+   ============================================ */
+.answer-card,
+.bg-game .card {
+    background: var(--color-card-bg);
+    border: 1px solid var(--color-card-border);
+    border-radius: 0;
+    padding: 20px 10px;
+    margin: 20px 0px;
+    cursor: pointer;
+    box-shadow: var(--shadow-sm);
+    transition: box-shadow var(--transition-fast), transform var(--transition-fast);
+}
+
+.answer-card:hover,
+.bg-game .card:hover {
+    box-shadow: var(--shadow-hover);
+    transform: translateY(-2px);
+}
+
+.answer-card.selected {
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px var(--color-primary-light);
+}
+
+.answer-card.correct {
+    background: var(--color-correct-answer);
+    border-color: var(--color-correct-answer);
+}
+
+.answer-card.incorrect {
+    background: var(--color-incorrect-answer);
+    border-color: var(--color-incorrect-answer);
+}
+
+/* Background block card variant */
+.card.background-block {
+    float: left;
+    width: 100%;
+    height: 200px;
+    overflow: hidden;
+}
+
+/* ============================================
+   RIBBON (for announcements/badges)
+   ============================================ */
+.ribbon {
+    font-size: 16px !important;
+    width: 50%;
+    position: relative;
+    background: var(--color-card-bg);
+    border: .5em solid var(--color-border-dark);
+    text-align: center;
+    padding: 1em 2em;
+    margin: 2em auto 3em;
+}
+
+.ribbon:before,
+.ribbon:after {
+    content: "";
+    position: absolute;
+    display: block;
+    bottom: -1em;
+    border: 1.5em solid var(--color-card-bg);
+    z-index: -1;
+}
+
+.ribbon:before {
+    left: -2em;
+    border-right-width: 1.5em;
+    border-left-color: transparent;
+}
+
+.ribbon:after {
+    right: -2em;
+    border-left-width: 1.5em;
+    border-right-color: transparent;
+}
+
+.ribbon .ribbon-content:before,
+.ribbon .ribbon-content:after {
+    content: "";
+    position: absolute;
+    display: block;
+    border-style: solid;
+    border-color: var(--color-card-bg) transparent transparent transparent;
+    bottom: -1em;
+}
+
+.ribbon .ribbon-content:before {
+    left: 0;
+    border-width: 1em 0 0 1em;
+}
+
+.ribbon .ribbon-content:after {
+    right: 0;
+    border-width: 1em 1em 0 0;
+}
+
+.non-semantic-protector {
+    position: relative;
+    z-index: 1;
+}
+
+/* ============================================
+   FLIPCLOCK TIMER CUSTOMIZATION
+   ============================================ */
+.flip-clock-wrapper ul li a div.down {
+    border-bottom-left-radius: 0px !important;
+    border-bottom-right-radius: 0px !important;
+}
+
+.clock.flip-clock-wrapper ul li a div div.inn {
+    font-size: 11px !important;
+    line-height: 25px !important;
+}
+
+ul.flip {
+    padding: 0px 10px !important;
+}
+
+.clock.flip-clock-wrapper ul {
+    width: 15px !important;
+    height: 25px !important;
+}
+
+.clock.flip-clock-wrapper ul li a div.up:after {
+    top: 12px !important;
+}
+
+.flip-clock-wrapper ul.flip.flip:nth-child(even) {
+    margin: 0px 10px 0px 0px !important;
+    border-radius: 0px 6px 6px 0px !important;
+}
+
+.flip-clock-wrapper ul.flip:nth-child(even) li a div div.inn {
+    background-color: var(--color-timer-primary) !important;
+    border-radius: 0px 6px 6px 0px !important;
+}
+
+.flip-clock-wrapper ul.flip.flip:nth-child(odd) {
+    margin: 0px !important;
+    border-radius: 6px 0px 0px 6px !important;
+}
+
+.flip-clock-wrapper ul.flip:nth-child(odd) li a div div.inn {
+    background-color: var(--color-timer-secondary) !important;
+    border-radius: 6px 0px 0px 6px !important;
+}
+
+/* ============================================
+   INTERSTITIAL / LOADING SCREEN
+   ============================================ */
+.interstitial-container {
+    display: flex;
+    flex-wrap: wrap;
+    align-content: center;
+    margin-top: 30vh;
+}
+
+.pinkBg {
+    background-color: #ed184f !important;
+    background-image: linear-gradient(90deg, #fd5581, #fd8b55);
+}
+
+.intro-banner-vdo-play-btn {
+    height: 60px;
+    width: 60px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    text-align: center;
+    margin: -30px 0 0 -30px;
+    border-radius: 100px;
+    z-index: 1;
+}
+
+.intro-banner-vdo-play-btn i {
+    line-height: 56px;
+    font-size: 30px;
+}
+
+.intro-banner-vdo-play-btn .ripple {
+    position: absolute;
+    width: 160px;
+    height: 160px;
+    z-index: -1;
+    left: 50%;
+    top: 50%;
+    opacity: 0;
+    margin: -80px 0 0 -80px;
+    border-radius: 100px;
+    animation: ripple 1.8s infinite;
+}
+
+@keyframes ripple {
+    0% {
+        opacity: 1;
+        transform: scale(0);
+    }
+    100% {
+        opacity: 0;
+        transform: scale(1);
+    }
+}
+
+.intro-banner-vdo-play-btn .ripple:nth-child(2) {
+    animation-delay: .3s;
+}
+
+.intro-banner-vdo-play-btn .ripple:nth-child(3) {
+    animation-delay: .6s;
+}
+
+/* ============================================
+   GAME TEXT STYLES
+   ============================================ */
+.bg-game span {
+    font-size: 15px;
+}
+
+.bg-game a {
+    text-decoration: none;
+    color: var(--color-primary);
+    border-bottom: 2px solid var(--color-primary);
+}
+
+.bg-game .text {
+    margin: 20px 0px;
+    color: var(--color-text-primary);
+}
+
+.bg-game .fa {
+    color: var(--color-primary-light);
+}

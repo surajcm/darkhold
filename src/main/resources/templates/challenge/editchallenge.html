@@ -1,25 +1,23 @@
 <!DOCTYPE HTML>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
 <head>
-    <title>Edit Challenge - Darkhold</title>
+    <title th:text="#{challenge.edit.title}">Edit Challenge - Darkhold</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="manifest" href="/manifest.json">
     <link rel="shortcut icon" href="/images/favicon.png">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/styles/darkhold-styles.css" rel="stylesheet" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
-    <link rel="stylesheet" href="/styles/core/font-awesome-all.5.15.4.min.css">
     <link rel="stylesheet" href="/styles/icon-styles.css">
-    <link href="/styles/theme-variables.css" rel="stylesheet" />
     <script type="text/javascript" src="/scripts/theme-manager.js"></script>
     <script type="text/javascript" src="/scripts/audio-manager.js"></script>
+    <script type="text/javascript" src="/scripts/language-manager.js"></script>
     <script type="text/javascript" src="/scripts/accessibility.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
     <script type="text/javascript" src="/scripts/common-scripts.js"></script>
     <style>
         body {
-            background-image: url("/images/funky-lines.png");
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            font-family: var(--font-system);
             font-style: normal;
         }
         body::before {
@@ -46,7 +44,7 @@
         }
     </style>
 </head>
-<body>
+<body class="bg-admin">
 <div th:insert="~{navbar :: navbar}"></div>
 <form method="POST" id="editChallengeForm">
 <div class="container my-4">
@@ -58,22 +56,23 @@
             <h5 class="mb-0" th:text="${challenge.title}">Challenge Title</h5>
             <div>
                 <button class="btn btn-outline-primary btn-sm" data-bs-toggle="modal" data-bs-target="#editInfoModal">
-                    <i class="bi bi-pencil"></i> Edit Info
+                    <i class="bi bi-pencil"></i> <span th:text="#{challenge.edit.editInfo}">Edit Info</span>
                 </button>
                 <a href="/options" class="btn btn-success btn-sm">
-                    <i class="bi bi-check-circle"></i> Done
+                    <i class="bi bi-check-circle"></i> <span th:text="#{challenge.edit.done}">Done</span>
                 </a>
             </div>
         </div>
         <div class="card-body">
-            <p class="text-muted mb-0" th:text="${challenge.description ?: 'No description'}"></p>
+            <p class="text-muted mb-0" th:text="${challenge.description}" th:unless="${challenge.description == null or challenge.description.isEmpty()}"></p>
+            <p class="text-muted mb-0" th:text="#{challenge.edit.noDescription}" th:if="${challenge.description == null or challenge.description.isEmpty()}">No description</p>
         </div>
     </div>
 
     <!-- Questions -->
     <div class="d-flex justify-content-between align-items-center mb-3">
-        <h5>Questions (<span id="questionCount" th:text="${challenge.questionSets?.size() ?: 0}">0</span>)</h5>
-        <button class="btn btn-primary" onclick="showQuestionModal()"><i class="bi bi-plus"></i> Add Question</button>
+        <h5><span th:text="#{challenge.edit.questions}">Questions</span> (<span id="questionCount" th:text="${challenge.questionSets?.size() ?: 0}">0</span>)</h5>
+        <button class="btn btn-primary" onclick="showQuestionModal()"><i class="bi bi-plus"></i> <span th:text="#{challenge.edit.addQuestion}">Add Question</span></button>
     </div>
 
     <div id="questionList">
@@ -100,7 +99,7 @@
                             <span th:class="${#strings.contains(q.correctOptions, 'FALSE')} ? 'correct-answer' : ''">False</span>
                         </div>
                         <div class="small text-muted" th:if="${q.questionType != null and q.questionType.name() == 'TYPE_ANSWER'}">
-                            Answer: <span class="correct-answer" th:text="${q.answer1}"></span>
+                            <span th:text="#{challenge.edit.answer}">Answer:</span> <span class="correct-answer" th:text="${q.answer1}"></span>
                             <span th:if="${q.acceptableAnswers}"> (also accepts: <span th:text="${q.acceptableAnswers}"></span>)</span>
                         </div>
                     </div>
@@ -113,7 +112,7 @@
             </div>
         </div>
     </div>
-    <div id="emptyState" class="text-center text-muted py-5" th:if="${challenge.questionSets == null || challenge.questionSets.empty}">
+    <div id="emptyState" class="text-center text-muted py-5" th:if="${challenge.questionSets == null || challenge.questionSets.empty}" th:text="#{challenge.edit.noQuestions}">
         No questions yet. Click "Add Question" to get started.
     </div>
 </div>
@@ -123,7 +122,7 @@
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="modalTitle">Add Question</h5>
+                <h5 class="modal-title" id="modalTitle" th:text="#{challenge.edit.addQuestion}">Add Question</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-body">
@@ -131,70 +130,70 @@
                 <!-- Question Type and Settings Row -->
                 <div class="row mb-3">
                     <div class="col-md-4">
-                        <label class="form-label">Question Type</label>
+                        <label class="form-label" th:text="#{challenge.edit.questionType}">Question Type</label>
                         <select id="questionType" class="form-select" onchange="onQuestionTypeChange()">
-                            <option value="MULTIPLE_CHOICE">Multiple Choice</option>
-                            <option value="TRUE_FALSE">True/False</option>
-                            <option value="TYPE_ANSWER">Type Answer</option>
-                            <option value="POLL">Poll (No Correct)</option>
+                            <option value="MULTIPLE_CHOICE" th:text="#{challenge.edit.multipleChoice}">Multiple Choice</option>
+                            <option value="TRUE_FALSE" th:text="#{challenge.edit.trueFalse}">True/False</option>
+                            <option value="TYPE_ANSWER" th:text="#{challenge.edit.typeAnswer}">Type Answer</option>
+                            <option value="POLL" th:text="#{challenge.edit.poll}">Poll (No Correct)</option>
                         </select>
                     </div>
                     <div class="col-md-4">
-                        <label class="form-label">Time Limit</label>
+                        <label class="form-label" th:text="#{challenge.edit.timeLimit}">Time Limit</label>
                         <select id="timeLimit" class="form-select">
-                            <option value="">Default</option>
-                            <option value="5">5 seconds</option>
-                            <option value="10">10 seconds</option>
-                            <option value="20">20 seconds</option>
-                            <option value="30">30 seconds</option>
-                            <option value="60">60 seconds</option>
-                            <option value="90">90 seconds</option>
-                            <option value="120">2 minutes</option>
-                            <option value="240">4 minutes</option>
+                            <option value="" th:text="#{challenge.edit.default}">Default</option>
+                            <option value="5">5 <span th:text="#{challenge.edit.seconds}">seconds</span></option>
+                            <option value="10">10 <span th:text="#{challenge.edit.seconds}">seconds</span></option>
+                            <option value="20">20 <span th:text="#{challenge.edit.seconds}">seconds</span></option>
+                            <option value="30">30 <span th:text="#{challenge.edit.seconds}">seconds</span></option>
+                            <option value="60">60 <span th:text="#{challenge.edit.seconds}">seconds</span></option>
+                            <option value="90">90 <span th:text="#{challenge.edit.seconds}">seconds</span></option>
+                            <option value="120">2 <span th:text="#{challenge.edit.minutes}">minutes</span></option>
+                            <option value="240">4 <span th:text="#{challenge.edit.minutes}">minutes</span></option>
                         </select>
                     </div>
                     <div class="col-md-4">
-                        <label class="form-label">Points</label>
+                        <label class="form-label" th:text="#{challenge.edit.points}">Points</label>
                         <input type="number" id="points" class="form-control" value="1000" min="0" max="10000">
                     </div>
                 </div>
                 <div class="mb-3">
-                    <label class="form-label">Question *</label>
+                    <label class="form-label" th:text="#{challenge.edit.questionLabel}">Question *</label>
                     <textarea id="questionText" class="form-control" rows="2" maxlength="425" required></textarea>
                 </div>
                 <!-- Multiple Choice / Poll Answers -->
                 <div id="multipleChoiceAnswers">
                     <div class="row">
                         <div class="col-md-6 mb-3">
-                            <label class="form-label">Answer A *</label>
+                            <label class="form-label" th:text="#{challenge.edit.answerA}">Answer A *</label>
                             <div class="input-group">
                                 <div class="input-group-text"><input type="checkbox" id="correctA" class="form-check-input mt-0"></div>
                                 <input type="text" id="answer1" class="form-control" maxlength="225" required>
                             </div>
                         </div>
                         <div class="col-md-6 mb-3">
-                            <label class="form-label">Answer B *</label>
+                            <label class="form-label" th:text="#{challenge.edit.answerB}">Answer B *</label>
                             <div class="input-group">
                                 <div class="input-group-text"><input type="checkbox" id="correctB" class="form-check-input mt-0"></div>
                                 <input type="text" id="answer2" class="form-control" maxlength="225" required>
                             </div>
                         </div>
                         <div class="col-md-6 mb-3" id="answerCGroup">
-                            <label class="form-label">Answer C</label>
+                            <label class="form-label" th:text="#{challenge.edit.answerC}">Answer C</label>
                             <div class="input-group">
                                 <div class="input-group-text"><input type="checkbox" id="correctC" class="form-check-input mt-0"></div>
                                 <input type="text" id="answer3" class="form-control" maxlength="225">
                             </div>
                         </div>
                         <div class="col-md-6 mb-3" id="answerDGroup">
-                            <label class="form-label">Answer D</label>
+                            <label class="form-label" th:text="#{challenge.edit.answerD}">Answer D</label>
                             <div class="input-group">
                                 <div class="input-group-text"><input type="checkbox" id="correctD" class="form-check-input mt-0"></div>
                                 <input type="text" id="answer4" class="form-control" maxlength="225">
                             </div>
                         </div>
                     </div>
-                    <small id="correctAnswerHint" class="text-muted">Check the box next to correct answer(s)</small>
+                    <small id="correctAnswerHint" class="text-muted" th:text="#{challenge.edit.correctAnswerHint}">Check the box next to correct answer(s)</small>
                 </div>
                 <!-- True/False Answers -->
                 <div id="trueFalseAnswers" style="display:none;">
@@ -202,13 +201,13 @@
                         <div class="col-md-6 mb-3">
                             <div class="form-check form-check-inline">
                                 <input class="form-check-input" type="radio" name="tfAnswer" id="tfTrue" value="TRUE">
-                                <label class="form-check-label" for="tfTrue">True is correct</label>
+                                <label class="form-check-label" for="tfTrue" th:text="#{challenge.edit.trueIsCorrect}">True is correct</label>
                             </div>
                         </div>
                         <div class="col-md-6 mb-3">
                             <div class="form-check form-check-inline">
                                 <input class="form-check-input" type="radio" name="tfAnswer" id="tfFalse" value="FALSE">
-                                <label class="form-check-label" for="tfFalse">False is correct</label>
+                                <label class="form-check-label" for="tfFalse" th:text="#{challenge.edit.falseIsCorrect}">False is correct</label>
                             </div>
                         </div>
                     </div>
@@ -216,39 +215,39 @@
                 <!-- Type Answer Input -->
                 <div id="typeAnswerInput" style="display:none;">
                     <div class="mb-3">
-                        <label class="form-label">Correct Answer *</label>
-                        <input type="text" id="typeAnswerCorrect" class="form-control" maxlength="225" placeholder="Enter the correct answer">
+                        <label class="form-label" th:text="#{challenge.edit.correctAnswer}">Correct Answer *</label>
+                        <input type="text" id="typeAnswerCorrect" class="form-control" maxlength="225" th:placeholder="#{challenge.edit.correctAnswerPlaceholder}" placeholder="Enter the correct answer">
                     </div>
                     <div class="mb-3">
-                        <label class="form-label">Alternative Answers (optional)</label>
-                        <input type="text" id="acceptableAnswers" class="form-control" maxlength="500" placeholder="Comma-separated alternatives, e.g.: answer1, answer2, answer3">
-                        <small class="text-muted">Typos will be tolerated using fuzzy matching</small>
+                        <label class="form-label" th:text="#{challenge.edit.alternativeAnswers}">Alternative Answers (optional)</label>
+                        <input type="text" id="acceptableAnswers" class="form-control" maxlength="500" th:placeholder="#{challenge.edit.alternativeAnswersPlaceholder}" placeholder="Comma-separated alternatives, e.g.: answer1, answer2, answer3">
+                        <small class="text-muted" th:text="#{challenge.edit.fuzzyMatchingHint}">Typos will be tolerated using fuzzy matching</small>
                     </div>
                 </div>
                 <!-- Media Section -->
                 <hr>
-                <h6 class="mb-3">Media (Optional)</h6>
+                <h6 class="mb-3" th:text="#{challenge.edit.mediaOptional}">Media (Optional)</h6>
                 <div class="mb-3">
-                    <label class="form-label">Question Image</label>
+                    <label class="form-label" th:text="#{challenge.edit.questionImage}">Question Image</label>
                     <input type="file" id="questionImageInput" class="form-control" accept="image/jpeg,image/jpg,image/png,image/gif">
-                    <small class="text-muted">Max 2MB. JPEG, PNG, or GIF. Will be auto-resized to 1200x800.</small>
+                    <small class="text-muted" th:text="#{challenge.edit.imageHint}">Max 2MB. JPEG, PNG, or GIF. Will be auto-resized to 1200x800.</small>
                     <div id="imagePreviewContainer" style="margin-top: 10px; display: none;">
                         <img id="imagePreview" style="max-width: 200px; max-height: 150px; border-radius: 4px; border: 1px solid #ddd;">
-                        <button type="button" id="removeImageBtn" class="btn btn-sm btn-danger ms-2" onclick="removeImage()">Remove</button>
+                        <button type="button" id="removeImageBtn" class="btn btn-sm btn-danger ms-2" onclick="removeImage()" th:text="#{challenge.edit.remove}">Remove</button>
                     </div>
                 </div>
                 <div class="mb-3">
-                    <label class="form-label">YouTube Video URL</label>
+                    <label class="form-label" th:text="#{challenge.edit.youtubeUrl}">YouTube Video URL</label>
                     <input type="text" id="videoUrl" class="form-control" placeholder="https://www.youtube.com/watch?v=..." onchange="previewYouTubeVideo()">
-                    <small class="text-muted">Enter a YouTube video URL to embed in the question</small>
+                    <small class="text-muted" th:text="#{challenge.edit.youtubeHint}">Enter a YouTube video URL to embed in the question</small>
                     <div id="videoPreviewContainer" style="margin-top: 10px; display: none;">
                         <iframe id="videoPreview" width="300" height="169" frameborder="0" allowfullscreen></iframe>
                     </div>
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                <button type="button" class="btn btn-primary" onclick="saveQuestion()">Save Question</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" th:text="#{button.cancel}">Cancel</button>
+                <button type="button" class="btn btn-primary" onclick="saveQuestion()" th:text="#{challenge.edit.saveQuestion}">Save Question</button>
             </div>
         </div>
     </div>
@@ -259,22 +258,22 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Edit Challenge Info</h5>
+                <h5 class="modal-title" th:text="#{challenge.edit.editChallengeInfo}">Edit Challenge Info</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-body">
                 <div class="mb-3">
-                    <label class="form-label">Title *</label>
+                    <label class="form-label" th:text="#{challenge.edit.titleLabel}">Title *</label>
                     <input type="text" id="editTitle" class="form-control" maxlength="100" th:value="${challenge.title}">
                 </div>
                 <div class="mb-3">
-                    <label class="form-label">Description</label>
+                    <label class="form-label" th:text="#{challenge.create.description}">Description</label>
                     <textarea id="editDescription" class="form-control" rows="3" maxlength="250" th:text="${challenge.description}"></textarea>
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                <button type="button" class="btn btn-primary" onclick="updateChallengeInfo()">Save</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" th:text="#{button.cancel}">Cancel</button>
+                <button type="button" class="btn btn-primary" onclick="updateChallengeInfo()" th:text="#{button.save}">Save</button>
             </div>
         </div>
     </div>

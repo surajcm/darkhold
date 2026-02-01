@@ -1,0 +1,429 @@
+/**
+ * Admin Components CSS
+ * Consolidated styles for all admin/management screens
+ *
+ * Includes styles for:
+ * - Options/Settings dashboard
+ * - User management
+ * - Challenge management (create, edit, view, preview)
+ * - Game management
+ * - Error pages
+ * - Forms and tables
+ */
+
+/* ============================================
+   BASE ADMIN STYLES
+   ============================================ */
+.bg-admin {
+    font-size: 0.9rem;
+}
+
+/* ============================================
+   LAYOUT UTILITIES
+   ============================================ */
+.body-style {
+    display: flex;
+    flex-wrap: wrap;
+    align-content: center;
+    margin-top: 30vh;
+}
+
+.my-form {
+    padding-top: 1.5rem;
+    padding-bottom: 1.5rem;
+}
+
+.my-form .row {
+    margin-left: 0;
+    margin-right: 0;
+}
+
+section {
+    padding: 60px 0;
+}
+
+/* ============================================
+   ADMIN CARDS
+   ============================================ */
+.admin-card,
+.bg-admin .card {
+    background: var(--color-card-bg);
+    flex: 0 0 23.55%;
+    margin: 8px;
+    padding: 30px;
+    box-shadow: var(--shadow-sm);
+    transition: box-shadow var(--transition-normal);
+    border: 1px solid var(--color-card-border);
+    cursor: pointer;
+    border-radius: var(--radius-sm);
+}
+
+.admin-card:hover,
+.bg-admin .card:hover {
+    box-shadow: var(--shadow-hover);
+}
+
+.bg-admin h3 {
+    text-align: center;
+    font-size: 22px;
+    color: var(--color-text-secondary);
+    font-weight: 600;
+}
+
+.bg-admin p {
+    padding: 5px;
+    text-align: center;
+    font-size: 15px;
+    color: var(--color-text-secondary);
+    line-height: 1.6;
+    font-weight: 500;
+    padding-top: 5px;
+}
+
+/* ============================================
+   BUTTONS
+   ============================================ */
+.button-style {
+    color: var(--color-text-inverse);
+    background-color: var(--color-info);
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border: none;
+    border-radius: 4px;
+}
+
+/* ============================================
+   TABLES
+   ============================================ */
+.bg-admin table,
+.bg-admin th,
+.bg-admin td {
+    border: 1px solid var(--color-border-light);
+}
+
+/* ============================================
+   FORMS - CHALLENGE CREATION
+   ============================================ */
+.firma-ara {
+    padding-bottom: 100px;
+    padding-top: 100px;
+}
+
+.form-arka-plan {
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.acik-renk-form {
+    background: rgba(255, 255, 255, 0.58);
+}
+
+.siyah-cerceve {
+    -webkit-text-fill-color: white;
+    -webkit-text-stroke-width: 1px;
+    -webkit-text-stroke-color: black;
+}
+
+/* ============================================
+   CHALLENGE LIST - BORDER CARDS
+   ============================================ */
+.border-card {
+    background: var(--color-card-bg);
+    margin-bottom: 30px;
+    display: flex;
+    align-items: center;
+    font-family: var(--font-system);
+    font-size: var(--font-size-sm);
+    padding: 12px 16px;
+    cursor: pointer;
+    border-radius: 4px;
+    border: 1px solid var(--color-border-light);
+    box-shadow: var(--shadow-sm);
+    transition: all 0.25s ease;
+}
+
+.border-card:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 5px 10px 0 rgba(0, 0, 0, 0.1);
+}
+
+.border-card.over {
+    background: color-mix(in srgb, var(--color-correct-answer) 15%, transparent);
+    padding-top: 24px;
+    padding-bottom: 24px;
+    border: 2px solid var(--color-correct-answer);
+    box-shadow: none;
+}
+
+.border-card.over .card-type-icon {
+    color: var(--color-correct-answer) !important;
+}
+
+.border-card.over p {
+    color: var(--color-correct-answer) !important;
+}
+
+.content-wrapper {
+    display: flex;
+    justify-content: flex-start;
+    width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    transition: all 0.25s ease;
+}
+
+.min-gap {
+    flex: 0 0 40px;
+}
+
+.card-type-icon {
+    flex-grow: 0;
+    flex-shrink: 0;
+    margin-right: 16px;
+    font-weight: 400;
+    color: var(--color-text-primary);
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    text-align: center;
+    line-height: 40px;
+    font-size: 14px;
+    transition: all 0.25s ease;
+}
+
+.card-type-icon.with-border {
+    color: var(--color-text-muted);
+    border: 1px solid var(--color-border-light);
+}
+
+.card-type-icon i {
+    line-height: 40px;
+}
+
+.label-group {
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.label-group.fixed {
+    flex-shrink: 0;
+}
+
+.label-group p {
+    margin: 0px;
+    line-height: 21px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-align: left;
+    padding: 0;
+}
+
+.label-group p.title {
+    color: var(--color-text-primary);
+    font-weight: 500;
+}
+
+.label-group p.title.cta {
+    text-transform: uppercase;
+}
+
+.label-group p.caption {
+    font-weight: 400;
+    color: var(--color-text-muted);
+}
+
+.end-icon {
+    margin-left: 16px;
+}
+
+/* ============================================
+   PREVIEW / CHECKOUT STEPS
+   ============================================ */
+.bg-gray {
+    background-color: var(--color-bg-secondary);
+}
+
+.text-green {
+    color: var(--color-success);
+}
+
+.checkout {
+    background-color: var(--color-card-bg);
+    border: 1px solid var(--color-border-light);
+    font-size: 14px;
+}
+
+.panel {
+    margin-bottom: 0px;
+}
+
+.checkout-step {
+    border-top: 1px solid var(--color-border-light);
+    color: var(--color-text-secondary);
+    font-size: 14px;
+    padding: 30px;
+    position: relative;
+}
+
+.checkout-step-number {
+    border-radius: 50%;
+    border: 1px solid var(--color-text-secondary);
+    display: inline-block;
+    font-size: 12px;
+    height: 32px;
+    margin-right: 26px;
+    padding: 6px;
+    text-align: center;
+    width: 32px;
+}
+
+.checkout-step-title {
+    display: inline-block;
+    margin: 0px;
+}
+
+.checkout-step-title a {
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.checkout-step-title a:hover {
+    text-decoration: underline;
+}
+
+p.title {
+    color: var(--color-text-primary);
+    font-weight: 500;
+}
+
+p.title_correct {
+    color: var(--color-success);
+    font-weight: 500;
+}
+
+.checkout-step-body {
+    padding-left: 60px;
+    padding-top: 30px;
+}
+
+/* ============================================
+   MODAL - CONFIRM DIALOGS
+   ============================================ */
+.modal-confirm {
+    color: var(--color-text-secondary);
+    width: 400px;
+}
+
+.modal-confirm .modal-content {
+    padding: 20px;
+    border-radius: 5px;
+    border: none;
+    text-align: center;
+    font-size: 14px;
+}
+
+.modal-confirm .modal-header {
+    border-bottom: none;
+    position: relative;
+}
+
+.modal-confirm h4 {
+    text-align: center;
+    font-size: 26px;
+    margin: 30px 0 -10px;
+}
+
+.modal-confirm .close {
+    position: absolute;
+    top: -5px;
+    right: -2px;
+}
+
+.modal-confirm .modal-body {
+    color: var(--color-text-tertiary);
+}
+
+.modal-confirm .modal-footer {
+    border: none;
+    text-align: center;
+    border-radius: 5px;
+    font-size: 13px;
+    padding: 10px 15px 25px;
+}
+
+.modal-confirm .modal-footer a {
+    color: var(--color-text-tertiary);
+}
+
+.modal-confirm .icon-box {
+    width: 80px;
+    height: 80px;
+    margin: 0 auto;
+    border-radius: 50%;
+    z-index: 9;
+    text-align: center;
+    border: 3px solid var(--color-error);
+}
+
+.modal-confirm .icon-box i {
+    color: var(--color-error);
+    font-size: 46px;
+    display: inline-block;
+    margin-top: 13px;
+}
+
+.modal-confirm .btn,
+.modal-confirm .btn:active {
+    color: var(--color-text-inverse);
+    border-radius: 4px;
+    background: var(--color-secondary);
+    text-decoration: none;
+    transition: all 0.4s;
+    line-height: normal;
+    min-width: 120px;
+    border: none;
+    min-height: 40px;
+    margin: 0 5px;
+}
+
+.modal-confirm .btn-secondary {
+    background: var(--color-btn-secondary-bg);
+}
+
+.modal-confirm .btn-secondary:hover,
+.modal-confirm .btn-secondary:focus {
+    background: var(--color-btn-secondary-hover);
+}
+
+.modal-confirm .btn-danger {
+    background: var(--color-error);
+}
+
+.modal-confirm .btn-danger:hover,
+.modal-confirm .btn-danger:focus {
+    background: var(--color-error-dark);
+}
+
+/* ============================================
+   ADMIN HEADINGS
+   ============================================ */
+.bg-admin h4 {
+    font-family: var(--font-system);
+    font-weight: 500;
+    font-size: var(--font-size-sm);
+    color: var(--color-text-muted);
+    text-transform: uppercase;
+    margin: 0;
+}
+
+.bg-admin hr {
+    margin-bottom: 16px;
+    border: 1px solid var(--color-border-light);
+}

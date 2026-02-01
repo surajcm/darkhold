@@ -11,11 +11,11 @@
     <link rel="shortcut icon" href="/images/favicon.png">
     <link rel="manifest" href="/manifest.json">
     <link rel="apple-touch-icon" href="/images/icons/icon-192.png">
-    <link href="/styles/homepage.css" rel="stylesheet" />
-    <link href="/styles/theme-variables.css" rel="stylesheet" />
+    <link href="/styles/darkhold-styles.css" rel="stylesheet" />
     <link href="/styles/team-styles.css" rel="stylesheet" />
     <script type="text/javascript" src="/scripts/theme-manager.js"></script>
     <script type="text/javascript" src="/scripts/audio-manager.js"></script>
+    <script type="text/javascript" src="/scripts/language-manager.js"></script>
     <script type="text/javascript" src="/scripts/accessibility.js"></script>
     <script type="text/javascript" src="/scripts/core/sockjs.min.js"></script>
     <script type="text/javascript" src="/scripts/core/stomp.min.js"></script>
@@ -33,19 +33,19 @@
         .score-cell { text-align: right; width: 150px; }
     </style>
 </head>
-<body onload="connect()">
+<body class="bg-game" onload="connect()">
     <div th:insert="~{navbar :: navbar}"></div>
     <nav class="navbar transparent">
         <ul class="navbar-nav mx-auto">
             <li class="nav-item">
-                <span class="badge badge-pill badge-primary">ScoreBoard</span>
+                <span class="badge badge-pill badge-primary leaderboard-title" th:text="#{scoreboard.title}">ScoreBoard</span>
             </li>
         </ul>
         <span th:if="${not #sets.isEmpty(#authentication.getPrincipal().getAuthorities())}">
-            <button class="btn btn-lg btn-outline-warning mr-2" type="button" onclick="skipQuestion();">Skip</button>
-            <button class="btn btn-lg btn-outline-danger mr-2" type="button" onclick="endGameEarly();">End Game</button>
+            <button class="btn btn-lg btn-outline-warning mr-2" type="button" onclick="skipQuestion();" th:text="#{scoreboard.skip}">Skip</button>
+            <button class="btn btn-lg btn-outline-danger mr-2" type="button" onclick="endGameEarly();" th:text="#{scoreboard.endGame}">End Game</button>
             <button id="nextButton" class="btn btn-lg btn-rised align-middle btn-primary ml-auto mr-3 order-lg-last" type="button"
-                    onclick="askQuestion();" >Next</button>
+                    onclick="askQuestion();" th:text="#{game.next}">Next</button>
         </span>
     </nav>
     <form action="#" th:object="${score}" method="post">
@@ -58,15 +58,15 @@
                         <div class="col-12 col-md-8 h-50">
                             <div class="jumbotron vertical-center text-center m-0 d-flex flex-column justify-content-center py-5">
                                 <!-- Scoreboard live region for accessibility -->
-                                <div class="sr-only" aria-live="polite" aria-atomic="false" id="scoreboardAnnouncements">
+                                <div class="sr-only" aria-live="polite" aria-atomic="false" id="scoreboardAnnouncements" th:text="#{scoreboard.updated}">
                                     Scoreboard updated
                                 </div>
 
                                 <!-- Team/Individual Toggle (only shown in team mode) -->
                                 <div th:if="${isTeamMode}" class="scoreboard-toggle mb-3">
                                     <div class="btn-group" role="group" aria-label="Scoreboard view">
-                                        <button type="button" class="btn btn-primary" id="btnIndividual" onclick="showIndividualScores()">Individual</button>
-                                        <button type="button" class="btn btn-outline-primary" id="btnTeams" onclick="showTeamScores()">Teams</button>
+                                        <button type="button" class="btn btn-primary" id="btnIndividual" onclick="showIndividualScores()" th:text="#{scoreboard.individual}">Individual</button>
+                                        <button type="button" class="btn btn-outline-primary" id="btnTeams" onclick="showTeamScores()" th:text="#{scoreboard.teams}">Teams</button>
                                     </div>
                                 </div>
 
@@ -89,15 +89,15 @@
                                         <!-- Expandable member list -->
                                         <div class="team-members-detail" style="display:none;">
                                             <div class="team-members-header">
-                                                <span>Player</span>
-                                                <span>Score</span>
+                                                <span th:text="#{scoreboard.player}">Player</span>
+                                                <span th:text="#{scoreboard.score}">Score</span>
                                             </div>
                                             <div th:each="member : ${team.individualScores}"
                                                  th:class="'team-member-score' + (${memberStat.index == 0} ? ' top-contributor' : '')">
                                                 <span th:text="${member.username}">Player</span>
                                                 <span th:text="${member.currentScore}">0</span>
                                             </div>
-                                            <div th:if="${team.individualScores == null or team.individualScores.isEmpty()}" class="no-members">
+                                            <div th:if="${team.individualScores == null or team.individualScores.isEmpty()}" class="no-members" th:text="#{scoreboard.noScoresYet}">
                                                 No scores yet
                                             </div>
                                         </div>
@@ -109,9 +109,9 @@
                                 <table class="table table-striped" role="main" aria-label="Game scoreboard">
                                     <thead>
                                         <tr>
-                                            <th class="rank-cell" scope="col">Rank</th>
-                                            <th class="username-cell" scope="col">Player</th>
-                                            <th class="score-cell" scope="col">Score</th>
+                                            <th class="rank-cell" scope="col" th:text="#{scoreboard.rank}">Rank</th>
+                                            <th class="username-cell" scope="col" th:text="#{scoreboard.player}">Player</th>
+                                            <th class="score-cell" scope="col" th:text="#{scoreboard.score}">Score</th>
                                         </tr>
                                     </thead>
                                     <tbody>

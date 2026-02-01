@@ -66,6 +66,33 @@ function toggleSound() {
 }
 
 /**
+ * Change the application language
+ * @param {string} lang - Language code (en, es)
+ */
+function changeLanguage(lang) {
+    if (typeof LanguageManager !== 'undefined') {
+        LanguageManager.changeLanguage(lang);
+    } else {
+        // Fallback if LanguageManager is not loaded
+        var url = new URL(window.location.href);
+        url.searchParams.set('lang', lang);
+        window.location.href = url.toString();
+    }
+}
+
+/**
+ * Update the language code display in the navbar
+ * @param {string} lang - Current language code
+ */
+function updateLanguageDisplay(lang) {
+    var codeElements = document.querySelectorAll('.language-code');
+    var displayCode = lang ? lang.toUpperCase() : 'EN';
+    codeElements.forEach(function(el) {
+        el.textContent = displayCode;
+    });
+}
+
+/**
  * Update sound icon based on enabled state
  */
 function updateSoundIcon(enabled) {
@@ -81,7 +108,7 @@ function updateSoundIcon(enabled) {
 function initializeUI() {
     // Update theme icon based on current theme
     if (typeof ThemeManager !== 'undefined') {
-        const currentTheme = ThemeManager.getCurrentTheme();
+        var currentTheme = ThemeManager.getCurrentTheme();
         updateThemeIcon(currentTheme);
     }
 
@@ -92,13 +119,26 @@ function initializeUI() {
 
     // Update sound icon based on current state
     if (typeof AudioManager !== 'undefined') {
-        const soundEnabled = AudioManager.isEnabled();
+        var soundEnabled = AudioManager.isEnabled();
         updateSoundIcon(soundEnabled);
         // Show sound toggle button
-        const soundToggleBtn = document.getElementById('sound-toggle-btn');
+        var soundToggleBtn = document.getElementById('sound-toggle-btn');
         if (soundToggleBtn) {
             soundToggleBtn.style.display = '';
         }
+    }
+
+    // Update language display based on current language
+    if (typeof LanguageManager !== 'undefined') {
+        var currentLang = LanguageManager.getCurrentLanguage();
+        updateLanguageDisplay(currentLang);
+    } else {
+        // Fallback: detect from URL or HTML lang attribute
+        var urlParams = new URLSearchParams(window.location.search);
+        var langFromUrl = urlParams.get('lang');
+        var langFromHtml = document.documentElement.lang;
+        var detectedLang = langFromUrl || langFromHtml || 'en';
+        updateLanguageDisplay(detectedLang.substring(0, 2));
     }
 }
 

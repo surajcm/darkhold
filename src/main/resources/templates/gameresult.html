@@ -1,15 +1,15 @@
 <!DOCTYPE HTML>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Game Results - Darkhold</title>
+    <title th:text="#{gameresult.title} + ' - Darkhold'">Game Results - Darkhold</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="manifest" href="/manifest.json">
     <link rel="shortcut icon" href="/images/favicon.png">
     <link href="/styles/darkhold-styles.css" rel="stylesheet" />
-    <link href="/styles/theme-variables.css" rel="stylesheet" />
     <link href="/styles/team-styles.css" rel="stylesheet" />
     <script type="text/javascript" src="/scripts/theme-manager.js"></script>
+    <script type="text/javascript" src="/scripts/language-manager.js"></script>
     <script type="text/javascript" src="/scripts/common-scripts.js"></script>
     <script type="text/javascript" src="/scripts/audio-manager.js"></script>
     <script type="text/javascript" src="/scripts/accessibility.js"></script>
@@ -54,18 +54,18 @@
         .rank-3 { background-color: #f8d7da; }
     </style>
 </head>
-<body>
+<body class="bg-game">
     <div th:insert="~{navbar :: navbar}"></div>
     <nav class="navbar transparent">
         <ul class="navbar-nav mx-auto">
             <li class="nav-item">
-                <span class="badge badge-pill badge-primary" style="font-size: 1.5rem;">Game Results</span>
+                <span class="badge badge-pill badge-primary leaderboard-title" style="font-size: 1.5rem;" th:text="#{gameresult.title}">Game Results</span>
             </li>
         </ul>
-        <a th:href="@{/game-result/{id}/export-csv(id=${gameResult.id})}" class="btn btn-secondary">
+        <a th:href="@{/game-result/{id}/export-csv(id=${gameResult.id})}" class="btn btn-secondary" th:text="#{gameresult.exportCsv}">
             Export CSV
         </a>
-        <a href="/past-games" class="btn btn-outline-primary">Back to List</a>
+        <a href="/past-games" class="btn btn-outline-primary" th:text="#{gameresult.backToList}">Back to List</a>
     </nav>
 
     <div class="container mt-4">
@@ -73,7 +73,7 @@
         <div class="summary-card">
             <h3>
                 <span th:text="${gameResult.challengeName}">Challenge Name</span>
-                <span th:if="${gameResult.teamMode}" class="badge bg-info ms-2" style="font-size: 0.6em;">Team Mode</span>
+                <span th:if="${gameResult.teamMode}" class="badge bg-info ms-2" style="font-size: 0.6em;" th:text="#{gameresult.teamMode}">Team Mode</span>
             </h3>
             <p class="text-muted">
                 PIN: <strong th:text="${gameResult.pin}"></strong> |
@@ -82,7 +82,7 @@
 
             <!-- Winning Team Display (if team mode) -->
             <div th:if="${gameResult.teamMode and gameResult.winningTeamName != null}" class="alert alert-success text-center mb-3">
-                <strong>Winning Team:</strong>
+                <strong th:text="#{gameresult.winningTeam}">Winning Team:</strong>
                 <span th:text="${gameResult.winningTeamName}"></span>
                 (<span th:text="${gameResult.winningTeamScore}"></span> pts)
             </div>
@@ -91,25 +91,25 @@
                 <div class="col-md-3">
                     <div class="stat-box">
                         <div class="stat-value" th:text="${gameResult.participantCount}">0</div>
-                        <div class="stat-label">Participants</div>
+                        <div class="stat-label" th:text="#{gameresult.participants}">Participants</div>
                     </div>
                 </div>
                 <div class="col-md-3">
                     <div class="stat-box">
                         <div class="stat-value" th:text="${gameResult.totalQuestions}">0</div>
-                        <div class="stat-label">Questions</div>
+                        <div class="stat-label" th:text="#{gameresult.questions}">Questions</div>
                     </div>
                 </div>
                 <div class="col-md-3">
                     <div class="stat-box">
                         <div class="stat-value" th:text="${gameResult.durationMinutes}">0</div>
-                        <div class="stat-label">Minutes</div>
+                        <div class="stat-label" th:text="#{gameresult.minutes}">Minutes</div>
                     </div>
                 </div>
                 <div class="col-md-3">
                     <div class="stat-box">
                         <div class="stat-value" th:text="${gameResult.gameMode}">Mode</div>
-                        <div class="stat-label">Game Mode</div>
+                        <div class="stat-label" th:text="#{gameresult.gameMode}">Game Mode</div>
                     </div>
                 </div>
             </div>
@@ -117,17 +117,17 @@
 
         <!-- Participant Results -->
         <div class="summary-card">
-            <h4>Participant Results</h4>
+            <h4 th:text="#{gameresult.participantResults}">Participant Results</h4>
             <table class="results-table table table-striped">
                 <thead>
                     <tr>
-                        <th>Rank</th>
-                        <th>Username</th>
-                        <th>Score</th>
-                        <th>Correct</th>
-                        <th>Incorrect</th>
-                        <th>Max Streak</th>
-                        <th>Accuracy</th>
+                        <th th:text="#{gameresult.rank}">Rank</th>
+                        <th th:text="#{gameresult.username}">Username</th>
+                        <th th:text="#{gameresult.score}">Score</th>
+                        <th th:text="#{gameresult.correct}">Correct</th>
+                        <th th:text="#{gameresult.incorrect}">Incorrect</th>
+                        <th th:text="#{gameresult.maxStreak}">Max Streak</th>
+                        <th th:text="#{gameresult.accuracy}">Accuracy</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -156,18 +156,18 @@
 
         <!-- Question Results -->
         <div class="summary-card">
-            <h4>Question Statistics</h4>
+            <h4 th:text="#{gameresult.questionStatistics}">Question Statistics</h4>
             <table class="results-table table table-striped">
                 <thead>
                     <tr>
-                        <th>#</th>
-                        <th>Question</th>
-                        <th>Type</th>
-                        <th>Correct</th>
-                        <th>Incorrect</th>
-                        <th>Timeout</th>
-                        <th>Success Rate</th>
-                        <th>Difficulty</th>
+                        <th th:text="#{gameresult.questionNumber}">#</th>
+                        <th th:text="#{gameresult.questionText}">Question</th>
+                        <th th:text="#{gameresult.type}">Type</th>
+                        <th th:text="#{gameresult.correct}">Correct</th>
+                        <th th:text="#{gameresult.incorrect}">Incorrect</th>
+                        <th th:text="#{gameresult.timeout}">Timeout</th>
+                        <th th:text="#{gameresult.successRate}">Success Rate</th>
+                        <th th:text="#{gameresult.difficulty}">Difficulty</th>
                     </tr>
                 </thead>
                 <tbody>

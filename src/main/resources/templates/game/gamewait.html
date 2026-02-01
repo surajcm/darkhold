@@ -6,25 +6,25 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="manifest" href="/manifest.json">
     <link rel="shortcut icon" href="/images/favicon.png">
-    <link href="/styles/join-styles.css" rel="stylesheet" />
-    <link href="/styles/theme-variables.css" rel="stylesheet" />
+    <link href="/styles/darkhold-styles.css" rel="stylesheet" />
     <link href="/styles/team-styles.css" rel="stylesheet" />
     <script type="text/javascript" src="/scripts/theme-manager.js"></script>
     <script type="text/javascript" src="/scripts/audio-manager.js"></script>
+    <script type="text/javascript" src="/scripts/language-manager.js"></script>
     <script type="text/javascript" src="/scripts/accessibility.js"></script>
     <script type="text/javascript" src="/scripts/core/sockjs.min.js"></script>
     <script type="text/javascript" src="/scripts/core/stomp.min.js"></script>
     <script type="text/javascript" src="/scripts/game-wait-scripts.js"></script>
     <script type="text/javascript" src="/scripts/common-scripts.js"></script>
 </head>
-<body onload="connect()">
+<body class="bg-game" onload="connect()">
     <div th:insert="~{navbar :: navbar}"></div>
 
     <!-- Moderator Warning Banner -->
     <div th:if="${moderatorWarning}" class="alert alert-warning alert-dismissible fade show m-3" role="alert" style="text-align: center;">
-        <strong>⚠️ You are the moderator of this game.</strong><br/>
-        In multiplayer mode, moderators control the game but do not earn points.<br/>
-        <small>Consider using a different name if you want to participate as a player.</small>
+        <strong th:text="'⚠️ ' + #{game.lobby.moderatorWarning}">⚠️ You are the moderator of this game.</strong><br/>
+        <span th:text="#{game.lobby.moderatorWarningDetail}">In multiplayer mode, moderators control the game but do not earn points.</span><br/>
+        <small th:text="#{game.lobby.moderatorWarningHint}">Consider using a different name if you want to participate as a player.</small>
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
 
@@ -39,18 +39,18 @@
             <div class="row justify-content-center align-items-center d-flex text-center h-100">
                 <div class="col-12 col-md-8  h-50">
                     <div class="jumbotron text-center m-0 d-flex flex-column justify-content-center py-5">
-                        <h1 class="display-2 text-dark mb-2 mt-5" id="head_msg">Your Quiz PIN is : <strong>[[${gameinfo.gamePin}]]</strong> </h1>
+                        <h1 class="display-2 font-display text-dark mb-2 mt-5" id="head_msg"><span th:text="#{game.lobby.quizPinIs}">Your Quiz PIN is :</span> <strong class="pin-display">[[${gameinfo.gamePin}]]</strong> </h1>
                         <div th:if="${teamMode}" class="mb-3">
-                            <span class="badge bg-info" style="font-size: 1rem;">Team Mode</span>
+                            <span class="badge bg-info" style="font-size: 1rem;" th:text="#{game.lobby.teamMode}">Team Mode</span>
                             <div id="myTeamDisplay" class="mt-2" style="display:none;">
-                                Your Team: <span id="myTeamBadge" class="team-badge"></span>
+                                <span th:text="#{game.lobby.yourTeam}">Your Team:</span> <span id="myTeamBadge" class="team-badge"></span>
                             </div>
                         </div>
                         <div id="messenger">
                             <p id="message_disp"></p>
                         </div>
-                        <p>Waiting for Game !!!</p>
-                        <p class="text-muted"><span id="participantCount">0</span> participant(s) joined</p>
+                        <p th:text="#{game.lobby.waitingForGame}">Waiting for Game !!!</p>
+                        <p class="text-muted"><span id="participantCount">0</span> <span th:text="#{game.lobby.participantsJoined}">participant(s) joined</span></p>
                     </div>
                 </div>
             </div>
@@ -59,7 +59,7 @@
         <div th:if="${teamMode}" id="teamModeView" class="container">
             <!-- Unassigned Players (shown for moderator in MANUAL mode) -->
             <div id="unassignedSection" class="unassigned-section" style="display:none;">
-                <h5>Unassigned Players</h5>
+                <h5 th:text="#{game.lobby.unassignedPlayers}">Unassigned Players</h5>
                 <div id="unassignedPlayers" class="unassigned-players-list">
                     <!-- Populated by JavaScript -->
                 </div>
@@ -75,7 +75,7 @@
                 <table id="conversation" class="table table-striped">
                     <thead>
                     <tr>
-                        <th>Participants:</th>
+                        <th th:text="#{game.lobby.participants}">Participants:</th>
                     </tr>
                     </thead>
                     <tbody id="players">

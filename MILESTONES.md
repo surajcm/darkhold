@@ -403,50 +403,61 @@ This document breaks down the project goals into actionable milestones. Each mil
 
 ---
 
-## Milestone 9: Team Features
+## Milestone 9: Team Features - COMPLETED
 
+**Status**: Completed on 2026-01-30
 **Focus**: Enable team-based gameplay
 
 ### 9.1 Team Creation
-- [ ] Create team before game starts
-- [ ] Random team assignment option
-- [ ] Custom team names/colors
-- [ ] Balance teams by participant count
+- [x] Create team before game starts
+- [x] Random team assignment option
+- [x] Custom team names/colors
+- [x] Balance teams by participant count (Balanced/Random/Manual assignment methods)
 
 ### 9.2 Team Scoring
-- [ ] Aggregate team scores
-- [ ] Show team leaderboard
-- [ ] Display individual contribution to team
+- [x] Aggregate team scores
+- [x] Show team leaderboard
+- [x] Display individual contribution to team
 
 ### 9.3 Team UI
-- [ ] Team lobby view
-- [ ] Team vs Team results screen
-- [ ] Team celebration animations
+- [x] Team lobby view
+- [x] Team vs Team results screen
+- [x] Team celebration animations
+
+### Files Created
+- `src/main/java/com/quiz/darkhold/team/` - Full team package
+  - `TeamController.java` - Team REST API
+  - `TeamService.java` - Team business logic
+  - `TeamConfig.java`, `TeamInfo.java`, `TeamScoreResult.java` - DTOs
+  - `TeamResult.java` - Entity for team results
+  - `TeamResultRepository.java` - Data access
+  - `TeamAssignmentMethod.java` - Enum (BALANCED, RANDOM, MANUAL)
 
 **Deliverable**: Collaborative team gameplay
 
 ---
 
-## Milestone 10: UI/UX Polish
+## Milestone 10: UI/UX Polish - COMPLETED
 
+**Status**: Completed on 2026-01-17
 **Focus**: Modern, accessible interface
 
 ### 10.1 Responsive Design
-- [ ] Audit mobile game experience
-- [ ] Optimize touch targets for answers
-- [ ] Test on various screen sizes
-- [ ] Add PWA manifest for mobile install
+- [x] Audit mobile game experience
+- [x] Optimize touch targets for answers
+- [x] Test on various screen sizes
+- [x] Add PWA manifest for mobile install
 
 ### 10.2 Theming
 - [x] Implement dark/light mode toggle
 - [x] Create theme system (CSS variables)
-- [ ] Allow custom quiz colors
-- [ ] Add lobby background options
+- [ ] Allow custom quiz colors (deferred)
+- [ ] Add lobby background options (deferred)
 
 ### 10.3 Accessibility
 - [x] Add ARIA labels throughout
 - [x] Ensure keyboard navigation works
-- [ ] Test with screen readers
+- [x] Test with screen readers
 - [x] Implement high contrast mode
 - [x] Add colorblind-friendly palettes
 
@@ -458,35 +469,62 @@ This document breaks down the project goals into actionable milestones. Each mil
 
 ### 10.5 Authentication Pages Redesign
 - [x] Modernize login page with brand identity
-- [ ] Modernize registration page to match login
-- [ ] Add password reset page styling
-- [ ] Consistent error/success messaging
+- [x] Modernize registration page to match login
+- [ ] Add password reset page styling (deferred)
+- [x] Consistent error/success messaging
+
+### Files Created
+- `theme-variables.css` - CSS variable system with light/dark themes
+- `theme-manager.js` - Theme switching with localStorage persistence
+- `audio-manager.js` - Sound effect manager with volume control
+- `accessibility.js` - Keyboard navigation, ARIA live regions
+- `animations.css` - Victory/defeat animations, confetti, focus indicators
+- `manifest.json` - PWA configuration with 8 icon sizes
+- `service-worker.js` - Offline caching and asset management
+- `offline.html` - Offline fallback page
+- 7 sound files (correct, incorrect, tick, countdown, victory, defeat, join)
 
 **Deliverable**: Polished, accessible user experience
 
 ---
 
-## Milestone 11: Internationalization
+## Milestone 11: Internationalization - IN PROGRESS
 
+**Status**: ~70% Complete
 **Focus**: Multi-language support
 
-### 11.1 Framework Setup
-- [ ] Configure Spring MessageSource
-- [ ] Extract all UI strings to messages.properties
-- [ ] Create language selector component
-- [ ] Store user language preference
+### 11.1 Framework Setup - COMPLETED
+- [x] Configure Spring MessageSource (I18nConfig.java)
+- [x] Extract all UI strings to messages.properties (~380 keys)
+- [x] Create language selector component (navbar dropdown with globe icon)
+- [x] Store user language preference (localStorage + session)
 
-### 11.2 Translations
-- [ ] Complete English (en) base
-- [ ] Add Spanish (es) translation
+### 11.2 Translations - PARTIAL
+- [x] Complete English (en) base
+- [x] Add Spanish (es) translation
 - [ ] Add French (fr) translation
 - [ ] Add German (de) translation
 - [ ] Community contribution guidelines for translations
 
-### 11.3 RTL Support
+### 11.3 RTL Support - PENDING
 - [ ] Add RTL CSS styles
 - [ ] Test Arabic/Hebrew layouts
 - [ ] Handle mixed LTR/RTL content
+
+### Files Created
+- `src/main/java/com/quiz/darkhold/init/I18nConfig.java` - MessageSource, LocaleResolver, LocaleChangeInterceptor
+- `src/main/resources/messages.properties` - English base (~380 keys)
+- `src/main/resources/messages_es.properties` - Spanish translations
+- `src/main/resources/static/scripts/language-manager.js` - Language switching logic
+
+### Templates Updated
+All 24 Thymeleaf templates updated to use `#{key}` message expressions:
+- Authentication: login.html, registration.html
+- Game: game.html, gamewait.html, scoreboard.html, finalscore.html
+- Challenge: createchallenge.html, editchallenge.html, viewchallenges.html, preview.html, publish.html
+- Admin: options.html, usermanagement.html, user_form.html, gameManagement.html
+- Analytics: activegames.html, pastgames.html, gameresult.html
+- Other: index.html, myprofile.html, error.html, offline.html
 
 **Deliverable**: Multi-language quiz platform
 
@@ -538,9 +576,9 @@ This document breaks down the project goals into actionable milestones. Each mil
 | 6 | Concurrency | Multiple simultaneous games | ✅ COMPLETED |
 | 7 | Analytics | Reports & game history | ✅ COMPLETED |
 | 8 | Game Modes | Self-paced & practice modes | ✅ COMPLETED |
-| 9 | Teams | Team-based gameplay | Pending |
-| 10 | UI/UX | Modern, accessible interface | Pending |
-| 11 | i18n | Multi-language support | Pending |
+| 9 | Teams | Team-based gameplay | ✅ COMPLETED |
+| 10 | UI/UX | Modern, accessible interface | ✅ COMPLETED |
+| 11 | i18n | Multi-language support | 🔄 ~70% |
 | 12 | Security & Scale | Production hardening | Pending |
 
 ---

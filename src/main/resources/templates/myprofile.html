@@ -1,21 +1,21 @@
 <!DOCTYPE HTML>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Getting Started: Darkhold classroom quiz experience</title>
+    <title th:text="#{myprofile.title} + ' - Darkhold'">My Profile - Darkhold</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="manifest" href="/manifest.json">
-    <link href="/styles/error-styles.css" rel="stylesheet" />
-    <link href="/styles/theme-variables.css" rel="stylesheet" />
+    <link href="/styles/darkhold-styles.css" rel="stylesheet" />
     <link rel="shortcut icon" href="/images/favicon.png">
     <script type="text/javascript" src="/scripts/theme-manager.js"></script>
+    <script type="text/javascript" src="/scripts/language-manager.js"></script>
     <script type="text/javascript" src="/scripts/common-scripts.js"></script>
     <script type="text/javascript" src="/scripts/audio-manager.js"></script>
     <script type="text/javascript" src="/scripts/accessibility.js"></script>
 </head>
-<body>
+<body class="bg-admin">
     <div th:insert="~{navbar :: navbar}"></div>
-    <p th:text="'Hello, lets wait here for the my profile!'" />
+    <p th:text="#{myprofile.placeholder}">Hello, lets wait here for the my profile!</p>
     <script type="text/javascript" src="/scripts/core/popper.min.js"></script>
     <script type="text/javascript" src="/scripts/core/bootstrap-5.3.1/bootstrap.min.js"></script>
 </body>

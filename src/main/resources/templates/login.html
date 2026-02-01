@@ -1,14 +1,14 @@
 <!DOCTYPE HTML>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Sign In - Darkhold Quiz</title>
+    <title th:text="#{login.title}">Sign In - Darkhold Quiz</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="Sign in to Darkhold - The interactive classroom quiz experience">
+    <meta name="description" th:content="#{login.metaDescription}" content="Sign in to Darkhold - The interactive classroom quiz experience">
     <link rel="manifest" href="/manifest.json">
     <link rel="shortcut icon" href="/images/favicon.png">
     <link rel="apple-touch-icon" href="/images/icons/icon-192.png">
-    <link href="/styles/theme-variables.css" rel="stylesheet" />
+    <link href="/styles/darkhold-styles.css" rel="stylesheet" />
     <link href="/styles/login.css" rel="stylesheet" />
     <script type="text/javascript" src="/scripts/theme-manager.js"></script>
 </head>
@@ -17,14 +17,14 @@
         <div class="login-card">
             <!-- Brand Header -->
             <div class="login-brand">
-                <img src="/images/icons/icon-192.png" alt="Darkhold Logo" class="login-logo">
-                <h1 class="login-title">Darkhold</h1>
-                <p class="login-subtitle">Interactive Quiz Platform</p>
+                <img src="/images/icons/icon-192.png" th:alt="#{app.name}" alt="Darkhold Logo" class="login-logo">
+                <h1 class="login-title brand-title" th:text="#{app.name}">Darkhold</h1>
+                <p class="login-subtitle" th:text="#{app.tagline}">Interactive Quiz Platform</p>
             </div>
 
             <!-- Error Message -->
             <div th:if="${danger}" class="login-error" role="alert">
-                <span th:text="${danger}">Invalid credentials</span>
+                <span th:text="${danger}" th:utext="#{login.invalidCredentials}">Invalid credentials</span>
             </div>
 
             <!-- Login Form -->
@@ -37,13 +37,16 @@
                         type="email"
                         id="username"
                         name="username"
+                        class="login-input"
+                        th:placeholder="#{login.email}"
                         placeholder="Email address"
-                        autocomplete="email"
+                        autocomplete="username"
                         autofocus
                         required
+                        th:aria-label="#{login.email}"
                         aria-label="Email address"
                     />
-                    <label for="username">Email address</label>
+                    <label for="username" th:text="#{login.email}">Email address</label>
                 </div>
 
                 <!-- Password Input -->
@@ -52,34 +55,37 @@
                         type="password"
                         id="password"
                         name="password"
+                        class="login-input"
+                        th:placeholder="#{login.password}"
                         placeholder="Password"
                         autocomplete="current-password"
                         required
+                        th:aria-label="#{login.password}"
                         aria-label="Password"
                     />
-                    <label for="password">Password</label>
+                    <label for="password" th:text="#{login.password}">Password</label>
                 </div>
 
                 <!-- Options Row -->
                 <div class="login-options">
                     <label class="remember-me">
                         <input type="checkbox" id="remember" name="remember-me">
-                        <span>Remember me</span>
+                        <span th:text="#{login.rememberMe}">Remember me</span>
                     </label>
-                    <a href="#" class="forgot-link" data-bs-toggle="modal" data-bs-target="#forgetPass">
+                    <a href="#" class="forgot-link" data-bs-toggle="modal" data-bs-target="#forgetPass" th:text="#{login.forgotPassword}">
                         Forgot password?
                     </a>
                 </div>
 
                 <!-- Submit Button -->
-                <button type="submit" class="login-btn">
+                <button type="submit" class="login-btn" th:text="#{login.signIn}">
                     Sign In
                 </button>
 
                 <!-- Sign Up Link -->
                 <div class="login-footer">
-                    <span>Don't have an account?</span>
-                    <a th:href="@{/registration}">Create one</a>
+                    <span th:text="#{login.noAccount}">Don't have an account?</span>
+                    <a th:href="@{/registration}" th:text="#{login.createAccount}">Create one</a>
                 </div>
             </form>
         </div>

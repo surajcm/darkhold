@@ -6,10 +6,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="manifest" href="/manifest.json">
     <link rel="shortcut icon" href="/images/favicon.png">
-    <link href="/styles/question-styles.css" rel="stylesheet" />
+    <link href="/styles/darkhold-styles.css" rel="stylesheet" />
     <link href="/styles/core/animate.min.css" rel="stylesheet" />
-    <link href="/styles/theme-variables.css" rel="stylesheet" />
     <script type="text/javascript" src="/scripts/theme-manager.js"></script>
+    <script type="text/javascript" src="/scripts/language-manager.js"></script>
     <script type="text/javascript" src="/scripts/common-scripts.js"></script>
     <script type="text/javascript" src="/scripts/audio-manager.js"></script>
     <script type="text/javascript" src="/scripts/accessibility.js"></script>
@@ -17,7 +17,7 @@
     <script type="text/javascript" src="/scripts/core/stomp.min.js"></script>
     <script type="text/javascript" src="/scripts/question-scripts.js"></script>
 </head>
-<body onload="connect()">
+<body class="bg-game" onload="connect()">
     <input type="hidden" th:value="${#authentication.getPrincipal().getUsername()}" id="name"/>
     <input type="hidden" th:value="${quizPin}" id="quizPin" name="quizPin"/>
     <form action="#" method="post">

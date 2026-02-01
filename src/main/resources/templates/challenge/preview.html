@@ -1,18 +1,17 @@
 <!DOCTYPE HTML>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
 <head>
-    <title>Getting Started: Darkhold classroom quiz experience</title>
+    <title th:text="#{challenge.preview.title}">Getting Started: Darkhold classroom quiz experience</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="manifest" href="/manifest.json">
     <link rel="shortcut icon" href="/images/favicon.png">
-    <link href="/styles/preview-styles.css" rel="stylesheet" />
-    <link href="/styles/theme-variables.css" rel="stylesheet" />
+    <link href="/styles/darkhold-styles.css" rel="stylesheet" />
     <link href="/styles/team-styles.css" rel="stylesheet" />
-    <link rel="stylesheet" href="/styles/core/font-awesome-all.5.15.4.min.css">
     <link rel="stylesheet" href="/styles/icon-styles.css">
     <script type="text/javascript" src="/scripts/theme-manager.js"></script>
     <script type="text/javascript" src="/scripts/audio-manager.js"></script>
+    <script type="text/javascript" src="/scripts/language-manager.js"></script>
     <script type="text/javascript" src="/scripts/accessibility.js"></script>
     <script type="text/javascript" src="/scripts/common-scripts.js"></script>
     <script type="text/javascript" src="/scripts/preview-scripts.js"></script>
@@ -54,7 +53,7 @@
         }
     </style>
 </head>
-<body>
+<body class="bg-admin">
     <div th:insert="~{navbar :: navbar}"></div>
     <form action="#" th:object="${previewInfo}" method="post">
     <input type="hidden" th:value="${previewInfo.challengeId}" id="challengeId"/>
@@ -93,20 +92,20 @@
                     <div class="col-12 mt-4">
                         <div class="card">
                             <div class="card-body">
-                                <h4 class="mb-3">Select Game Mode</h4>
+                                <h4 class="mb-3" th:text="#{challenge.preview.selectGameMode}">Select Game Mode</h4>
                                 <div class="row">
                                     <div class="col-md-6 col-lg-3 mb-3">
                                         <div class="game-mode-card" onclick="publish();">
                                             <div class="mode-icon">🎮</div>
-                                            <h5>Multiplayer</h5>
-                                            <p class="small">Live game with PIN. Moderator controls pace. Real-time competition.</p>
+                                            <h5 th:text="#{challenge.preview.multiplayer}">Multiplayer</h5>
+                                            <p class="small" th:text="#{challenge.preview.multiplayerDesc}">Live game with PIN. Moderator controls pace. Real-time competition.</p>
                                             <div class="team-mode-toggle" onclick="event.stopPropagation();">
                                                 <input type="checkbox" class="form-check-input" id="teamModeCheckbox" onchange="toggleTeamConfig()">
-                                                <label for="teamModeCheckbox">Team Mode</label>
+                                                <label for="teamModeCheckbox" th:text="#{challenge.preview.teamMode}">Team Mode</label>
                                             </div>
                                             <div id="teamConfigPanel" style="display:none; margin-top:10px;" onclick="event.stopPropagation();">
                                                 <div class="mb-2">
-                                                    <label class="small">Teams:</label>
+                                                    <label class="small" th:text="#{challenge.preview.teams}">Teams:</label>
                                                     <select id="teamCountSelect" class="form-select form-select-sm" onchange="updateTeamCount()">
                                                         <option value="2">2 Teams</option>
                                                         <option value="3">3 Teams</option>
@@ -116,15 +115,15 @@
                                                     </select>
                                                 </div>
                                                 <div class="mb-2">
-                                                    <label class="small">Assignment:</label>
+                                                    <label class="small" th:text="#{challenge.preview.assignment}">Assignment:</label>
                                                     <select id="assignmentSelect" class="form-select form-select-sm" onchange="updateAssignment()">
-                                                        <option value="BALANCED">Balanced</option>
-                                                        <option value="RANDOM">Random</option>
-                                                        <option value="MANUAL">Manual</option>
+                                                        <option value="BALANCED" th:text="#{challenge.preview.balanced}">Balanced</option>
+                                                        <option value="RANDOM" th:text="#{challenge.preview.random}">Random</option>
+                                                        <option value="MANUAL" th:text="#{challenge.preview.manual}">Manual</option>
                                                     </select>
                                                 </div>
                                                 <div class="mb-2">
-                                                    <a href="#" class="small text-primary" onclick="event.preventDefault(); toggleCustomNames();" id="customNamesToggle">
+                                                    <a href="#" class="small text-primary" onclick="event.preventDefault(); toggleCustomNames();" id="customNamesToggle" th:text="#{challenge.preview.customizeTeamNames}">
                                                         + Customize team names
                                                     </a>
                                                 </div>
@@ -155,31 +154,31 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            <button type="button" class="btn btn-primary btn-block mt-2">Start Multiplayer</button>
+                                            <button type="button" class="btn btn-primary btn-block mt-2" th:text="#{challenge.preview.startMultiplayer}">Start Multiplayer</button>
                                         </div>
                                     </div>
                                     <div class="col-md-6 col-lg-3 mb-3">
                                         <div class="game-mode-card" onclick="startPractice();">
                                             <div class="mode-icon">📝</div>
-                                            <h5>Practice</h5>
-                                            <p class="small">Solo mode with instant feedback. See correct answers immediately. No pressure.</p>
-                                            <button type="button" class="btn btn-success btn-block">Start Practice</button>
+                                            <h5 th:text="#{challenge.preview.practice}">Practice</h5>
+                                            <p class="small" th:text="#{challenge.preview.practiceDesc}">Solo mode with instant feedback. See correct answers immediately. No pressure.</p>
+                                            <button type="button" class="btn btn-success btn-block" th:text="#{challenge.preview.startPractice}">Start Practice</button>
                                         </div>
                                     </div>
                                     <div class="col-md-6 col-lg-3 mb-3">
-                                        <div class="game-mode-card disabled" title="Coming Soon">
+                                        <div class="game-mode-card disabled" th:title="#{challenge.preview.comingSoon}" title="Coming Soon">
                                             <div class="mode-icon">📅</div>
-                                            <h5>Self-Paced</h5>
-                                            <p class="small">Shareable link. Take anytime within window. Multiple attempts allowed.</p>
-                                            <button type="button" class="btn btn-secondary btn-block" disabled>Coming Soon</button>
+                                            <h5 th:text="#{challenge.preview.selfPaced}">Self-Paced</h5>
+                                            <p class="small" th:text="#{challenge.preview.selfPacedDesc}">Shareable link. Take anytime within window. Multiple attempts allowed.</p>
+                                            <button type="button" class="btn btn-secondary btn-block" disabled th:text="#{challenge.preview.comingSoon}">Coming Soon</button>
                                         </div>
                                     </div>
                                     <div class="col-md-6 col-lg-3 mb-3">
-                                        <div class="game-mode-card disabled" title="Coming Soon">
+                                        <div class="game-mode-card disabled" th:title="#{challenge.preview.comingSoon}" title="Coming Soon">
                                             <div class="mode-icon">🏆</div>
-                                            <h5>Challenge</h5>
-                                            <p class="small">Persistent leaderboard. Best scores tracked. Competitive rankings.</p>
-                                            <button type="button" class="btn btn-secondary btn-block" disabled>Coming Soon</button>
+                                            <h5 th:text="#{challenge.preview.challenge}">Challenge</h5>
+                                            <p class="small" th:text="#{challenge.preview.challengeDesc}">Persistent leaderboard. Best scores tracked. Competitive rankings.</p>
+                                            <button type="button" class="btn btn-secondary btn-block" disabled th:text="#{challenge.preview.comingSoon}">Coming Soon</button>
                                         </div>
                                     </div>
                                 </div>
@@ -187,7 +186,7 @@
                         </div>
                     </div>
                     <div class="col-12 mt-3">
-                        <button type="button" class="btn btn-outline-secondary pl-5 pr-5" onclick="toChallenges();">Back to Challenges</button>
+                        <button type="button" class="btn btn-outline-secondary pl-5 pr-5" onclick="toChallenges();" th:text="#{challenge.preview.backToChallenges}">Back to Challenges</button>
                     </div>
                 </div>
             </section>

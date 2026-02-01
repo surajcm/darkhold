@@ -15,6 +15,7 @@
     <link href="/styles/team-styles.css" rel="stylesheet" />
     <script type="text/javascript" src="/scripts/theme-manager.js"></script>
     <script type="text/javascript" src="/scripts/audio-manager.js"></script>
+    <script type="text/javascript" src="/scripts/language-manager.js"></script>
     <script type="text/javascript" src="/scripts/accessibility.js"></script>
     <script type="text/javascript" src="/scripts/common-scripts.js"></script>
     <style>
@@ -27,9 +28,9 @@
         .podium-block.gold { background: linear-gradient(135deg, #FFD700, #FFA500); height: 150px; }
         .podium-block.silver { background: linear-gradient(135deg, #C0C0C0, #A8A8A8); height: 120px; }
         .podium-block.bronze { background: linear-gradient(135deg, #CD7F32, #8B4513); height: 90px; }
-        .podium-rank { font-size: 2.5rem; font-weight: bold; margin-bottom: 5px; }
+        .podium-rank { font-size: 2.5rem; font-weight: bold; margin-bottom: 5px; font-family: var(--font-display); }
         .podium-name { font-size: 1.2rem; font-weight: 500; word-break: break-word; }
-        .podium-score { font-size: 1rem; opacity: 0.9; }
+        .podium-score { font-size: 1rem; opacity: 0.9; font-family: var(--font-display); }
         .trophy { font-size: 3rem; margin-bottom: 10px; }
         @keyframes slideUp { from { opacity: 0; transform: translateY(50px); } to { opacity: 1; transform: translateY(0); } }
         .confetti { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: -1; }
@@ -37,12 +38,12 @@
         .winner-announcement { font-size: 1.5rem; text-align: center; margin-bottom: 20px; color: #333; }
     </style>
 </head>
-<body>
+<body class="bg-game">
     <div th:insert="~{navbar :: navbar}"></div>
     <nav class="navbar transparent">
         <ul class="navbar-nav mx-auto">
             <li class="nav-item">
-                <span class="badge badge-pill badge-primary" style="font-size: 1.5rem;">Final Results</span>
+                <span class="badge badge-pill badge-primary leaderboard-title" style="font-size: 1.5rem;" th:text="#{finalscore.title}">Final Results</span>
             </li>
         </ul>
     </nav>
@@ -53,31 +54,31 @@
                     <div class="container">
                         <!-- Team Mode Badge -->
                         <div th:if="${isTeamMode}" class="text-center mb-3">
-                            <span class="badge bg-info" style="font-size: 1rem;">Team Mode Results</span>
+                            <span class="badge bg-info" style="font-size: 1rem;" th:text="#{finalscore.teamModeResults}">Team Mode Results</span>
                         </div>
 
                         <!-- Winner Announcement -->
                         <div class="winner-announcement victory-message" th:if="${score.score != null and !score.score.isEmpty()}" role="status" aria-live="polite">
-                            <span th:if="${isTeamMode and teamScores != null and !teamScores.isEmpty()}">
+                            <span th:if="${isTeamMode and teamScores != null and !teamScores.isEmpty()}" th:text="#{finalscore.congratsTeam}">
                                 Congratulations to the winning team!
                             </span>
-                            <span th:unless="${isTeamMode and teamScores != null and !teamScores.isEmpty()}">
+                            <span th:unless="${isTeamMode and teamScores != null and !teamScores.isEmpty()}" th:text="#{finalscore.congratsWinner}">
                                 Congratulations to our winner!
                             </span>
                         </div>
 
                         <!-- Team Podium (shown when team mode is enabled) -->
                         <div th:if="${isTeamMode and teamScores != null and !teamScores.isEmpty()}">
-                            <h4 class="text-center mb-3">Team Results</h4>
+                            <h4 class="text-center mb-3" th:text="#{finalscore.teamResults}">Team Results</h4>
                             <div class="team-podium-container">
                                 <!-- 2nd Place Team -->
                                 <div class="team-podium-place second" th:if="${#lists.size(teamScores) > 1}">
                                     <div class="trophy">&#129352;</div>
                                     <div th:class="'team-podium-block silver team-card-' + ${teamScores[1].color}">
-                                        <div class="team-podium-rank">2nd</div>
+                                        <div class="team-podium-rank" th:text="#{finalscore.2nd}">2nd</div>
                                         <div class="team-podium-name" th:text="${teamScores[1].teamName}"></div>
-                                        <div class="team-podium-score" th:text="${teamScores[1].totalScore} + ' pts'"></div>
-                                        <div class="team-podium-members" th:text="${teamScores[1].memberCount} + ' members'"></div>
+                                        <div class="team-podium-score"><span th:text="${teamScores[1].totalScore}"></span> <span th:text="#{finalscore.pts}">pts</span></div>
+                                        <div class="team-podium-members"><span th:text="${teamScores[1].memberCount}"></span> <span th:text="#{finalscore.members}">members</span></div>
                                     </div>
                                 </div>
 
@@ -86,11 +87,11 @@
                                     <div class="trophy">&#127942;</div>
                                     <div th:class="'team-podium-block gold team-card-' + ${teamScores[0].color} + ' team-winner-celebration team-winner-' + ${teamScores[0].color}"
                                          th:data-winner-color="${teamScores[0].color}">
-                                        <div class="team-podium-rank">1st</div>
+                                        <div class="team-podium-rank" th:text="#{finalscore.1st}">1st</div>
                                         <div class="team-podium-name" th:text="${teamScores[0].teamName}"></div>
-                                        <div class="team-podium-score" th:text="${teamScores[0].totalScore} + ' pts'"></div>
-                                        <div class="team-podium-members" th:text="${teamScores[0].memberCount} + ' members'"></div>
-                                        <div class="team-victory-badge">WINNERS!</div>
+                                        <div class="team-podium-score"><span th:text="${teamScores[0].totalScore}"></span> <span th:text="#{finalscore.pts}">pts</span></div>
+                                        <div class="team-podium-members"><span th:text="${teamScores[0].memberCount}"></span> <span th:text="#{finalscore.members}">members</span></div>
+                                        <div class="team-victory-badge" th:text="#{finalscore.winners}">WINNERS!</div>
                                     </div>
                                 </div>
 
@@ -98,10 +99,10 @@
                                 <div class="team-podium-place third" th:if="${#lists.size(teamScores) > 2}">
                                     <div class="trophy">&#129353;</div>
                                     <div th:class="'team-podium-block bronze team-card-' + ${teamScores[2].color}">
-                                        <div class="team-podium-rank">3rd</div>
+                                        <div class="team-podium-rank" th:text="#{finalscore.3rd}">3rd</div>
                                         <div class="team-podium-name" th:text="${teamScores[2].teamName}"></div>
-                                        <div class="team-podium-score" th:text="${teamScores[2].totalScore} + ' pts'"></div>
-                                        <div class="team-podium-members" th:text="${teamScores[2].memberCount} + ' members'"></div>
+                                        <div class="team-podium-score"><span th:text="${teamScores[2].totalScore}"></span> <span th:text="#{finalscore.pts}">pts</span></div>
+                                        <div class="team-podium-members"><span th:text="${teamScores[2].memberCount}"></span> <span th:text="#{finalscore.members}">members</span></div>
                                     </div>
                                 </div>
                             </div>
@@ -110,7 +111,7 @@
                         </div>
 
                         <!-- Individual Podium Header -->
-                        <h4 th:if="${isTeamMode}" class="text-center mb-3 mt-4">Individual Results</h4>
+                        <h4 th:if="${isTeamMode}" class="text-center mb-3 mt-4" th:text="#{finalscore.individualResults}">Individual Results</h4>
 
                         <!-- Podium for top 3 -->
                         <div class="podium-container" th:if="${score.sortedScores != null and !score.sortedScores.isEmpty()}">
@@ -118,9 +119,9 @@
                             <div class="podium-place second" th:if="${#lists.size(score.sortedScores) > 1}">
                                 <div class="trophy">&#129352;</div>
                                 <div class="podium-block silver">
-                                    <div class="podium-rank">2nd</div>
+                                    <div class="podium-rank" th:text="#{finalscore.2nd}">2nd</div>
                                     <div class="podium-name" th:text="${score.sortedScores[1].key}"></div>
-                                    <div class="podium-score" th:text="${score.sortedScores[1].value} + ' pts'"></div>
+                                    <div class="podium-score"><span th:text="${score.sortedScores[1].value}"></span> <span th:text="#{finalscore.pts}">pts</span></div>
                                 </div>
                             </div>
 
@@ -128,9 +129,9 @@
                             <div class="podium-place first" th:if="${#lists.size(score.sortedScores) > 0}">
                                 <div class="trophy">&#127942;</div>
                                 <div class="podium-block gold">
-                                    <div class="podium-rank">1st</div>
+                                    <div class="podium-rank" th:text="#{finalscore.1st}">1st</div>
                                     <div class="podium-name" th:text="${score.sortedScores[0].key}"></div>
-                                    <div class="podium-score" th:text="${score.sortedScores[0].value} + ' pts'"></div>
+                                    <div class="podium-score"><span th:text="${score.sortedScores[0].value}"></span> <span th:text="#{finalscore.pts}">pts</span></div>
                                 </div>
                             </div>
 
@@ -138,22 +139,22 @@
                             <div class="podium-place third" th:if="${#lists.size(score.sortedScores) > 2}">
                                 <div class="trophy">&#129353;</div>
                                 <div class="podium-block bronze">
-                                    <div class="podium-rank">3rd</div>
+                                    <div class="podium-rank" th:text="#{finalscore.3rd}">3rd</div>
                                     <div class="podium-name" th:text="${score.sortedScores[2].key}"></div>
-                                    <div class="podium-score" th:text="${score.sortedScores[2].value} + ' pts'"></div>
+                                    <div class="podium-score"><span th:text="${score.sortedScores[2].value}"></span> <span th:text="#{finalscore.pts}">pts</span></div>
                                 </div>
                             </div>
                         </div>
 
                         <!-- Full leaderboard -->
                         <div class="remaining-scores" th:if="${score.score != null and !score.score.isEmpty()}">
-                            <h4 class="text-center mb-3">Full Leaderboard</h4>
+                            <h4 class="text-center mb-3" th:text="#{finalscore.fullLeaderboard}">Full Leaderboard</h4>
                             <table class="table table-striped">
                                 <thead>
                                     <tr>
-                                        <th style="width: 60px;">Rank</th>
-                                        <th>Player</th>
-                                        <th style="text-align: right;">Score</th>
+                                        <th style="width: 60px;" th:text="#{scoreboard.rank}">Rank</th>
+                                        <th th:text="#{scoreboard.player}">Player</th>
+                                        <th style="text-align: right;" th:text="#{scoreboard.score}">Score</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -169,13 +170,13 @@
 
                         <!-- No scores message -->
                         <div class="text-center my-5" th:if="${score.score == null or score.score.isEmpty()}">
-                            <h3>No scores to display</h3>
-                            <p>The game ended without any scores recorded.</p>
+                            <h3 th:text="#{finalscore.noScores}">No scores to display</h3>
+                            <p th:text="#{finalscore.noScoresMessage}">The game ended without any scores recorded.</p>
                         </div>
 
                         <!-- Return button -->
                         <div class="text-center mt-4 mb-4">
-                            <button type="button" class="btn btn-lg btn-primary" onclick="window.location.href='/'">
+                            <button type="button" class="btn btn-lg btn-primary" onclick="window.location.href='/'" th:text="#{finalscore.returnHome}">
                                 Return to Home
                             </button>
                         </div>

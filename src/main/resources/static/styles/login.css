@@ -1,9 +1,9 @@
 /**
  * Darkhold Login Page - Modern Design
  * Milestone 10.5: Authentication Pages Redesign
+ *
+ * Note: This file is loaded after darkhold-styles.css in templates
  */
-
-@import url('darkhold-styles.css');
 
 /* ============================================
    PAGE LAYOUT
@@ -96,21 +96,77 @@
     margin-bottom: var(--spacing-lg);
 }
 
-.form-floating input {
+.form-floating input,
+.form-floating input.login-input {
     width: 100%;
-    padding: 1.25rem 1rem 0.5rem 1rem;
+    height: 56px;
+    padding: 1.75rem 1rem 0.25rem 1rem;
     font-size: 1rem;
+    line-height: 1.25;
     border: 2px solid var(--color-border-light);
     border-radius: var(--radius-md);
-    background: var(--color-input-bg);
+    background-color: #ffffff !important;
     color: var(--color-input-text);
-    transition: all var(--transition-normal);
-    outline: none;
+    transition: border-color var(--transition-normal);
+    box-sizing: border-box;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+}
+
+[data-theme="dark"] .form-floating input,
+[data-theme="dark"] .form-floating input.login-input {
+    background-color: #2d2d2d !important;
 }
 
 .form-floating input:focus {
     border-color: var(--color-primary);
-    box-shadow: 0 0 0 3px rgba(0, 98, 204, 0.15);
+    outline: none;
+    box-shadow: none;
+}
+
+/* Override browser autofill styling - Light theme */
+.form-floating input:-webkit-autofill,
+.form-floating input:-webkit-autofill:hover,
+.form-floating input:-webkit-autofill:focus,
+.form-floating input:-webkit-autofill:active,
+.login-input:-webkit-autofill,
+.login-input:-webkit-autofill:hover,
+.login-input:-webkit-autofill:focus,
+.login-input:-webkit-autofill:active {
+    -webkit-box-shadow: 0 0 0 1000px #ffffff inset !important;
+    -webkit-text-fill-color: #323232 !important;
+    box-shadow: 0 0 0 1000px #ffffff inset !important;
+    background-color: #ffffff !important;
+    background-image: none !important;
+    transition: background-color 5000s ease-in-out 0s !important;
+    caret-color: #323232 !important;
+}
+
+/* Dark theme autofill override */
+[data-theme="dark"] .form-floating input:-webkit-autofill,
+[data-theme="dark"] .form-floating input:-webkit-autofill:hover,
+[data-theme="dark"] .form-floating input:-webkit-autofill:focus,
+[data-theme="dark"] .form-floating input:-webkit-autofill:active {
+    -webkit-box-shadow: 0 0 0 1000px #2d2d2d inset !important;
+    -webkit-text-fill-color: #f0f0f0 !important;
+    box-shadow: 0 0 0 1000px #2d2d2d inset !important;
+    background-color: #2d2d2d !important;
+    caret-color: #f0f0f0 !important;
+}
+
+/* Firefox autofill override */
+.form-floating input:autofill,
+.form-floating input:-moz-autofill {
+    background-color: #ffffff !important;
+    color: #323232 !important;
+    filter: none !important;
+}
+
+[data-theme="dark"] .form-floating input:autofill,
+[data-theme="dark"] .form-floating input:-moz-autofill {
+    background-color: #2d2d2d !important;
+    color: #f0f0f0 !important;
 }
 
 .form-floating input::placeholder {
@@ -119,21 +175,22 @@
 
 .form-floating label {
     position: absolute;
-    left: 1rem;
+    left: 0.875rem;
     top: 50%;
     transform: translateY(-50%);
     color: var(--color-text-tertiary);
     font-size: 1rem;
     pointer-events: none;
-    transition: all var(--transition-fast);
+    transition: all 0.15s ease-out;
     background: transparent;
     padding: 0 0.25rem;
 }
 
 .form-floating input:focus ~ label,
-.form-floating input:not(:placeholder-shown) ~ label {
-    top: 0.5rem;
-    transform: translateY(0);
+.form-floating input:not(:placeholder-shown) ~ label,
+.form-floating input:-webkit-autofill ~ label {
+    top: 0;
+    transform: translateY(-50%);
     font-size: 0.75rem;
     color: var(--color-primary);
     background: var(--color-card-bg);

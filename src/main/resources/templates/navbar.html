@@ -29,10 +29,62 @@
             <div class="icon-bar" onclick="toggleSound();" title="Toggle Sound Effects" id="sound-toggle-btn" aria-label="Toggle sound">
                 <a class="active" href="#"><i class="fas fa-volume-up" id="sound-icon"></i></a>
             </div>
-            <button class="btn btn-lg btn-rised align-middle btn-primary ml-auto mr-3 order-lg-last" type="button" onclick="logOut();" >Logout</button>
+            <div class="dropdown" id="language-selector">
+                <a class="icon-bar dropdown-toggle" href="#" role="button" id="languageDropdown"
+                   data-bs-toggle="dropdown" aria-expanded="false" aria-label="Select language"
+                   th:title="#{language.select}">
+                    <i class="fas fa-globe"></i>
+                    <span class="language-code" id="current-lang-code">EN</span>
+                </a>
+                <ul class="dropdown-menu dropdown-menu-end language-dropdown" aria-labelledby="languageDropdown">
+                    <li>
+                        <a class="dropdown-item" href="#" onclick="changeLanguage('en'); return false;"
+                           id="lang-en" th:classappend="${#locale.language == 'en'} ? 'active' : ''">
+                            <span class="lang-check" th:if="${#locale.language == 'en'}"><i class="fas fa-check"></i></span>
+                            <span th:text="#{language.en}">English</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item" href="#" onclick="changeLanguage('es'); return false;"
+                           id="lang-es" th:classappend="${#locale.language == 'es'} ? 'active' : ''">
+                            <span class="lang-check" th:if="${#locale.language == 'es'}"><i class="fas fa-check"></i></span>
+                            <span th:text="#{language.es}">Espanol</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <button class="btn btn-lg btn-rised align-middle btn-primary ml-auto mr-3 order-lg-last" type="button" onclick="logOut();" th:text="#{nav.logout}">Logout</button>
         </div>
         <div class="navbar-nav ms-auto mb-2 mb-lg-0" sec:authorize="isAnonymous()">
-            <button class="btn btn-lg btn-rised align-middle btn-primary ml-auto mr-3 order-lg-last" type="button" onclick="logMeIn()" >LogIn / SignUp</button>
+            <div class="dropdown me-3" id="language-selector-anon">
+                <a class="icon-bar dropdown-toggle" href="#" role="button" id="languageDropdownAnon"
+                   data-bs-toggle="dropdown" aria-expanded="false" aria-label="Select language"
+                   th:title="#{language.select}">
+                    <i class="fas fa-globe"></i>
+                    <span class="language-code" id="current-lang-code-anon">EN</span>
+                </a>
+                <ul class="dropdown-menu dropdown-menu-end language-dropdown" aria-labelledby="languageDropdownAnon">
+                    <li>
+                        <a class="dropdown-item" href="#" onclick="changeLanguage('en'); return false;"
+                           th:classappend="${#locale.language == 'en'} ? 'active' : ''">
+                            <span class="lang-check" th:if="${#locale.language == 'en'}"><i class="fas fa-check"></i></span>
+                            <span th:text="#{language.en}">English</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item" href="#" onclick="changeLanguage('es'); return false;"
+                           th:classappend="${#locale.language == 'es'} ? 'active' : ''">
+                            <span class="lang-check" th:if="${#locale.language == 'es'}"><i class="fas fa-check"></i></span>
+                            <span th:text="#{language.es}">Espanol</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <button class="btn-auth" type="button" onclick="logMeIn()">
+                <span class="btn-auth-icon"><i class="fas fa-user"></i></span>
+                <span class="btn-auth-text" th:text="#{nav.login}">Login / SignUp</span>
+                <span class="btn-auth-arrow"><i class="fas fa-arrow-right"></i></span>
+            </button>
         </div>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown"
                 aria-expanded="false" aria-label="Toggle navigation">

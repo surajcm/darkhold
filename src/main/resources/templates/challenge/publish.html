@@ -1,15 +1,15 @@
 <!DOCTYPE HTML>
-<html lang="en">
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
 <head>
-    <title>Getting Started: Darkhold classroom quiz experience</title>
+    <title th:text="#{game.lobby.title}">Getting Started: Darkhold classroom quiz experience</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="manifest" href="/manifest.json">
     <link rel="shortcut icon" href="/images/favicon.png">
-    <link href="/styles/publish-styles.css" rel="stylesheet" />
-    <link href="/styles/theme-variables.css" rel="stylesheet" />
+    <link href="/styles/darkhold-styles.css" rel="stylesheet" />
     <link href="/styles/team-styles.css" rel="stylesheet" />
     <script type="text/javascript" src="/scripts/theme-manager.js"></script>
+    <script type="text/javascript" src="/scripts/language-manager.js"></script>
     <script type="text/javascript" src="/scripts/common-scripts.js"></script>
     <script type="text/javascript" src="/scripts/audio-manager.js"></script>
     <script type="text/javascript" src="/scripts/accessibility.js"></script>
@@ -17,7 +17,7 @@
     <script type="text/javascript" src="/scripts/core/stomp.min.js"></script>
     <script type="text/javascript" src="/scripts/publish-scripts.js"></script>
 </head>
-<body onload="connect()">
+<body class="bg-admin" onload="connect()">
     <div th:insert="~{navbar :: navbar}"></div>
     <form action="#" th:object="${quizPin}" method="post">
         <input type="hidden" th:value="${quizPin}" id="quizPin"/>
@@ -29,19 +29,19 @@
                 <div class="col-12 col-md-8  h-50">
                     <div th:if="${quizPin != null}">
                         <div class="jumbotron text-center m-0 d-flex flex-column justify-content-center py-5">
-                            <h1 class="display-2 text-dark mb-2 mt-5" id="head_msg">Your Quiz PIN is : <strong>[[${quizPin}]]</strong> </h1>
+                            <h1 class="display-2 text-dark mb-2 mt-5" id="head_msg"><span th:text="#{game.lobby.quizPinIs}">Your Quiz PIN is :</span> <strong>[[${quizPin}]]</strong> </h1>
                             <div th:if="${teamMode}" class="mb-3">
-                                <span class="badge bg-info" style="font-size: 1rem;">Team Mode Enabled</span>
+                                <span class="badge bg-info" style="font-size: 1rem;" th:text="#{game.lobby.teamModeEnabled}">Team Mode Enabled</span>
                             </div>
                             <div id="messenger">
                                 <p id="message_disp"></p>
                             </div>
-                            <p><a class="btn bg-danger shadow-lg btn-round text-light btn-lg btn-rised" onclick="startGame()">Start Game</a></p>
+                            <p><a class="btn bg-danger shadow-lg btn-round text-light btn-lg btn-rised" onclick="startGame()" th:text="#{game.lobby.startGame}">Start Game</a></p>
                         </div>
                     </div>
                     <div th:unless="${quizPin != null}">
                         <div class="jumbotron text-center m-0 d-flex flex-column justify-content-center py-5">
-                            <h1 class="display-2 text-dark mb-2 mt-5" id="head_msg">There are no active challenges !!!</h1>
+                            <h1 class="display-2 text-dark mb-2 mt-5" id="head_msg" th:text="#{game.lobby.noActiveChallenges}">There are no active challenges !!!</h1>
                         </div>
                     </div>
                 </div>
@@ -52,14 +52,14 @@
             <div th:if="${teamMode}" id="teamModeView" class="container">
                 <div class="row mb-3">
                     <div class="col-12 text-center">
-                        <button type="button" class="btn btn-outline-primary btn-sm" onclick="autoAssignAllPlayers()">
+                        <button type="button" class="btn btn-outline-primary btn-sm" onclick="autoAssignAllPlayers()" th:text="#{game.lobby.autoAssignAll}">
                             Auto-Assign All Players
                         </button>
                     </div>
                 </div>
                 <!-- Unassigned Players Section -->
                 <div id="unassignedSection" class="unassigned-section mb-4">
-                    <h5>Unassigned Players</h5>
+                    <h5 th:text="#{game.lobby.unassignedPlayers}">Unassigned Players</h5>
                     <div id="unassignedPlayers" class="d-flex flex-wrap gap-2">
                         <!-- Populated by JavaScript -->
                     </div>
@@ -76,7 +76,7 @@
                     <table id="conversation" class="table table-striped">
                         <thead>
                         <tr>
-                            <th>Participants:</th>
+                            <th th:text="#{game.lobby.participants}">Participants:</th>
                         </tr>
                         </thead>
                         <tbody id="players">
