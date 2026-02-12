@@ -10,6 +10,7 @@
 @import url('animations.css');
 
 /* Context-specific Component Styles */
+@import url('navbar.css');
 @import url('game-components.css');
 @import url('admin-components.css');
 
@@ -101,111 +102,13 @@ h1.display-4,
 [data-theme="dark"] .bg-admin::after {
     background: linear-gradient(180deg, var(--color-bg-primary) 0%, var(--color-bg-secondary) 50%);
 }
+/* Legacy icon-bar kept for game screens that may use it */
 .icon-bar a {
     display: block;
     text-align: center;
     padding: 16px;
     transition: all 0.3s ease;
     font-size: 24px;
-}
-
-/* Language Selector Styles */
-#language-selector,
-#language-selector-anon {
-    display: inline-block;
-}
-
-#language-selector .dropdown-toggle,
-#language-selector-anon .dropdown-toggle {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    padding: 12px 16px;
-    text-decoration: none;
-    color: var(--color-text-primary);
-    cursor: pointer;
-    border-radius: var(--radius-md);
-    transition: background-color var(--transition-fast);
-}
-
-#language-selector .dropdown-toggle:hover,
-#language-selector-anon .dropdown-toggle:hover {
-    background-color: var(--color-bg-tertiary);
-}
-
-#language-selector .dropdown-toggle::after,
-#language-selector-anon .dropdown-toggle::after {
-    display: none;
-}
-
-.language-code {
-    font-size: 14px;
-    font-weight: 600;
-    text-transform: uppercase;
-}
-
-.language-dropdown {
-    background-color: var(--color-card-bg);
-    border: 1px solid var(--color-border-light);
-    border-radius: var(--radius-md);
-    box-shadow: var(--shadow-lg);
-    min-width: 160px;
-    padding: 8px 0;
-}
-
-.language-dropdown .dropdown-item {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    padding: 10px 16px;
-    color: var(--color-text-primary);
-    font-size: 16px;
-    transition: background-color var(--transition-fast);
-}
-
-.language-dropdown .dropdown-item:hover {
-    background-color: var(--color-bg-tertiary);
-    color: var(--color-text-primary);
-}
-
-.language-dropdown .dropdown-item.active {
-    background-color: var(--color-primary);
-    color: var(--color-text-inverse);
-}
-
-.language-dropdown .dropdown-item.active:hover {
-    background-color: var(--color-primary-hover);
-    color: var(--color-text-inverse);
-}
-
-.lang-check {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 18px;
-    height: 18px;
-    font-size: 12px;
-}
-
-.lang-check i {
-    color: inherit;
-}
-
-/* Mobile responsive adjustments */
-@media (max-width: 991.98px) {
-    #language-selector,
-    #language-selector-anon {
-        margin-right: 8px;
-    }
-
-    #language-selector .dropdown-toggle,
-    #language-selector-anon .dropdown-toggle {
-        padding: 10px 12px;
-    }
-
-    .language-code {
-        font-size: 12px;
-    }
 }
 body::before {
   content: "";

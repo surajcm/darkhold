@@ -31,7 +31,7 @@ function uploadWithExcel(uploadButton, file, title, description, resultDiv) {
     // Show progress bar and update button
     progressDiv.style.display = "block";
     uploadButton.disabled = true;
-    uploadButton.innerHTML = 'Uploading...';
+    uploadButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Uploading...';
 
     const formData = new FormData();
     formData.append('upload', file, file.name);
@@ -47,8 +47,7 @@ function uploadWithExcel(uploadButton, file, title, description, resultDiv) {
             const percentage = Math.round((e.loaded / e.total) * 100);
             progress.style.width = percentage + '%';
             progress.setAttribute('aria-valuenow', percentage);
-            progress.textContent = percentage + '%';
-            uploadButton.innerHTML = 'Uploading ' + percentage + '%';
+            uploadButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Uploading ' + percentage + '%';
         }
     };
 
@@ -67,7 +66,7 @@ function uploadWithExcel(uploadButton, file, title, description, resultDiv) {
             progressDiv.style.display = "none";
             resultDiv.innerHTML = '<div class="alert alert-danger">An error occurred while uploading the file.</div>';
             uploadButton.disabled = false;
-            uploadButton.innerHTML = 'Create Challenge';
+            uploadButton.innerHTML = '<i class="fas fa-plus-circle"></i> Create Challenge';
         }
     };
 
@@ -75,7 +74,7 @@ function uploadWithExcel(uploadButton, file, title, description, resultDiv) {
         progressDiv.style.display = "none";
         resultDiv.innerHTML = '<div class="alert alert-danger">Network error occurred.</div>';
         uploadButton.disabled = false;
-        uploadButton.innerHTML = 'Create Challenge';
+        uploadButton.innerHTML = '<i class="fas fa-plus-circle"></i> Create Challenge';
     };
 
     xhr.send(formData);
@@ -83,7 +82,7 @@ function uploadWithExcel(uploadButton, file, title, description, resultDiv) {
 
 function createEmptyChallenge(uploadButton, title, description, resultDiv) {
     uploadButton.disabled = true;
-    uploadButton.innerHTML = 'Creating...';
+    uploadButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Creating...';
 
     const formData = new FormData();
     formData.append('title', title);
@@ -108,13 +107,13 @@ function createEmptyChallenge(uploadButton, title, description, resultDiv) {
         } else {
             resultDiv.innerHTML = '<div class="alert alert-danger">' + data.message + '</div>';
             uploadButton.disabled = false;
-            uploadButton.innerHTML = 'Create Challenge';
+            uploadButton.innerHTML = '<i class="fas fa-plus-circle"></i> Create Challenge';
         }
     })
     .catch(error => {
         resultDiv.innerHTML = '<div class="alert alert-danger">An error occurred: ' + error.message + '</div>';
         uploadButton.disabled = false;
-        uploadButton.innerHTML = 'Create Challenge';
+        uploadButton.innerHTML = '<i class="fas fa-plus-circle"></i> Create Challenge';
     });
 }
 

@@ -7,6 +7,7 @@
     <link rel="manifest" href="/manifest.json">
     <link rel="shortcut icon" href="/images/favicon.png">
     <link rel="stylesheet" href="/styles/darkhold-styles.css" />
+    <link rel="stylesheet" href="/styles/options-page.css" />
     <script type="text/javascript" src="/scripts/theme-manager.js"></script>
     <script type="text/javascript" src="/scripts/language-manager.js"></script>
     <script type="text/javascript" src="/scripts/common-scripts.js"></script>
@@ -14,50 +15,190 @@
     <script type="text/javascript" src="/scripts/accessibility.js"></script>
     <script type="text/javascript" src="/scripts/options-scripts.js"></script>
 </head>
-<body class="bg-admin">
+<body class="bg-admin options-page">
     <div th:insert="~{navbar :: navbar}"></div>
-    <form action="#" method="post">
+
+    <!-- Hidden form for POST actions -->
+    <form id="optionsForm" action="#" method="post" style="display:none;">
         <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-        <div class="container mt-5">
-            <div class="row">
-                <div class="col-lg-3 col-md-6 col-xs-12 pl-1 pr-1">
-                    <div class="card" style="cursor:pointer" onclick="createChallenge();">
-                        <h3 th:text="#{options.createChallenge}">Create Challenge</h3>
-                        <p th:text="#{options.createChallengeDesc}">With or without Excel</p>
-                    </div>
-                </div>
-                <div class="col-lg-4 col-md-8 col-xs-12 pl-1 pr-1">
-                    <div class="card" style="cursor:pointer" onclick="viewChallenge();">
-                        <h3 th:text="#{options.viewChallenge}">View existing Challenge</h3>
-                        <p>  </p>
-                    </div>
-                </div>
-                <div class="col-lg-4 col-md-8 col-xs-12 pl-1 pr-1">
-                    <div class="card" style="cursor:pointer" onclick="activeChallenge();">
-                        <h3 th:utext="#{options.viewActiveChallenge}">View active <br/>Challenge</h3>
-                        <p>  </p>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <hr class="mt-2 mb-3"/>
-        <div class="container mt-5">
-            <div class="row">
-                <div class="col-lg-6 col-md-8 col-xs-12 pl-1 pr-1">
-                    <div class="card" style="cursor:pointer" onclick="manageUsers();">
-                        <h3 th:text="#{options.userManagement}">User Management</h3>
-                        <p> </p>
-                    </div>
-                </div>
-                <div class="col-lg-6 col-md-8 col-xs-12 pl-1 pr-1">
-                    <div class="card" style="cursor:pointer" onclick="manageGame();">
-                        <h3 th:text="#{options.gameManagement}">Game Management</h3>
-                        <p>  </p>
-                    </div>
-                </div>
-            </div>
-        </div>
     </form>
+
+    <main class="options-main">
+        <!-- ============================
+             PAGE HEADER
+             ============================ -->
+        <section class="options-header">
+            <div class="options-container">
+                <div class="options-header-content">
+                    <div class="options-header-text">
+                        <h1 class="options-title" th:text="#{options.title}">Settings</h1>
+                        <p class="options-subtitle">Manage your quizzes, users, and game settings from one place.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============================
+             QUIZ MANAGEMENT
+             ============================ -->
+        <section class="options-section">
+            <div class="options-container">
+                <div class="section-label">
+                    <span class="section-label-text">Quiz Management</span>
+                </div>
+                <div class="action-grid action-grid--3">
+                    <div class="action-card" onclick="createChallenge();">
+                        <div class="action-card-icon action-card-icon--primary">
+                            <i class="fas fa-plus-circle"></i>
+                        </div>
+                        <div class="action-card-body">
+                            <h3 class="action-card-title" th:text="#{options.createChallenge}">Create Challenge</h3>
+                            <p class="action-card-desc" th:text="#{options.createChallengeDesc}">With or without Excel</p>
+                        </div>
+                        <div class="action-card-arrow">
+                            <i class="fas fa-chevron-right"></i>
+                        </div>
+                    </div>
+                    <div class="action-card" onclick="viewChallenge();">
+                        <div class="action-card-icon action-card-icon--teal">
+                            <i class="fas fa-folder-open"></i>
+                        </div>
+                        <div class="action-card-body">
+                            <h3 class="action-card-title" th:text="#{options.viewChallenge}">View existing Challenge</h3>
+                            <p class="action-card-desc">Browse, edit, or launch your saved quizzes</p>
+                        </div>
+                        <div class="action-card-arrow">
+                            <i class="fas fa-chevron-right"></i>
+                        </div>
+                    </div>
+                    <div class="action-card" onclick="activeChallenge();">
+                        <div class="action-card-icon action-card-icon--orange">
+                            <i class="fas fa-broadcast-tower"></i>
+                        </div>
+                        <div class="action-card-body">
+                            <h3 class="action-card-title" th:text="#{options.viewActiveChallenge}">View active Challenge</h3>
+                            <p class="action-card-desc">Monitor live sessions and connected players</p>
+                        </div>
+                        <div class="action-card-arrow">
+                            <i class="fas fa-chevron-right"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============================
+             ADMINISTRATION
+             ============================ -->
+        <section class="options-section">
+            <div class="options-container">
+                <div class="section-label">
+                    <span class="section-label-text">Administration</span>
+                </div>
+                <div class="action-grid action-grid--2">
+                    <div class="action-card" onclick="manageUsers();">
+                        <div class="action-card-icon action-card-icon--purple">
+                            <i class="fas fa-users-cog"></i>
+                        </div>
+                        <div class="action-card-body">
+                            <h3 class="action-card-title" th:text="#{options.userManagement}">User Management</h3>
+                            <p class="action-card-desc">Add, edit, or remove users and assign roles</p>
+                        </div>
+                        <div class="action-card-arrow">
+                            <i class="fas fa-chevron-right"></i>
+                        </div>
+                    </div>
+                    <div class="action-card" onclick="manageGame();">
+                        <div class="action-card-icon action-card-icon--green">
+                            <i class="fas fa-sliders-h"></i>
+                        </div>
+                        <div class="action-card-body">
+                            <h3 class="action-card-title" th:text="#{options.gameManagement}">Game Management</h3>
+                            <p class="action-card-desc">Configure timers, scoring rules, and game modes</p>
+                        </div>
+                        <div class="action-card-arrow">
+                            <i class="fas fa-chevron-right"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============================
+             QUICK LINKS
+             ============================ -->
+        <section class="options-section">
+            <div class="options-container">
+                <div class="section-label">
+                    <span class="section-label-text">Quick Links</span>
+                </div>
+                <div class="quick-links-grid">
+                    <a href="/" class="quick-link">
+                        <i class="fas fa-home"></i>
+                        <span>Home</span>
+                    </a>
+                    <a href="#" class="quick-link" onclick="toActiveGames(); return false;">
+                        <i class="fas fa-gamepad"></i>
+                        <span>Active Games</span>
+                    </a>
+                    <a href="#" class="quick-link" onclick="toPastGames(); return false;">
+                        <i class="fas fa-history"></i>
+                        <span>Past Games</span>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============================
+             PLATFORM INFO
+             ============================ -->
+        <section class="options-section options-section--muted">
+            <div class="options-container">
+                <div class="section-label">
+                    <span class="section-label-text">Platform</span>
+                </div>
+                <div class="info-grid">
+                    <div class="info-card">
+                        <div class="info-card-icon">
+                            <i class="fas fa-shield-alt"></i>
+                        </div>
+                        <div class="info-card-body">
+                            <span class="info-card-label">Security</span>
+                            <span class="info-card-value">CSRF &amp; Session Protection</span>
+                        </div>
+                    </div>
+                    <div class="info-card">
+                        <div class="info-card-icon">
+                            <i class="fas fa-database"></i>
+                        </div>
+                        <div class="info-card-body">
+                            <span class="info-card-label">Storage</span>
+                            <span class="info-card-value">Self-hosted Database</span>
+                        </div>
+                    </div>
+                    <div class="info-card">
+                        <div class="info-card-icon">
+                            <i class="fas fa-code-branch"></i>
+                        </div>
+                        <div class="info-card-body">
+                            <span class="info-card-label">Version</span>
+                            <span class="info-card-value">Darkhold v1.0</span>
+                        </div>
+                    </div>
+                    <div class="info-card">
+                        <div class="info-card-icon">
+                            <i class="fas fa-server"></i>
+                        </div>
+                        <div class="info-card-body">
+                            <span class="info-card-label">Runtime</span>
+                            <span class="info-card-value">Spring Boot 4.0 / Java 21</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
     <script type="text/javascript" src="/scripts/core/popper.min.js"></script>
     <script type="text/javascript" src="/scripts/core/bootstrap-5.3.1/bootstrap.min.js"></script>
 </body>

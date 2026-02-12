@@ -1,97 +1,129 @@
 <!DOCTYPE HTML>
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
 <head>
-    <title th:text="#{challenge.view.title}">Getting Started: Darkhold classroom quiz experience</title>
+    <title th:text="#{challenge.view.title}">View Challenges - Darkhold</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <script type="text/javascript" src="/scripts/view-challenges-scripts.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="manifest" href="/manifest.json">
     <link rel="shortcut icon" href="/images/favicon.png">
     <link rel="stylesheet" href="/styles/darkhold-styles.css" />
+    <link rel="stylesheet" href="/styles/view-challenges.css" />
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" >
     <script type="text/javascript" src="/scripts/theme-manager.js"></script>
     <script type="text/javascript" src="/scripts/audio-manager.js"></script>
     <script type="text/javascript" src="/scripts/language-manager.js"></script>
     <script type="text/javascript" src="/scripts/accessibility.js"></script>
+    <script type="text/javascript" src="/scripts/view-challenges-scripts.js"></script>
     <script type="text/javascript" src="/scripts/common-scripts.js"></script>
 </head>
-<body class="bg-admin">
+<body>
     <div th:insert="~{navbar :: navbar}"></div>
-    <section class="search-banner text-white form-arka-plan" id="search-banner">
-        <form action="#" th:object="${challengeInfo}" method="post">
-            <input type="hidden" th:name="challenges" id="challenges"/>
-            <div class="container my-5">
-                <div class="row text-center pb-4">
-                    <div class="col-md-12">
-                        <h2 class="text-white siyah-cerceve" th:text="#{challenge.view.searchTitle}">Search for the challenges</h2>
+
+    <main class="view-challenges-page">
+        <div class="view-challenges-container">
+            <form action="#" th:object="${challengeInfo}" method="post">
+                <input type="hidden" th:name="challenges" id="challenges"/>
+
+                <!-- Page Header -->
+                <header class="view-challenges-header">
+                    <h1 class="view-challenges-title" th:text="#{challenge.view.title}">My Challenges</h1>
+                    <p class="view-challenges-subtitle">Browse, edit, and manage your quiz collection</p>
+                </header>
+
+                <!-- Search Section -->
+                <section class="search-section">
+                    <div class="search-form">
+                        <input type="text" class="search-input"
+                               th:placeholder="#{challenge.view.searchPlaceholder}"
+                               placeholder="Search challenges by name or topic..." />
+                        <button type="button" class="search-btn" th:text="#{challenge.view.search}">
+                            <i class="fas fa-search"></i> Search
+                        </button>
                     </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="card acik-renk-form">
-                            <div class="card-body">
-                                <div class="row">
-                                    <div class="col-md-9">
-                                        <div class="form-group ">
-                                            <input type="text" class="form-control" th:placeholder="#{challenge.view.searchPlaceholder}" placeholder="aws, ec2, s3" />
-                                        </div>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <button type="button" class="btn btn-warning  pl-5 pr-5" th:text="#{challenge.view.search}">Search</button>
-                                    </div>
+                </section>
+
+                <!-- Challenges Section -->
+                <section>
+                    <div class="challenges-section-header">
+                        <h2 class="challenges-section-title" th:text="#{challenge.view.recentChallenges}">Recent Challenges</h2>
+                        <span class="challenges-count" th:if="${challengeInfo.challengeSummaryList != null}"
+                              th:text="${#lists.size(challengeInfo.challengeSummaryList)} + ' challenges'">5 challenges</span>
+                    </div>
+
+                    <!-- Challenges Grid -->
+                    <div class="challenges-grid" th:if="${challengeInfo.challengeSummaryList != null and !#lists.isEmpty(challengeInfo.challengeSummaryList)}">
+                        <div th:each="ch: ${challengeInfo.challengeSummaryList}"
+                             th:id="${ch.challengeId}"
+                             class="challenge-card">
+                            <div class="challenge-card-header" onclick="selectQuiz(this);">
+                                <div class="challenge-id-badge">
+                                    <span th:text="'#' + ${ch.challengeId}">#1</span>
                                 </div>
+                                <h3 class="challenge-card-title" th:text="${ch.challengeName}">Sample Challenge</h3>
+                            </div>
+
+                            <div class="challenge-card-actions">
+                                <a class="challenge-action-btn challenge-action-btn--edit"
+                                   th:href="@{'/edit_challenge/' + ${ch.challengeId}}"
+                                   th:title="#{challenge.view.edit}"
+                                   title="Edit">
+                                    <i class="fas fa-edit"></i>
+                                </a>
+                                <button type="button"
+                                        class="challenge-action-btn challenge-action-btn--duplicate"
+                                        onclick="duplicateChallenge(this);"
+                                        th:title="#{challenge.view.duplicate}"
+                                        title="Duplicate">
+                                    <i class="fas fa-copy"></i>
+                                </button>
+                                <button type="button"
+                                        class="challenge-action-btn challenge-action-btn--delete"
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#confirmModal"
+                                        onclick="markQuizForDeletion(this);"
+                                        title="Delete">
+                                    <i class="fas fa-trash"></i>
+                                </button>
                             </div>
                         </div>
                     </div>
-                </div>
-                <br>
-                <h4 th:text="#{challenge.view.recentChallenges}">Recent challenges</h4>
-                <hr>
-                <div th:each="ch: ${challengeInfo.challengeSummaryList}" th:id="${ch.challengeId}">
-                    <div class="border-card">
-                        <div class="card-type-icon with-border" onclick="selectQuiz(this);"><p th:text="${ch.challengeId}" /></div>
-                        <div class="content-wrapper" onclick="selectQuiz(this);">
-                            <div class="label-group fixed">
-                                <p class="title" th:text="${ch.challengeName}" />
-                            </div>
+
+                    <!-- Empty State -->
+                    <div class="empty-state" th:if="${challengeInfo.challengeSummaryList == null or #lists.isEmpty(challengeInfo.challengeSummaryList)}">
+                        <div class="empty-state-icon">
+                            <i class="fas fa-clipboard-list"></i>
                         </div>
-                        <a class="card-type-icon with-border" th:href="@{'/edit_challenge/' + ${ch.challengeId}}" th:title="#{challenge.view.edit}" title="Edit">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-                                <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168l10-10zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207 11.207 2.5zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293l6.5-6.5z"/>
-                            </svg>
+                        <h3 class="empty-state-title">No Challenges Yet</h3>
+                        <p class="empty-state-text">Create your first challenge to get started</p>
+                        <a href="/create_challenge" class="btn-primary-create">
+                            <i class="fas fa-plus-circle"></i>
+                            <span>Create Challenge</span>
                         </a>
-                        <a class="card-type-icon with-border" href="#" onclick="duplicateChallenge(this);" th:title="#{challenge.view.duplicate}" title="Duplicate">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-                                <path d="M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1h1a1 1 0 0 1 1 1V14a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1h1v-1z"/>
-                                <path d="M9.5 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5h3z"/>
-                            </svg>
-                        </a>
-                        <a class="card-type-icon with-border" href="#confirmModal" data-bs-toggle="modal" data-bs-target="#confirmModal" onclick="markQuizForDeletion(this);">X</a>
                     </div>
-                </div>
+                </section>
+
+                <!-- Delete Confirmation Modal -->
                 <div id="confirmModal" class="modal fade" tabindex="-1" aria-labelledby="confirmModalLabel" aria-hidden="true">
-                    <div class="modal-dialog modal-confirm">
+                    <div class="modal-dialog modal-dialog-centered">
                         <div class="modal-content">
-                            <div class="modal-header flex-column">
-                                <div class="icon-box">
-                                    <i class="material-icons">&#xE5CD;</i>
-                                </div>
-                                <h4 class="modal-title w-100" id="confirmModalLabel" th:text="#{challenge.view.confirmDelete}">Are you sure?</h4>
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="confirmModalLabel" th:text="#{challenge.view.confirmDelete}">Are you sure?</h5>
                                 <button type="button" id="closeConfirmModal" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                             </div>
                             <div class="modal-body">
                                 <p th:text="#{challenge.view.deleteWarning}">Do you really want to delete this challenge? This process cannot be undone.</p>
                             </div>
-                            <div class="modal-footer justify-content-center">
+                            <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" th:text="#{button.cancel}">Cancel</button>
                                 <button type="button" class="btn btn-danger" onclick="deleteQuiz();" th:text="#{challenge.view.delete}">Delete</button>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        </form>
-    </section>
+            </form>
+        </div>
+    </main>
+
     <script type="text/javascript" src="/scripts/core/jquery-3.7.0.min.js"></script>
     <script type="text/javascript" src="/scripts/core/popper.min.js"></script>
     <script type="text/javascript" src="/scripts/core/bootstrap-5.3.1/bootstrap.min.js"></script>

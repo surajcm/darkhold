@@ -1,0 +1,362 @@
+/* ============================================
+   CREATE CHALLENGE PAGE
+   Modern form layout with step-by-step sections
+   ============================================ */
+
+/* ----------------------------------------
+   Page Layout
+   ---------------------------------------- */
+.create-challenge-page {
+    min-height: 100vh;
+    background: var(--color-bg-secondary);
+    padding: 2rem 0 3rem;
+}
+
+.create-challenge-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+}
+
+/* ----------------------------------------
+   Page Header
+   ---------------------------------------- */
+.create-challenge-header {
+    margin-bottom: 2rem;
+    text-align: center;
+}
+
+.create-challenge-title {
+    font-size: clamp(1.75rem, 4vw, 2.25rem);
+    font-weight: 800;
+    color: var(--color-text-primary);
+    margin: 0 0 0.5rem;
+    letter-spacing: -0.02em;
+}
+
+.create-challenge-subtitle {
+    font-size: 1rem;
+    color: var(--color-text-tertiary);
+    margin: 0;
+}
+
+/* ----------------------------------------
+   Main Form Card
+   ---------------------------------------- */
+.create-challenge-card {
+    background: var(--color-bg-primary);
+    border: 1px solid var(--color-border-light);
+    border-radius: var(--radius-xl);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04), 0 8px 40px rgba(0, 0, 0, 0.08);
+    overflow: hidden;
+}
+
+[data-theme="dark"] .create-challenge-card {
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1), 0 8px 40px rgba(0, 0, 0, 0.25);
+}
+
+.create-challenge-body {
+    padding: 2.5rem;
+}
+
+/* ----------------------------------------
+   Form Sections
+   ---------------------------------------- */
+.form-section {
+    margin-bottom: 2.5rem;
+}
+
+.form-section:last-child {
+    margin-bottom: 0;
+}
+
+.section-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1.25rem;
+}
+
+.section-icon {
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.95rem;
+    color: var(--color-primary);
+    background: rgba(var(--color-primary-rgb, 0, 98, 204), 0.08);
+    border-radius: var(--radius-md);
+    flex-shrink: 0;
+}
+
+.section-title {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--color-text-primary);
+    margin: 0;
+}
+
+.section-description {
+    font-size: 0.9rem;
+    color: var(--color-text-tertiary);
+    margin: 0.5rem 0 0;
+    line-height: 1.6;
+}
+
+/* ----------------------------------------
+   Form Fields
+   ---------------------------------------- */
+.form-field {
+    margin-bottom: 1.5rem;
+}
+
+.form-field:last-child {
+    margin-bottom: 0;
+}
+
+.form-label {
+    display: block;
+    font-size: 0.88rem;
+    font-weight: 600;
+    color: var(--color-text-primary);
+    margin-bottom: 0.5rem;
+}
+
+.form-label-required::after {
+    content: ' *';
+    color: var(--color-error);
+}
+
+.form-input,
+.form-textarea,
+.form-file {
+    width: 100%;
+    padding: 0.7rem 0.95rem;
+    font-size: 0.92rem;
+    color: var(--color-text-primary);
+    background: var(--color-bg-primary);
+    border: 1px solid var(--color-border-light);
+    border-radius: var(--radius-md);
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+[data-theme="dark"] .form-input,
+[data-theme="dark"] .form-textarea,
+[data-theme="dark"] .form-file {
+    background: var(--color-bg-tertiary);
+}
+
+.form-input:focus,
+.form-textarea:focus,
+.form-file:focus {
+    outline: none;
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px rgba(var(--color-primary-rgb, 0, 98, 204), 0.1);
+}
+
+.form-textarea {
+    resize: vertical;
+    min-height: 90px;
+}
+
+.form-hint {
+    display: block;
+    font-size: 0.8rem;
+    color: var(--color-text-muted);
+    margin-top: 0.4rem;
+}
+
+/* ----------------------------------------
+   Excel Format Guide
+   ---------------------------------------- */
+.excel-guide-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 0.85rem;
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--color-primary);
+    background: rgba(var(--color-primary-rgb, 0, 98, 204), 0.06);
+    border: 1px solid rgba(var(--color-primary-rgb, 0, 98, 204), 0.15);
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.excel-guide-toggle:hover {
+    background: rgba(var(--color-primary-rgb, 0, 98, 204), 0.1);
+    border-color: var(--color-primary);
+}
+
+.excel-guide-content {
+    margin-top: 1rem;
+    padding: 1.25rem;
+    background: rgba(var(--color-primary-rgb, 0, 98, 204), 0.04);
+    border: 1px solid rgba(var(--color-primary-rgb, 0, 98, 204), 0.1);
+    border-radius: var(--radius-md);
+}
+
+.excel-guide-title {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--color-text-primary);
+    margin: 0 0 0.85rem;
+}
+
+.excel-format-table {
+    width: 100%;
+    font-size: 0.8rem;
+    border-collapse: collapse;
+    margin: 0;
+}
+
+.excel-format-table thead th {
+    padding: 0.6rem 0.75rem;
+    font-weight: 700;
+    text-align: left;
+    color: var(--color-text-secondary);
+    background: var(--color-bg-secondary);
+    border-bottom: 2px solid var(--color-border-light);
+}
+
+.excel-format-table tbody td {
+    padding: 0.6rem 0.75rem;
+    color: var(--color-text-primary);
+    border-bottom: 1px solid var(--color-border-light);
+}
+
+.excel-format-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+/* ----------------------------------------
+   Progress Bar
+   ---------------------------------------- */
+.progress-wrapper {
+    margin: 1.5rem 0;
+}
+
+.progress-bar-container {
+    height: 8px;
+    background: var(--color-bg-tertiary);
+    border-radius: var(--radius-full);
+    overflow: hidden;
+}
+
+.progress-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--color-primary) 0%, var(--color-secondary) 100%);
+    border-radius: var(--radius-full);
+    transition: width 0.3s ease;
+}
+
+/* ----------------------------------------
+   Action Buttons
+   ---------------------------------------- */
+.form-actions {
+    display: flex;
+    gap: 0.75rem;
+    margin-top: 2rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--color-border-light);
+}
+
+.btn-primary-create {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.5rem;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: white;
+    background: var(--color-primary);
+    border: none;
+    border-radius: var(--radius-lg);
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.btn-primary-create:hover:not(:disabled) {
+    background: var(--color-primary-hover);
+    transform: translateY(-1px);
+    box-shadow: 0 6px 20px rgba(var(--color-primary-rgb, 0, 98, 204), 0.3);
+}
+
+.btn-primary-create:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.btn-secondary-cancel {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.5rem;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--color-text-secondary);
+    background: var(--color-bg-secondary);
+    border: 1px solid var(--color-border-light);
+    border-radius: var(--radius-lg);
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.btn-secondary-cancel:hover {
+    background: var(--color-bg-tertiary);
+    border-color: var(--color-border-medium);
+}
+
+/* ----------------------------------------
+   Result Message
+   ---------------------------------------- */
+.result-message {
+    margin: 1.5rem 0;
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+@media (max-width: 768px) {
+    .create-challenge-page {
+        padding: 1.5rem 0 2rem;
+    }
+
+    .create-challenge-body {
+        padding: 1.5rem;
+    }
+
+    .form-section {
+        margin-bottom: 2rem;
+    }
+
+    .section-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+    }
+
+    .form-actions {
+        flex-direction: column;
+    }
+
+    .btn-primary-create,
+    .btn-secondary-cancel {
+        width: 100%;
+        justify-content: center;
+    }
+}
+
+@media (max-width: 480px) {
+    .create-challenge-title {
+        font-size: 1.5rem;
+    }
+
+    .create-challenge-body {
+        padding: 1.25rem;
+    }
+}

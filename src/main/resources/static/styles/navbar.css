@@ -1,0 +1,446 @@
+/* ============================================
+   DARKHOLD NAVBAR
+   Modern, minimal navigation bar
+   ============================================ */
+
+/* ----------------------------------------
+   Base Navbar
+   ---------------------------------------- */
+.dh-navbar {
+    position: sticky;
+    top: 0;
+    z-index: 1030;
+    background: var(--color-bg-primary);
+    border-bottom: 1px solid var(--color-border-light);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+}
+
+/* Slight transparency for depth effect */
+[data-theme="light"] .dh-navbar {
+    background: rgba(255, 255, 255, 0.92);
+}
+
+[data-theme="dark"] .dh-navbar {
+    background: rgba(26, 26, 26, 0.92);
+    border-bottom-color: var(--color-border-light);
+}
+
+.dh-navbar-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+    height: 56px;
+}
+
+/* ----------------------------------------
+   Left Section: Brand + Nav Links
+   ---------------------------------------- */
+.dh-navbar-left {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    min-width: 0;
+}
+
+/* Brand */
+.dh-navbar-brand {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    text-decoration: none;
+    flex-shrink: 0;
+    padding: 0.25rem 0;
+}
+
+.dh-navbar-brand:hover {
+    text-decoration: none;
+}
+
+.dh-navbar-logo {
+    border-radius: var(--radius-sm);
+}
+
+.dh-navbar-brand-text {
+    font-family: var(--font-display);
+    font-size: 1.1rem;
+    color: var(--color-text-primary);
+    letter-spacing: 0.02em;
+}
+
+.dh-navbar-brand:hover .dh-navbar-brand-text {
+    color: var(--color-primary);
+}
+
+/* Vertical divider */
+.dh-navbar-divider {
+    width: 1px;
+    height: 20px;
+    background: var(--color-border-light);
+    margin: 0 0.75rem;
+    flex-shrink: 0;
+}
+
+/* Nav links */
+.dh-navbar-links {
+    display: flex;
+    align-items: center;
+    gap: 0.125rem;
+}
+
+.dh-nav-link {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.4rem 0.7rem;
+    font-size: 0.82rem;
+    font-weight: 500;
+    color: var(--color-text-secondary);
+    text-decoration: none;
+    border-radius: var(--radius-md);
+    transition: color var(--transition-fast), background-color var(--transition-fast);
+    white-space: nowrap;
+}
+
+.dh-nav-link i {
+    font-size: 0.8rem;
+    opacity: 0.65;
+    transition: opacity var(--transition-fast);
+}
+
+.dh-nav-link:hover {
+    color: var(--color-text-primary);
+    background: var(--color-bg-secondary);
+    text-decoration: none;
+}
+
+.dh-nav-link:hover i {
+    opacity: 1;
+}
+
+.dh-nav-link:active {
+    background: var(--color-bg-tertiary);
+}
+
+/* ----------------------------------------
+   Right Section: Toolbar + User / Login
+   ---------------------------------------- */
+.dh-navbar-right {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-shrink: 0;
+}
+
+/* Toolbar buttons (theme, sound, language) */
+.dh-navbar-toolbar {
+    display: flex;
+    align-items: center;
+    gap: 0.125rem;
+}
+
+.dh-toolbar-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.3rem;
+    width: 34px;
+    height: 34px;
+    padding: 0;
+    font-size: 0.9rem;
+    color: var(--color-text-tertiary);
+    background: none;
+    border: none;
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    transition: color var(--transition-fast), background-color var(--transition-fast);
+}
+
+.dh-toolbar-btn:hover {
+    color: var(--color-text-primary);
+    background: var(--color-bg-secondary);
+}
+
+.dh-toolbar-btn:active {
+    background: var(--color-bg-tertiary);
+}
+
+/* Language button is wider to fit code text */
+.dh-toolbar-btn.dropdown-toggle {
+    width: auto;
+    padding: 0 0.5rem;
+}
+
+/* Hide Bootstrap caret on language dropdown */
+.dh-toolbar-btn.dropdown-toggle::after {
+    display: none;
+}
+
+.dh-lang-code {
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+/* ----------------------------------------
+   User Info
+   ---------------------------------------- */
+.dh-navbar-user {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.25rem 0.5rem;
+}
+
+.dh-user-avatar {
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.7rem;
+    color: var(--color-primary);
+    background: rgba(var(--color-primary-rgb, 0, 98, 204), 0.1);
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+.dh-user-name {
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--color-text-primary);
+    max-width: 120px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* ----------------------------------------
+   Logout Button
+   ---------------------------------------- */
+.dh-btn-logout {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.35rem 0.85rem;
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: var(--color-text-secondary);
+    background: var(--color-bg-secondary);
+    border: 1px solid var(--color-border-light);
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    transition: all 0.15s ease;
+    white-space: nowrap;
+}
+
+.dh-btn-logout:hover {
+    color: var(--color-error);
+    border-color: var(--color-error);
+    background: rgba(241, 94, 94, 0.06);
+}
+
+/* ----------------------------------------
+   Mobile Toggle
+   ---------------------------------------- */
+.dh-navbar-toggle {
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    gap: 4px;
+    width: 34px;
+    height: 34px;
+    padding: 6px;
+    background: none;
+    border: none;
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    transition: background-color var(--transition-fast);
+}
+
+.dh-navbar-toggle:hover {
+    background: var(--color-bg-secondary);
+}
+
+.dh-navbar-toggle-bar {
+    display: block;
+    width: 100%;
+    height: 2px;
+    background: var(--color-text-secondary);
+    border-radius: 1px;
+    transition: all 0.25s ease;
+    transform-origin: center;
+}
+
+/* Animated hamburger → X */
+.dh-navbar-toggle[aria-expanded="true"] .dh-navbar-toggle-bar:nth-child(1) {
+    transform: translateY(6px) rotate(45deg);
+}
+
+.dh-navbar-toggle[aria-expanded="true"] .dh-navbar-toggle-bar:nth-child(2) {
+    opacity: 0;
+}
+
+.dh-navbar-toggle[aria-expanded="true"] .dh-navbar-toggle-bar:nth-child(3) {
+    transform: translateY(-6px) rotate(-45deg);
+}
+
+/* ----------------------------------------
+   Mobile Menu
+   ---------------------------------------- */
+.dh-mobile-menu {
+    display: none;
+    border-top: 1px solid var(--color-border-light);
+    background: var(--color-bg-primary);
+    padding: 0.5rem 1rem 1rem;
+}
+
+.dh-mobile-menu.open {
+    display: block;
+}
+
+.dh-mobile-menu-body {
+    display: flex;
+    flex-direction: column;
+}
+
+.dh-mobile-link {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.7rem 0.75rem;
+    font-size: 0.92rem;
+    font-weight: 500;
+    color: var(--color-text-secondary);
+    text-decoration: none;
+    border-radius: var(--radius-md);
+    transition: color var(--transition-fast), background-color var(--transition-fast);
+}
+
+.dh-mobile-link i {
+    font-size: 0.9rem;
+    width: 20px;
+    text-align: center;
+    opacity: 0.65;
+}
+
+.dh-mobile-link:hover {
+    color: var(--color-text-primary);
+    background: var(--color-bg-secondary);
+    text-decoration: none;
+}
+
+.dh-mobile-divider {
+    height: 1px;
+    background: var(--color-border-light);
+    margin: 0.35rem 0.75rem;
+}
+
+/* ============================================
+   LANGUAGE DROPDOWN (Shared)
+   Overrides from darkhold-styles.css still apply
+   ============================================ */
+.language-dropdown {
+    background-color: var(--color-card-bg);
+    border: 1px solid var(--color-border-light);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-lg);
+    min-width: 150px;
+    padding: 0.35rem 0;
+}
+
+.language-dropdown .dropdown-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 0.85rem;
+    color: var(--color-text-primary);
+    font-size: 0.85rem;
+    transition: background-color var(--transition-fast);
+}
+
+.language-dropdown .dropdown-item:hover {
+    background-color: var(--color-bg-tertiary);
+    color: var(--color-text-primary);
+}
+
+.language-dropdown .dropdown-item.active {
+    background-color: var(--color-primary);
+    color: var(--color-text-inverse);
+}
+
+.language-dropdown .dropdown-item.active:hover {
+    background-color: var(--color-primary-hover);
+    color: var(--color-text-inverse);
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+
+/* Hide link text on medium screens, show icons only */
+@media (max-width: 1100px) {
+    .dh-nav-link span {
+        display: none;
+    }
+
+    .dh-nav-link {
+        padding: 0.4rem 0.55rem;
+    }
+
+    .dh-nav-link i {
+        font-size: 0.95rem;
+        opacity: 0.8;
+    }
+}
+
+/* Mobile breakpoint */
+@media (max-width: 768px) {
+    .dh-navbar-inner {
+        height: 50px;
+        padding: 0 1rem;
+    }
+
+    .dh-navbar-links {
+        display: none;
+    }
+
+    .dh-navbar-divider {
+        display: none;
+    }
+
+    .dh-navbar-right {
+        display: none;
+    }
+
+    .dh-navbar-toggle {
+        display: flex;
+    }
+
+    /* Show toolbar buttons inline on mobile next to brand */
+    .dh-navbar-left {
+        flex: 1;
+    }
+
+    .dh-navbar-brand-text {
+        font-size: 1rem;
+    }
+}
+
+/* ============================================
+   REDUCED MOTION
+   ============================================ */
+@media (prefers-reduced-motion: reduce) {
+    .dh-navbar-toggle-bar {
+        transition: none;
+    }
+
+    .dh-toolbar-btn,
+    .dh-nav-link,
+    .dh-btn-logout {
+        transition: none;
+    }
+}

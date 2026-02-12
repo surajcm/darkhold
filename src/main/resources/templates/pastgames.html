@@ -7,146 +7,133 @@
     <link rel="manifest" href="/manifest.json">
     <link rel="shortcut icon" href="/images/favicon.png">
     <link href="/styles/darkhold-styles.css" rel="stylesheet" />
+    <link href="/styles/past-games.css" rel="stylesheet" />
     <script type="text/javascript" src="/scripts/theme-manager.js"></script>
     <script type="text/javascript" src="/scripts/language-manager.js"></script>
     <script type="text/javascript" src="/scripts/common-scripts.js"></script>
     <script type="text/javascript" src="/scripts/audio-manager.js"></script>
     <script type="text/javascript" src="/scripts/accessibility.js"></script>
-    <style>
-        .games-table {
-            width: 100%;
-            margin-top: 20px;
-        }
-        .games-table th {
-            background-color: #f8f9fa;
-            padding: 12px;
-            text-align: left;
-            font-weight: 600;
-        }
-        .games-table td {
-            padding: 12px;
-            border-bottom: 1px solid #dee2e6;
-        }
-        .games-table tbody tr:hover {
-            background-color: #f8f9fa;
-            cursor: pointer;
-        }
-        .mode-badge {
-            display: inline-block;
-            padding: 4px 12px;
-            border-radius: 12px;
-            font-size: 0.85rem;
-        }
-        .mode-multiplayer {
-            background-color: #28a745;
-            color: white;
-        }
-        .mode-practice {
-            background-color: #17a2b8;
-            color: white;
-        }
-        .winner-info {
-            color: #28a745;
-            font-weight: 500;
-        }
-        .no-games {
-            text-align: center;
-            padding: 60px 20px;
-            color: #6c757d;
-        }
-        .stats-badge {
-            background-color: #e9ecef;
-            padding: 4px 8px;
-            border-radius: 8px;
-            margin: 0 4px;
-            font-size: 0.9rem;
-        }
-    </style>
 </head>
-<body class="bg-admin">
+<body>
     <div th:insert="~{navbar :: navbar}"></div>
-    <nav class="navbar transparent">
-        <ul class="navbar-nav mx-auto">
-            <li class="nav-item">
-                <span class="badge badge-pill badge-primary" style="font-size: 1.5rem;" th:text="#{pastgames.title}">Past Games</span>
-            </li>
-        </ul>
-    </nav>
 
-    <div class="container mt-4">
-        <!-- Past Games Table -->
-        <div th:if="${pastGames != null and !pastGames.isEmpty()}">
-            <div class="row mb-3">
-                <div class="col-12">
-                    <p class="text-muted">
-                        <span th:text="#{pastgames.showing}">Showing</span> <strong th:text="${#lists.size(pastGames)}"></strong> <span th:text="#{pastgames.completedGames}">completed game(s)</span>
-                    </p>
+    <main class="past-games-page">
+        <div class="past-games-container">
+
+            <!-- Page Header -->
+            <header class="past-games-header">
+                <h1 class="past-games-title" th:text="#{pastgames.title}">Past Games</h1>
+                <p class="past-games-subtitle">View your completed games and download detailed reports</p>
+            </header>
+
+            <!-- Stats Bar (only show when there are games) -->
+            <div class="past-games-stats" th:if="${pastGames != null and !pastGames.isEmpty()}">
+                <div class="stats-badge">
+                    <i class="fas fa-chart-bar"></i>
+                    <span th:text="#{pastgames.showing}">Showing</span>
+                    <span class="stats-count" th:text="${#lists.size(pastGames)}">12</span>
+                    <span th:text="#{pastgames.completedGames}">completed game(s)</span>
                 </div>
             </div>
 
-            <table class="games-table table table-hover">
-                <thead>
-                    <tr>
-                        <th th:text="#{pastgames.dateTime}">Date & Time</th>
-                        <th th:text="#{pastgames.challenge}">Challenge</th>
-                        <th th:text="#{pastgames.mode}">Mode</th>
-                        <th th:text="#{pastgames.duration}">Duration</th>
-                        <th th:text="#{pastgames.questions}">Questions</th>
-                        <th th:text="#{pastgames.participants}">Participants</th>
-                        <th th:text="#{pastgames.winner}">Winner</th>
-                        <th th:text="#{pastgames.actions}">Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr th:each="game : ${pastGames}">
-                        <td>
-                            <div th:text="${#temporals.format(game.completedAt, 'MMM dd, yyyy')}"></div>
-                            <small class="text-muted" th:text="${#temporals.format(game.completedAt, 'HH:mm')}"></small>
-                        </td>
-                        <td>
-                            <strong th:text="${game.challengeName}">Challenge</strong>
-                            <br/>
-                            <small class="text-muted">PIN: <span th:text="${game.pin}"></span></small>
-                        </td>
-                        <td>
-                            <span class="mode-badge"
-                                  th:classappend="${game.gameMode == 'PRACTICE' ? 'mode-practice' : 'mode-multiplayer'}"
-                                  th:text="${game.gameMode == 'PRACTICE' ? #{pastgames.practice} : #{pastgames.multiplayer}}">
-                            </span>
-                        </td>
-                        <td>
-                            <span th:text="${game.durationMinutes} + ' ' + #{pastgames.min}"></span>
-                        </td>
-                        <td>
-                            <span class="stats-badge" th:text="${game.totalQuestions}"></span>
-                        </td>
-                        <td>
-                            <span class="stats-badge" th:text="${game.participantCount}"></span>
-                        </td>
-                        <td>
-                            <div class="winner-info" th:if="${game.winnerUsername != null}">
-                                <div th:text="${game.winnerUsername}"></div>
-                                <small th:text="${game.winnerScore} + ' pts'"></small>
-                            </div>
-                            <span th:if="${game.winnerUsername == null}" class="text-muted">-</span>
-                        </td>
-                        <td>
-                            <a th:href="@{/game-result/{id}(id=${game.id})}" class="btn btn-sm btn-primary" th:text="#{pastgames.view}">View</a>
-                            <a th:href="@{/game-result/{id}/export-csv(id=${game.id})}" class="btn btn-sm btn-secondary">CSV</a>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
+            <!-- Games Grid -->
+            <div class="games-grid" th:if="${pastGames != null and !pastGames.isEmpty()}">
+                <div class="game-history-card" th:each="game : ${pastGames}">
 
-        <!-- No Games Message -->
-        <div th:if="${pastGames == null or pastGames.isEmpty()}" class="no-games">
-            <div style="font-size: 4rem; margin-bottom: 20px;">📊</div>
-            <h3 th:text="#{pastgames.noPastGames}">No Past Games</h3>
-            <p th:text="#{pastgames.noPastGamesMessage}">You haven't completed any games yet.</p>
-            <a href="/" class="btn btn-primary mt-3" th:text="#{pastgames.startNewGame}">Start a New Game</a>
+                    <!-- Card Header -->
+                    <div class="game-card-header">
+                        <div class="game-card-main">
+                            <h3 class="game-card-title" th:text="${game.challengeName}">World Geography Quiz</h3>
+                            <div class="game-card-meta">
+                                <span class="game-meta-item">
+                                    <i class="fas fa-calendar"></i>
+                                    <span th:text="${#temporals.format(game.completedAt, 'MMM dd, yyyy')}">Jan 10, 2026</span>
+                                </span>
+                                <span class="game-meta-item">
+                                    <i class="fas fa-clock"></i>
+                                    <span th:text="${#temporals.format(game.completedAt, 'HH:mm')}">14:30</span>
+                                </span>
+                                <span class="game-pin-badge">
+                                    <i class="fas fa-hashtag"></i>
+                                    <span th:text="${game.pin}">12345</span>
+                                </span>
+                            </div>
+                        </div>
+                        <span class="game-mode-badge"
+                              th:classappend="${game.gameMode == 'PRACTICE' ? 'game-mode-badge--practice' : 'game-mode-badge--multiplayer'}"
+                              th:text="${game.gameMode == 'PRACTICE' ? #{pastgames.practice} : #{pastgames.multiplayer}}">
+                            Multiplayer
+                        </span>
+                    </div>
+
+                    <!-- Card Body: Stats -->
+                    <div class="game-card-body">
+                        <!-- Duration -->
+                        <div class="game-stat">
+                            <span class="game-stat-label" th:text="#{pastgames.duration}">Duration</span>
+                            <span class="game-stat-value" th:text="${game.durationMinutes}">15</span>
+                            <span class="game-stat-subtext" th:text="#{pastgames.min}">min</span>
+                        </div>
+
+                        <!-- Questions -->
+                        <div class="game-stat">
+                            <span class="game-stat-label" th:text="#{pastgames.questions}">Questions</span>
+                            <span class="game-stat-value" th:text="${game.totalQuestions}">20</span>
+                        </div>
+
+                        <!-- Participants -->
+                        <div class="game-stat">
+                            <span class="game-stat-label" th:text="#{pastgames.participants}">Participants</span>
+                            <span class="game-stat-value" th:text="${game.participantCount}">8</span>
+                        </div>
+
+                        <!-- Winner -->
+                        <div class="game-stat">
+                            <span class="game-stat-label" th:text="#{pastgames.winner}">Winner</span>
+                            <div th:if="${game.winnerUsername != null}" class="winner-display">
+                                <div class="winner-avatar">
+                                    <i class="fas fa-trophy"></i>
+                                </div>
+                                <div class="winner-info">
+                                    <span class="winner-name" th:text="${game.winnerUsername}">John Doe</span>
+                                    <span class="winner-score" th:text="${game.winnerScore} + ' pts'">8500 pts</span>
+                                </div>
+                            </div>
+                            <span th:if="${game.winnerUsername == null}" class="game-stat-value">-</span>
+                        </div>
+                    </div>
+
+                    <!-- Card Actions -->
+                    <div class="game-card-actions">
+                        <a th:href="@{/game-result/{id}(id=${game.id})}"
+                           class="game-action-btn game-action-btn--primary">
+                            <i class="fas fa-eye"></i>
+                            <span th:text="#{pastgames.view}">View Details</span>
+                        </a>
+                        <a th:href="@{/game-result/{id}/export-csv(id=${game.id})}"
+                           class="game-action-btn game-action-btn--secondary">
+                            <i class="fas fa-download"></i>
+                            <span>Export CSV</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Empty State -->
+            <div class="empty-state" th:if="${pastGames == null or pastGames.isEmpty()}">
+                <div class="empty-state-icon">
+                    <i class="fas fa-chart-bar"></i>
+                </div>
+                <h2 class="empty-state-title" th:text="#{pastgames.noPastGames}">No Past Games</h2>
+                <p class="empty-state-text" th:text="#{pastgames.noPastGamesMessage}">You haven't completed any games yet. Start a new game to build your history.</p>
+                <a href="/view_challenges" class="empty-state-btn">
+                    <i class="fas fa-plus-circle"></i>
+                    <span th:text="#{pastgames.startNewGame}">Start a New Game</span>
+                </a>
+            </div>
+
         </div>
-    </div>
+    </main>
 
     <script type="text/javascript" src="/scripts/core/popper.min.js"></script>
     <script type="text/javascript" src="/scripts/core/bootstrap-5.3.1/bootstrap.min.js"></script>

@@ -1,40 +1,59 @@
+function getOptionsForm() {
+    return document.getElementById('optionsForm') || document.forms[0];
+}
+
 function createChallenge() {
     window.location.href = "/create_challenge_form";
 }
 
 function viewChallenge() {
-    document.forms[0].action = "/viewChallenge";
-    document.forms[0].submit();
+    var form = getOptionsForm();
+    form.action = "/viewChallenge";
+    form.submit();
 }
 
 function activeChallenge() {
-    document.forms[0].action = "/activeChallenge";
-    document.forms[0].submit();
+    var form = getOptionsForm();
+    form.action = "/activeChallenge";
+    form.submit();
 }
 
 function logOut() {
-    document.forms[0].action = "/logout";
-    document.forms[0].submit();
+    var form = getOptionsForm();
+    form.action = "/logout";
+    form.submit();
 }
 
 function toOptions() {
-    document.forms[0].action = "/options";
-    document.forms[0].submit();
+    var form = getOptionsForm();
+    form.action = "/options";
+    form.submit();
 }
 
 function toHome() {
-    document.forms[0].method = 'get';
-    document.forms[0].action = "/";
-    document.forms[0].submit();
+    var form = getOptionsForm();
+    form.method = 'get';
+    form.action = "/";
+    form.submit();
 }
 
 function manageUsers() {
-    document.forms[0].method = 'get';
-    document.forms[0].action = "/userManagement";
-    document.forms[0].submit();
+    var form = getOptionsForm();
+    form.method = 'get';
+    form.action = "/userManagement";
+    form.submit();
 }
 
 function manageGame() {
-    document.forms[0].action = "/gameManagement";
-    document.forms[0].submit();
+    var form = getOptionsForm();
+    form.action = "/gameManagement";
+    form.submit();
+}
+
+function toActiveGames() {
+    window.location.href = "/my-active-games";
+}
+
+function toPastGames() {
+    window.location.href = "/past-games";
 }

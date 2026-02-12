@@ -1,12 +1,13 @@
 <!DOCTYPE HTML>
 <html lang="en" xmlns:th="https://www.thymeleaf.org">
 <head>
-    <title th:text="#{game.lobby.title}">Getting Started: Darkhold classroom quiz experience</title>
+    <title th:text="#{game.lobby.title}">Game Lobby - Darkhold</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="manifest" href="/manifest.json">
     <link rel="shortcut icon" href="/images/favicon.png">
     <link href="/styles/darkhold-styles.css" rel="stylesheet" />
+    <link href="/styles/game-lobby.css" rel="stylesheet" />
     <link href="/styles/team-styles.css" rel="stylesheet" />
     <script type="text/javascript" src="/scripts/theme-manager.js"></script>
     <script type="text/javascript" src="/scripts/language-manager.js"></script>
@@ -17,46 +18,54 @@
     <script type="text/javascript" src="/scripts/core/stomp.min.js"></script>
     <script type="text/javascript" src="/scripts/publish-scripts.js"></script>
 </head>
-<body class="bg-admin" onload="connect()">
+<body onload="connect()">
     <div th:insert="~{navbar :: navbar}"></div>
-    <form action="#" th:object="${quizPin}" method="post">
+
+    <form action="#" th:object="${quizPin}" method="post" class="game-lobby-page">
         <input type="hidden" th:value="${quizPin}" id="quizPin"/>
         <input type="hidden" th:name="quiz_pin" id="quiz_pin"/>
         <input type="hidden" th:value="${teamMode}" id="teamMode"/>
         <input type="hidden" th:value="${assignmentMethod}" id="assignmentMethod"/>
-        <div class="container-fluid">
-            <div class="row justify-content-center align-items-center d-flex text-center h-100">
-                <div class="col-12 col-md-8  h-50">
-                    <div th:if="${quizPin != null}">
-                        <div class="jumbotron text-center m-0 d-flex flex-column justify-content-center py-5">
-                            <h1 class="display-2 text-dark mb-2 mt-5" id="head_msg"><span th:text="#{game.lobby.quizPinIs}">Your Quiz PIN is :</span> <strong>[[${quizPin}]]</strong> </h1>
-                            <div th:if="${teamMode}" class="mb-3">
-                                <span class="badge bg-info" style="font-size: 1rem;" th:text="#{game.lobby.teamModeEnabled}">Team Mode Enabled</span>
-                            </div>
-                            <div id="messenger">
-                                <p id="message_disp"></p>
-                            </div>
-                            <p><a class="btn bg-danger shadow-lg btn-round text-light btn-lg btn-rised" onclick="startGame()" th:text="#{game.lobby.startGame}">Start Game</a></p>
-                        </div>
+
+        <!-- Active Quiz PIN View -->
+        <div th:if="${quizPin != null}" class="game-lobby-container">
+
+            <!-- PIN Display Section -->
+            <section class="pin-display-section">
+                <div class="pin-display-bg"></div>
+                <div class="pin-display-content">
+                    <p class="pin-display-label" th:text="#{game.lobby.quizPinIs}">Your Quiz PIN is</p>
+                    <h1 class="pin-display-code" id="head_msg">[[${quizPin}]]</h1>
+
+                    <!-- Team Mode Badge -->
+                    <div th:if="${teamMode}" class="team-mode-badge">
+                        <i class="fas fa-users"></i>
+                        <span th:text="#{game.lobby.teamModeEnabled}">Team Mode Enabled</span>
                     </div>
-                    <div th:unless="${quizPin != null}">
-                        <div class="jumbotron text-center m-0 d-flex flex-column justify-content-center py-5">
-                            <h1 class="display-2 text-dark mb-2 mt-5" id="head_msg" th:text="#{game.lobby.noActiveChallenges}">There are no active challenges !!!</h1>
-                        </div>
+
+                    <!-- Message Display -->
+                    <div id="messenger" class="message-display">
+                        <p id="message_disp" class="message-text"></p>
                     </div>
+
+                    <!-- Start Game Button -->
+                    <button type="button" class="start-game-btn" onclick="startGame()">
+                        <i class="fas fa-play-circle"></i>
+                        <span th:text="#{game.lobby.startGame}">Start Game</span>
+                    </button>
                 </div>
-            </div>
-        </div>
-        <div th:if="${quizPin != null}">
+            </section>
+
             <!-- Team Mode View -->
-            <div th:if="${teamMode}" id="teamModeView" class="container">
-                <div class="row mb-3">
-                    <div class="col-12 text-center">
-                        <button type="button" class="btn btn-outline-primary btn-sm" onclick="autoAssignAllPlayers()" th:text="#{game.lobby.autoAssignAll}">
-                            Auto-Assign All Players
-                        </button>
-                    </div>
+            <div th:if="${teamMode}">
+                <!-- Auto-Assign Button -->
+                <div class="auto-assign-section">
+                    <button type="button" class="auto-assign-btn" onclick="autoAssignAllPlayers()">
+                        <i class="fas fa-magic"></i>
+                        <span th:text="#{game.lobby.autoAssignAll}">Auto-Assign All Players</span>
+                    </button>
                 </div>
+
                 <!-- Unassigned Players Section -->
                 <div id="unassignedSection" class="unassigned-section mb-4">
                     <h5 th:text="#{game.lobby.unassignedPlayers}">Unassigned Players</h5>
@@ -64,28 +73,97 @@
                         <!-- Populated by JavaScript -->
                     </div>
                 </div>
+
                 <!-- Team Columns -->
                 <div id="teamColumns" class="team-columns">
                     <!-- Populated by JavaScript -->
                 </div>
             </div>
 
-            <!-- Standard View (non-team mode) -->
-            <div th:unless="${teamMode}" class="row">
-                <div class="col-md-12">
-                    <table id="conversation" class="table table-striped">
-                        <thead>
-                        <tr>
-                            <th th:text="#{game.lobby.participants}">Participants:</th>
-                        </tr>
-                        </thead>
+            <!-- Standard Mode View -->
+            <div th:unless="${teamMode}" class="lobby-main-content">
+                <!-- Players Section -->
+                <section class="players-section">
+                    <div class="section-header">
+                        <h2 class="section-title">
+                            <div class="section-title-icon">
+                                <i class="fas fa-users"></i>
+                            </div>
+                            <span th:text="#{game.lobby.participants}">Participants</span>
+                        </h2>
+                        <span id="playerCountBadge" class="players-count-badge">
+                            <i class="fas fa-user"></i>
+                            <span id="playerCount">0</span>
+                        </span>
+                    </div>
+
+                    <!-- Players Grid -->
+                    <div id="playersGrid" class="players-grid">
+                        <!-- Initial player -->
+                        <div class="player-card">
+                            <div class="player-avatar">
+                                <i class="fas fa-user"></i>
+                            </div>
+                            <span class="player-name">[[${user}]]</span>
+                        </div>
+                    </div>
+
+                    <!-- Empty State -->
+                    <div id="emptyState" class="empty-state-lobby" style="display: none;">
+                        <div class="empty-state-icon-lobby">
+                            <i class="fas fa-user-plus"></i>
+                        </div>
+                        <p class="empty-state-text-lobby">Waiting for players to join...</p>
+                    </div>
+
+                    <!-- Hidden table for WebSocket compatibility -->
+                    <table id="conversation" style="display: none;">
                         <tbody id="players">
-                            <tr>
-                                <td>[[${user}]]</td>
-                            </tr>
+                            <tr><td>[[${user}]]</td></tr>
                         </tbody>
                     </table>
-                </div>
+                </section>
+
+                <!-- Info Panel -->
+                <aside class="info-panel">
+                    <!-- Quick Tips -->
+                    <div class="info-card">
+                        <h3 class="info-card-title">
+                            <i class="fas fa-lightbulb"></i>
+                            <span>Quick Tips</span>
+                        </h3>
+                        <ul class="info-list">
+                            <li class="info-list-item">
+                                <i class="fas fa-circle"></i>
+                                <span>Share the PIN with your participants</span>
+                            </li>
+                            <li class="info-list-item">
+                                <i class="fas fa-circle"></i>
+                                <span>Players will appear here as they join</span>
+                            </li>
+                            <li class="info-list-item">
+                                <i class="fas fa-circle"></i>
+                                <span>Start the game when everyone is ready</span>
+                            </li>
+                            <li class="info-list-item">
+                                <i class="fas fa-circle"></i>
+                                <span>You'll moderate the game from your screen</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- How to Join -->
+                    <div class="info-card">
+                        <h3 class="info-card-title">
+                            <i class="fas fa-info-circle"></i>
+                            <span>How Players Join</span>
+                        </h3>
+                        <p class="info-card-text">
+                            Players can join by visiting your Darkhold URL and entering the PIN displayed above.
+                            They'll be added to the lobby in real-time.
+                        </p>
+                    </div>
+                </aside>
             </div>
 
             <!-- Hidden table for team mode (used by WebSocket handlers) -->
@@ -95,8 +173,63 @@
                 </table>
             </div>
         </div>
+
+        <!-- No Active Quiz View -->
+        <div th:unless="${quizPin != null}" class="game-lobby-container">
+            <div class="no-challenges-state">
+                <div class="no-challenges-icon">⚠️</div>
+                <h1 class="no-challenges-title" th:text="#{game.lobby.noActiveChallenges}">There are no active challenges!</h1>
+            </div>
+        </div>
     </form>
+
     <script type="text/javascript" src="/scripts/core/popper.min.js"></script>
     <script type="text/javascript" src="/scripts/core/bootstrap-5.3.1/bootstrap.min.js"></script>
+
+    <script>
+        // Update player count in badge
+        function updatePlayerCount() {
+            const playerCards = document.querySelectorAll('.player-card');
+            const count = playerCards.length;
+            const countBadge = document.getElementById('playerCount');
+            if (countBadge) {
+                countBadge.textContent = count;
+            }
+        }
+
+        // Enhance the showGreeting function to use the new grid layout
+        const originalShowGreeting = window.showGreeting;
+        window.showGreeting = function(users) {
+            // Call original function to maintain compatibility
+            if (originalShowGreeting) {
+                originalShowGreeting(users);
+            }
+
+            // Update the grid view
+            const playersGrid = document.getElementById('playersGrid');
+            const emptyState = document.getElementById('emptyState');
+
+            if (!playersGrid) return;
+
+            if (users && users.length > 0) {
+                playersGrid.innerHTML = users.map(user => `
+                    <div class="player-card">
+                        <div class="player-avatar">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <span class="player-name">${user}</span>
+                    </div>
+                `).join('');
+                if (emptyState) emptyState.style.display = 'none';
+                updatePlayerCount();
+            } else {
+                playersGrid.innerHTML = '';
+                if (emptyState) emptyState.style.display = 'block';
+            }
+        };
+
+        // Initialize player count on load
+        document.addEventListener('DOMContentLoaded', updatePlayerCount);
+    </script>
 </body>
 </html>

@@ -9,6 +9,7 @@
     <link rel="manifest" href="/manifest.json">
     <link rel="shortcut icon" href="/images/favicon.png">
     <link href="/styles/darkhold-styles.css" rel="stylesheet" />
+    <link href="/styles/create-challenge.css" rel="stylesheet" />
     <script type="text/javascript" src="/scripts/theme-manager.js"></script>
     <script type="text/javascript" src="/scripts/audio-manager.js"></script>
     <script type="text/javascript" src="/scripts/language-manager.js"></script>
@@ -16,140 +17,174 @@
     <script type="text/javascript" src="/scripts/create-challenge-scripts.js"></script>
     <script type="text/javascript" src="/scripts/common-scripts.js"></script>
 </head>
-<body class="bg-admin">
+<body>
     <div th:insert="~{navbar :: navbar}"></div>
-    <form method="POST" id="fileUploadForm" enctype="multipart/form-data">
-        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-        <main class="my-form">
-            <div class="container">
-                <div class="row justify-content-center">
-                    <div class="col-md-8">
-                        <div class="card">
-                            <div class="card-header" th:text="#{challenge.create.header}">Create Challenge</div>
-                            <div class="card-body">
-                                <!-- Title Field -->
-                                <div class="mb-3">
-                                    <label for="title" class="form-label" th:text="#{challenge.create.titleLabel}">Challenge Title *</label>
-                                    <input type="text" id="title" class="form-control" name="title"
-                                           maxlength="100" required th:placeholder="#{challenge.create.titlePlaceholder}" placeholder="Enter challenge title">
-                                    <small class="form-text text-muted" th:text="#{challenge.create.titleHint}">Required, maximum 100 characters</small>
-                                </div>
 
-                                <!-- Description Field -->
-                                <div class="mb-3">
-                                    <label for="description" class="form-label" th:text="#{challenge.create.description}">Description</label>
-                                    <textarea id="description" class="form-control" name="description"
-                                              rows="3" maxlength="250" th:placeholder="#{challenge.create.descriptionPlaceholder}" placeholder="Enter challenge description (optional)"></textarea>
-                                    <small class="form-text text-muted" th:text="#{challenge.create.descriptionHint}">Optional, maximum 250 characters</small>
-                                </div>
+    <main class="create-challenge-page">
+        <div class="create-challenge-container">
 
-                                <!-- Excel Upload Section (Optional) -->
-                                <div class="mb-3">
-                                    <label for="upload" class="form-label" th:text="#{challenge.create.uploadQuestions}">Upload Questions (Optional)</label>
-                                    <input class="form-control" type="file" name="upload" id="upload" accept=".xlsx" />
-                                    <small class="form-text text-muted" th:text="#{challenge.create.uploadHint}">
-                                        Upload an Excel file to bulk-add questions, or leave empty to add questions manually later.
-                                    </small>
-                                </div>
+            <!-- Page Header -->
+            <header class="create-challenge-header">
+                <h1 class="create-challenge-title" th:text="#{challenge.create.header}">Create Challenge</h1>
+                <p class="create-challenge-subtitle">Build an engaging quiz with custom questions or import from Excel</p>
+            </header>
 
-                                <!-- Excel Format Instructions (Collapsible) -->
-                                <div class="mb-3">
-                                    <button class="btn btn-sm btn-outline-info" type="button" data-bs-toggle="collapse"
-                                            data-bs-target="#excelFormatHelp" aria-expanded="false" aria-controls="excelFormatHelp">
-                                        <i class="fas fa-info-circle"></i> <span th:text="#{challenge.create.showExcelFormat}">Show Excel Format Guide</span>
-                                    </button>
-                                    <div class="collapse mt-2" id="excelFormatHelp">
-                                        <div class="alert alert-info">
-                                            <strong th:text="#{challenge.create.excelFormatTitle}">Excel Format Requirements:</strong>
-                                            <table class="table table-sm table-bordered mt-2">
-                                                <thead>
-                                                    <tr>
-                                                        <th th:text="#{challenge.create.column}">Column</th>
-                                                        <th th:text="#{challenge.create.field}">Field</th>
-                                                        <th th:text="#{challenge.create.excelDescription}">Description</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    <tr>
-                                                        <td>0</td>
-                                                        <td th:text="#{excel.question}">Question</td>
-                                                        <td th:text="#{excel.maxChars120}">Max 120 characters</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>1-4</td>
-                                                        <td th:text="#{excel.answer1to4}">Answer 1-4</td>
-                                                        <td th:text="#{excel.maxChars75}">Max 75 characters each</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>5</td>
-                                                        <td th:text="#{excel.correctOptions}">Correct Options</td>
-                                                        <td th:text="#{excel.correctOptionsDesc}">Comma-separated: A, B, C, D</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>6</td>
-                                                        <td th:text="#{excel.questionType}">Question Type</td>
-                                                        <td th:text="#{excel.questionTypeDesc}">MULTIPLE_CHOICE, TRUE_FALSE, TYPE_ANSWER, POLL (optional)</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>7</td>
-                                                        <td th:text="#{excel.timeLimit}">Time Limit</td>
-                                                        <td th:text="#{excel.timeLimitDesc}">Seconds (optional)</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>8</td>
-                                                        <td th:text="#{excel.points}">Points</td>
-                                                        <td th:text="#{excel.pointsDesc}">Integer, defaults to 1000 (optional)</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>9</td>
-                                                        <td th:text="#{excel.acceptableAnswers}">Acceptable Answers</td>
-                                                        <td th:text="#{excel.acceptableAnswersDesc}">For TYPE_ANSWER questions (optional)</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>10</td>
-                                                        <td th:text="#{excel.imageUrl}">Image URL</td>
-                                                        <td th:text="#{excel.imageUrlDesc}">Question image (optional)</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>11</td>
-                                                        <td th:text="#{excel.videoUrl}">Video URL</td>
-                                                        <td th:text="#{excel.videoUrlDesc}">Question video (optional)</td>
-                                                    </tr>
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    </div>
-                                </div>
+            <!-- Main Form Card -->
+            <div class="create-challenge-card">
+                <form method="POST" id="fileUploadForm" enctype="multipart/form-data" class="create-challenge-body">
+                    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 
-                                <!-- Progress Bar -->
-                                <div class="mb-3">
-                                    <div id="progressdiv" style="display: none;">
-                                        <div class="progress">
-                                            <div id="progress" class="progress-bar progress-bar-striped progress-bar-animated"
-                                                 role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">0%</div>
-                                        </div>
-                                    </div>
-                                </div>
+                    <!-- Section 1: Basic Information -->
+                    <section class="form-section">
+                        <div class="section-header">
+                            <div class="section-icon">
+                                <i class="fas fa-info-circle"></i>
+                            </div>
+                            <div>
+                                <h2 class="section-title">Basic Information</h2>
+                                <p class="section-description">Give your challenge a name and description to help players understand what to expect</p>
+                            </div>
+                        </div>
 
-                                <!-- Result Message -->
-                                <div id="resultMessage" class="mb-3"></div>
+                        <div class="form-field">
+                            <label for="title" class="form-label form-label-required" th:text="#{challenge.create.titleLabel}">Challenge Title</label>
+                            <input type="text" id="title" class="form-input" name="title"
+                                   maxlength="100" required
+                                   th:placeholder="#{challenge.create.titlePlaceholder}"
+                                   placeholder="e.g., World Geography Quiz">
+                            <span class="form-hint" th:text="#{challenge.create.titleHint}">Required, maximum 100 characters</span>
+                        </div>
 
-                                <!-- Action Buttons -->
-                                <div class="d-flex gap-2">
-                                    <button class="btn btn-primary" type="button" id="btnSubmit" onclick="uploadPDF()" th:text="#{challenge.create.createButton}">
-                                        Create Challenge
-                                    </button>
-                                    <button type="button" class="btn btn-secondary" onclick="toOptions()" th:text="#{button.cancel}">
-                                        Cancel
-                                    </button>
+                        <div class="form-field">
+                            <label for="description" class="form-label" th:text="#{challenge.create.description}">Description</label>
+                            <textarea id="description" class="form-textarea" name="description"
+                                      rows="3" maxlength="250"
+                                      th:placeholder="#{challenge.create.descriptionPlaceholder}"
+                                      placeholder="Provide a brief overview of this challenge (optional)"></textarea>
+                            <span class="form-hint" th:text="#{challenge.create.descriptionHint}">Optional, maximum 250 characters</span>
+                        </div>
+                    </section>
+
+                    <!-- Section 2: Question Import -->
+                    <section class="form-section">
+                        <div class="section-header">
+                            <div class="section-icon">
+                                <i class="fas fa-file-excel"></i>
+                            </div>
+                            <div>
+                                <h2 class="section-title" th:text="#{challenge.create.uploadQuestions}">Upload Questions (Optional)</h2>
+                                <p class="section-description">Import questions from an Excel file, or skip to add them manually later</p>
+                            </div>
+                        </div>
+
+                        <div class="form-field">
+                            <label for="upload" class="form-label">Excel File</label>
+                            <input class="form-file" type="file" name="upload" id="upload" accept=".xlsx" />
+                            <span class="form-hint" th:text="#{challenge.create.uploadHint}">
+                                Upload an Excel file to bulk-add questions, or leave empty to add questions manually later.
+                            </span>
+                        </div>
+
+                        <!-- Excel Format Guide -->
+                        <div class="form-field">
+                            <button class="excel-guide-toggle" type="button" data-bs-toggle="collapse"
+                                    data-bs-target="#excelFormatHelp" aria-expanded="false" aria-controls="excelFormatHelp">
+                                <i class="fas fa-question-circle"></i>
+                                <span th:text="#{challenge.create.showExcelFormat}">Show Excel Format Guide</span>
+                            </button>
+                            <div class="collapse" id="excelFormatHelp">
+                                <div class="excel-guide-content">
+                                    <h3 class="excel-guide-title" th:text="#{challenge.create.excelFormatTitle}">Excel Format Requirements:</h3>
+                                    <table class="excel-format-table">
+                                        <thead>
+                                            <tr>
+                                                <th th:text="#{challenge.create.column}">Column</th>
+                                                <th th:text="#{challenge.create.field}">Field</th>
+                                                <th th:text="#{challenge.create.excelDescription}">Description</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>0</td>
+                                                <td th:text="#{excel.question}">Question</td>
+                                                <td th:text="#{excel.maxChars120}">Max 120 characters</td>
+                                            </tr>
+                                            <tr>
+                                                <td>1-4</td>
+                                                <td th:text="#{excel.answer1to4}">Answer 1-4</td>
+                                                <td th:text="#{excel.maxChars75}">Max 75 characters each</td>
+                                            </tr>
+                                            <tr>
+                                                <td>5</td>
+                                                <td th:text="#{excel.correctOptions}">Correct Options</td>
+                                                <td th:text="#{excel.correctOptionsDesc}">Comma-separated: A, B, C, D</td>
+                                            </tr>
+                                            <tr>
+                                                <td>6</td>
+                                                <td th:text="#{excel.questionType}">Question Type</td>
+                                                <td th:text="#{excel.questionTypeDesc}">MULTIPLE_CHOICE, TRUE_FALSE, TYPE_ANSWER, POLL (optional)</td>
+                                            </tr>
+                                            <tr>
+                                                <td>7</td>
+                                                <td th:text="#{excel.timeLimit}">Time Limit</td>
+                                                <td th:text="#{excel.timeLimitDesc}">Seconds (optional)</td>
+                                            </tr>
+                                            <tr>
+                                                <td>8</td>
+                                                <td th:text="#{excel.points}">Points</td>
+                                                <td th:text="#{excel.pointsDesc}">Integer, defaults to 1000 (optional)</td>
+                                            </tr>
+                                            <tr>
+                                                <td>9</td>
+                                                <td th:text="#{excel.acceptableAnswers}">Acceptable Answers</td>
+                                                <td th:text="#{excel.acceptableAnswersDesc}">For TYPE_ANSWER questions (optional)</td>
+                                            </tr>
+                                            <tr>
+                                                <td>10</td>
+                                                <td th:text="#{excel.imageUrl}">Image URL</td>
+                                                <td th:text="#{excel.imageUrlDesc}">Question image (optional)</td>
+                                            </tr>
+                                            <tr>
+                                                <td>11</td>
+                                                <td th:text="#{excel.videoUrl}">Video URL</td>
+                                                <td th:text="#{excel.videoUrlDesc}">Question video (optional)</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
                                 </div>
                             </div>
                         </div>
+                    </section>
+
+                    <!-- Progress Bar -->
+                    <div id="progressdiv" class="progress-wrapper" style="display: none;">
+                        <div class="progress-bar-container">
+                            <div id="progress" class="progress-bar-fill"
+                                 role="progressbar" style="width: 0%;"
+                                 aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
                     </div>
-                </div>
+
+                    <!-- Result Message -->
+                    <div id="resultMessage" class="result-message"></div>
+
+                    <!-- Action Buttons -->
+                    <div class="form-actions">
+                        <button class="btn-primary-create" type="button" id="btnSubmit" onclick="uploadPDF()">
+                            <i class="fas fa-plus-circle"></i>
+                            <span th:text="#{challenge.create.createButton}">Create Challenge</span>
+                        </button>
+                        <button type="button" class="btn-secondary-cancel" onclick="toOptions()">
+                            <i class="fas fa-times"></i>
+                            <span th:text="#{button.cancel}">Cancel</span>
+                        </button>
+                    </div>
+                </form>
             </div>
-        </main>
-    </form>
+
+        </div>
+    </main>
+
     <script type="text/javascript" src="/scripts/core/popper.min.js"></script>
     <script type="text/javascript" src="/scripts/core/bootstrap-5.3.1/bootstrap.min.js"></script>
 </body>

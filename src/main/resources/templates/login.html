@@ -14,84 +14,240 @@
 </head>
 <body>
     <main class="login-page">
-        <div class="login-card">
-            <!-- Brand Header -->
-            <div class="login-brand">
-                <img src="/images/icons/icon-192.png" th:alt="#{app.name}" alt="Darkhold Logo" class="login-logo">
-                <h1 class="login-title brand-title" th:text="#{app.name}">Darkhold</h1>
-                <p class="login-subtitle" th:text="#{app.tagline}">Interactive Quiz Platform</p>
+        <!-- ============================
+             LEFT PANEL - Branding
+             ============================ -->
+        <div class="login-panel-left">
+            <div class="panel-left-content">
+                <!-- Logo & Title -->
+                <div class="panel-brand">
+                    <svg class="panel-logo-icon" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M32 4L58 18V46L32 60L6 46V18L32 4Z" stroke="currentColor" stroke-width="2" fill="none"/>
+                        <path d="M32 12L50 22V42L32 52L14 42V22L32 12Z" fill="currentColor" opacity="0.2"/>
+                        <path d="M32 20L42 26V38L32 44L22 38V26L32 20Z" fill="currentColor"/>
+                        <circle cx="32" cy="32" r="4" fill="rgba(0,0,0,0.3)"/>
+                    </svg>
+                    <h2 class="panel-title font-display" th:text="#{app.name}">Darkhold</h2>
+                </div>
+
+                <p class="panel-headline">The interactive quiz platform for engaged learning</p>
+
+                <!-- Feature List -->
+                <div class="panel-features">
+                    <div class="panel-feature">
+                        <div class="panel-feature-icon">
+                            <i class="fas fa-bolt"></i>
+                        </div>
+                        <div class="panel-feature-text">
+                            <span class="panel-feature-title">Real-Time Gameplay</span>
+                            <span class="panel-feature-desc">Live questions, instant scoring, and dynamic leaderboards</span>
+                        </div>
+                    </div>
+                    <div class="panel-feature">
+                        <div class="panel-feature-icon">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <div class="panel-feature-text">
+                            <span class="panel-feature-title">Team &amp; Solo Modes</span>
+                            <span class="panel-feature-desc">Compete individually or collaborate in teams</span>
+                        </div>
+                    </div>
+                    <div class="panel-feature">
+                        <div class="panel-feature-icon">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <div class="panel-feature-text">
+                            <span class="panel-feature-title">Detailed Analytics</span>
+                            <span class="panel-feature-desc">Track performance and identify knowledge gaps</span>
+                        </div>
+                    </div>
+                    <div class="panel-feature">
+                        <div class="panel-feature-icon">
+                            <i class="fas fa-server"></i>
+                        </div>
+                        <div class="panel-feature-text">
+                            <span class="panel-feature-title">Self-Hosted &amp; Private</span>
+                            <span class="panel-feature-desc">Own your data, deploy on your infrastructure</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Testimonial -->
+                <div class="panel-testimonial">
+                    <blockquote class="panel-quote">
+                        &ldquo;Darkhold transformed how we run training sessions. Engagement went through the roof.&rdquo;
+                    </blockquote>
+                    <div class="panel-quote-author">
+                        <div class="panel-quote-avatar">JD</div>
+                        <div class="panel-quote-info">
+                            <span class="panel-quote-name">Jane Doe</span>
+                            <span class="panel-quote-role">Training Manager, Acme Corp</span>
+                        </div>
+                    </div>
+                </div>
             </div>
 
-            <!-- Error Message -->
-            <div th:if="${danger}" class="login-error" role="alert">
-                <span th:text="${danger}" th:utext="#{login.invalidCredentials}">Invalid credentials</span>
+            <!-- Decorative elements -->
+            <div class="panel-left-decor">
+                <div class="panel-glow panel-glow--1"></div>
+                <div class="panel-glow panel-glow--2"></div>
             </div>
+        </div>
 
-            <!-- Login Form -->
-            <form th:action="@{/login}" method="post" class="login-form">
-                <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-
-                <!-- Email Input -->
-                <div class="form-floating">
-                    <input
-                        type="email"
-                        id="username"
-                        name="username"
-                        class="login-input"
-                        th:placeholder="#{login.email}"
-                        placeholder="Email address"
-                        autocomplete="username"
-                        autofocus
-                        required
-                        th:aria-label="#{login.email}"
-                        aria-label="Email address"
-                    />
-                    <label for="username" th:text="#{login.email}">Email address</label>
-                </div>
-
-                <!-- Password Input -->
-                <div class="form-floating">
-                    <input
-                        type="password"
-                        id="password"
-                        name="password"
-                        class="login-input"
-                        th:placeholder="#{login.password}"
-                        placeholder="Password"
-                        autocomplete="current-password"
-                        required
-                        th:aria-label="#{login.password}"
-                        aria-label="Password"
-                    />
-                    <label for="password" th:text="#{login.password}">Password</label>
-                </div>
-
-                <!-- Options Row -->
-                <div class="login-options">
-                    <label class="remember-me">
-                        <input type="checkbox" id="remember" name="remember-me">
-                        <span th:text="#{login.rememberMe}">Remember me</span>
-                    </label>
-                    <a href="#" class="forgot-link" data-bs-toggle="modal" data-bs-target="#forgetPass" th:text="#{login.forgotPassword}">
-                        Forgot password?
-                    </a>
-                </div>
-
-                <!-- Submit Button -->
-                <button type="submit" class="login-btn" th:text="#{login.signIn}">
-                    Sign In
+        <!-- ============================
+             RIGHT PANEL - Login Form
+             ============================ -->
+        <div class="login-panel-right">
+            <div class="login-card">
+                <!-- Theme toggle -->
+                <button type="button" class="theme-toggle" onclick="ThemeManager.toggle(); updateIcon();" aria-label="Toggle theme">
+                    <i class="fas fa-moon" id="login-theme-icon"></i>
                 </button>
+
+                <!-- Brand Header (mobile only) -->
+                <div class="login-brand-mobile">
+                    <svg class="login-logo-mobile" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M32 4L58 18V46L32 60L6 46V18L32 4Z" stroke="currentColor" stroke-width="2" fill="none"/>
+                        <path d="M32 20L42 26V38L32 44L22 38V26L32 20Z" fill="currentColor"/>
+                    </svg>
+                    <span class="login-brand-mobile-name font-display" th:text="#{app.name}">Darkhold</span>
+                </div>
+
+                <!-- Welcome Text -->
+                <div class="login-header">
+                    <h1 class="login-title" th:text="#{login.signIn}">Sign In</h1>
+                    <p class="login-subtitle" th:text="#{app.tagline}">Interactive Quiz Platform</p>
+                </div>
+
+                <!-- Error Message -->
+                <div th:if="${danger}" class="login-error" role="alert">
+                    <i class="fas fa-exclamation-circle"></i>
+                    <span th:text="${danger}" th:utext="#{login.invalidCredentials}">Invalid credentials</span>
+                </div>
+
+                <!-- Login Form -->
+                <form th:action="@{/login}" method="post" class="login-form">
+                    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+
+                    <!-- Email Input -->
+                    <div class="form-group">
+                        <label for="username" class="form-group-label" th:text="#{login.email}">Email address</label>
+                        <div class="input-wrapper">
+                            <input
+                                type="email"
+                                id="username"
+                                name="username"
+                                class="login-input"
+                                th:placeholder="#{login.email}"
+                                placeholder="you@example.com"
+                                autocomplete="username"
+                                autofocus
+                                required
+                                th:aria-label="#{login.email}"
+                                aria-label="Email address"
+                            />
+                            <div class="input-icon-right">
+                                <i class="fas fa-envelope"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Password Input -->
+                    <div class="form-group">
+                        <div class="form-group-header">
+                            <label for="password" class="form-group-label" th:text="#{login.password}">Password</label>
+                            <a href="#" class="forgot-link" data-bs-toggle="modal" data-bs-target="#forgotPassModal" th:text="#{login.forgotPassword}">
+                                Forgot password?
+                            </a>
+                        </div>
+                        <div class="input-wrapper">
+                            <input
+                                type="password"
+                                id="password"
+                                name="password"
+                                class="login-input"
+                                th:placeholder="#{login.password}"
+                                placeholder="Enter your password"
+                                autocomplete="current-password"
+                                required
+                                th:aria-label="#{login.password}"
+                                aria-label="Password"
+                            />
+                            <div class="input-icon-right">
+                                <i class="fas fa-lock"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Remember Me -->
+                    <div class="login-options">
+                        <label class="remember-me">
+                            <input type="checkbox" id="remember" name="remember-me">
+                            <span class="checkmark"></span>
+                            <span th:text="#{login.rememberMe}">Remember me</span>
+                        </label>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <button type="submit" class="login-btn">
+                        <span th:text="#{login.signIn}">Sign In</span>
+                        <i class="fas fa-arrow-right"></i>
+                    </button>
+                </form>
+
+                <!-- Divider -->
+                <div class="login-divider">
+                    <span>or</span>
+                </div>
 
                 <!-- Sign Up Link -->
                 <div class="login-footer">
-                    <span th:text="#{login.noAccount}">Don't have an account?</span>
-                    <a th:href="@{/registration}" th:text="#{login.createAccount}">Create one</a>
+                    <p>
+                        <span th:text="#{login.noAccount}">Don't have an account?</span>
+                        <a th:href="@{/registration}" class="signup-link" th:text="#{login.createAccount}">Create one</a>
+                    </p>
                 </div>
-            </form>
+
+                <!-- Back to Home -->
+                <div class="login-back">
+                    <a href="/" class="back-link">
+                        <i class="fas fa-arrow-left"></i>
+                        <span>Back to Home</span>
+                    </a>
+                </div>
+            </div>
         </div>
     </main>
 
+    <!-- Forgot Password Modal -->
+    <div class="modal fade" id="forgotPassModal" tabindex="-1" aria-labelledby="forgotPassLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-sm">
+            <div class="modal-content forgot-modal-content">
+                <div class="modal-body forgot-modal-body">
+                    <div class="forgot-modal-icon">
+                        <i class="fas fa-wrench"></i>
+                    </div>
+                    <h5 id="forgotPassLabel" class="forgot-modal-title">Coming Soon</h5>
+                    <p class="forgot-modal-text">
+                        Password reset is not yet available. Please contact your administrator to reset your password.
+                    </p>
+                    <button type="button" class="forgot-modal-btn" data-bs-dismiss="modal">Got it</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script type="text/javascript" src="/scripts/core/popper.min.js"></script>
     <script type="text/javascript" src="/scripts/core/bootstrap-5.3.1/bootstrap.min.js"></script>
+    <script>
+        function updateIcon() {
+            var icon = document.getElementById('login-theme-icon');
+            if (icon) {
+                icon.className = ThemeManager.isDark() ? 'fas fa-sun' : 'fas fa-moon';
+            }
+        }
+        document.addEventListener('DOMContentLoaded', function() { updateIcon(); });
+        window.addEventListener('themechange', function() { updateIcon(); });
+    </script>
 </body>
 </html>

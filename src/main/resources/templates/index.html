@@ -34,177 +34,436 @@
 
     <!-- Main Content -->
     <main id="main-content" class="home-main">
-        <!-- Decorative Elements -->
-        <div class="hero-decoration">
-            <div class="geo-shape geo-shape-1"></div>
-            <div class="geo-shape geo-shape-2"></div>
-            <div class="geo-shape geo-shape-3"></div>
-            <div class="geo-ring geo-ring-1"></div>
-            <div class="geo-ring geo-ring-2"></div>
-        </div>
 
-        <!-- Hero Section -->
+        <!-- ============================
+             HERO SECTION
+             ============================ -->
         <section class="hero-section">
-            <div class="container">
-                <!-- Logo & Branding -->
-                <div class="brand-header animate-fade-in">
-                    <div class="brand-logo">
-                        <svg class="logo-icon" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M32 4L58 18V46L32 60L6 46V18L32 4Z" stroke="currentColor" stroke-width="2" fill="none"/>
-                            <path d="M32 12L50 22V42L32 52L14 42V22L32 12Z" fill="currentColor" opacity="0.2"/>
-                            <path d="M32 20L42 26V38L32 44L22 38V26L32 20Z" fill="currentColor"/>
-                            <circle cx="32" cy="32" r="4" fill="var(--color-bg-primary)"/>
-                        </svg>
+            <!-- Ambient background -->
+            <div class="hero-glow hero-glow--1"></div>
+            <div class="hero-glow hero-glow--2"></div>
+            <div class="hero-grid-bg"></div>
+
+            <div class="container hero-container">
+                <!-- Left: Branding + Text -->
+                <div class="hero-text animate-fade-in">
+                    <div class="hero-badge">
+                        <i class="fas fa-bolt"></i>
+                        <span>Real-time multiplayer quizzes</span>
                     </div>
-                    <h1 class="brand-name font-display" th:text="#{app.name}">Darkhold</h1>
-                    <p class="brand-tagline" th:text="#{app.tagline}">Interactive Quiz Platform</p>
-                </div>
+                    <h1 class="hero-title font-display">
+                        <span class="hero-title-line" th:text="#{app.name}">Darkhold</span>
+                    </h1>
+                    <p class="hero-subtitle" th:text="#{app.tagline}">Interactive Quiz Platform</p>
+                    <p class="hero-description">
+                        Engage your audience with live quizzes, instant feedback, and real-time leaderboards.
+                        Built for classrooms, meetings, and events.
+                    </p>
 
-                <!-- PIN Entry Card -->
-                <div class="pin-card animate-slide-up">
-                    <form action="#" th:action="@{/joinGame}" th:object="${gameinfo}" method="post" id="joinForm" class="pin-form">
-                        <!-- Success Message -->
-                        <div th:if="${gameinfo != null && gameinfo.message != null}" class="alert-banner alert-success" role="alert">
-                            <i class="fas fa-check-circle"></i>
-                            <span th:text="${gameinfo.message}">Success message</span>
-                            <button type="button" class="alert-close" aria-label="Close">&times;</button>
-                        </div>
-
-                        <!-- PIN Entry Step -->
-                        <div id="pin-step" class="form-step active">
-                            <label for="gamePin" class="form-label" id="pin-label">
-                                <span class="label-text" th:text="#{home.enterPin}">Enter Game PIN</span>
-                            </label>
-                            <div class="input-wrapper">
-                                <input type="text"
-                                       inputmode="numeric"
-                                       pattern="[0-9]*"
-                                       maxlength="5"
-                                       class="pin-input"
-                                       th:field="*{gamePin}"
-                                       id="gamePin"
-                                       name="gamePin"
-                                       th:placeholder="#{home.pinPlaceholder}"
-                                       placeholder="Game PIN"
-                                       aria-labelledby="pin-label"
-                                       aria-describedby="pin-help pin-error"
-                                       autocomplete="off"
-                                       autofocus />
-                                <div class="input-icon">
-                                    <i class="fas fa-hashtag"></i>
-                                </div>
-                            </div>
-                            <small id="pin-help" class="form-help" th:text="#{home.pinHelp}">Enter the 5-digit PIN shown on the presenter's screen</small>
-                        </div>
-
-                        <!-- Name Entry Step (hidden initially) -->
-                        <div id="name-step" class="form-step">
-                            <label for="username" class="form-label" id="name-label">
-                                <span class="label-text" th:text="#{home.enterName}">Enter Your Name</span>
-                            </label>
-                            <div class="input-wrapper">
-                                <input type="text"
-                                       class="pin-input name-input"
-                                       th:field="*{name}"
-                                       id="username"
-                                       name="username"
-                                       th:placeholder="#{home.namePlaceholder}"
-                                       placeholder="Your nickname"
-                                       aria-labelledby="name-label"
-                                       aria-describedby="name-help"
-                                       autocomplete="off"
-                                       maxlength="20" />
-                                <div class="input-icon">
-                                    <i class="fas fa-user"></i>
-                                </div>
-                            </div>
-                            <small id="name-help" class="form-help" th:text="#{home.nameHelp}">This name will be visible to other players</small>
-                        </div>
-
-                        <!-- Error Message -->
-                        <div id="messenger" class="error-container" role="alert" aria-live="polite">
-                            <p id="message_disp" class="error-message"></p>
-                        </div>
-
-                        <!-- Submit Button -->
-                        <button type="button" class="btn-join" id="joinBtn" onclick="enterGame();">
-                            <span class="btn-text" th:text="#{home.joinGame}">Join Game</span>
-                            <span class="btn-loading">
-                                <i class="fas fa-circle-notch fa-spin"></i>
-                                <span th:text="#{home.connecting}">Connecting...</span>
-                            </span>
-                            <i class="fas fa-arrow-right btn-icon"></i>
-                        </button>
-                    </form>
-                </div>
-
-                <!-- How It Works Section -->
-                <div class="how-it-works animate-fade-in-delayed">
-                    <h2 class="section-title" th:text="#{home.howItWorks}">How it works</h2>
-                    <div class="steps-grid">
-                        <div class="step-item">
-                            <div class="step-number">1</div>
-                            <h3 class="step-title" th:text="#{home.step1Title}">Get the PIN</h3>
-                            <p class="step-desc" th:text="#{home.step1Desc}">The host will display a game PIN on their screen</p>
-                        </div>
-                        <div class="step-item">
-                            <div class="step-number">2</div>
-                            <h3 class="step-title" th:text="#{home.step2Title}">Enter & Join</h3>
-                            <p class="step-desc" th:text="#{home.step2Desc}">Type the PIN above and enter your nickname</p>
-                        </div>
-                        <div class="step-item">
-                            <div class="step-number">3</div>
-                            <h3 class="step-title" th:text="#{home.step3Title}">Play & Compete</h3>
-                            <p class="step-desc" th:text="#{home.step3Desc}">Answer questions and climb the leaderboard!</p>
-                        </div>
+                    <!-- Quick Actions for Authenticated Users -->
+                    <div sec:authorize="isAuthenticated()" class="hero-actions">
+                        <a th:href="@{/challenge/create}" class="btn-hero-primary">
+                            <i class="fas fa-plus-circle"></i>
+                            <span th:text="#{home.createQuiz}">Create Quiz</span>
+                        </a>
+                        <a th:href="@{/challenge/view}" class="btn-hero-secondary">
+                            <i class="fas fa-folder-open"></i>
+                            <span th:text="#{home.viewChallenges}">My Quizzes</span>
+                        </a>
                     </div>
                 </div>
 
-                <!-- Quick Actions for Authenticated Users -->
-                <div sec:authorize="isAuthenticated()" class="quick-actions animate-fade-in-delayed">
-                    <h2 class="section-title">
-                        <span th:text="#{home.welcome}">Welcome back</span>,
-                        <span class="user-name" th:text="${#authentication.getPrincipal().getUsername()}">User</span>
-                    </h2>
-                    <div class="actions-grid">
-                        <a th:href="@{/challenge/create}" class="action-card">
-                            <div class="action-icon">
-                                <i class="fas fa-plus-circle"></i>
+                <!-- Right: PIN Entry Card -->
+                <div class="hero-card animate-slide-up">
+                    <div class="pin-card">
+                        <div class="pin-card-header">
+                            <div class="pin-card-icon">
+                                <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M32 4L58 18V46L32 60L6 46V18L32 4Z" stroke="currentColor" stroke-width="2" fill="none"/>
+                                    <path d="M32 12L50 22V42L32 52L14 42V22L32 12Z" fill="currentColor" opacity="0.2"/>
+                                    <path d="M32 20L42 26V38L32 44L22 38V26L32 20Z" fill="currentColor"/>
+                                    <circle cx="32" cy="32" r="4" fill="var(--color-bg-primary)"/>
+                                </svg>
                             </div>
-                            <span class="action-text" th:text="#{home.createQuiz}">Create Quiz</span>
-                        </a>
-                        <a th:href="@{/challenge/view}" class="action-card">
-                            <div class="action-icon">
-                                <i class="fas fa-folder-open"></i>
+                            <h2 class="pin-card-title" th:text="#{home.enterPin}">Enter Game PIN</h2>
+                            <p class="pin-card-subtitle" th:text="#{home.pinHelp}">Enter the 5-digit PIN shown on the presenter's screen</p>
+                        </div>
+
+                        <form action="#" th:action="@{/joinGame}" th:object="${gameinfo}" method="post" id="joinForm" class="pin-form">
+                            <!-- Success Message -->
+                            <div th:if="${gameinfo != null && gameinfo.message != null}" class="alert-banner alert-success" role="alert">
+                                <i class="fas fa-check-circle"></i>
+                                <span th:text="${gameinfo.message}">Success message</span>
+                                <button type="button" class="alert-close" aria-label="Close">&times;</button>
                             </div>
-                            <span class="action-text" th:text="#{home.viewChallenges}">My Quizzes</span>
-                        </a>
-                        <a th:href="@{/activegames}" class="action-card">
-                            <div class="action-icon">
-                                <i class="fas fa-gamepad"></i>
+
+                            <!-- PIN Entry Step -->
+                            <div id="pin-step" class="form-step active">
+                                <label for="gamePin" class="sr-only" id="pin-label">
+                                    <span class="label-text" th:text="#{home.enterPin}">Enter Game PIN</span>
+                                </label>
+                                <div class="input-wrapper">
+                                    <input type="text"
+                                           inputmode="numeric"
+                                           pattern="[0-9]*"
+                                           maxlength="5"
+                                           class="pin-input"
+                                           th:field="*{gamePin}"
+                                           id="gamePin"
+                                           name="gamePin"
+                                           th:placeholder="#{home.pinPlaceholder}"
+                                           placeholder="Game PIN"
+                                           aria-labelledby="pin-label"
+                                           aria-describedby="pin-help pin-error"
+                                           autocomplete="off"
+                                           autofocus />
+                                    <div class="input-icon">
+                                        <i class="fas fa-hashtag"></i>
+                                    </div>
+                                </div>
                             </div>
-                            <span class="action-text" th:text="#{nav.activeGames}">Active Games</span>
-                        </a>
-                        <a th:href="@{/pastgames}" class="action-card">
-                            <div class="action-icon">
-                                <i class="fas fa-history"></i>
+
+                            <!-- Name Entry Step (hidden initially) -->
+                            <div id="name-step" class="form-step">
+                                <label for="username" class="sr-only" id="name-label">
+                                    <span class="label-text" th:text="#{home.enterName}">Enter Your Name</span>
+                                </label>
+                                <div class="input-wrapper">
+                                    <input type="text"
+                                           class="pin-input name-input"
+                                           th:field="*{name}"
+                                           id="username"
+                                           name="username"
+                                           th:placeholder="#{home.namePlaceholder}"
+                                           placeholder="Your nickname"
+                                           aria-labelledby="name-label"
+                                           aria-describedby="name-help"
+                                           autocomplete="off"
+                                           maxlength="20" />
+                                    <div class="input-icon">
+                                        <i class="fas fa-user"></i>
+                                    </div>
+                                </div>
                             </div>
-                            <span class="action-text" th:text="#{nav.pastGames}">Past Games</span>
-                        </a>
+
+                            <!-- Error Message -->
+                            <div id="messenger" class="error-container" role="alert" aria-live="polite">
+                                <p id="message_disp" class="error-message"></p>
+                            </div>
+
+                            <!-- Submit Button -->
+                            <button type="button" class="btn-join" id="joinBtn" onclick="enterGame();">
+                                <span class="btn-text" th:text="#{home.joinGame}">Join Game</span>
+                                <span class="btn-loading">
+                                    <i class="fas fa-circle-notch fa-spin"></i>
+                                    <span th:text="#{home.connecting}">Connecting...</span>
+                                </span>
+                                <i class="fas fa-arrow-right btn-icon"></i>
+                            </button>
+                        </form>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- Footer -->
-        <footer class="home-footer">
+        <!-- ============================
+             STATS BAR
+             ============================ -->
+        <section class="stats-bar">
             <div class="container">
-                <div class="footer-content">
+                <div class="stats-grid">
+                    <div class="stat-item">
+                        <span class="stat-number">1M+</span>
+                        <span class="stat-label">Questions Answered</span>
+                    </div>
+                    <div class="stat-divider"></div>
+                    <div class="stat-item">
+                        <span class="stat-number">50K+</span>
+                        <span class="stat-label">Games Played</span>
+                    </div>
+                    <div class="stat-divider"></div>
+                    <div class="stat-item">
+                        <span class="stat-number">10K+</span>
+                        <span class="stat-label">Active Hosts</span>
+                    </div>
+                    <div class="stat-divider"></div>
+                    <div class="stat-item">
+                        <span class="stat-number">99.9%</span>
+                        <span class="stat-label">Uptime</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============================
+             HOW IT WORKS
+             ============================ -->
+        <section class="section-how-it-works">
+            <div class="container">
+                <div class="section-header">
+                    <span class="section-eyebrow" th:text="#{home.howItWorks}">How it works</span>
+                    <h2 class="section-heading">Get started in seconds</h2>
+                    <p class="section-subheading">No accounts needed for players. Just a PIN and you're in.</p>
+                </div>
+                <div class="steps-grid">
+                    <div class="step-card">
+                        <div class="step-icon-wrap">
+                            <div class="step-icon">
+                                <i class="fas fa-key"></i>
+                            </div>
+                            <span class="step-number">1</span>
+                        </div>
+                        <h3 class="step-title" th:text="#{home.step1Title}">Get the PIN</h3>
+                        <p class="step-desc" th:text="#{home.step1Desc}">The host will display a game PIN on their screen</p>
+                    </div>
+                    <div class="step-connector">
+                        <i class="fas fa-chevron-right"></i>
+                    </div>
+                    <div class="step-card">
+                        <div class="step-icon-wrap">
+                            <div class="step-icon">
+                                <i class="fas fa-sign-in-alt"></i>
+                            </div>
+                            <span class="step-number">2</span>
+                        </div>
+                        <h3 class="step-title" th:text="#{home.step2Title}">Enter &amp; Join</h3>
+                        <p class="step-desc" th:text="#{home.step2Desc}">Type the PIN above and enter your nickname</p>
+                    </div>
+                    <div class="step-connector">
+                        <i class="fas fa-chevron-right"></i>
+                    </div>
+                    <div class="step-card">
+                        <div class="step-icon-wrap">
+                            <div class="step-icon">
+                                <i class="fas fa-trophy"></i>
+                            </div>
+                            <span class="step-number">3</span>
+                        </div>
+                        <h3 class="step-title" th:text="#{home.step3Title}">Play &amp; Compete</h3>
+                        <p class="step-desc" th:text="#{home.step3Desc}">Answer questions and climb the leaderboard!</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============================
+             FEATURES
+             ============================ -->
+        <section class="section-features">
+            <div class="container">
+                <div class="section-header">
+                    <span class="section-eyebrow">Features</span>
+                    <h2 class="section-heading">Everything you need to engage</h2>
+                    <p class="section-subheading">Powerful tools to create, host, and analyze interactive quiz sessions.</p>
+                </div>
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-bolt"></i>
+                        </div>
+                        <h3 class="feature-title">Real-Time Play</h3>
+                        <p class="feature-desc">WebSocket-powered live gameplay with instant question delivery and real-time score updates across all connected devices.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon feature-icon--teal">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <h3 class="feature-title">Team Mode</h3>
+                        <p class="feature-desc">Split players into teams automatically or manually. Collaborate on answers and compete as a group for added engagement.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon feature-icon--orange">
+                            <i class="fas fa-file-excel"></i>
+                        </div>
+                        <h3 class="feature-title">Excel Import</h3>
+                        <p class="feature-desc">Upload your questions from a spreadsheet in seconds. No manual entry needed - just drag, drop, and go live.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon feature-icon--green">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <h3 class="feature-title">Live Analytics</h3>
+                        <p class="feature-desc">Track participation, accuracy, and performance in real time. Review detailed reports after every session.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon feature-icon--purple">
+                            <i class="fas fa-moon"></i>
+                        </div>
+                        <h3 class="feature-title">Dark Mode</h3>
+                        <p class="feature-desc">Full dark theme support with automatic OS detection. Easy on the eyes for late-night study sessions and events.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon feature-icon--red">
+                            <i class="fas fa-server"></i>
+                        </div>
+                        <h3 class="feature-title">Self-Hosted</h3>
+                        <p class="feature-desc">Own your data completely. Deploy on your own infrastructure with Docker in minutes. No vendor lock-in, ever.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============================
+             DASHBOARD PREVIEW (Auth Users)
+             ============================ -->
+        <div sec:authorize="isAuthenticated()">
+            <section class="section-dashboard">
+                <div class="container">
+                    <div class="section-header">
+                        <span class="section-eyebrow">Dashboard</span>
+                        <h2 class="section-heading">
+                            <span th:text="#{home.welcome}">Welcome back</span>,
+                            <span class="text-gradient" th:text="${#authentication.getPrincipal().getUsername()}">User</span>
+                        </h2>
+                        <p class="section-subheading">Jump right back in. Here are your quick actions.</p>
+                    </div>
+                    <div class="dashboard-grid">
+                        <a th:href="@{/challenge/create}" class="dashboard-card">
+                            <div class="dashboard-card-icon">
+                                <i class="fas fa-plus-circle"></i>
+                            </div>
+                            <div class="dashboard-card-body">
+                                <span class="dashboard-card-title" th:text="#{home.createQuiz}">Create Quiz</span>
+                                <span class="dashboard-card-desc">Build a new quiz from scratch or import</span>
+                            </div>
+                            <i class="fas fa-arrow-right dashboard-card-arrow"></i>
+                        </a>
+                        <a th:href="@{/challenge/view}" class="dashboard-card">
+                            <div class="dashboard-card-icon dashboard-card-icon--teal">
+                                <i class="fas fa-folder-open"></i>
+                            </div>
+                            <div class="dashboard-card-body">
+                                <span class="dashboard-card-title" th:text="#{home.viewChallenges}">My Quizzes</span>
+                                <span class="dashboard-card-desc">View, edit, or launch your saved quizzes</span>
+                            </div>
+                            <i class="fas fa-arrow-right dashboard-card-arrow"></i>
+                        </a>
+                        <a th:href="@{/activegames}" class="dashboard-card">
+                            <div class="dashboard-card-icon dashboard-card-icon--orange">
+                                <i class="fas fa-gamepad"></i>
+                            </div>
+                            <div class="dashboard-card-body">
+                                <span class="dashboard-card-title" th:text="#{nav.activeGames}">Active Games</span>
+                                <span class="dashboard-card-desc">Monitor and manage running sessions</span>
+                            </div>
+                            <i class="fas fa-arrow-right dashboard-card-arrow"></i>
+                        </a>
+                        <a th:href="@{/pastgames}" class="dashboard-card">
+                            <div class="dashboard-card-icon dashboard-card-icon--purple">
+                                <i class="fas fa-history"></i>
+                            </div>
+                            <div class="dashboard-card-body">
+                                <span class="dashboard-card-title" th:text="#{nav.pastGames}">Past Games</span>
+                                <span class="dashboard-card-desc">Review results, scores, and analytics</span>
+                            </div>
+                            <i class="fas fa-arrow-right dashboard-card-arrow"></i>
+                        </a>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- ============================
+             USE CASES
+             ============================ -->
+        <section class="section-use-cases">
+            <div class="container">
+                <div class="section-header">
+                    <span class="section-eyebrow">Use Cases</span>
+                    <h2 class="section-heading">Built for every scenario</h2>
+                    <p class="section-subheading">From classrooms to corporate training, Darkhold adapts to your needs.</p>
+                </div>
+                <div class="use-cases-grid">
+                    <div class="use-case-card">
+                        <div class="use-case-visual">
+                            <i class="fas fa-graduation-cap"></i>
+                        </div>
+                        <h3 class="use-case-title">Education</h3>
+                        <p class="use-case-desc">Make learning interactive with formative assessments. Students stay engaged while teachers get instant insight into comprehension levels.</p>
+                    </div>
+                    <div class="use-case-card">
+                        <div class="use-case-visual">
+                            <i class="fas fa-building"></i>
+                        </div>
+                        <h3 class="use-case-title">Corporate Training</h3>
+                        <p class="use-case-desc">Reinforce training material with competitive quizzes. Track employee progress and identify knowledge gaps across your organization.</p>
+                    </div>
+                    <div class="use-case-card">
+                        <div class="use-case-visual">
+                            <i class="fas fa-calendar-alt"></i>
+                        </div>
+                        <h3 class="use-case-title">Events & Conferences</h3>
+                        <p class="use-case-desc">Break the ice and energize your audience with live trivia. Perfect for team-building events, meetups, and social gatherings.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============================
+             CTA SECTION (Anonymous only)
+             ============================ -->
+        <section sec:authorize="isAnonymous()" class="section-cta">
+            <div class="container">
+                <div class="cta-card">
+                    <div class="cta-content">
+                        <h2 class="cta-title font-display">Ready to host your first quiz?</h2>
+                        <p class="cta-text">Create an account and start building engaging quizzes in minutes. Free to self-host, forever.</p>
+                        <button class="btn-cta" type="button" onclick="logMeIn()">
+                            <span>Get Started</span>
+                            <i class="fas fa-arrow-right"></i>
+                        </button>
+                    </div>
+                    <div class="cta-decoration">
+                        <div class="cta-shape cta-shape--1"></div>
+                        <div class="cta-shape cta-shape--2"></div>
+                        <div class="cta-shape cta-shape--3"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============================
+             FOOTER
+             ============================ -->
+        <footer class="site-footer">
+            <div class="container">
+                <div class="footer-grid">
+                    <div class="footer-brand">
+                        <div class="footer-logo">
+                            <svg class="footer-logo-icon" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M32 4L58 18V46L32 60L6 46V18L32 4Z" stroke="currentColor" stroke-width="2" fill="none"/>
+                                <path d="M32 20L42 26V38L32 44L22 38V26L32 20Z" fill="currentColor"/>
+                            </svg>
+                            <span class="footer-brand-name font-display">Darkhold</span>
+                        </div>
+                        <p class="footer-tagline">Open-source, self-hosted quiz platform for interactive learning and engagement.</p>
+                    </div>
+                    <div class="footer-links">
+                        <h4 class="footer-heading">Platform</h4>
+                        <ul>
+                            <li><a href="#" onclick="toHome(); return false;">Home</a></li>
+                            <li sec:authorize="isAuthenticated()"><a th:href="@{/challenge/view}">My Quizzes</a></li>
+                            <li sec:authorize="isAuthenticated()"><a th:href="@{/activegames}">Active Games</a></li>
+                            <li sec:authorize="isAnonymous()"><a href="#" onclick="logMeIn(); return false;">Login / Sign Up</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-links">
+                        <h4 class="footer-heading">Resources</h4>
+                        <ul>
+                            <li><a href="#">Documentation</a></li>
+                            <li><a href="#">API Reference</a></li>
+                            <li><a href="#">Release Notes</a></li>
+                            <li><a href="#">Community</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="footer-bottom">
                     <p class="copyright">
                         <span>&copy; </span>
                         <span th:text="${#dates.year(#dates.createNow())}">2024</span>
                         <span th:text="#{home.copyright}">Darkhold Quiz Platform</span>
                     </p>
+                    <p class="footer-note">Self-hosted &middot; Open Source &middot; Privacy First</p>
                 </div>
             </div>
         </footer>

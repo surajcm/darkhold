@@ -33,3 +33,7 @@ out/
 
 ### VS Code ###
 .vscode/
+
+### CLAUDE CODE ###
+.agents/
+

@@ -1,0 +1,448 @@
+/* ============================================
+   PREVIEW / PRECONFIGURE PAGE
+   Modern challenge preview with game mode selection
+   ============================================ */
+
+/* ----------------------------------------
+   Page Layout
+   ---------------------------------------- */
+.preview-page {
+    min-height: 100vh;
+    background: var(--color-bg-secondary);
+    padding: 2rem 0 3rem;
+}
+
+.preview-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+}
+
+/* ----------------------------------------
+   Page Header
+   ---------------------------------------- */
+.preview-header {
+    text-align: center;
+    margin-bottom: 2.5rem;
+}
+
+.preview-title {
+    font-size: clamp(1.75rem, 4vw, 2.5rem);
+    font-weight: 800;
+    color: var(--color-text-primary);
+    margin: 0 0 0.5rem;
+    letter-spacing: -0.02em;
+}
+
+.preview-subtitle {
+    font-size: 1rem;
+    color: var(--color-text-tertiary);
+    margin: 0;
+}
+
+/* ----------------------------------------
+   Questions Preview Section
+   ---------------------------------------- */
+.questions-section {
+    background: var(--color-bg-primary);
+    border: 1px solid var(--color-border-light);
+    border-radius: var(--radius-xl);
+    padding: 2rem;
+    margin-bottom: 2.5rem;
+}
+
+.questions-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--color-border-light);
+}
+
+.questions-title {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: var(--color-text-primary);
+    margin: 0;
+}
+
+.questions-title-icon {
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.95rem;
+    color: var(--color-primary);
+    background: rgba(var(--color-primary-rgb, 0, 98, 204), 0.08);
+    border-radius: var(--radius-md);
+}
+
+.questions-count-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.4rem 0.85rem;
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: var(--color-primary);
+    background: rgba(var(--color-primary-rgb, 0, 98, 204), 0.08);
+    border-radius: var(--radius-full);
+}
+
+/* ----------------------------------------
+   Question Accordion
+   ---------------------------------------- */
+.question-accordion {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.question-item {
+    background: var(--color-bg-secondary);
+    border: 1px solid var(--color-border-light);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    transition: all 0.2s ease;
+}
+
+.question-item:hover {
+    border-color: var(--color-border-medium);
+}
+
+.question-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem 1.25rem;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.question-header:hover {
+    background: var(--color-bg-tertiary);
+}
+
+.question-number {
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--color-primary);
+    background: rgba(var(--color-primary-rgb, 0, 98, 204), 0.08);
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+.question-text {
+    flex: 1;
+    font-size: 0.92rem;
+    font-weight: 600;
+    color: var(--color-text-primary);
+    line-height: 1.4;
+}
+
+.question-toggle-icon {
+    font-size: 0.9rem;
+    color: var(--color-text-muted);
+    transition: transform 0.2s ease;
+}
+
+.question-item.expanded .question-toggle-icon {
+    transform: rotate(180deg);
+}
+
+.question-body {
+    padding: 0 1.25rem 1.25rem 1.25rem;
+    display: none;
+}
+
+.question-item.expanded .question-body {
+    display: block;
+}
+
+.answer-option {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    padding: 0.75rem 1rem;
+    margin-bottom: 0.5rem;
+    background: var(--color-bg-primary);
+    border: 1px solid var(--color-border-light);
+    border-radius: var(--radius-md);
+    font-size: 0.88rem;
+    color: var(--color-text-primary);
+}
+
+.answer-option.correct {
+    border-color: var(--color-success);
+    background: rgba(40, 167, 69, 0.06);
+}
+
+.answer-label {
+    font-weight: 700;
+    color: var(--color-text-secondary);
+    flex-shrink: 0;
+}
+
+.answer-option.correct .answer-label {
+    color: var(--color-success);
+}
+
+/* ----------------------------------------
+   Game Mode Section
+   ---------------------------------------- */
+.game-modes-section {
+    margin-bottom: 2rem;
+}
+
+.section-label {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--color-text-primary);
+    margin: 0 0 1.25rem;
+}
+
+.game-modes-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 1.25rem;
+}
+
+/* ----------------------------------------
+   Game Mode Card
+   ---------------------------------------- */
+.mode-card {
+    position: relative;
+    background: var(--color-bg-primary);
+    border: 2px solid var(--color-border-light);
+    border-radius: var(--radius-xl);
+    padding: 2rem 1.75rem;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.mode-card:hover:not(.disabled) {
+    border-color: var(--color-primary);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 30px rgba(var(--color-primary-rgb, 0, 98, 204), 0.15);
+}
+
+.mode-card.disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.mode-icon {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    line-height: 1;
+}
+
+.mode-title {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: var(--color-text-primary);
+    margin: 0 0 0.75rem;
+}
+
+.mode-description {
+    font-size: 0.85rem;
+    color: var(--color-text-tertiary);
+    line-height: 1.6;
+    margin: 0 0 1.5rem;
+    min-height: 65px;
+}
+
+/* Team Mode Toggle */
+.team-toggle-section {
+    margin: 1.25rem 0;
+    padding: 1rem;
+    background: var(--color-bg-secondary);
+    border-radius: var(--radius-md);
+}
+
+.team-toggle-label {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--color-text-primary);
+    cursor: pointer;
+}
+
+.team-config-panel {
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--color-border-light);
+}
+
+.config-field {
+    margin-bottom: 0.85rem;
+    text-align: left;
+}
+
+.config-label {
+    display: block;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--color-text-secondary);
+    margin-bottom: 0.4rem;
+}
+
+.config-select {
+    width: 100%;
+    padding: 0.5rem 0.75rem;
+    font-size: 0.85rem;
+    color: var(--color-text-primary);
+    background: var(--color-bg-primary);
+    border: 1px solid var(--color-border-light);
+    border-radius: var(--radius-md);
+}
+
+.custom-names-link {
+    display: inline-block;
+    font-size: 0.82rem;
+    color: var(--color-primary);
+    text-decoration: none;
+    margin-top: 0.5rem;
+}
+
+.custom-names-link:hover {
+    text-decoration: underline;
+}
+
+.team-name-inputs {
+    margin-top: 0.75rem;
+}
+
+.team-name-field {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.team-color-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+.team-name-field input {
+    flex: 1;
+    padding: 0.4rem 0.65rem;
+    font-size: 0.82rem;
+}
+
+/* Mode Action Button */
+.mode-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    width: 100%;
+    padding: 0.75rem 1.25rem;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: white;
+    background: var(--color-primary);
+    border: none;
+    border-radius: var(--radius-lg);
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.mode-btn:hover:not(:disabled) {
+    background: var(--color-primary-hover);
+    transform: translateY(-1px);
+}
+
+.mode-btn--success {
+    background: var(--color-success);
+}
+
+.mode-btn--success:hover:not(:disabled) {
+    background: #218838;
+}
+
+.mode-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    background: var(--color-bg-tertiary);
+    color: var(--color-text-muted);
+}
+
+/* ----------------------------------------
+   Back Button
+   ---------------------------------------- */
+.back-button-section {
+    text-align: center;
+}
+
+.btn-back {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.7rem 1.75rem;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--color-text-secondary);
+    background: var(--color-bg-primary);
+    border: 1px solid var(--color-border-light);
+    border-radius: var(--radius-lg);
+    text-decoration: none;
+    transition: all 0.2s ease;
+}
+
+.btn-back:hover {
+    background: var(--color-bg-tertiary);
+    border-color: var(--color-border-medium);
+    text-decoration: none;
+    color: var(--color-text-primary);
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+@media (max-width: 768px) {
+    .preview-page {
+        padding: 1.5rem 0 2rem;
+    }
+
+    .questions-section {
+        padding: 1.5rem;
+    }
+
+    .game-modes-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .mode-card {
+        padding: 1.75rem 1.5rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .questions-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.75rem;
+    }
+
+    .mode-icon {
+        font-size: 2.5rem;
+    }
+}

@@ -42,17 +42,17 @@ function toggleTheme() {
 }
 
 /**
- * Update theme icon based on current theme
+ * Update theme icon based on current theme (both auth and anon icons)
  */
 function updateThemeIcon(theme) {
-    const themeIcon = document.getElementById('theme-icon');
-    if (themeIcon) {
-        if (theme === 'dark') {
-            themeIcon.className = 'fas fa-sun'; // Show sun icon in dark mode
-        } else {
-            themeIcon.className = 'fas fa-moon'; // Show moon icon in light mode
+    var icons = ['theme-icon', 'theme-icon-anon'];
+    var className = theme === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
+    icons.forEach(function(id) {
+        var el = document.getElementById(id);
+        if (el) {
+            el.className = className;
         }
-    }
+    });
 }
 
 /**
@@ -85,7 +85,7 @@ function changeLanguage(lang) {
  * @param {string} lang - Current language code
  */
 function updateLanguageDisplay(lang) {
-    var codeElements = document.querySelectorAll('.language-code');
+    var codeElements = document.querySelectorAll('.language-code, .dh-lang-code');
     var displayCode = lang ? lang.toUpperCase() : 'EN';
     codeElements.forEach(function(el) {
         el.textContent = displayCode;
@@ -100,6 +100,28 @@ function updateSoundIcon(enabled) {
     if (soundIcon) {
         soundIcon.className = enabled ? 'fas fa-volume-up' : 'fas fa-volume-mute';
     }
+}
+
+/**
+ * Initialize mobile menu toggle
+ */
+function initMobileMenu() {
+    var toggle = document.getElementById('navMobileToggle');
+    var menu = document.getElementById('navMobileMenu');
+    if (!toggle || !menu) return;
+
+    toggle.addEventListener('click', function() {
+        var isOpen = menu.classList.toggle('open');
+        toggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+    });
+
+    // Close menu when a link is clicked
+    menu.querySelectorAll('.dh-mobile-link').forEach(function(link) {
+        link.addEventListener('click', function() {
+            menu.classList.remove('open');
+            toggle.setAttribute('aria-expanded', 'false');
+        });
+    });
 }
 
 /**
@@ -140,6 +162,9 @@ function initializeUI() {
         var detectedLang = langFromUrl || langFromHtml || 'en';
         updateLanguageDisplay(detectedLang.substring(0, 2));
     }
+
+    // Initialize mobile menu
+    initMobileMenu();
 }
 
 // Initialize UI when DOM is ready

@@ -7,193 +7,175 @@
     <link rel="manifest" href="/manifest.json">
     <link rel="shortcut icon" href="/images/favicon.png">
     <link href="/styles/darkhold-styles.css" rel="stylesheet" />
+    <link href="/styles/game-result.css" rel="stylesheet" />
     <link href="/styles/team-styles.css" rel="stylesheet" />
     <script type="text/javascript" src="/scripts/theme-manager.js"></script>
     <script type="text/javascript" src="/scripts/language-manager.js"></script>
     <script type="text/javascript" src="/scripts/common-scripts.js"></script>
     <script type="text/javascript" src="/scripts/audio-manager.js"></script>
     <script type="text/javascript" src="/scripts/accessibility.js"></script>
-    <style>
-        .summary-card {
-            background: white;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            margin-bottom: 20px;
-        }
-        .stat-box {
-            text-align: center;
-            padding: 15px;
-            margin: 10px;
-            background: #f8f9fa;
-            border-radius: 8px;
-        }
-        .stat-value {
-            font-size: 2rem;
-            font-weight: bold;
-            color: #007bff;
-        }
-        .stat-label {
-            font-size: 0.9rem;
-            color: #6c757d;
-            margin-top: 5px;
-        }
-        .difficulty-easy { color: #28a745; }
-        .difficulty-medium { color: #ffc107; }
-        .difficulty-hard { color: #dc3545; }
-        .results-table th {
-            background-color: #f8f9fa;
-            padding: 12px;
-            font-weight: 600;
-        }
-        .results-table td {
-            padding: 12px;
-        }
-        .rank-1 { background-color: #fff3cd; font-weight: bold; }
-        .rank-2 { background-color: #e2e3e5; }
-        .rank-3 { background-color: #f8d7da; }
-    </style>
 </head>
-<body class="bg-game">
+<body>
     <div th:insert="~{navbar :: navbar}"></div>
-    <nav class="navbar transparent">
-        <ul class="navbar-nav mx-auto">
-            <li class="nav-item">
-                <span class="badge badge-pill badge-primary leaderboard-title" style="font-size: 1.5rem;" th:text="#{gameresult.title}">Game Results</span>
-            </li>
-        </ul>
-        <a th:href="@{/game-result/{id}/export-csv(id=${gameResult.id})}" class="btn btn-secondary" th:text="#{gameresult.exportCsv}">
-            Export CSV
-        </a>
-        <a href="/past-games" class="btn btn-outline-primary" th:text="#{gameresult.backToList}">Back to List</a>
-    </nav>
 
-    <div class="container mt-4">
-        <!-- Summary Section -->
-        <div class="summary-card">
-            <h3>
-                <span th:text="${gameResult.challengeName}">Challenge Name</span>
-                <span th:if="${gameResult.teamMode}" class="badge bg-info ms-2" style="font-size: 0.6em;" th:text="#{gameresult.teamMode}">Team Mode</span>
-            </h3>
-            <p class="text-muted">
-                PIN: <strong th:text="${gameResult.pin}"></strong> |
-                Completed: <span th:text="${#temporals.format(gameResult.completedAt, 'MMM dd, yyyy HH:mm')}"></span>
-            </p>
+    <main class="game-result-page">
+        <div class="game-result-container">
 
-            <!-- Winning Team Display (if team mode) -->
-            <div th:if="${gameResult.teamMode and gameResult.winningTeamName != null}" class="alert alert-success text-center mb-3">
-                <strong th:text="#{gameresult.winningTeam}">Winning Team:</strong>
-                <span th:text="${gameResult.winningTeamName}"></span>
-                (<span th:text="${gameResult.winningTeamScore}"></span> pts)
+            <!-- Page Header -->
+            <header class="game-result-header">
+                <div class="game-result-title-section">
+                    <h1 class="game-result-title" th:text="${gameResult.challengeName}">World Geography Quiz</h1>
+                    <div class="game-result-meta">
+                        <span class="result-meta-item">
+                            <i class="fas fa-hashtag"></i>
+                            <span th:text="${gameResult.pin}">12345</span>
+                        </span>
+                        <span class="result-meta-item">
+                            <i class="fas fa-calendar"></i>
+                            <span th:text="${#temporals.format(gameResult.completedAt, 'MMM dd, yyyy HH:mm')}">Jan 10, 2026 14:30</span>
+                        </span>
+                        <span th:if="${gameResult.teamMode}" class="team-mode-badge">
+                            <i class="fas fa-users"></i>
+                            <span th:text="#{gameresult.teamMode}">Team Mode</span>
+                        </span>
+                    </div>
+                </div>
+                <div class="game-result-actions">
+                    <a th:href="@{/game-result/{id}/export-csv(id=${gameResult.id})}"
+                       class="result-action-btn result-action-btn--secondary">
+                        <i class="fas fa-download"></i>
+                        <span th:text="#{gameresult.exportCsv}">Export CSV</span>
+                    </a>
+                    <a href="/past-games" class="result-action-btn result-action-btn--primary">
+                        <i class="fas fa-arrow-left"></i>
+                        <span th:text="#{gameresult.backToList}">Back to List</span>
+                    </a>
+                </div>
+            </header>
+
+            <!-- Winning Team Banner -->
+            <div th:if="${gameResult.teamMode and gameResult.winningTeamName != null}" class="winning-team-banner">
+                <p class="winning-team-text">
+                    <i class="fas fa-trophy"></i>
+                    <span th:text="#{gameresult.winningTeam}">Winning Team:</span>
+                    <span class="winning-team-name" th:text="${gameResult.winningTeamName}">Team Red</span>
+                    (<span th:text="${gameResult.winningTeamScore}">5000</span> pts)
+                </p>
             </div>
 
-            <div class="row">
-                <div class="col-md-3">
-                    <div class="stat-box">
-                        <div class="stat-value" th:text="${gameResult.participantCount}">0</div>
-                        <div class="stat-label" th:text="#{gameresult.participants}">Participants</div>
-                    </div>
+            <!-- Stats Grid -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-value" th:text="${gameResult.participantCount}">8</div>
+                    <div class="stat-label" th:text="#{gameresult.participants}">Participants</div>
                 </div>
-                <div class="col-md-3">
-                    <div class="stat-box">
-                        <div class="stat-value" th:text="${gameResult.totalQuestions}">0</div>
-                        <div class="stat-label" th:text="#{gameresult.questions}">Questions</div>
-                    </div>
+                <div class="stat-card">
+                    <div class="stat-value" th:text="${gameResult.totalQuestions}">20</div>
+                    <div class="stat-label" th:text="#{gameresult.questions}">Questions</div>
                 </div>
-                <div class="col-md-3">
-                    <div class="stat-box">
-                        <div class="stat-value" th:text="${gameResult.durationMinutes}">0</div>
-                        <div class="stat-label" th:text="#{gameresult.minutes}">Minutes</div>
-                    </div>
+                <div class="stat-card">
+                    <div class="stat-value" th:text="${gameResult.durationMinutes}">15</div>
+                    <div class="stat-label" th:text="#{gameresult.minutes}">Minutes</div>
                 </div>
-                <div class="col-md-3">
-                    <div class="stat-box">
-                        <div class="stat-value" th:text="${gameResult.gameMode}">Mode</div>
-                        <div class="stat-label" th:text="#{gameresult.gameMode}">Game Mode</div>
-                    </div>
+                <div class="stat-card">
+                    <div class="stat-value" th:text="${gameResult.gameMode}">MULTIPLAYER</div>
+                    <div class="stat-label" th:text="#{gameresult.gameMode}">Game Mode</div>
                 </div>
             </div>
-        </div>
 
-        <!-- Participant Results -->
-        <div class="summary-card">
-            <h4 th:text="#{gameresult.participantResults}">Participant Results</h4>
-            <table class="results-table table table-striped">
-                <thead>
-                    <tr>
-                        <th th:text="#{gameresult.rank}">Rank</th>
-                        <th th:text="#{gameresult.username}">Username</th>
-                        <th th:text="#{gameresult.score}">Score</th>
-                        <th th:text="#{gameresult.correct}">Correct</th>
-                        <th th:text="#{gameresult.incorrect}">Incorrect</th>
-                        <th th:text="#{gameresult.maxStreak}">Max Streak</th>
-                        <th th:text="#{gameresult.accuracy}">Accuracy</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr th:each="pr : ${gameResult.participantResults}"
-                        th:classappend="${pr.finalRank == 1 ? 'rank-1' : (pr.finalRank == 2 ? 'rank-2' : (pr.finalRank == 3 ? 'rank-3' : ''))}">
-                        <td>
-                            <strong th:text="${pr.finalRank}">1</strong>
-                            <span th:if="${pr.finalRank == 1}">🥇</span>
-                            <span th:if="${pr.finalRank == 2}">🥈</span>
-                            <span th:if="${pr.finalRank == 3}">🥉</span>
-                        </td>
-                        <td th:text="${pr.username}">Player</td>
-                        <td><strong th:text="${pr.finalScore}">1000</strong></td>
-                        <td th:text="${pr.correctAnswers}">0</td>
-                        <td th:text="${pr.incorrectAnswers}">0</td>
-                        <td>
-                            <span class="badge badge-danger" th:text="'x' + ${pr.maxStreak}">x3</span>
-                        </td>
-                        <td>
-                            <span th:text="${#numbers.formatDecimal(pr.accuracyPercentage, 1, 1)} + '%'">0.0%</span>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
+            <!-- Participant Results -->
+            <section class="results-section">
+                <div class="results-section-header">
+                    <div class="results-section-icon">
+                        <i class="fas fa-trophy"></i>
+                    </div>
+                    <h2 class="results-section-title" th:text="#{gameresult.participantResults}">Participant Results</h2>
+                </div>
 
-        <!-- Question Results -->
-        <div class="summary-card">
-            <h4 th:text="#{gameresult.questionStatistics}">Question Statistics</h4>
-            <table class="results-table table table-striped">
-                <thead>
-                    <tr>
-                        <th th:text="#{gameresult.questionNumber}">#</th>
-                        <th th:text="#{gameresult.questionText}">Question</th>
-                        <th th:text="#{gameresult.type}">Type</th>
-                        <th th:text="#{gameresult.correct}">Correct</th>
-                        <th th:text="#{gameresult.incorrect}">Incorrect</th>
-                        <th th:text="#{gameresult.timeout}">Timeout</th>
-                        <th th:text="#{gameresult.successRate}">Success Rate</th>
-                        <th th:text="#{gameresult.difficulty}">Difficulty</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr th:each="qr : ${gameResult.questionResults}">
-                        <td th:text="${qr.questionNumber}">1</td>
-                        <td>
-                            <span th:text="${#strings.abbreviate(qr.questionText, 60)}">Question text...</span>
-                        </td>
-                        <td>
-                            <small th:text="${qr.questionType}">MULTIPLE_CHOICE</small>
-                        </td>
-                        <td><span class="text-success" th:text="${qr.correctCount}">0</span></td>
-                        <td><span class="text-danger" th:text="${qr.incorrectCount}">0</span></td>
-                        <td><span class="text-muted" th:text="${qr.timeoutCount}">0</span></td>
-                        <td>
-                            <strong th:text="${#numbers.formatDecimal(qr.successRatePercentage, 1, 1)} + '%'">0%</strong>
-                        </td>
-                        <td>
-                            <span th:class="'difficulty-' + ${#strings.toLowerCase(qr.difficultyLevel)}"
-                                  th:text="${qr.difficultyLevel}">EASY</span>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+                <div class="leaderboard">
+                    <div th:each="pr : ${gameResult.participantResults}"
+                         class="leaderboard-row"
+                         th:classappend="${pr.finalRank <= 3 ? 'leaderboard-row--podium' : ''}">
+                        <div class="rank-display">
+                            <span th:text="${pr.finalRank}">1</span>
+                            <span class="rank-medal" th:if="${pr.finalRank == 1}">🥇</span>
+                            <span class="rank-medal" th:if="${pr.finalRank == 2}">🥈</span>
+                            <span class="rank-medal" th:if="${pr.finalRank == 3}">🥉</span>
+                        </div>
+                        <div class="participant-name" th:text="${pr.username}">John Doe</div>
+                        <div>
+                            <span class="stat-value-small" th:text="${pr.finalScore}">8500</span>
+                            <span class="stat-label-small" th:text="#{gameresult.score}">Score</span>
+                        </div>
+                        <div>
+                            <span class="stat-value-small" th:text="${pr.correctAnswers}">18</span>
+                            <span class="stat-label-small" th:text="#{gameresult.correct}">Correct</span>
+                        </div>
+                        <div>
+                            <span class="stat-value-small" th:text="${pr.incorrectAnswers}">2</span>
+                            <span class="stat-label-small" th:text="#{gameresult.incorrect}">Incorrect</span>
+                        </div>
+                        <div>
+                            <span class="streak-badge">
+                                <i class="fas fa-fire"></i>
+                                <span th:text="'x' + ${pr.maxStreak}">x5</span>
+                            </span>
+                        </div>
+                        <div>
+                            <span class="stat-value-small" th:text="${#numbers.formatDecimal(pr.accuracyPercentage, 1, 1)} + '%'">90.0%</span>
+                            <span class="stat-label-small" th:text="#{gameresult.accuracy}">Accuracy</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Question Statistics -->
+            <section class="results-section">
+                <div class="results-section-header">
+                    <div class="results-section-icon">
+                        <i class="fas fa-chart-bar"></i>
+                    </div>
+                    <h2 class="results-section-title" th:text="#{gameresult.questionStatistics}">Question Statistics</h2>
+                </div>
+
+                <table class="question-stats-table">
+                    <tbody>
+                        <tr th:each="qr : ${gameResult.questionResults}" class="question-stats-row">
+                            <td class="question-number-cell">
+                                <span th:text="${qr.questionNumber}">1</span>
+                            </td>
+                            <td class="question-text-cell">
+                                <div th:text="${#strings.abbreviate(qr.questionText, 80)}">What is the capital of France?</div>
+                                <span class="question-type-badge" th:text="${qr.questionType}">MULTIPLE_CHOICE</span>
+                            </td>
+                            <td>
+                                <span class="stat-value-small" style="color: var(--color-success);" th:text="${qr.correctCount}">15</span>
+                                <span class="stat-label-small" th:text="#{gameresult.correct}">Correct</span>
+                            </td>
+                            <td>
+                                <span class="stat-value-small" style="color: var(--color-error);" th:text="${qr.incorrectCount}">2</span>
+                                <span class="stat-label-small" th:text="#{gameresult.incorrect}">Incorrect</span>
+                            </td>
+                            <td>
+                                <span class="stat-value-small" style="color: var(--color-text-muted);" th:text="${qr.timeoutCount}">1</span>
+                                <span class="stat-label-small" th:text="#{gameresult.timeout}">Timeout</span>
+                            </td>
+                            <td>
+                                <span class="success-rate-display" th:text="${#numbers.formatDecimal(qr.successRatePercentage, 1, 1)} + '%'">83.3%</span>
+                                <span class="stat-label-small" th:text="#{gameresult.successRate}">Success Rate</span>
+                            </td>
+                            <td>
+                                <span class="difficulty-badge"
+                                      th:classappend="'difficulty-badge--' + ${#strings.toLowerCase(qr.difficultyLevel)}"
+                                      th:text="${qr.difficultyLevel}">EASY</span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+
         </div>
-    </div>
+    </main>
 
     <script type="text/javascript" src="/scripts/core/popper.min.js"></script>
     <script type="text/javascript" src="/scripts/core/bootstrap-5.3.1/bootstrap.min.js"></script>

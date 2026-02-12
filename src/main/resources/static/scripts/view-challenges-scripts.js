@@ -1,6 +1,8 @@
 function selectQuiz(elem) {
-    console.log('selected quiz of ' + elem.parentElement.parentElement.id);
-    document.getElementById('challenges').value = elem.parentElement.parentElement.id;
+    // In the new HTML structure, the ID is on the direct parent (challenge-card)
+    var challengeId = elem.parentElement.id;
+    console.log('selected quiz of ' + challengeId);
+    document.getElementById('challenges').value = challengeId;
     document.forms[0].action = "/preconfigure";
     document.forms[0].submit();
 }

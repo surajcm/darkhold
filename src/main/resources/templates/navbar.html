@@ -5,91 +5,172 @@
     <meta charset="UTF-8"/>
 </head>
 <body>
-<div th:fragment="navbar" >
-    <nav class="navbar transparent navbar-inverse navbar-expand-lg">
-        <div class="container-fluid" sec:authorize="isAuthenticated()">
-            <div class="icon-bar" onclick="toHome();">
-                <a class="active" href="#"><i class="fas fa-home"></i></a>
-            </div>
-            <div class="icon-bar" onclick="toActiveGames();" title="My Active Games">
-                <a class="active" href="#"><i class="fas fa-gamepad"></i></a>
-            </div>
-            <div class="icon-bar" onclick="toPastGames();" title="Past Games">
-                <a class="active" href="#"><i class="fas fa-chart-bar"></i></a>
-            </div>
-            <div class="mx-auto order-0">
-                <span class="navbar-brand mx-auto" th:text="${#authentication.getPrincipal().getUsername()}"></span>
-            </div>
-            <div class="icon-bar" onclick="toOptions();">
-                <a class="active" href="#"><i class="fas fa-cog"></i></a>
-            </div>
-            <div class="icon-bar" onclick="toggleTheme();" title="Toggle Dark/Light Mode" id="theme-toggle-btn" aria-label="Toggle theme">
-                <a class="active" href="#"><i class="fas fa-moon" id="theme-icon"></i></a>
-            </div>
-            <div class="icon-bar" onclick="toggleSound();" title="Toggle Sound Effects" id="sound-toggle-btn" aria-label="Toggle sound">
-                <a class="active" href="#"><i class="fas fa-volume-up" id="sound-icon"></i></a>
-            </div>
-            <div class="dropdown" id="language-selector">
-                <a class="icon-bar dropdown-toggle" href="#" role="button" id="languageDropdown"
-                   data-bs-toggle="dropdown" aria-expanded="false" aria-label="Select language"
-                   th:title="#{language.select}">
-                    <i class="fas fa-globe"></i>
-                    <span class="language-code" id="current-lang-code">EN</span>
+<div th:fragment="navbar">
+    <nav class="dh-navbar" role="navigation" aria-label="Main navigation">
+        <div class="dh-navbar-inner">
+
+            <!-- ======== LEFT: Brand + Nav Links (Authenticated) ======== -->
+            <div class="dh-navbar-left" sec:authorize="isAuthenticated()">
+                <a class="dh-navbar-brand" href="#" onclick="toHome(); return false;">
+                    <img src="/images/favicon.png" alt="" class="dh-navbar-logo" width="28" height="28" />
+                    <span class="dh-navbar-brand-text">Darkhold</span>
                 </a>
-                <ul class="dropdown-menu dropdown-menu-end language-dropdown" aria-labelledby="languageDropdown">
-                    <li>
-                        <a class="dropdown-item" href="#" onclick="changeLanguage('en'); return false;"
-                           id="lang-en" th:classappend="${#locale.language == 'en'} ? 'active' : ''">
-                            <span class="lang-check" th:if="${#locale.language == 'en'}"><i class="fas fa-check"></i></span>
-                            <span th:text="#{language.en}">English</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a class="dropdown-item" href="#" onclick="changeLanguage('es'); return false;"
-                           id="lang-es" th:classappend="${#locale.language == 'es'} ? 'active' : ''">
-                            <span class="lang-check" th:if="${#locale.language == 'es'}"><i class="fas fa-check"></i></span>
-                            <span th:text="#{language.es}">Espanol</span>
-                        </a>
-                    </li>
-                </ul>
+                <div class="dh-navbar-divider" aria-hidden="true"></div>
+                <div class="dh-navbar-links">
+                    <a class="dh-nav-link" href="#" onclick="toHome(); return false;" th:title="#{nav.home}">
+                        <i class="fas fa-home"></i>
+                        <span th:text="#{nav.home}">Home</span>
+                    </a>
+                    <a class="dh-nav-link" href="#" onclick="toActiveGames(); return false;" th:title="#{nav.activeGames}">
+                        <i class="fas fa-gamepad"></i>
+                        <span th:text="#{nav.activeGames}">Active Games</span>
+                    </a>
+                    <a class="dh-nav-link" href="#" onclick="toPastGames(); return false;" th:title="#{nav.pastGames}">
+                        <i class="fas fa-chart-bar"></i>
+                        <span th:text="#{nav.pastGames}">Past Games</span>
+                    </a>
+                    <a class="dh-nav-link" href="#" onclick="toOptions(); return false;" th:title="#{nav.settings}">
+                        <i class="fas fa-cog"></i>
+                        <span th:text="#{nav.settings}">Settings</span>
+                    </a>
+                </div>
             </div>
-            <button class="btn btn-lg btn-rised align-middle btn-primary ml-auto mr-3 order-lg-last" type="button" onclick="logOut();" th:text="#{nav.logout}">Logout</button>
-        </div>
-        <div class="navbar-nav ms-auto mb-2 mb-lg-0" sec:authorize="isAnonymous()">
-            <div class="dropdown me-3" id="language-selector-anon">
-                <a class="icon-bar dropdown-toggle" href="#" role="button" id="languageDropdownAnon"
-                   data-bs-toggle="dropdown" aria-expanded="false" aria-label="Select language"
-                   th:title="#{language.select}">
-                    <i class="fas fa-globe"></i>
-                    <span class="language-code" id="current-lang-code-anon">EN</span>
+
+            <!-- ======== LEFT: Brand only (Anonymous) ======== -->
+            <div class="dh-navbar-left" sec:authorize="isAnonymous()">
+                <a class="dh-navbar-brand" href="/">
+                    <img src="/images/favicon.png" alt="" class="dh-navbar-logo" width="28" height="28" />
+                    <span class="dh-navbar-brand-text">Darkhold</span>
                 </a>
-                <ul class="dropdown-menu dropdown-menu-end language-dropdown" aria-labelledby="languageDropdownAnon">
-                    <li>
-                        <a class="dropdown-item" href="#" onclick="changeLanguage('en'); return false;"
-                           th:classappend="${#locale.language == 'en'} ? 'active' : ''">
-                            <span class="lang-check" th:if="${#locale.language == 'en'}"><i class="fas fa-check"></i></span>
-                            <span th:text="#{language.en}">English</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a class="dropdown-item" href="#" onclick="changeLanguage('es'); return false;"
-                           th:classappend="${#locale.language == 'es'} ? 'active' : ''">
-                            <span class="lang-check" th:if="${#locale.language == 'es'}"><i class="fas fa-check"></i></span>
-                            <span th:text="#{language.es}">Espanol</span>
-                        </a>
-                    </li>
-                </ul>
             </div>
-            <button class="btn-auth" type="button" onclick="logMeIn()">
-                <span class="btn-auth-icon"><i class="fas fa-user"></i></span>
-                <span class="btn-auth-text" th:text="#{nav.login}">Login / SignUp</span>
-                <span class="btn-auth-arrow"><i class="fas fa-arrow-right"></i></span>
+
+            <!-- ======== Mobile Toggle ======== -->
+            <button class="dh-navbar-toggle" type="button" id="navMobileToggle"
+                    aria-expanded="false" th:aria-label="#{nav.toggleNavigation}">
+                <span class="dh-navbar-toggle-bar"></span>
+                <span class="dh-navbar-toggle-bar"></span>
+                <span class="dh-navbar-toggle-bar"></span>
             </button>
+
+            <!-- ======== RIGHT: Toolbar + User (Authenticated) ======== -->
+            <div class="dh-navbar-right" sec:authorize="isAuthenticated()">
+                <div class="dh-navbar-toolbar">
+                    <button class="dh-toolbar-btn" onclick="toggleTheme();"
+                            id="theme-toggle-btn" th:title="#{nav.toggleTheme}" th:aria-label="#{nav.toggleTheme}">
+                        <i class="fas fa-moon" id="theme-icon"></i>
+                    </button>
+                    <button class="dh-toolbar-btn" onclick="toggleSound();"
+                            id="sound-toggle-btn" th:title="#{nav.toggleSound}" th:aria-label="#{nav.toggleSound}">
+                        <i class="fas fa-volume-up" id="sound-icon"></i>
+                    </button>
+                    <div class="dropdown" id="language-selector">
+                        <button class="dh-toolbar-btn dropdown-toggle" type="button" id="languageDropdown"
+                                data-bs-toggle="dropdown" aria-expanded="false"
+                                th:title="#{language.select}" th:aria-label="#{language.select}">
+                            <i class="fas fa-globe"></i>
+                            <span class="dh-lang-code" id="current-lang-code">EN</span>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end language-dropdown" aria-labelledby="languageDropdown">
+                            <li>
+                                <a class="dropdown-item" href="#" onclick="changeLanguage('en'); return false;"
+                                   id="lang-en" th:classappend="${#locale.language == 'en'} ? 'active' : ''">
+                                    <span class="lang-check" th:if="${#locale.language == 'en'}"><i class="fas fa-check"></i></span>
+                                    <span th:text="#{language.en}">English</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="#" onclick="changeLanguage('es'); return false;"
+                                   id="lang-es" th:classappend="${#locale.language == 'es'} ? 'active' : ''">
+                                    <span class="lang-check" th:if="${#locale.language == 'es'}"><i class="fas fa-check"></i></span>
+                                    <span th:text="#{language.es}">Espanol</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="dh-navbar-divider" aria-hidden="true"></div>
+                <div class="dh-navbar-user">
+                    <div class="dh-user-avatar">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <span class="dh-user-name" th:text="${#authentication.getPrincipal().getUsername()}"></span>
+                </div>
+                <button class="dh-btn-logout" type="button" onclick="logOut();" th:text="#{nav.logout}">Logout</button>
+            </div>
+
+            <!-- ======== RIGHT: Toolbar + Login (Anonymous) ======== -->
+            <div class="dh-navbar-right" sec:authorize="isAnonymous()">
+                <div class="dh-navbar-toolbar">
+                    <button class="dh-toolbar-btn" onclick="toggleTheme();"
+                            id="theme-toggle-btn-anon" th:title="#{nav.toggleTheme}" th:aria-label="#{nav.toggleTheme}">
+                        <i class="fas fa-moon" id="theme-icon-anon"></i>
+                    </button>
+                    <div class="dropdown" id="language-selector-anon">
+                        <button class="dh-toolbar-btn dropdown-toggle" type="button" id="languageDropdownAnon"
+                                data-bs-toggle="dropdown" aria-expanded="false"
+                                th:title="#{language.select}" th:aria-label="#{language.select}">
+                            <i class="fas fa-globe"></i>
+                            <span class="dh-lang-code" id="current-lang-code-anon">EN</span>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end language-dropdown" aria-labelledby="languageDropdownAnon">
+                            <li>
+                                <a class="dropdown-item" href="#" onclick="changeLanguage('en'); return false;"
+                                   th:classappend="${#locale.language == 'en'} ? 'active' : ''">
+                                    <span class="lang-check" th:if="${#locale.language == 'en'}"><i class="fas fa-check"></i></span>
+                                    <span th:text="#{language.en}">English</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="#" onclick="changeLanguage('es'); return false;"
+                                   th:classappend="${#locale.language == 'es'} ? 'active' : ''">
+                                    <span class="lang-check" th:if="${#locale.language == 'es'}"><i class="fas fa-check"></i></span>
+                                    <span th:text="#{language.es}">Espanol</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <button class="btn-auth" type="button" onclick="logMeIn()">
+                    <span class="btn-auth-icon"><i class="fas fa-user"></i></span>
+                    <span class="btn-auth-text" th:text="#{nav.login}">Login / SignUp</span>
+                    <span class="btn-auth-arrow"><i class="fas fa-arrow-right"></i></span>
+                </button>
+            </div>
+
         </div>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown"
-                aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
+
+        <!-- ======== Mobile Menu Overlay ======== -->
+        <div class="dh-mobile-menu" id="navMobileMenu">
+            <div class="dh-mobile-menu-body" sec:authorize="isAuthenticated()">
+                <a class="dh-mobile-link" href="#" onclick="toHome(); return false;">
+                    <i class="fas fa-home"></i>
+                    <span th:text="#{nav.home}">Home</span>
+                </a>
+                <a class="dh-mobile-link" href="#" onclick="toActiveGames(); return false;">
+                    <i class="fas fa-gamepad"></i>
+                    <span th:text="#{nav.activeGames}">Active Games</span>
+                </a>
+                <a class="dh-mobile-link" href="#" onclick="toPastGames(); return false;">
+                    <i class="fas fa-chart-bar"></i>
+                    <span th:text="#{nav.pastGames}">Past Games</span>
+                </a>
+                <a class="dh-mobile-link" href="#" onclick="toOptions(); return false;">
+                    <i class="fas fa-cog"></i>
+                    <span th:text="#{nav.settings}">Settings</span>
+                </a>
+                <div class="dh-mobile-divider"></div>
+                <a class="dh-mobile-link" href="#" onclick="logOut(); return false;">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span th:text="#{nav.logout}">Logout</span>
+                </a>
+            </div>
+            <div class="dh-mobile-menu-body" sec:authorize="isAnonymous()">
+                <a class="dh-mobile-link" href="#" onclick="logMeIn(); return false;">
+                    <i class="fas fa-user"></i>
+                    <span th:text="#{nav.login}">Login / SignUp</span>
+                </a>
+            </div>
+        </div>
     </nav>
 </div>
 </body>
