@@ -19,9 +19,7 @@ function logOut() {
 }
 
 function toHome() {
-    document.forms[0].method = 'get';
-    document.forms[0].action = "/";
-    document.forms[0].submit();
+    window.location.href = "/";
 }
 
 function initialize_home() {

@@ -7,6 +7,7 @@
     <link rel="manifest" href="/manifest.json">
     <link rel="shortcut icon" href="/images/favicon.png">
     <link href="/styles/darkhold-styles.css" rel="stylesheet" />
+    <link href="/styles/edit-challenge.css" rel="stylesheet" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
     <link rel="stylesheet" href="/styles/icon-styles.css">
     <script type="text/javascript" src="/scripts/theme-manager.js"></script>
@@ -15,34 +16,6 @@
     <script type="text/javascript" src="/scripts/accessibility.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
     <script type="text/javascript" src="/scripts/common-scripts.js"></script>
-    <style>
-        body {
-            font-family: var(--font-system);
-            font-style: normal;
-        }
-        body::before {
-            content: "";
-            position: fixed;
-            top: -10px;
-            left: 0;
-            width: 100%;
-            height: 10px;
-            box-shadow: 0px 0 10px rgba(0, 0, 0, 0.8);
-            z-index: 100;
-        }
-        .question-card { cursor: move; transition: transform 0.2s; }
-        .question-card:hover { transform: translateX(5px); }
-        .question-card.sortable-ghost { opacity: 0.4; }
-        .correct-answer { color: #198754; font-weight: bold; }
-        .btn-icon { padding: 0.25rem 0.5rem; }
-        .icon-bar a {
-            display: block;
-            text-align: center;
-            padding: 16px;
-            transition: all 0.3s ease;
-            font-size: 24px;
-        }
-    </style>
 </head>
 <body class="bg-admin">
 <div th:insert="~{navbar :: navbar}"></div>
@@ -51,69 +24,82 @@
     <input type="hidden" id="challengeId" th:value="${challenge.id}"/>
 
     <!-- Challenge Info -->
-    <div class="card mb-4">
-        <div class="card-header d-flex justify-content-between align-items-center">
-            <h5 class="mb-0" th:text="${challenge.title}">Challenge Title</h5>
-            <div>
-                <button class="btn btn-outline-primary btn-sm" data-bs-toggle="modal" data-bs-target="#editInfoModal">
-                    <i class="bi bi-pencil"></i> <span th:text="#{challenge.edit.editInfo}">Edit Info</span>
+    <div class="challenge-info-card">
+        <div class="challenge-info-header">
+            <h1 class="challenge-info-title" th:text="${challenge.title}">Challenge Title</h1>
+            <div class="challenge-info-actions">
+                <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#editInfoModal">
+                    <i class="bi bi-pencil"></i>
+                    <span th:text="#{challenge.edit.editInfo}">Edit Info</span>
                 </button>
-                <a href="/options" class="btn btn-success btn-sm">
-                    <i class="bi bi-check-circle"></i> <span th:text="#{challenge.edit.done}">Done</span>
+                <a href="/options" class="btn btn-success">
+                    <i class="bi bi-check-circle"></i>
+                    <span th:text="#{challenge.edit.done}">Done</span>
                 </a>
             </div>
         </div>
-        <div class="card-body">
-            <p class="text-muted mb-0" th:text="${challenge.description}" th:unless="${challenge.description == null or challenge.description.isEmpty()}"></p>
-            <p class="text-muted mb-0" th:text="#{challenge.edit.noDescription}" th:if="${challenge.description == null or challenge.description.isEmpty()}">No description</p>
+        <div class="challenge-info-body">
+            <p class="challenge-description" th:text="${challenge.description}" th:unless="${challenge.description == null or challenge.description.isEmpty()}"></p>
+            <p class="challenge-description empty" th:text="#{challenge.edit.noDescription}" th:if="${challenge.description == null or challenge.description.isEmpty()}">No description</p>
         </div>
     </div>
 
     <!-- Questions -->
-    <div class="d-flex justify-content-between align-items-center mb-3">
-        <h5><span th:text="#{challenge.edit.questions}">Questions</span> (<span id="questionCount" th:text="${challenge.questionSets?.size() ?: 0}">0</span>)</h5>
-        <button class="btn btn-primary" onclick="showQuestionModal()"><i class="bi bi-plus"></i> <span th:text="#{challenge.edit.addQuestion}">Add Question</span></button>
+    <div class="questions-header">
+        <h2 class="questions-title">
+            <span th:text="#{challenge.edit.questions}">Questions</span>
+            (<span class="question-count" id="questionCount" th:text="${challenge.questionSets?.size() ?: 0}">0</span>)
+        </h2>
+        <button class="btn btn-primary" onclick="showQuestionModal()">
+            <i class="bi bi-plus"></i>
+            <span th:text="#{challenge.edit.addQuestion}">Add Question</span>
+        </button>
     </div>
 
-    <div id="questionList">
-        <div th:each="q, stat : ${challenge.questionSets}" class="card mb-2 question-card" th:data-id="${q.id}">
-            <div class="card-body py-2">
-                <div class="d-flex align-items-center">
-                    <span class="badge bg-secondary me-2" th:text="${stat.index + 1}">1</span>
-                    <div class="flex-grow-1">
-                        <div class="d-flex align-items-center gap-2">
-                            <strong th:text="${q.question}">Question text</strong>
-                            <span th:if="${q.questionType != null and q.questionType.name() != 'MULTIPLE_CHOICE'}"
-                                  class="badge bg-info text-dark"
-                                  th:text="${q.questionType.name() == 'TRUE_FALSE' ? 'T/F' : (q.questionType.name() == 'TYPE_ANSWER' ? 'Type' : 'Poll')}"></span>
-                            <span th:if="${q.timeLimit != null}" class="badge bg-warning text-dark" th:text="${q.timeLimit} + 's'"></span>
-                        </div>
-                        <div class="small text-muted" th:if="${q.questionType == null or q.questionType.name() == 'MULTIPLE_CHOICE' or q.questionType.name() == 'POLL'}">
-                            <span th:class="${q.questionType == null or q.questionType.name() != 'POLL'} and ${#strings.contains(q.correctOptions, 'A')} ? 'correct-answer' : ''" th:text="'A: ' + ${q.answer1}"></span> |
-                            <span th:class="${q.questionType == null or q.questionType.name() != 'POLL'} and ${#strings.contains(q.correctOptions, 'B')} ? 'correct-answer' : ''" th:text="'B: ' + ${q.answer2}"></span>
-                            <span th:if="${q.answer3}"> | <span th:class="${q.questionType == null or q.questionType.name() != 'POLL'} and ${#strings.contains(q.correctOptions, 'C')} ? 'correct-answer' : ''" th:text="'C: ' + ${q.answer3}"></span></span>
-                            <span th:if="${q.answer4}"> | <span th:class="${q.questionType == null or q.questionType.name() != 'POLL'} and ${#strings.contains(q.correctOptions, 'D')} ? 'correct-answer' : ''" th:text="'D: ' + ${q.answer4}"></span></span>
-                        </div>
-                        <div class="small text-muted" th:if="${q.questionType != null and q.questionType.name() == 'TRUE_FALSE'}">
-                            <span th:class="${#strings.contains(q.correctOptions, 'TRUE')} ? 'correct-answer' : ''">True</span> |
-                            <span th:class="${#strings.contains(q.correctOptions, 'FALSE')} ? 'correct-answer' : ''">False</span>
-                        </div>
-                        <div class="small text-muted" th:if="${q.questionType != null and q.questionType.name() == 'TYPE_ANSWER'}">
-                            <span th:text="#{challenge.edit.answer}">Answer:</span> <span class="correct-answer" th:text="${q.answer1}"></span>
-                            <span th:if="${q.acceptableAnswers}"> (also accepts: <span th:text="${q.acceptableAnswers}"></span>)</span>
-                        </div>
+    <div id="questionList" class="question-list">
+        <div th:each="q, stat : ${challenge.questionSets}" class="question-card" th:data-id="${q.id}">
+            <div class="question-card-content">
+                <span class="question-number-badge" th:text="${stat.index + 1}">1</span>
+                <div class="question-details">
+                    <div class="question-header">
+                        <strong class="question-text" th:text="${q.question}">Question text</strong>
+                        <span th:if="${q.questionType != null and q.questionType.name() != 'MULTIPLE_CHOICE'}"
+                              class="question-type-badge"
+                              th:text="${q.questionType.name() == 'TRUE_FALSE' ? 'T/F' : (q.questionType.name() == 'TYPE_ANSWER' ? 'Type' : 'Poll')}"></span>
+                        <span th:if="${q.timeLimit != null}" class="question-time-badge" th:text="${q.timeLimit} + 's'"></span>
                     </div>
-                    <div class="btn-group">
-                        <button class="btn btn-outline-secondary btn-icon" th:onclick="'editQuestion(' + ${q.id} + ')'"><i class="bi bi-pencil"></i></button>
-                        <button class="btn btn-outline-secondary btn-icon" th:onclick="'duplicateQuestion(' + ${q.id} + ')'"><i class="bi bi-copy"></i></button>
-                        <button class="btn btn-outline-danger btn-icon" th:onclick="'deleteQuestion(' + ${q.id} + ')'"><i class="bi bi-trash"></i></button>
+                    <div class="question-answers" th:if="${q.questionType == null or q.questionType.name() == 'MULTIPLE_CHOICE' or q.questionType.name() == 'POLL'}">
+                        <span th:class="${q.questionType == null or q.questionType.name() != 'POLL'} and ${#strings.contains(q.correctOptions, 'A')} ? 'correct-answer' : ''" th:text="'A: ' + ${q.answer1}"></span> |
+                        <span th:class="${q.questionType == null or q.questionType.name() != 'POLL'} and ${#strings.contains(q.correctOptions, 'B')} ? 'correct-answer' : ''" th:text="'B: ' + ${q.answer2}"></span>
+                        <span th:if="${q.answer3}"> | <span th:class="${q.questionType == null or q.questionType.name() != 'POLL'} and ${#strings.contains(q.correctOptions, 'C')} ? 'correct-answer' : ''" th:text="'C: ' + ${q.answer3}"></span></span>
+                        <span th:if="${q.answer4}"> | <span th:class="${q.questionType == null or q.questionType.name() != 'POLL'} and ${#strings.contains(q.correctOptions, 'D')} ? 'correct-answer' : ''" th:text="'D: ' + ${q.answer4}"></span></span>
                     </div>
+                    <div class="question-answers" th:if="${q.questionType != null and q.questionType.name() == 'TRUE_FALSE'}">
+                        <span th:class="${#strings.contains(q.correctOptions, 'TRUE')} ? 'correct-answer' : ''">True</span> |
+                        <span th:class="${#strings.contains(q.correctOptions, 'FALSE')} ? 'correct-answer' : ''">False</span>
+                    </div>
+                    <div class="question-answers" th:if="${q.questionType != null and q.questionType.name() == 'TYPE_ANSWER'}">
+                        <span th:text="#{challenge.edit.answer}">Answer:</span> <span class="correct-answer" th:text="${q.answer1}"></span>
+                        <span th:if="${q.acceptableAnswers}"> (also accepts: <span th:text="${q.acceptableAnswers}"></span>)</span>
+                    </div>
+                </div>
+                <div class="question-actions">
+                    <button class="question-action-btn" th:onclick="'editQuestion(' + ${q.id} + ')'">
+                        <i class="bi bi-pencil"></i>
+                    </button>
+                    <button class="question-action-btn" th:onclick="'duplicateQuestion(' + ${q.id} + ')'">
+                        <i class="bi bi-copy"></i>
+                    </button>
+                    <button class="question-action-btn question-action-btn--delete" th:onclick="'deleteQuestion(' + ${q.id} + ')'">
+                        <i class="bi bi-trash"></i>
+                    </button>
                 </div>
             </div>
         </div>
     </div>
-    <div id="emptyState" class="text-center text-muted py-5" th:if="${challenge.questionSets == null || challenge.questionSets.empty}" th:text="#{challenge.edit.noQuestions}">
-        No questions yet. Click "Add Question" to get started.
+    <div id="emptyState" class="empty-state" th:if="${challenge.questionSets == null || challenge.questionSets.empty}">
+        <i class="bi bi-inbox" style="font-size: 3rem; opacity: 0.3; margin-bottom: 1rem;"></i>
+        <p th:text="#{challenge.edit.noQuestions}">No questions yet. Click "Add Question" to get started.</p>
     </div>
 </div>
 
@@ -301,8 +287,9 @@ new Sortable(document.getElementById('questionList'), {
 
 function updateNumbers() {
     document.querySelectorAll('.question-card').forEach((card, i) => {
-        card.querySelector('.badge').textContent = i + 1;
+        card.querySelector('.question-number-badge').textContent = i + 1;
     });
+    document.getElementById('questionCount').textContent = document.querySelectorAll('.question-card').length;
 }
 
 function showQuestionModal(id = null) {

@@ -7,60 +7,29 @@
     <link rel="manifest" href="/manifest.json">
     <link rel="shortcut icon" href="/images/favicon.png">
     <link href="/styles/darkhold-styles.css" rel="stylesheet" />
-    <style>
-        body {
-            font-family: var(--font-system);
-            background-color: var(--color-bg-primary);
-            color: var(--color-text-primary);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            margin: 0;
-            padding: 20px;
-            text-align: center;
-        }
-        .offline-container {
-            max-width: 400px;
-        }
-        .offline-icon {
-            font-size: 4rem;
-            margin-bottom: 20px;
-        }
-        h1 {
-            font-size: 1.5rem;
-            margin-bottom: 10px;
-            color: var(--color-text-primary);
-        }
-        p {
-            color: var(--color-text-secondary);
-            margin-bottom: 20px;
-            line-height: 1.6;
-        }
-        .retry-btn {
-            display: inline-block;
-            padding: 12px 24px;
-            background-color: var(--color-primary);
-            color: var(--color-text-inverse);
-            border: none;
-            border-radius: var(--radius-md);
-            font-size: 1rem;
-            cursor: pointer;
-            text-decoration: none;
-            transition: background-color var(--transition-fast);
-        }
-        .retry-btn:hover {
-            background-color: var(--color-primary-hover);
-        }
-    </style>
-</head>
-<body class="bg-admin">
-    <div class="offline-container">
-        <div class="offline-icon">&#128268;</div>
-        <h1>You're Offline</h1>
-        <p>It looks like you've lost your internet connection. Please check your connection and try again.</p>
-        <button class="retry-btn" onclick="window.location.reload();">Try Again</button>
-    </div>
+    <link href="/styles/offline.css" rel="stylesheet" />
     <script type="text/javascript" src="/scripts/theme-manager.js"></script>
+</head>
+<body class="offline-page">
+    <div class="offline-container">
+        <div class="offline-icon">📡</div>
+        <h1 class="offline-title">You're Offline</h1>
+        <p class="offline-message">
+            It looks like you've lost your internet connection. Please check your connection and try again.
+        </p>
+        <button class="retry-btn" onclick="window.location.reload();">
+            <i class="fas fa-redo"></i>
+            <span>Try Again</span>
+        </button>
+
+        <div class="offline-tips">
+            <div class="offline-tips-title">Quick Tips:</div>
+            <ul class="offline-tips-list">
+                <li>Check your WiFi or mobile data</li>
+                <li>Try disabling airplane mode</li>
+                <li>Restart your router if needed</li>
+            </ul>
+        </div>
+    </div>
 </body>
 </html>

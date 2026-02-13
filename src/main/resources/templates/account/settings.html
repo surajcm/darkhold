@@ -1,0 +1,177 @@
+<!DOCTYPE HTML>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title th:text="#{account.settings} + ' - Darkhold'">Account Settings - Darkhold</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="shortcut icon" href="/images/favicon.png">
+    <link href="/styles/darkhold-styles.css" rel="stylesheet" />
+    <link href="/styles/account-settings.css" rel="stylesheet" />
+    <script type="text/javascript" src="/scripts/theme-manager.js"></script>
+    <script type="text/javascript" src="/scripts/audio-manager.js"></script>
+    <script type="text/javascript" src="/scripts/language-manager.js"></script>
+    <script type="text/javascript" src="/scripts/accessibility.js"></script>
+    <script type="text/javascript" src="/scripts/common-scripts.js"></script>
+</head>
+<body>
+    <div th:insert="~{navbar :: navbar}"></div>
+
+    <main class="account-settings-page">
+        <div class="account-container">
+            <!-- Page Header -->
+            <header class="account-header">
+                <h1 class="account-title">Account Settings</h1>
+                <p class="account-subtitle">Manage your profile and preferences</p>
+            </header>
+
+            <!-- Profile Section -->
+            <section class="settings-section">
+                <div class="settings-section-header">
+                    <h2 class="settings-section-title">
+                        <i class="fas fa-user-circle"></i>
+                        Profile Information
+                    </h2>
+                </div>
+                <div class="settings-section-body">
+                    <div class="profile-info-grid">
+                        <div class="profile-info-item">
+                            <span class="profile-info-label">Username</span>
+                            <span class="profile-info-value" th:text="${#authentication.getPrincipal().getUsername()}">user@example.com</span>
+                        </div>
+                        <div class="profile-info-item">
+                            <span class="profile-info-label">Account Type</span>
+                            <span class="profile-info-value">
+                                <span class="badge badge-primary" th:each="role : ${#authentication.getPrincipal().getAuthorities()}"
+                                      th:text="${role.authority}">ROLE_USER</span>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="settings-actions">
+                        <button class="btn btn-secondary" onclick="alert('Profile edit feature coming soon!')">
+                            <i class="fas fa-edit"></i>
+                            Edit Profile
+                        </button>
+                        <button class="btn btn-secondary" onclick="alert('Password change feature coming soon!')">
+                            <i class="fas fa-key"></i>
+                            Change Password
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Preferences Section -->
+            <section class="settings-section">
+                <div class="settings-section-header">
+                    <h2 class="settings-section-title">
+                        <i class="fas fa-sliders-h"></i>
+                        Preferences
+                    </h2>
+                </div>
+                <div class="settings-section-body">
+                    <div class="settings-options">
+                        <div class="settings-option">
+                            <div class="settings-option-info">
+                                <label class="settings-option-label">Theme</label>
+                                <p class="settings-option-desc">Choose your preferred theme</p>
+                            </div>
+                            <div class="settings-option-control">
+                                <button class="btn-icon" onclick="toggleTheme()" id="theme-toggle-btn-settings">
+                                    <i class="fas fa-moon" id="theme-icon-settings"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="settings-option">
+                            <div class="settings-option-info">
+                                <label class="settings-option-label">Sound Effects</label>
+                                <p class="settings-option-desc">Play sounds during games</p>
+                            </div>
+                            <div class="settings-option-control">
+                                <button class="btn-icon" onclick="toggleSound()" id="sound-toggle-btn-settings">
+                                    <i class="fas fa-volume-up" id="sound-icon-settings"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="settings-option">
+                            <div class="settings-option-info">
+                                <label class="settings-option-label">Language</label>
+                                <p class="settings-option-desc">Select your language</p>
+                            </div>
+                            <div class="settings-option-control">
+                                <select class="form-select" onchange="changeLanguage(this.value)">
+                                    <option value="en" th:selected="${#locale.language == 'en'}">English</option>
+                                    <option value="es" th:selected="${#locale.language == 'es'}">Español</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Data & Privacy Section -->
+            <section class="settings-section">
+                <div class="settings-section-header">
+                    <h2 class="settings-section-title">
+                        <i class="fas fa-shield-alt"></i>
+                        Data & Privacy
+                    </h2>
+                </div>
+                <div class="settings-section-body">
+                    <div class="settings-actions">
+                        <button class="btn btn-secondary" onclick="alert('Export data feature coming soon!')">
+                            <i class="fas fa-download"></i>
+                            Export My Data
+                        </button>
+                        <button class="btn btn-danger" onclick="confirmDeleteAccount()">
+                            <i class="fas fa-trash"></i>
+                            Delete Account
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Back Button -->
+            <div class="account-footer">
+                <button class="btn btn-secondary" onclick="window.history.back()">
+                    <i class="fas fa-arrow-left"></i>
+                    Back
+                </button>
+            </div>
+        </div>
+    </main>
+
+    <script type="text/javascript" src="/scripts/core/jquery-3.7.0.min.js"></script>
+    <script type="text/javascript" src="/scripts/core/popper.min.js"></script>
+    <script type="text/javascript" src="/scripts/core/bootstrap-5.3.1/bootstrap.min.js"></script>
+    <script>
+        // Sync theme icon in settings
+        function updateThemeIconSettings() {
+            const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+            const icon = document.getElementById('theme-icon-settings');
+            if (icon) {
+                icon.className = isDark ? 'fas fa-sun' : 'fas fa-moon';
+            }
+        }
+
+        // Sync sound icon in settings
+        function updateSoundIconSettings() {
+            const isMuted = localStorage.getItem('sound-enabled') === 'false';
+            const icon = document.getElementById('sound-icon-settings');
+            if (icon) {
+                icon.className = isMuted ? 'fas fa-volume-mute' : 'fas fa-volume-up';
+            }
+        }
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            updateThemeIconSettings();
+            updateSoundIconSettings();
+        });
+
+        function confirmDeleteAccount() {
+            if (confirm('Are you sure you want to delete your account? This action cannot be undone.')) {
+                alert('Account deletion feature will be implemented soon.');
+            }
+        }
+    </script>
+</body>
+</html>

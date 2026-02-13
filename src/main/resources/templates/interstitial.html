@@ -1,48 +1,129 @@
 <!DOCTYPE HTML>
 <html lang="en">
 <head>
-    <title>Getting Started: Darkhold classroom quiz experience</title>
+    <title>Starting Game - Darkhold</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="manifest" href="/manifest.json">
-    <link href="/styles/darkhold-styles.css" rel="stylesheet" />
     <link rel="shortcut icon" href="/images/favicon.png">
+    <link href="/styles/darkhold-styles.css" rel="stylesheet" />
+    <link href="/styles/interstitial.css" rel="stylesheet" />
     <script type="text/javascript" src="/scripts/theme-manager.js"></script>
     <script type="text/javascript" src="/scripts/language-manager.js"></script>
     <script type="text/javascript" src="/scripts/common-scripts.js"></script>
     <script type="text/javascript" src="/scripts/audio-manager.js"></script>
     <script type="text/javascript" src="/scripts/accessibility.js"></script>
     <script type="text/javascript">
+        let countdownValue = 5;
+        let countdownInterval;
+
         function loading() {
-            setTimeout(function(){ askQuestion(); }, 5000);
+            updateCountdown();
+            countdownInterval = setInterval(function() {
+                countdownValue--;
+                updateCountdown();
+
+                if (countdownValue <= 0) {
+                    clearInterval(countdownInterval);
+                    askQuestion();
+                }
+            }, 1000);
         }
+
+        function updateCountdown() {
+            const countdownElement = document.getElementById('countdownNumber');
+            if (countdownElement) {
+                countdownElement.textContent = countdownValue;
+            }
+        }
+
         function askQuestion() {
             let quizPin = document.getElementById('quizPin').value;
             console.log('triggering quiz of ' + quizPin);
             document.getElementById('quizPin').value = quizPin;
-            document.forms[0].action="/question";
+            document.forms[0].action = "/question";
             document.forms[0].submit();
         }
     </script>
 </head>
-<body class="bg-game" onload="loading()">
+<body onload="loading()">
     <form action="#" method="post">
         <input type="hidden" th:value="${quizPin}" id="quizPin" name="quizPin" />
-        <div class="container">
-            <div class="row">
-                <div class="container">
-                    <div class="row">
-                        <a href="#" class="intro-banner-vdo-play-btn pinkBg">
-                            <i class="glyphicon glyphicon-play whiteText" aria-hidden="true"></i>
-                            <span class="ripple pinkBg"></span>
-                            <span class="ripple pinkBg"></span>
-                            <span class="ripple pinkBg"></span>
-                        </a>
+
+        <div class="interstitial-page">
+            <!-- Animated background -->
+            <div class="interstitial-bg"></div>
+
+            <div class="interstitial-content">
+
+                <!-- Countdown Circle -->
+                <div class="countdown-circle-container">
+                    <div class="countdown-circle">
+                        <svg class="countdown-svg" width="200" height="200">
+                            <circle class="countdown-circle-bg" cx="100" cy="100" r="90"></circle>
+                            <circle class="countdown-circle-progress" cx="100" cy="100" r="90"></circle>
+                        </svg>
+                        <div class="countdown-number" id="countdownNumber">5</div>
                     </div>
                 </div>
+
+                <!-- Main Message -->
+                <h1 class="interstitial-title">Get Ready!</h1>
+                <p class="interstitial-message">
+                    The game is about to start. Prepare yourself for an exciting challenge!
+                </p>
+
+                <!-- Status Pills -->
+                <div class="status-pills">
+                    <div class="status-pill">
+                        <i class="fas fa-bolt"></i>
+                        <span>Fast Paced</span>
+                    </div>
+                    <div class="status-pill">
+                        <i class="fas fa-trophy"></i>
+                        <span>Competitive</span>
+                    </div>
+                    <div class="status-pill">
+                        <i class="fas fa-brain"></i>
+                        <span>Test Your Knowledge</span>
+                    </div>
+                </div>
+
+                <!-- Quick Tips -->
+                <div class="tips-section">
+                    <h2 class="tips-title">Quick Tips</h2>
+                    <ul class="tips-list">
+                        <li class="tip-item">
+                            <div class="tip-icon">
+                                <i class="fas fa-check"></i>
+                            </div>
+                            <span>Answer quickly to earn bonus points for speed</span>
+                        </li>
+                        <li class="tip-item">
+                            <div class="tip-icon">
+                                <i class="fas fa-check"></i>
+                            </div>
+                            <span>Build up answer streaks for multiplier bonuses</span>
+                        </li>
+                        <li class="tip-item">
+                            <div class="tip-icon">
+                                <i class="fas fa-check"></i>
+                            </div>
+                            <span>Stay focused and read each question carefully</span>
+                        </li>
+                        <li class="tip-item">
+                            <div class="tip-icon">
+                                <i class="fas fa-check"></i>
+                            </div>
+                            <span>Have fun and enjoy the competition!</span>
+                        </li>
+                    </ul>
+                </div>
+
             </div>
         </div>
     </form>
+
     <script type="text/javascript" src="/scripts/core/popper.min.js"></script>
     <script type="text/javascript" src="/scripts/core/bootstrap-5.3.1/bootstrap.min.js"></script>
 </body>

@@ -1,0 +1,256 @@
+/* ============================================
+   ADMIN USER FORM
+   User create/edit form styling
+   ============================================ */
+
+/* Import admin layout */
+@import url('admin-layout.css');
+
+/* ----------------------------------------
+   Form Container
+   ---------------------------------------- */
+.admin-form-card {
+    background: var(--color-bg-primary);
+    border: 1px solid var(--color-border-light);
+    border-radius: var(--radius-xl);
+    padding: 2.5rem;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+/* ----------------------------------------
+   Form Groups
+   ---------------------------------------- */
+.admin-form-group {
+    margin-bottom: 1.5rem;
+}
+
+.admin-form-label {
+    display: block;
+    font-weight: 600;
+    color: var(--color-text-primary);
+    margin-bottom: 0.5rem;
+    font-size: 0.95rem;
+}
+
+.admin-form-label .required {
+    color: var(--color-error);
+    margin-left: 0.25rem;
+}
+
+.admin-form-input {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: 1px solid var(--color-border-light);
+    border-radius: var(--radius-md);
+    font-size: 0.95rem;
+    transition: all 0.2s ease;
+    background: var(--color-bg-primary);
+    color: var(--color-text-primary);
+}
+
+.admin-form-input:focus {
+    outline: none;
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px rgba(var(--color-primary-rgb, 0, 98, 204), 0.1);
+}
+
+.admin-form-input:disabled {
+    background: var(--color-bg-secondary);
+    cursor: not-allowed;
+}
+
+.admin-form-hint {
+    font-size: 0.85rem;
+    color: var(--color-text-tertiary);
+    margin-top: 0.25rem;
+}
+
+/* ----------------------------------------
+   Role Checkboxes
+   ---------------------------------------- */
+.admin-roles-grid {
+    display: grid;
+    gap: 0.75rem;
+    margin-top: 0.5rem;
+}
+
+.admin-role-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    padding: 1rem;
+    background: var(--color-bg-secondary);
+    border: 1px solid var(--color-border-light);
+    border-radius: var(--radius-md);
+    transition: all 0.2s ease;
+}
+
+.admin-role-item:hover {
+    border-color: var(--color-primary);
+    background: rgba(var(--color-primary-rgb, 0, 98, 204), 0.03);
+}
+
+.admin-role-checkbox {
+    width: 18px;
+    height: 18px;
+    margin-top: 0.25rem;
+    cursor: pointer;
+    accent-color: var(--color-primary);
+}
+
+.admin-role-info {
+    flex: 1;
+}
+
+.admin-role-name {
+    font-weight: 600;
+    color: var(--color-text-primary);
+    display: block;
+    margin-bottom: 0.25rem;
+}
+
+.admin-role-description {
+    font-size: 0.85rem;
+    color: var(--color-text-secondary);
+}
+
+/* ----------------------------------------
+   Toggle Switch (Enabled field)
+   ---------------------------------------- */
+.admin-toggle-field {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem;
+    background: var(--color-bg-secondary);
+    border-radius: var(--radius-md);
+}
+
+.admin-toggle-switch {
+    position: relative;
+    width: 50px;
+    height: 26px;
+}
+
+.admin-toggle-switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.admin-toggle-slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    transition: 0.4s;
+    border-radius: 26px;
+}
+
+.admin-toggle-slider:before {
+    position: absolute;
+    content: "";
+    height: 18px;
+    width: 18px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    transition: 0.4s;
+    border-radius: 50%;
+}
+
+.admin-toggle-switch input:checked + .admin-toggle-slider {
+    background-color: var(--color-success);
+}
+
+.admin-toggle-switch input:checked + .admin-toggle-slider:before {
+    transform: translateX(24px);
+}
+
+.admin-toggle-label {
+    font-weight: 600;
+    color: var(--color-text-primary);
+}
+
+/* ----------------------------------------
+   Photo Upload
+   ---------------------------------------- */
+.admin-photo-upload {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.admin-photo-preview {
+    position: relative;
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    border: 3px solid var(--color-border-light);
+    overflow: hidden;
+    background: var(--color-bg-secondary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.admin-photo-preview img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.admin-photo-preview-placeholder {
+    font-size: 3rem;
+    color: var(--color-text-tertiary);
+}
+
+.admin-file-input {
+    padding: 0.5rem;
+    border: 2px dashed var(--color-border-light);
+    border-radius: var(--radius-md);
+    background: var(--color-bg-secondary);
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.admin-file-input:hover {
+    border-color: var(--color-primary);
+    background: rgba(var(--color-primary-rgb, 0, 98, 204), 0.03);
+}
+
+/* ----------------------------------------
+   Form Actions
+   ---------------------------------------- */
+.admin-form-actions {
+    display: flex;
+    gap: 1rem;
+    margin-top: 2rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--color-border-light);
+}
+
+.admin-form-actions .btn {
+    flex: 1;
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+@media (max-width: 768px) {
+    .admin-form-card {
+        padding: 1.5rem;
+    }
+
+    .admin-form-actions {
+        flex-direction: column;
+    }
+
+    .admin-form-actions .btn {
+        width: 100%;
+    }
+}

@@ -7,6 +7,7 @@
     <link rel="manifest" href="/manifest.json">
     <link rel="shortcut icon" href="/images/favicon.png">
     <link href="/styles/darkhold-styles.css" rel="stylesheet" />
+    <link href="/styles/admin-users.css" rel="stylesheet" />
     <link href="/styles/icon-styles.css" rel="stylesheet">
     <script type="text/javascript" src="/scripts/theme-manager.js"></script>
     <script type="text/javascript" src="/scripts/audio-manager.js"></script>
@@ -16,123 +17,238 @@
     <script type="text/javascript" src="/scripts/user-management-scripts.js"></script>
     <script type="text/javascript" src="/scripts/core/bootstrap-5.3.1/bootstrap.min.js"></script>
 </head>
-<body class="bg-admin">
+<body class="admin-page">
     <div th:insert="~{navbar :: navbar}"></div>
-    <div>
-        <h2 th:text="#{user.manageUsers}">Manage Users</h2>
-        <a th:href="@{/user/create}" th:text="#{user.createNew}">Create New User</a>
-    </div>
-    <div th:if="${message != null}">
-        <div class="alert alert-success text-center" role="alert">
-            [[${message}]]
+
+    <!-- Admin Sidebar -->
+    <aside class="admin-sidebar" id="adminSidebar">
+        <div class="admin-sidebar-header">
+            <h2 class="admin-sidebar-title">
+                <i class="fas fa-shield-alt"></i>
+                <span th:text="#{admin.title}">Admin Panel</span>
+            </h2>
         </div>
-    </div>
-    <div>
-        <form action="" method="post">
-            <table class="table table-bordered table-striped table-hover table-responsive-xl">
-                <thead class="thead-dark">
-                    <tr>
-                        <th th:text="#{user.userId}">User ID</th>
-                        <th th:text="#{user.photos}">Photos</th>
-                        <th th:text="#{user.email}">Email</th>
-                        <th th:text="#{user.firstName}">First Name</th>
-                        <th th:text="#{user.lastName}">Last Name</th>
-                        <th th:text="#{user.roles}">Roles</th>
-                        <th th:text="#{user.enabled}">Enabled</th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr th:each="user: ${listusers}">
-                        <td>[[${user.id}]]</td>
-                        <td>
-                            <span th:if="${user.photo == null}" class="fas fa-portrait fa-3x icon-silver"></span>
-                            <img th:if="${user.photo != null}" th:src="@{${user.photosImagePath}}" style="width: 100px" />
-                        </td>
-                        <td>[[${user.email}]]</td>
-                        <td>[[${user.firstName}]]</td>
-                        <td>[[${user.lastName}]]</td>
-                        <td>[[${user.roles}]]</td>
-                        <td>
-                            <a th:if="${user.enabled == true}" class="fas fa-check-circle fa-2x icon-green"
-                               th:href="@{'/users/' + ${user.id} + '/enabled/false'}" th:title="#{user.disableUser}" title="Disable this user"></a>
-                            <a th:if="${user.enabled == false}" class="fas fa-circle fa-2x icon-dark"
-                               th:href="@{'/users/' + ${user.id} + '/enabled/true'}" th:title="#{user.enableUser}" title="Enable this user"></a>
-                        </td>
-                        <td>
-                            <a class="fas fa-edit fa-2x icon-green" th:href="@{'/user/edit/' + ${user.id}}" th:title="#{user.editUser}" title="Edit this user"></a>
-                            &nbsp;
-                            <a class="fas fa-trash fa-2x icon-dark" th:href="@{'/user/delete/' + ${user.id}}"
-                               th:userId="${user.id}"
-                               th:title="#{user.deleteUser}" title="Delete this user"></a>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-            <div class="text-center m-1">
-                    <span th:if="${totalItems > 0}">
-                        <span th:text="#{user.showingUsers}">Showing users</span> #[[${startCount}]] <span th:text="#{user.to}">to</span> [[${endCount}]] <span th:text="#{user.of}">of</span> [[${totalItems}]]
-                    </span>
-                <span th:unless="${totalItems > 0}" th:text="#{user.noUsersFound}">
-                        No users found
-                    </span>
+        <nav class="admin-sidebar-nav">
+            <div class="admin-nav-section">
+                <div class="admin-nav-section-label" th:text="#{admin.main}">Main</div>
+                <a href="/options" class="admin-nav-item">
+                    <i class="fas fa-home"></i>
+                    <span th:text="#{admin.dashboard}">Dashboard</span>
+                </a>
             </div>
-            <div>
-                <nav>
-                    <ul class="pagination justify-content-center">
-                        <li th:class="${currentPage > 1 ? 'page-item' : 'page-item disabled'} " >
-                            <a class="page-link" th:href="@{/user/page/1}" th:text="#{user.first}">First</a>
-                        </li>
-                        <li th:class="${currentPage > 1 ? 'page-item' : 'page-item disabled'} " >
-                            <a class="page-link" th:href="@{'/user/page/' + ${currentPage - 1 }}" th:text="#{user.previous}">Previous</a>
-                        </li>
-                        <li th:class="${currentPage != i ? 'page-item' : 'page-item active'} " th:each="i : ${#numbers.sequence(1, totalPages)}">
-                            <a class="page-link" th:href="@{'/user/page/' + ${i}}">[[${i}]]</a>
-                        </li>
-                        <li th:class="${currentPage < totalPages ? 'page-item' : 'page-item disabled'}" >
-                            <a class="page-link" th:href="@{'/user/page/' + ${currentPage + 1 }}" th:text="#{user.next}">Next</a>
-                        </li>
-                        <li th:class="${currentPage < totalPages ? 'page-item' : 'page-item disabled'}">
-                            <a class="page-link" th:href="@{'/user/page/' + ${totalPages}}" th:text="#{user.last}">Last</a>
-                        </li>
-                    </ul>
-                </nav>
+            <div class="admin-nav-section">
+                <div class="admin-nav-section-label" th:text="#{admin.management}">Management</div>
+                <a href="/userManagement" class="admin-nav-item active">
+                    <i class="fas fa-users"></i>
+                    <span th:text="#{admin.users}">Users</span>
+                </a>
+                <a href="/options" class="admin-nav-item">
+                    <i class="fas fa-clipboard-list"></i>
+                    <span th:text="#{admin.challenges}">Challenges</span>
+                </a>
+                <a href="/activegames" class="admin-nav-item">
+                    <i class="fas fa-gamepad"></i>
+                    <span th:text="#{admin.activeGames}">Active Games</span>
+                </a>
+                <a href="/pastgames" class="admin-nav-item">
+                    <i class="fas fa-history"></i>
+                    <span th:text="#{admin.pastGames}">Past Games</span>
+                </a>
             </div>
-        </form>
-        <div class="modal fade text-center" id="confirmModal">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h4 class="modal-title" id="modalTitle" th:text="#{user.deleteConfirmation}">Delete Confirmation</h4>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal">&times;</button>
+            <div class="admin-nav-section">
+                <div class="admin-nav-section-label" th:text="#{admin.system}">System</div>
+                <a href="/options" class="admin-nav-item">
+                    <i class="fas fa-cog"></i>
+                    <span th:text="#{admin.settings}">Settings</span>
+                </a>
+            </div>
+        </nav>
+    </aside>
+
+    <!-- Admin Content -->
+    <main class="admin-content">
+        <!-- Page Header -->
+        <div class="admin-content-header">
+            <div class="admin-breadcrumb">
+                <a href="/options" th:text="#{admin.home}">Home</a>
+                <span class="admin-breadcrumb-separator">/</span>
+                <span th:text="#{user.manageUsers}">User Management</span>
+            </div>
+            <h1 class="admin-page-title" th:text="#{user.manageUsers}">User Management</h1>
+            <p class="admin-page-subtitle" th:text="#{user.manageUsersSubtitle}">Manage user accounts, roles, and permissions</p>
+            <div class="admin-page-actions">
+                <a th:href="@{/user/create}" class="btn btn-primary">
+                    <i class="fas fa-plus"></i>
+                    <span th:text="#{user.createNew}">Create New User</span>
+                </a>
+            </div>
+        </div>
+
+        <!-- Success Message -->
+        <div th:if="${message != null}" class="admin-alert admin-alert-success">
+            <i class="fas fa-check-circle"></i>
+            <span>[[${message}]]</span>
+        </div>
+        <!-- Users Table -->
+        <div class="admin-card">
+            <div class="admin-table-container">
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th th:text="#{user.user}">User</th>
+                            <th th:text="#{user.roles}">Roles</th>
+                            <th th:text="#{user.status}">Status</th>
+                            <th th:text="#{user.actions}">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="user: ${listusers}">
+                            <td>
+                                <div class="user-info-cell">
+                                    <img th:if="${user.photo != null}"
+                                         th:src="@{${user.photosImagePath}}"
+                                         class="user-avatar"
+                                         th:alt="${user.firstName} + ' ' + ${user.lastName}" />
+                                    <div th:if="${user.photo == null}" class="user-avatar-placeholder">
+                                        <i class="fas fa-user"></i>
+                                    </div>
+                                    <div class="user-info-details">
+                                        <span class="user-name">[[${user.firstName}]] [[${user.lastName}]]</span>
+                                        <span class="user-email">[[${user.email}]]</span>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <span th:each="role : ${user.roles}"
+                                      th:class="'role-badge role-badge--' + ${#strings.toLowerCase(role.name)}"
+                                      th:text="${role.name}">ADMIN</span>
+                            </td>
+                            <td>
+                                <span th:if="${user.enabled == true}" class="status-badge status-badge--active">
+                                    <span class="status-indicator"></span>
+                                    <span th:text="#{user.active}">Active</span>
+                                </span>
+                                <span th:if="${user.enabled == false}" class="status-badge status-badge--inactive">
+                                    <span class="status-indicator"></span>
+                                    <span th:text="#{user.inactive}">Inactive</span>
+                                </span>
+                            </td>
+                            <td>
+                                <div class="admin-actions">
+                                    <a th:if="${user.enabled == true}"
+                                       class="admin-action-btn admin-action-btn--toggle"
+                                       th:href="@{'/users/' + ${user.id} + '/enabled/false'}"
+                                       th:title="#{user.disableUser}">
+                                        <i class="fas fa-toggle-on"></i>
+                                    </a>
+                                    <a th:if="${user.enabled == false}"
+                                       class="admin-action-btn admin-action-btn--toggle"
+                                       th:href="@{'/users/' + ${user.id} + '/enabled/true'}"
+                                       th:title="#{user.enableUser}">
+                                        <i class="fas fa-toggle-off"></i>
+                                    </a>
+                                    <a class="admin-action-btn admin-action-btn--edit"
+                                       th:href="@{'/user/edit/' + ${user.id}}"
+                                       th:title="#{user.editUser}">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                    <a class="admin-action-btn admin-action-btn--delete"
+                                       th:href="@{'/user/delete/' + ${user.id}}"
+                                       th:userId="${user.id}"
+                                       th:title="#{user.deleteUser}">
+                                        <i class="fas fa-trash"></i>
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <!-- Pagination -->
+                <div class="admin-pagination">
+                    <div class="admin-pagination-info">
+                        <span th:if="${totalItems > 0}">
+                            <span th:text="#{user.showing}">Showing</span>
+                            <strong>[[${startCount}]]</strong>
+                            <span th:text="#{user.to}">to</span>
+                            <strong>[[${endCount}]]</strong>
+                            <span th:text="#{user.of}">of</span>
+                            <strong>[[${totalItems}]]</strong>
+                            <span th:text="#{user.users}">users</span>
+                        </span>
+                        <span th:unless="${totalItems > 0}" th:text="#{user.noUsersFound}">No users found</span>
                     </div>
-                    <div class="modal-body">
-                        <span id="confirmText"></span>
+                    <div class="admin-pagination-controls">
+                        <a th:href="@{/user/page/1}"
+                           th:class="${currentPage > 1 ? 'pagination-btn' : 'pagination-btn'}"
+                           th:classappend="${currentPage <= 1 ? 'disabled' : ''}"
+                           th:text="#{user.first}">First</a>
+                        <a th:href="@{'/user/page/' + ${currentPage - 1}}"
+                           th:class="${currentPage > 1 ? 'pagination-btn' : 'pagination-btn'}"
+                           th:classappend="${currentPage <= 1 ? 'disabled' : ''}"
+                           th:text="#{user.previous}">Previous</a>
+                        <a th:each="i : ${#numbers.sequence(1, totalPages)}"
+                           th:href="@{'/user/page/' + ${i}}"
+                           th:class="${currentPage == i ? 'pagination-btn active' : 'pagination-btn'}">[[${i}]]</a>
+                        <a th:href="@{'/user/page/' + ${currentPage + 1}}"
+                           th:class="${currentPage < totalPages ? 'pagination-btn' : 'pagination-btn'}"
+                           th:classappend="${currentPage >= totalPages ? 'disabled' : ''}"
+                           th:text="#{user.next}">Next</a>
+                        <a th:href="@{'/user/page/' + ${totalPages}}"
+                           th:class="${currentPage < totalPages ? 'pagination-btn' : 'pagination-btn'}"
+                           th:classappend="${currentPage >= totalPages ? 'disabled' : ''}"
+                           th:text="#{user.last}">Last</a>
                     </div>
-                    <div class="modal-footer">
-                        <a class="btn btn-success" href="" th:text="#{user.yes}">Yes</a>
-                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal" th:text="#{user.no}">No</button>
-                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Mobile Sidebar Toggle -->
+    <button class="admin-sidebar-toggle" onclick="toggleAdminSidebar()">
+        <i class="fas fa-bars"></i>
+    </button>
+
+    <!-- Delete Confirmation Modal -->
+    <div class="modal fade" id="confirmModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalTitle" th:text="#{user.deleteConfirmation}">Delete Confirmation</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <p id="confirmText"></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" th:text="#{user.no}">Cancel</button>
+                    <a class="btn btn-danger" href="" th:text="#{user.yes}">Delete</a>
                 </div>
             </div>
         </div>
     </div>
 <script type="text/javascript">
+    // Mobile sidebar toggle
+    function toggleAdminSidebar() {
+        const sidebar = document.getElementById('adminSidebar');
+        sidebar.classList.toggle('active');
+    }
+
+    // Delete confirmation modal
     window.onload = function() {
-        var deleteLinks = document.querySelectorAll('a[title="Delete this user"]');
+        var deleteLinks = document.querySelectorAll('.admin-action-btn--delete');
 
         deleteLinks.forEach(function(link) {
             const userId = link.getAttribute('userId');
             link.addEventListener('click', function(event) {
                 event.preventDefault();
-                document.getElementById('confirmText').innerText = 'Are you sure you want to delete user ID ' + userId + '?';
+                document.getElementById('confirmText').innerText = 'Are you sure you want to delete user ID ' + userId + '? This action cannot be undone.';
 
                 // Open the modal
                 var myModal = new bootstrap.Modal(document.getElementById('confirmModal'));
                 myModal.show();
 
                 // Set the href of the confirmation button to the href of the delete link
-                var confirmButton = document.querySelector('#confirmModal .btn-success');
+                var confirmButton = document.querySelector('#confirmModal .btn-danger');
                 confirmButton.href = this.href;
             });
         });

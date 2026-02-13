@@ -8,6 +8,7 @@
     <link rel="shortcut icon" href="/images/favicon.png">
     <link href="/styles/darkhold-styles.css" rel="stylesheet" />
     <link href="/styles/team-styles.css" rel="stylesheet" />
+    <link href="/styles/game-wait.css" rel="stylesheet" />
     <script type="text/javascript" src="/scripts/theme-manager.js"></script>
     <script type="text/javascript" src="/scripts/audio-manager.js"></script>
     <script type="text/javascript" src="/scripts/language-manager.js"></script>
@@ -17,17 +18,18 @@
     <script type="text/javascript" src="/scripts/game-wait-scripts.js"></script>
     <script type="text/javascript" src="/scripts/common-scripts.js"></script>
 </head>
-<body class="bg-game" onload="connect()">
+<body class="game-lobby-page" onload="connect()">
     <div th:insert="~{navbar :: navbar}"></div>
 
     <!-- Moderator Warning Banner -->
-    <div th:if="${moderatorWarning}" class="alert alert-warning alert-dismissible fade show m-3" role="alert" style="text-align: center;">
+    <div th:if="${moderatorWarning}" class="alert alert-warning alert-dismissible fade show" style="margin: 1rem auto; max-width: 800px; text-align: center;" role="alert">
         <strong th:text="'⚠️ ' + #{game.lobby.moderatorWarning}">⚠️ You are the moderator of this game.</strong><br/>
         <span th:text="#{game.lobby.moderatorWarningDetail}">In multiplayer mode, moderators control the game but do not earn points.</span><br/>
         <small th:text="#{game.lobby.moderatorWarningHint}">Consider using a different name if you want to participate as a player.</small>
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
 
+    <div class="game-lobby-container">
     <form action="#" th:object="${gameinfo}" method="post">
         <input type="hidden" th:value="${gameinfo.gamePin}" id="quizPin"/>
         <input type="hidden" th:value="${gameinfo.name}" id="name"/>
@@ -35,25 +37,31 @@
         <input type="hidden" th:value="${gameinfo.moderator}" id="moderator"/>
         <input type="hidden" th:value="${teamMode}" id="teamMode"/>
         <input type="hidden" th:value="${assignmentMethod}" id="assignmentMethod"/>
-        <div class="container-fluid">
-            <div class="row justify-content-center align-items-center d-flex text-center h-100">
-                <div class="col-12 col-md-8  h-50">
-                    <div class="jumbotron text-center m-0 d-flex flex-column justify-content-center py-5">
-                        <h1 class="display-2 font-display text-dark mb-2 mt-5" id="head_msg"><span th:text="#{game.lobby.quizPinIs}">Your Quiz PIN is :</span> <strong class="pin-display">[[${gameinfo.gamePin}]]</strong> </h1>
-                        <div th:if="${teamMode}" class="mb-3">
-                            <span class="badge bg-info" style="font-size: 1rem;" th:text="#{game.lobby.teamMode}">Team Mode</span>
-                            <div id="myTeamDisplay" class="mt-2" style="display:none;">
-                                <span th:text="#{game.lobby.yourTeam}">Your Team:</span> <span id="myTeamBadge" class="team-badge"></span>
-                            </div>
-                        </div>
-                        <div id="messenger">
-                            <p id="message_disp"></p>
-                        </div>
-                        <p th:text="#{game.lobby.waitingForGame}">Waiting for Game !!!</p>
-                        <p class="text-muted"><span id="participantCount">0</span> <span th:text="#{game.lobby.participantsJoined}">participant(s) joined</span></p>
-                    </div>
-                </div>
+
+        <!-- PIN Display -->
+        <div class="pin-section">
+            <div class="pin-label" th:text="#{game.lobby.quizPinIs}">Quiz PIN</div>
+            <div class="pin-display">[[${gameinfo.gamePin}]]</div>
+            <div th:if="${teamMode}" class="pin-badge">
+                <i class="fas fa-users"></i>
+                <span th:text="#{game.lobby.teamMode}">Team Mode</span>
             </div>
+            <div id="myTeamDisplay" class="my-team-display" style="display:none;">
+                <span th:text="#{game.lobby.yourTeam}">Your Team:</span>
+                <span id="myTeamBadge" class="team-badge"></span>
+            </div>
+        </div>
+
+        <!-- Status Messages -->
+        <div class="game-wait-message">
+            <div id="messenger">
+                <p id="message_disp"></p>
+            </div>
+            <p th:text="#{game.lobby.waitingForGame}">Waiting for Game to Start...</p>
+            <p class="participant-count-text">
+                <span class="participant-count-number" id="participantCount">0</span>
+                <span th:text="#{game.lobby.participantsJoined}">participant(s) joined</span>
+            </p>
         </div>
         <!-- Team Mode View -->
         <div th:if="${teamMode}" id="teamModeView" class="container">
@@ -70,21 +78,22 @@
         </div>
 
         <!-- Standard View (non-team mode) -->
-        <div th:unless="${teamMode}" class="row">
-            <div class="col-md-12">
-                <table id="conversation" class="table table-striped">
-                    <thead>
+        <div th:unless="${teamMode}" class="player-list-container">
+            <table id="conversation" class="player-list-table">
+                <thead>
                     <tr>
-                        <th th:text="#{game.lobby.participants}">Participants:</th>
+                        <th th:text="#{game.lobby.participants}">Participants</th>
                     </tr>
-                    </thead>
-                    <tbody id="players">
-                        <tr th:each="user : ${gameinfo.users}">
-                            <td><span th:text="${user}"></span></td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
+                </thead>
+                <tbody id="players">
+                    <tr th:each="user : ${gameinfo.users}">
+                        <td>
+                            <i class="fas fa-user" style="margin-right: 0.5rem; color: var(--color-primary);"></i>
+                            <span th:text="${user}"></span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
 
         <!-- Hidden table for team mode (used by WebSocket handlers) -->
@@ -94,6 +103,7 @@
             </table>
         </div>
     </form>
+    </div>
     <script type="text/javascript" src="/scripts/core/jquery-3.7.0.min.js"></script>
     <script type="text/javascript" src="/scripts/core/popper.min.js"></script>
     <script type="text/javascript" src="/scripts/core/bootstrap-5.3.1/bootstrap.min.js"></script>

@@ -15,8 +15,8 @@ function showIndividualScores() {
     if (teamScoreboard) {
         teamScoreboard.style.display = 'none';
     }
-    document.getElementById('btnIndividual').className = 'btn btn-primary';
-    document.getElementById('btnTeams').className = 'btn btn-outline-primary';
+    document.getElementById('btnIndividual').className = 'scoreboard-toggle-btn active';
+    document.getElementById('btnTeams').className = 'scoreboard-toggle-btn';
 }
 
 function showTeamScores() {
@@ -25,8 +25,8 @@ function showTeamScores() {
     if (teamScoreboard) {
         teamScoreboard.style.display = 'grid';
     }
-    document.getElementById('btnIndividual').className = 'btn btn-outline-primary';
-    document.getElementById('btnTeams').className = 'btn btn-primary';
+    document.getElementById('btnIndividual').className = 'scoreboard-toggle-btn';
+    document.getElementById('btnTeams').className = 'scoreboard-toggle-btn active';
 }
 
 function toggleTeamExpansion(element) {
@@ -97,6 +97,5 @@ function logOut() {
 }
 
 function toHome() {
-    document.forms[0].action = "/home";
-    document.forms[0].submit();
+    window.location.href = "/";
 }

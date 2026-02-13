@@ -104,9 +104,19 @@ function highlightGreen() {
         }
     }
 
+    // Play correct sound only if user selected the correct answer
+    let selectedOptions = document.getElementById('selectedOptions').value;
+    if (selectedOptions === "correct" && typeof AudioManager !== 'undefined') {
+        AudioManager.playCorrect();
+    }
+
     // Announce correct answer for screen readers
     if (typeof A11y !== 'undefined') {
-        A11y.announce('The correct answer has been revealed: Option ' + correctAnswer);
+        if (selectedOptions === "correct") {
+            A11y.announce('Correct! The answer was Option ' + correctAnswer);
+        } else {
+            A11y.announce('The correct answer has been revealed: Option ' + correctAnswer);
+        }
     }
 }
 
@@ -207,12 +217,9 @@ function realWaitAndShowAnswer(elem) {
         document.getElementById('selectedOptions').value = "correct";
         hideOptions();
 
-        // Play correct sound and announce
-        if (typeof AudioManager !== 'undefined') {
-            AudioManager.playCorrect();
-        }
+        // Announce submission (sound will be played later when timer expires)
         if (typeof A11y !== 'undefined') {
-            A11y.announce('Correct answer! Answer submitted.');
+            A11y.announce('Answer submitted.');
         }
     } else {
         document.getElementById('selectedOptions').value = "incorrect";

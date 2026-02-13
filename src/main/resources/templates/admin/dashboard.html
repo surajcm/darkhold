@@ -1,0 +1,187 @@
+<!DOCTYPE HTML>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title th:text="#{admin.dashboard} + ' - Darkhold'">Admin Dashboard - Darkhold</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="shortcut icon" href="/images/favicon.png">
+    <link href="/styles/darkhold-styles.css" rel="stylesheet" />
+    <link href="/styles/admin-layout.css" rel="stylesheet" />
+    <script type="text/javascript" src="/scripts/theme-manager.js"></script>
+    <script type="text/javascript" src="/scripts/audio-manager.js"></script>
+    <script type="text/javascript" src="/scripts/language-manager.js"></script>
+    <script type="text/javascript" src="/scripts/accessibility.js"></script>
+    <script type="text/javascript" src="/scripts/common-scripts.js"></script>
+</head>
+<body class="admin-page">
+    <div th:insert="~{navbar :: navbar}"></div>
+
+    <!-- Admin Sidebar -->
+    <aside class="admin-sidebar" id="adminSidebar">
+        <div class="admin-sidebar-header">
+            <h2 class="admin-sidebar-title">
+                <i class="fas fa-shield-alt"></i>
+                <span th:text="#{admin.title}">Admin Panel</span>
+            </h2>
+        </div>
+        <nav class="admin-sidebar-nav">
+            <div class="admin-nav-section">
+                <div class="admin-nav-section-label" th:text="#{admin.main}">Main</div>
+                <a href="/admin" class="admin-nav-item active">
+                    <i class="fas fa-th-large"></i>
+                    <span th:text="#{admin.dashboard}">Dashboard</span>
+                </a>
+            </div>
+            <div class="admin-nav-section">
+                <div class="admin-nav-section-label" th:text="#{admin.management}">Management</div>
+                <a href="/userManagement" class="admin-nav-item">
+                    <i class="fas fa-users"></i>
+                    <span th:text="#{admin.users}">Users</span>
+                </a>
+                <a href="/view_challenges" class="admin-nav-item">
+                    <i class="fas fa-clipboard-list"></i>
+                    <span th:text="#{admin.challenges}">Challenges</span>
+                </a>
+                <a href="/activegames" class="admin-nav-item">
+                    <i class="fas fa-gamepad"></i>
+                    <span th:text="#{admin.activeGames}">Active Games</span>
+                </a>
+                <a href="/pastgames" class="admin-nav-item">
+                    <i class="fas fa-history"></i>
+                    <span th:text="#{admin.pastGames}">Past Games</span>
+                </a>
+            </div>
+            <div class="admin-nav-section">
+                <div class="admin-nav-section-label" th:text="#{admin.system}">System</div>
+                <a href="/gameManagement" class="admin-nav-item">
+                    <i class="fas fa-sliders-h"></i>
+                    <span th:text="#{admin.gameSettings}">Game Settings</span>
+                </a>
+            </div>
+        </nav>
+    </aside>
+
+    <!-- Admin Content -->
+    <main class="admin-content">
+        <!-- Page Header -->
+        <div class="admin-content-header">
+            <div class="admin-breadcrumb">
+                <a href="/options" th:text="#{nav.dashboard}">Dashboard</a>
+                <span class="admin-breadcrumb-separator">/</span>
+                <span th:text="#{admin.dashboard}">Admin</span>
+            </div>
+            <h1 class="admin-page-title" th:text="#{admin.dashboard}">Admin Dashboard</h1>
+            <p class="admin-page-subtitle">Manage users, content, and system settings</p>
+        </div>
+
+        <!-- Stats Cards -->
+        <div class="admin-stats-grid">
+            <div class="admin-stat-card">
+                <div class="admin-stat-icon admin-stat-icon--primary">
+                    <i class="fas fa-users"></i>
+                </div>
+                <div class="admin-stat-body">
+                    <span class="admin-stat-label">Total Users</span>
+                    <span class="admin-stat-value" th:text="${totalUsers != null ? totalUsers : '0'}">0</span>
+                </div>
+            </div>
+            <div class="admin-stat-card">
+                <div class="admin-stat-icon admin-stat-icon--success">
+                    <i class="fas fa-gamepad"></i>
+                </div>
+                <div class="admin-stat-body">
+                    <span class="admin-stat-label">Active Games</span>
+                    <span class="admin-stat-value" th:text="${activeGames != null ? activeGames : '0'}">0</span>
+                </div>
+            </div>
+            <div class="admin-stat-card">
+                <div class="admin-stat-icon admin-stat-icon--info">
+                    <i class="fas fa-clipboard-list"></i>
+                </div>
+                <div class="admin-stat-body">
+                    <span class="admin-stat-label">Total Challenges</span>
+                    <span class="admin-stat-value" th:text="${totalChallenges != null ? totalChallenges : '0'}">0</span>
+                </div>
+            </div>
+            <div class="admin-stat-card">
+                <div class="admin-stat-icon admin-stat-icon--warning">
+                    <i class="fas fa-chart-line"></i>
+                </div>
+                <div class="admin-stat-body">
+                    <span class="admin-stat-label">Games Played</span>
+                    <span class="admin-stat-value" th:text="${gamesPlayed != null ? gamesPlayed : '0'}">0</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="admin-card">
+            <div class="admin-card-header">
+                <h2 class="admin-card-title">
+                    <i class="fas fa-bolt"></i>
+                    Quick Actions
+                </h2>
+            </div>
+            <div class="admin-card-body">
+                <div class="admin-actions-grid">
+                    <a href="/userManagement" class="admin-action-card">
+                        <div class="admin-action-icon" style="background: rgba(var(--color-primary-rgb, 0, 98, 204), 0.1); color: var(--color-primary);">
+                            <i class="fas fa-users-cog"></i>
+                        </div>
+                        <div class="admin-action-body">
+                            <h3 class="admin-action-title">Manage Users</h3>
+                            <p class="admin-action-desc">Add, edit, or remove users and assign roles</p>
+                        </div>
+                        <i class="fas fa-arrow-right admin-action-arrow"></i>
+                    </a>
+                    <a href="/view_challenges" class="admin-action-card">
+                        <div class="admin-action-icon" style="background: rgba(40, 167, 69, 0.1); color: #28a745;">
+                            <i class="fas fa-clipboard-list"></i>
+                        </div>
+                        <div class="admin-action-body">
+                            <h3 class="admin-action-title">Manage Challenges</h3>
+                            <p class="admin-action-desc">Create, edit, and organize quiz challenges</p>
+                        </div>
+                        <i class="fas fa-arrow-right admin-action-arrow"></i>
+                    </a>
+                    <a href="/activegames" class="admin-action-card">
+                        <div class="admin-action-icon" style="background: rgba(255, 193, 7, 0.1); color: #ffc107;">
+                            <i class="fas fa-gamepad"></i>
+                        </div>
+                        <div class="admin-action-body">
+                            <h3 class="admin-action-title">Active Games</h3>
+                            <p class="admin-action-desc">Monitor and manage live quiz sessions</p>
+                        </div>
+                        <i class="fas fa-arrow-right admin-action-arrow"></i>
+                    </a>
+                    <a href="/pastgames" class="admin-action-card">
+                        <div class="admin-action-icon" style="background: rgba(108, 117, 125, 0.1); color: #6c757d;">
+                            <i class="fas fa-history"></i>
+                        </div>
+                        <div class="admin-action-body">
+                            <h3 class="admin-action-title">View Reports</h3>
+                            <p class="admin-action-desc">Analyze past games and download reports</p>
+                        </div>
+                        <i class="fas fa-arrow-right admin-action-arrow"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Mobile Sidebar Toggle -->
+    <button class="admin-sidebar-toggle" onclick="toggleAdminSidebar()">
+        <i class="fas fa-bars"></i>
+    </button>
+
+    <script type="text/javascript" src="/scripts/core/jquery-3.7.0.min.js"></script>
+    <script type="text/javascript" src="/scripts/core/popper.min.js"></script>
+    <script type="text/javascript" src="/scripts/core/bootstrap-5.3.1/bootstrap.min.js"></script>
+    <script>
+        function toggleAdminSidebar() {
+            const sidebar = document.getElementById('adminSidebar');
+            sidebar.classList.toggle('active');
+        }
+    </script>
+</body>
+</html>

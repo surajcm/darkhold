@@ -187,13 +187,23 @@
 }
 
 /* ----------------------------------------
-   User Info
+   User Info & Dropdown
    ---------------------------------------- */
 .dh-navbar-user {
     display: flex;
     align-items: center;
     gap: 0.5rem;
-    padding: 0.25rem 0.5rem;
+    padding: 0.35rem 0.75rem;
+    border: 1px solid var(--color-border-light);
+    border-radius: var(--radius-md);
+    background: var(--color-bg-secondary);
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+.dh-navbar-user:hover {
+    border-color: var(--color-primary);
+    background: rgba(var(--color-primary-rgb, 0, 98, 204), 0.05);
 }
 
 .dh-user-avatar {
@@ -219,28 +229,55 @@
     white-space: nowrap;
 }
 
-/* ----------------------------------------
-   Logout Button
-   ---------------------------------------- */
-.dh-btn-logout {
-    display: inline-flex;
-    align-items: center;
-    padding: 0.35rem 0.85rem;
-    font-size: 0.78rem;
-    font-weight: 600;
-    color: var(--color-text-secondary);
-    background: var(--color-bg-secondary);
-    border: 1px solid var(--color-border-light);
-    border-radius: var(--radius-md);
-    cursor: pointer;
-    transition: all 0.15s ease;
-    white-space: nowrap;
+.dh-user-chevron {
+    font-size: 0.7rem;
+    color: var(--color-text-tertiary);
+    transition: transform 0.2s ease;
 }
 
-.dh-btn-logout:hover {
-    color: var(--color-error);
-    border-color: var(--color-error);
-    background: rgba(241, 94, 94, 0.06);
+.dh-navbar-user.show .dh-user-chevron {
+    transform: rotate(180deg);
+}
+
+/* User Dropdown Menu */
+.dh-user-dropdown {
+    min-width: 200px;
+    margin-top: 0.5rem;
+    padding: 0.5rem 0;
+    border: 1px solid var(--color-border-light);
+    border-radius: var(--radius-lg);
+    background: var(--color-bg-primary);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.dh-user-dropdown .dropdown-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.6rem 1rem;
+    font-size: 0.9rem;
+    color: var(--color-text-primary);
+    transition: all 0.15s ease;
+}
+
+.dh-user-dropdown .dropdown-item i {
+    width: 18px;
+    font-size: 0.95rem;
+    color: var(--color-text-tertiary);
+}
+
+.dh-user-dropdown .dropdown-item:hover {
+    background: var(--color-bg-secondary);
+    color: var(--color-primary);
+}
+
+.dh-user-dropdown .dropdown-item:hover i {
+    color: var(--color-primary);
+}
+
+.dh-user-dropdown .dropdown-divider {
+    margin: 0.5rem 0;
+    border-top: 1px solid var(--color-border-light);
 }
 
 /* ----------------------------------------

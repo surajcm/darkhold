@@ -7,9 +7,15 @@
    Page Layout
    ---------------------------------------- */
 .active-games-page {
+    /* Layout is handled by admin-content when in admin context */
+}
+
+/* Standalone page layout (if not in admin-content) */
+body:not(.admin-page) .active-games-page {
     min-height: 100vh;
     background: var(--color-bg-secondary);
     padding: 2rem 0 3rem;
+    margin-top: 56px;
 }
 
 .active-games-container {

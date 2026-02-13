@@ -1,0 +1,254 @@
+/* ============================================
+   ACCOUNT SETTINGS
+   Personal preferences and profile management
+   ============================================ */
+
+/* ----------------------------------------
+   Page Layout
+   ---------------------------------------- */
+.account-settings-page {
+    min-height: calc(100vh - 56px);
+    background: var(--color-bg-secondary);
+    padding: 3rem 1.5rem;
+    margin-top: 56px;
+}
+
+.account-container {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+/* ----------------------------------------
+   Page Header
+   ---------------------------------------- */
+.account-header {
+    margin-bottom: 2.5rem;
+}
+
+.account-title {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--color-text-primary);
+    margin: 0 0 0.5rem 0;
+}
+
+.account-subtitle {
+    font-size: 1rem;
+    color: var(--color-text-secondary);
+    margin: 0;
+}
+
+/* ----------------------------------------
+   Settings Sections
+   ---------------------------------------- */
+.settings-section {
+    background: var(--color-bg-primary);
+    border: 1px solid var(--color-border-light);
+    border-radius: var(--radius-xl);
+    margin-bottom: 1.5rem;
+    overflow: hidden;
+}
+
+.settings-section-header {
+    padding: 1.5rem;
+    border-bottom: 1px solid var(--color-border-light);
+}
+
+.settings-section-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--color-text-primary);
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.settings-section-body {
+    padding: 1.5rem;
+}
+
+/* ----------------------------------------
+   Profile Info Grid
+   ---------------------------------------- */
+.profile-info-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.profile-info-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.profile-info-label {
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--color-text-tertiary);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.profile-info-value {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--color-text-primary);
+}
+
+.badge {
+    display: inline-block;
+    padding: 0.25rem 0.75rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    border-radius: var(--radius-full);
+}
+
+.badge-primary {
+    background: rgba(var(--color-primary-rgb, 0, 98, 204), 0.1);
+    color: var(--color-primary);
+}
+
+/* ----------------------------------------
+   Settings Options
+   ---------------------------------------- */
+.settings-options {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.settings-option {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 1rem;
+    background: var(--color-bg-secondary);
+    border-radius: var(--radius-md);
+}
+
+.settings-option-info {
+    flex: 1;
+}
+
+.settings-option-label {
+    display: block;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--color-text-primary);
+    margin-bottom: 0.25rem;
+}
+
+.settings-option-desc {
+    font-size: 0.85rem;
+    color: var(--color-text-secondary);
+    margin: 0;
+}
+
+.settings-option-control {
+    flex-shrink: 0;
+}
+
+.btn-icon {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid var(--color-border-light);
+    background: var(--color-bg-primary);
+    border-radius: var(--radius-md);
+    color: var(--color-text-secondary);
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.btn-icon:hover {
+    border-color: var(--color-primary);
+    color: var(--color-primary);
+    background: rgba(var(--color-primary-rgb, 0, 98, 204), 0.05);
+}
+
+.form-select {
+    min-width: 150px;
+    padding: 0.5rem 1rem;
+    border: 1px solid var(--color-border-light);
+    border-radius: var(--radius-md);
+    background: var(--color-bg-primary);
+    color: var(--color-text-primary);
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.form-select:hover {
+    border-color: var(--color-primary);
+}
+
+.form-select:focus {
+    outline: none;
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px rgba(var(--color-primary-rgb, 0, 98, 204), 0.1);
+}
+
+/* ----------------------------------------
+   Actions
+   ---------------------------------------- */
+.settings-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--color-border-light);
+}
+
+.settings-actions .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+/* ----------------------------------------
+   Footer
+   ---------------------------------------- */
+.account-footer {
+    margin-top: 2rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--color-border-light);
+}
+
+/* ----------------------------------------
+   Responsive
+   ---------------------------------------- */
+@media (max-width: 768px) {
+    .account-settings-page {
+        padding: 2rem 1rem;
+    }
+
+    .profile-info-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+
+    .settings-option {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .settings-option-control {
+        width: 100%;
+        display: flex;
+        justify-content: flex-end;
+    }
+
+    .settings-actions {
+        flex-direction: column;
+    }
+
+    .settings-actions .btn {
+        width: 100%;
+    }
+}

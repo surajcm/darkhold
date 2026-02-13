@@ -6,32 +6,113 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="shortcut icon" href="/images/favicon.png">
     <link href="/styles/darkhold-styles.css" rel="stylesheet" />
+    <link href="/styles/admin-layout.css" rel="stylesheet" />
     <script type="text/javascript" src="/scripts/theme-manager.js"></script>
     <script type="text/javascript" src="/scripts/audio-manager.js"></script>
     <script type="text/javascript" src="/scripts/language-manager.js"></script>
     <script type="text/javascript" src="/scripts/accessibility.js"></script>
     <script type="text/javascript" src="/scripts/common-scripts.js"></script>
 </head>
-<body class="bg-admin">
+<body class="admin-page">
     <div th:insert="~{navbar :: navbar}"></div>
-    <form action="#" method="post">
-        <div class="container">
-            <div class="body-style">
-                <div style="width:45%;float:left;margin-left:50px;">
-                    <h1 style="font-weight:bold;font-size:34px;" th:text="#{gameManagement.title}">Game Management</h1>
-                    <div style="font-size:25px;text-align:left;" th:text="#{gameManagement.yetToImplement}">
-                        Yet to implement
-                    </div>
-                    <div>
-                        <br/>
-                        <button class="button-style" onclick="toHome();" th:text="#{error.visitHomepage}">Visit Homepage</button>
-                    </div>
+
+    <!-- Admin Sidebar -->
+    <aside class="admin-sidebar" id="adminSidebar">
+        <div class="admin-sidebar-header">
+            <h2 class="admin-sidebar-title">
+                <i class="fas fa-shield-alt"></i>
+                <span th:text="#{admin.title}">Admin Panel</span>
+            </h2>
+        </div>
+        <nav class="admin-sidebar-nav">
+            <div class="admin-nav-section">
+                <div class="admin-nav-section-label" th:text="#{admin.main}">Main</div>
+                <a href="/options" class="admin-nav-item">
+                    <i class="fas fa-home"></i>
+                    <span th:text="#{admin.dashboard}">Dashboard</span>
+                </a>
+            </div>
+            <div class="admin-nav-section">
+                <div class="admin-nav-section-label" th:text="#{admin.management}">Management</div>
+                <a href="/userManagement" class="admin-nav-item">
+                    <i class="fas fa-users"></i>
+                    <span th:text="#{admin.users}">Users</span>
+                </a>
+                <a href="/options" class="admin-nav-item">
+                    <i class="fas fa-clipboard-list"></i>
+                    <span th:text="#{admin.challenges}">Challenges</span>
+                </a>
+                <a href="/activegames" class="admin-nav-item">
+                    <i class="fas fa-gamepad"></i>
+                    <span th:text="#{admin.activeGames}">Active Games</span>
+                </a>
+                <a href="/pastgames" class="admin-nav-item">
+                    <i class="fas fa-history"></i>
+                    <span th:text="#{admin.pastGames}">Past Games</span>
+                </a>
+            </div>
+            <div class="admin-nav-section">
+                <div class="admin-nav-section-label" th:text="#{admin.system}">System</div>
+                <a href="/options" class="admin-nav-item">
+                    <i class="fas fa-cog"></i>
+                    <span th:text="#{admin.settings}">Settings</span>
+                </a>
+            </div>
+        </nav>
+    </aside>
+
+    <!-- Admin Content -->
+    <main class="admin-content">
+        <!-- Page Header -->
+        <div class="admin-content-header">
+            <div class="admin-breadcrumb">
+                <a href="/options" th:text="#{admin.home}">Home</a>
+                <span class="admin-breadcrumb-separator">/</span>
+                <span th:text="#{gameManagement.title}">Game Management</span>
+            </div>
+            <h1 class="admin-page-title" th:text="#{gameManagement.title}">Game Management</h1>
+            <p class="admin-page-subtitle" th:text="#{gameManagement.subtitle}">Monitor and manage active games</p>
+        </div>
+
+        <!-- Coming Soon Card -->
+        <div class="admin-card">
+            <div style="text-align: center; padding: 4rem 2rem;">
+                <i class="fas fa-tools" style="font-size: 4rem; color: var(--color-text-tertiary); opacity: 0.3; margin-bottom: 1rem;"></i>
+                <h2 style="font-size: 1.5rem; font-weight: 700; color: var(--color-text-primary); margin-bottom: 0.5rem;" th:text="#{gameManagement.comingSoon}">Coming Soon</h2>
+                <p style="color: var(--color-text-secondary); margin-bottom: 2rem;" th:text="#{gameManagement.yetToImplement}">
+                    This feature is under development. You can currently manage games through the Active Games and Past Games pages.
+                </p>
+                <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+                    <a href="/activegames" class="btn btn-primary">
+                        <i class="fas fa-gamepad"></i>
+                        <span th:text="#{admin.activeGames}">View Active Games</span>
+                    </a>
+                    <a href="/pastgames" class="btn btn-secondary">
+                        <i class="fas fa-history"></i>
+                        <span th:text="#{admin.pastGames}">View Past Games</span>
+                    </a>
+                    <a href="/options" class="btn btn-secondary">
+                        <i class="fas fa-home"></i>
+                        <span th:text="#{admin.dashboard}">Dashboard</span>
+                    </a>
                 </div>
             </div>
         </div>
-    </form>
+    </main>
+
+    <!-- Mobile Sidebar Toggle -->
+    <button class="admin-sidebar-toggle" onclick="toggleAdminSidebar()">
+        <i class="fas fa-bars"></i>
+    </button>
+
     <script type="text/javascript" src="/scripts/core/jquery-3.7.0.min.js"></script>
     <script type="text/javascript" src="/scripts/core/popper.min.js"></script>
     <script type="text/javascript" src="/scripts/core/bootstrap-5.3.1/bootstrap.min.js"></script>
+    <script>
+        function toggleAdminSidebar() {
+            const sidebar = document.getElementById('adminSidebar');
+            sidebar.classList.toggle('active');
+        }
+    </script>
 </body>
 </html>

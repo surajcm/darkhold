@@ -1,13 +1,13 @@
 <!DOCTYPE HTML>
 <html lang="en">
 <head>
-    <title>Getting Started: Darkhold classroom quiz experience</title>
+    <title>Next Question - Darkhold</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="manifest" href="/manifest.json">
     <link rel="shortcut icon" href="/images/favicon.png">
     <link href="/styles/darkhold-styles.css" rel="stylesheet" />
-    <link href="/styles/core/animate.min.css" rel="stylesheet" />
+    <link href="/styles/question-waiting.css" rel="stylesheet" />
     <script type="text/javascript" src="/scripts/theme-manager.js"></script>
     <script type="text/javascript" src="/scripts/language-manager.js"></script>
     <script type="text/javascript" src="/scripts/common-scripts.js"></script>
@@ -17,22 +17,113 @@
     <script type="text/javascript" src="/scripts/core/stomp.min.js"></script>
     <script type="text/javascript" src="/scripts/question-scripts.js"></script>
 </head>
-<body class="bg-game" onload="connect()">
+<body onload="connect()">
     <input type="hidden" th:value="${#authentication.getPrincipal().getUsername()}" id="name"/>
     <input type="hidden" th:value="${quizPin}" id="quizPin" name="quizPin"/>
+
     <form action="#" method="post">
         <input type="hidden" th:value="${quizPin}" name="quizPin"/>
-        <div class="container-fluid">
-            <div class="card-group vertical-center">
-                <div class="card bg-light text-dark">
-                    <div class="card-body text-center animated bounceIn slow">
-                        <p id="div_body" class="card-text"></p>
+
+        <div class="question-waiting-page">
+            <!-- Animated particles background -->
+            <div class="particles-bg">
+                <div class="particle"></div>
+                <div class="particle"></div>
+                <div class="particle"></div>
+                <div class="particle"></div>
+                <div class="particle"></div>
+                <div class="particle"></div>
+                <div class="particle"></div>
+                <div class="particle"></div>
+                <div class="particle"></div>
+            </div>
+
+            <div class="question-waiting-content">
+                <div class="question-waiting-card">
+
+                    <!-- Icon -->
+                    <div class="waiting-icon-container">
+                        <div class="waiting-icon">
+                            <i class="fas fa-bolt"></i>
+                        </div>
                     </div>
+
+                    <!-- Status Banner -->
+                    <div class="status-banner">
+                        <div class="status-banner-icon">
+                            <i class="fas fa-clock"></i>
+                        </div>
+                        <span class="status-banner-text">Waiting for next question...</span>
+                    </div>
+
+                    <!-- Main Message (dynamically updated) -->
+                    <div id="div_body">
+                        <h1 class="waiting-message">Get Ready!</h1>
+                        <p class="waiting-subtext">The next question is loading</p>
+                    </div>
+
+                    <!-- Progress Indicator -->
+                    <div class="progress-indicator">
+                        <div class="progress-dot"></div>
+                        <div class="progress-dot"></div>
+                        <div class="progress-dot"></div>
+                    </div>
+
+                    <!-- Quick Tips -->
+                    <div class="waiting-tips">
+                        <div class="tips-grid">
+                            <div class="tip-item-small">
+                                <i class="fas fa-tachometer-alt"></i>
+                                <span class="tip-text-small">Speed Bonus</span>
+                            </div>
+                            <div class="tip-item-small">
+                                <i class="fas fa-fire"></i>
+                                <span class="tip-text-small">Streak Multiplier</span>
+                            </div>
+                            <div class="tip-item-small">
+                                <i class="fas fa-trophy"></i>
+                                <span class="tip-text-small">Earn Points</span>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
             </div>
         </div>
     </form>
+
     <script type="text/javascript" src="/scripts/core/popper.min.js"></script>
     <script type="text/javascript" src="/scripts/core/bootstrap-5.3.1/bootstrap.min.js"></script>
+
+    <script>
+        // Override the updateTextOrEndGame function to provide better UI updates
+        const originalUpdateTextOrEndGame = window.updateTextOrEndGame;
+        window.updateTextOrEndGame = function(message) {
+            console.log(message);
+            if (message === "END_GAME") {
+                // Update UI before ending game
+                const divBody = document.getElementById('div_body');
+                divBody.innerHTML = `
+                    <h1 class="waiting-message">Game Complete!</h1>
+                    <p class="waiting-subtext">Calculating final scores...</p>
+                `;
+                setTimeout(function() {
+                    endGame();
+                }, 2000);
+                return;
+            }
+
+            // Update the message display
+            const divBody = document.getElementById('div_body');
+            divBody.innerHTML = `
+                <h1 class="waiting-message">${message}</h1>
+                <p class="waiting-subtext">Prepare yourself for the next challenge</p>
+            `;
+
+            setTimeout(function() {
+                startGame();
+            }, 3000);
+        };
+    </script>
 </body>
 </html>

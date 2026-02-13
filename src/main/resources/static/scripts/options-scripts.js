@@ -7,15 +7,11 @@ function createChallenge() {
 }
 
 function viewChallenge() {
-    var form = getOptionsForm();
-    form.action = "/viewChallenge";
-    form.submit();
+    window.location.href = "/view_challenges";
 }
 
 function activeChallenge() {
-    var form = getOptionsForm();
-    form.action = "/activeChallenge";
-    form.submit();
+    window.location.href = "/activegames";
 }
 
 function logOut() {
@@ -25,29 +21,19 @@ function logOut() {
 }
 
 function toOptions() {
-    var form = getOptionsForm();
-    form.action = "/options";
-    form.submit();
+    window.location.href = "/options";
 }
 
 function toHome() {
-    var form = getOptionsForm();
-    form.method = 'get';
-    form.action = "/";
-    form.submit();
+    window.location.href = "/";
 }
 
 function manageUsers() {
-    var form = getOptionsForm();
-    form.method = 'get';
-    form.action = "/userManagement";
-    form.submit();
+    window.location.href = "/userManagement";
 }
 
 function manageGame() {
-    var form = getOptionsForm();
-    form.action = "/gameManagement";
-    form.submit();
+    window.location.href = "/gameManagement";
 }
 
 function toActiveGames() {

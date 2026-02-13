@@ -1,0 +1,333 @@
+/* ============================================
+   QUESTION WAITING SCREEN
+   Modern transition screen between questions
+   ============================================ */
+
+/* ----------------------------------------
+   Page Layout
+   ---------------------------------------- */
+.question-waiting-page {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    padding: 2rem;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Animated particles background */
+.particles-bg {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+}
+
+.particle {
+    position: absolute;
+    width: 4px;
+    height: 4px;
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    animation: float linear infinite;
+}
+
+.particle:nth-child(1) { left: 10%; animation-duration: 8s; animation-delay: 0s; }
+.particle:nth-child(2) { left: 20%; animation-duration: 10s; animation-delay: 1s; }
+.particle:nth-child(3) { left: 30%; animation-duration: 12s; animation-delay: 2s; }
+.particle:nth-child(4) { left: 40%; animation-duration: 9s; animation-delay: 0.5s; }
+.particle:nth-child(5) { left: 50%; animation-duration: 11s; animation-delay: 1.5s; }
+.particle:nth-child(6) { left: 60%; animation-duration: 10s; animation-delay: 2.5s; }
+.particle:nth-child(7) { left: 70%; animation-duration: 13s; animation-delay: 0.8s; }
+.particle:nth-child(8) { left: 80%; animation-duration: 9s; animation-delay: 1.8s; }
+.particle:nth-child(9) { left: 90%; animation-duration: 11s; animation-delay: 0.3s; }
+
+@keyframes float {
+    0% {
+        transform: translateY(100vh) scale(0);
+        opacity: 0;
+    }
+    10% {
+        opacity: 1;
+    }
+    90% {
+        opacity: 1;
+    }
+    100% {
+        transform: translateY(-100vh) scale(1);
+        opacity: 0;
+    }
+}
+
+/* ----------------------------------------
+   Content Container
+   ---------------------------------------- */
+.question-waiting-content {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+    max-width: 700px;
+    width: 100%;
+}
+
+/* ----------------------------------------
+   Main Card
+   ---------------------------------------- */
+.question-waiting-card {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-radius: var(--radius-xl);
+    padding: 3rem 2.5rem;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    animation: cardEntrance 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+[data-theme="dark"] .question-waiting-card {
+    background: rgba(30, 30, 30, 0.95);
+}
+
+@keyframes cardEntrance {
+    0% {
+        transform: scale(0.8) translateY(30px);
+        opacity: 0;
+    }
+    100% {
+        transform: scale(1) translateY(0);
+        opacity: 1;
+    }
+}
+
+/* ----------------------------------------
+   Icon Container
+   ---------------------------------------- */
+.waiting-icon-container {
+    margin-bottom: 2rem;
+}
+
+.waiting-icon {
+    width: 100px;
+    height: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 50%;
+    box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+    animation: iconPulse 2s ease-in-out infinite;
+}
+
+.waiting-icon i {
+    font-size: 2.5rem;
+    color: white;
+}
+
+@keyframes iconPulse {
+    0%, 100% {
+        transform: scale(1);
+        box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+    }
+    50% {
+        transform: scale(1.05);
+        box-shadow: 0 15px 40px rgba(102, 126, 234, 0.6);
+    }
+}
+
+/* ----------------------------------------
+   Message Display
+   ---------------------------------------- */
+.waiting-message {
+    font-size: clamp(1.5rem, 4vw, 2.25rem);
+    font-weight: 800;
+    color: var(--color-text-primary);
+    margin: 0 0 1rem;
+    line-height: 1.3;
+    animation: messageFadeIn 0.6s ease-out 0.3s both;
+}
+
+@keyframes messageFadeIn {
+    0% {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.waiting-subtext {
+    font-size: 1.05rem;
+    color: var(--color-text-tertiary);
+    margin: 0 0 2rem;
+    animation: messageFadeIn 0.6s ease-out 0.5s both;
+}
+
+/* ----------------------------------------
+   Progress Indicator
+   ---------------------------------------- */
+.progress-indicator {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-top: 2rem;
+}
+
+.progress-dot {
+    width: 10px;
+    height: 10px;
+    background: var(--color-border-light);
+    border-radius: 50%;
+    animation: dotPulse 1.5s ease-in-out infinite;
+}
+
+.progress-dot:nth-child(1) {
+    animation-delay: 0s;
+}
+
+.progress-dot:nth-child(2) {
+    animation-delay: 0.3s;
+}
+
+.progress-dot:nth-child(3) {
+    animation-delay: 0.6s;
+}
+
+@keyframes dotPulse {
+    0%, 100% {
+        transform: scale(1);
+        background: var(--color-border-light);
+    }
+    50% {
+        transform: scale(1.5);
+        background: var(--color-primary);
+    }
+}
+
+/* ----------------------------------------
+   Status Banner
+   ---------------------------------------- */
+.status-banner {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.85rem 1.5rem;
+    background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+    border: 1px solid rgba(102, 126, 234, 0.3);
+    border-radius: var(--radius-full);
+    margin-bottom: 2rem;
+    animation: messageFadeIn 0.6s ease-out 0.7s both;
+}
+
+.status-banner-icon {
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 50%;
+    color: white;
+    font-size: 0.9rem;
+}
+
+.status-banner-text {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--color-text-primary);
+}
+
+/* ----------------------------------------
+   Tips Section
+   ---------------------------------------- */
+.waiting-tips {
+    margin-top: 2.5rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--color-border-light);
+    animation: messageFadeIn 0.6s ease-out 0.9s both;
+}
+
+.tips-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 1rem;
+}
+
+.tip-item-small {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 1rem;
+    background: var(--color-bg-secondary);
+    border-radius: var(--radius-lg);
+}
+
+.tip-item-small i {
+    font-size: 1.5rem;
+    color: #667eea;
+}
+
+.tip-text-small {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--color-text-secondary);
+    text-align: center;
+    line-height: 1.4;
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+@media (max-width: 768px) {
+    .question-waiting-page {
+        padding: 1.5rem;
+    }
+
+    .question-waiting-card {
+        padding: 2.5rem 1.75rem;
+    }
+
+    .waiting-icon {
+        width: 80px;
+        height: 80px;
+    }
+
+    .waiting-icon i {
+        font-size: 2rem;
+    }
+
+    .waiting-message {
+        font-size: 1.5rem;
+    }
+
+    .waiting-subtext {
+        font-size: 0.95rem;
+    }
+
+    .tips-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 480px) {
+    .question-waiting-card {
+        padding: 2rem 1.5rem;
+    }
+}
+
+/* ============================================
+   REDUCED MOTION
+   ============================================ */
+@media (prefers-reduced-motion: reduce) {
+    .particle,
+    .waiting-icon,
+    .progress-dot,
+    .cardEntrance,
+    .iconPulse,
+    .messageFadeIn {
+        animation: none;
+    }
+}

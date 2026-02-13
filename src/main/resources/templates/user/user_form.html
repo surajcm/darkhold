@@ -11,6 +11,7 @@
         <link rel="manifest" href="/manifest.json">
         <link rel="shortcut icon" href="/images/favicon.png">
         <link href="/styles/darkhold-styles.css" rel="stylesheet" />
+        <link href="/styles/admin-user-form.css" rel="stylesheet" />
         <script type="text/javascript" src="/scripts/theme-manager.js"></script>
         <script type="text/javascript" src="/scripts/audio-manager.js"></script>
         <script type="text/javascript" src="/scripts/language-manager.js"></script>
@@ -19,100 +20,223 @@
         <script type="text/javascript" src="/scripts/user-management-scripts.js"></script>
         <script type="text/javascript" src="/scripts/core/bootstrap-5.3.1/bootstrap.min.js"></script>
     </head>
-    <body class="bg-admin">
-        <main>
-            <div th:insert="~{navbar :: navbar}"></div>
-            <div class="container">
-                <div class="panel panel-primary">
-                    <div class="panel-heading">
-                        <h3 class="panel-title">[[${pageTitle}]]</h3>
-                    </div>
+    <body class="admin-page">
+        <div th:insert="~{navbar :: navbar}"></div>
+
+        <!-- Admin Sidebar (same as user management) -->
+        <aside class="admin-sidebar" id="adminSidebar">
+            <div class="admin-sidebar-header">
+                <h2 class="admin-sidebar-title">
+                    <i class="fas fa-shield-alt"></i>
+                    <span th:text="#{admin.title}">Admin Panel</span>
+                </h2>
+            </div>
+            <nav class="admin-sidebar-nav">
+                <div class="admin-nav-section">
+                    <div class="admin-nav-section-label" th:text="#{admin.main}">Main</div>
+                    <a href="/options" class="admin-nav-item">
+                        <i class="fas fa-home"></i>
+                        <span th:text="#{admin.dashboard}">Dashboard</span>
+                    </a>
                 </div>
+                <div class="admin-nav-section">
+                    <div class="admin-nav-section-label" th:text="#{admin.management}">Management</div>
+                    <a href="/userManagement" class="admin-nav-item active">
+                        <i class="fas fa-users"></i>
+                        <span th:text="#{admin.users}">Users</span>
+                    </a>
+                    <a href="/options" class="admin-nav-item">
+                        <i class="fas fa-clipboard-list"></i>
+                        <span th:text="#{admin.challenges}">Challenges</span>
+                    </a>
+                    <a href="/activegames" class="admin-nav-item">
+                        <i class="fas fa-gamepad"></i>
+                        <span th:text="#{admin.activeGames}">Active Games</span>
+                    </a>
+                    <a href="/pastgames" class="admin-nav-item">
+                        <i class="fas fa-history"></i>
+                        <span th:text="#{admin.pastGames}">Past Games</span>
+                    </a>
+                </div>
+                <div class="admin-nav-section">
+                    <div class="admin-nav-section-label" th:text="#{admin.system}">System</div>
+                    <a href="/options" class="admin-nav-item">
+                        <i class="fas fa-cog"></i>
+                        <span th:text="#{admin.settings}">Settings</span>
+                    </a>
+                </div>
+            </nav>
+        </aside>
+
+        <!-- Admin Content -->
+        <main class="admin-content">
+            <!-- Page Header -->
+            <div class="admin-content-header">
+                <div class="admin-breadcrumb">
+                    <a href="/options" th:text="#{admin.home}">Home</a>
+                    <span class="admin-breadcrumb-separator">/</span>
+                    <a href="/userManagement" th:text="#{user.manageUsers}">Users</a>
+                    <span class="admin-breadcrumb-separator">/</span>
+                    <span>[[${pageTitle}]]</span>
+                </div>
+                <h1 class="admin-page-title">[[${pageTitle}]]</h1>
+            </div>
+            <div class="admin-form-card">
                 <form th:action="@{/users/save}" method="post" th:object="${userForm}"
                       enctype="multipart/form-data"
                       onsubmit="return checkEmailUnique(this);">
                     <input type="hidden" th:field="*{id}" />
-                    <div class="border border-secondary rounded p-3">
-                        <div class="input-group mb-3">
-                            <label class="col-sm-4 col-form-label" th:text="#{user.firstName} + ' : '">First Name : </label>
-                            <div class="col-sm-8">
-                                <input type="text" class="form-control" th:field="*{firstName}" required minlength="8" maxlength="90" />
-                            </div>
-                        </div>
-                        <div class="input-group mb-3">
-                            <label class="col-sm-4 col-form-label" th:text="#{user.lastName} + ' : '">Last Name : </label>
-                            <div class="col-sm-8">
-                                <input type="text" class="form-control" th:field="*{lastName}" required minlength="8" maxlength="90" />
-                            </div>
-                        </div>
-                        <div class="input-group mb-3">
-                            <label class="col-sm-4 col-form-label" th:text="#{user.email} + ' : '">E-mail : </label>
-                            <div class="col-sm-8">
-                                <input type="email" class="form-control" th:field="*{email}" required minlength="8" maxlength="128" />
-                            </div>
-                        </div>
-                        <div class="input-group mb-3">
-                            <label class="col-sm-4 col-form-label" th:text="#{user.password} + ' : '">Password : </label>
-                            <div class="col-sm-8">
-                                <input type="password" th:if="${userForm.id == null}" class="form-control"
-                                       th:field="*{password}" required minlength="8" maxlength="20" />
-                                <input type="password" th:if="${userForm.id != null}" class="form-control"
-                                       th:field="*{password}" minlength="8" maxlength="20" />
-                            </div>
-                        </div>
-                        <div class="input-group mb-3">
-                            <label class="col-sm-4 col-form-label" th:text="#{user.roles} + ' : '">Roles : </label>
-                            <div class="col-sm-8">
-                                <th:block th:each="role : ${listRoles}">
-                                    <div class="form-check">
-                                        <input type="checkbox" th:field="*{roles}" th:text="${role.name}" th:value="${role.id}" class="form-check-input"/>
-                                        - <small>[[${role.description}]]</small>
-                                    </div>
-                                </th:block>
-                            </div>
-                        </div>
-                        <div class="input-group mb-3">
-                            <label class="col-sm-4 col-form-label" th:text="#{user.enabled} + ' : '">Enabled : </label>
-                            <div class="col-sm-8">
-                                <input type="checkbox" th:field="*{enabled}" />
-                            </div>
-                        </div>
-                        <div class="input-group mb-3">
-                            <label class="col-sm-4 col-form-label" th:text="#{user.photos} + ' : '">Photos : </label>
-                            <div class="col-sm-8">
-                                <input type="hidden" th:field="*{photo}" />
-                                <input type="file" id="fileImage" name="image" accept="image/png, image/jpeg"
-                                       onchange="changeThumbnail(this);" class="mb-2"/>
-                                <img id="thumbnail" th:alt="#{user.photosPreview}" alt="Photos preview" th:src="@{${userForm.photosImagePath}}"
-                                     class="img-fluid"/>
-                            </div>
-                        </div>
-                        <div class="text-center">
-                            <input type="submit" th:value="#{user.save}" value="Save" class="btn btn-primary m-3" />
-                            <input type="button" th:value="#{user.cancel}" value="Cancel" id="cancelButton" onclick="toUsers()" class="btn border-secondary" />
+
+                    <!-- First Name -->
+                    <div class="admin-form-group">
+                        <label class="admin-form-label">
+                            <span th:text="#{user.firstName}">First Name</span>
+                            <span class="required">*</span>
+                        </label>
+                        <input type="text" class="admin-form-input" th:field="*{firstName}"
+                               required minlength="2" maxlength="90"
+                               th:placeholder="#{user.firstNamePlaceholder}" placeholder="Enter first name" />
+                    </div>
+
+                    <!-- Last Name -->
+                    <div class="admin-form-group">
+                        <label class="admin-form-label">
+                            <span th:text="#{user.lastName}">Last Name</span>
+                            <span class="required">*</span>
+                        </label>
+                        <input type="text" class="admin-form-input" th:field="*{lastName}"
+                               required minlength="2" maxlength="90"
+                               th:placeholder="#{user.lastNamePlaceholder}" placeholder="Enter last name" />
+                    </div>
+
+                    <!-- Email -->
+                    <div class="admin-form-group">
+                        <label class="admin-form-label">
+                            <span th:text="#{user.email}">Email</span>
+                            <span class="required">*</span>
+                        </label>
+                        <input type="email" class="admin-form-input" th:field="*{email}"
+                               required minlength="6" maxlength="128"
+                               th:placeholder="#{user.emailPlaceholder}" placeholder="user@example.com" />
+                    </div>
+
+                    <!-- Password -->
+                    <div class="admin-form-group">
+                        <label class="admin-form-label">
+                            <span th:text="#{user.password}">Password</span>
+                            <span th:if="${userForm.id == null}" class="required">*</span>
+                        </label>
+                        <input type="password" class="admin-form-input" th:field="*{password}"
+                               th:required="${userForm.id == null}"
+                               minlength="8" maxlength="20"
+                               th:placeholder="#{user.passwordPlaceholder}" placeholder="Enter password (min 8 characters)" />
+                        <div class="admin-form-hint" th:if="${userForm.id != null}" th:text="#{user.passwordHint}">
+                            Leave blank to keep current password
                         </div>
                     </div>
-                </form>
-                <div class="modal fade text-center" id="modalDialog">
-                    <div class="modal-dialog">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h4 class="modal-title" id="modalTitle" th:text="#{user.warning}">Warning</h4>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal">&times;</button>
+
+                    <!-- Roles -->
+                    <div class="admin-form-group">
+                        <label class="admin-form-label">
+                            <span th:text="#{user.roles}">Roles</span>
+                            <span class="required">*</span>
+                        </label>
+                        <div class="admin-roles-grid">
+                            <th:block th:each="role : ${listRoles}">
+                                <div class="admin-role-item">
+                                    <input type="checkbox" class="admin-role-checkbox"
+                                           th:field="*{roles}" th:value="${role.id}" th:id="'role_' + ${role.id}"/>
+                                    <label class="admin-role-info" th:for="'role_' + ${role.id}">
+                                        <span class="admin-role-name">[[${role.name}]]</span>
+                                        <span class="admin-role-description">[[${role.description}]]</span>
+                                    </label>
+                                </div>
+                            </th:block>
+                        </div>
+                    </div>
+
+                    <!-- Enabled Toggle -->
+                    <div class="admin-form-group">
+                        <label class="admin-form-label" th:text="#{user.accountStatus}">Account Status</label>
+                        <div class="admin-toggle-field">
+                            <label class="admin-toggle-switch">
+                                <input type="checkbox" th:field="*{enabled}" />
+                                <span class="admin-toggle-slider"></span>
+                            </label>
+                            <span class="admin-toggle-label" th:text="#{user.accountEnabled}">Account Enabled</span>
+                        </div>
+                        <div class="admin-form-hint" th:text="#{user.enabledHint}">
+                            Disabled accounts cannot login to the system
+                        </div>
+                    </div>
+
+                    <!-- Photo Upload -->
+                    <div class="admin-form-group">
+                        <label class="admin-form-label" th:text="#{user.profilePhoto}">Profile Photo</label>
+                        <div class="admin-photo-upload">
+                            <div class="admin-photo-preview">
+                                <img id="thumbnail" th:if="${userForm.photosImagePath != null}"
+                                     th:src="@{${userForm.photosImagePath}}"
+                                     th:alt="#{user.photosPreview}" alt="Profile photo" />
+                                <div th:unless="${userForm.photosImagePath != null}" class="admin-photo-preview-placeholder">
+                                    <i class="fas fa-user"></i>
+                                </div>
                             </div>
-                            <div class="modal-body">
-                                <span id="modalBody"></span>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-danger" data-bs-dismiss="modal" th:text="#{user.close}">Close</button>
+                            <input type="hidden" th:field="*{photo}" />
+                            <input type="file" id="fileImage" name="image" class="admin-file-input"
+                                   accept="image/png, image/jpeg"
+                                   onchange="changeThumbnail(this);" />
+                            <div class="admin-form-hint" th:text="#{user.photoHint}">
+                                Maximum file size: 1MB. Formats: PNG, JPEG
                             </div>
                         </div>
+                    </div>
+
+                    <!-- Form Actions -->
+                    <div class="admin-form-actions">
+                        <button type="button" class="btn btn-secondary" onclick="toUsers()">
+                            <i class="fas fa-times"></i>
+                            <span th:text="#{user.cancel}">Cancel</span>
+                        </button>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save"></i>
+                            <span th:text="#{user.save}">Save User</span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </main>
+
+        <!-- Mobile Sidebar Toggle -->
+        <button class="admin-sidebar-toggle" onclick="toggleAdminSidebar()">
+            <i class="fas fa-bars"></i>
+        </button>
+
+        <!-- Warning Modal -->
+        <div class="modal fade" id="modalDialog" tabindex="-1">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="modalTitle" th:text="#{user.warning}">Warning</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p id="modalBody"></p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" data-bs-dismiss="modal" th:text="#{user.close}">Close</button>
                     </div>
                 </div>
             </div>
-        </main>
+        </div>
         <script type="text/javascript">
             /*<![CDATA[*/
+            // Mobile sidebar toggle
+            function toggleAdminSidebar() {
+                const sidebar = document.getElementById('adminSidebar');
+                sidebar.classList.toggle('active');
+            }
+
             function toUsers() {
                 window.location = "/userManagement";
             }

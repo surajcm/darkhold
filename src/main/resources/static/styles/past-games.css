@@ -7,15 +7,21 @@
    Page Layout
    ---------------------------------------- */
 .past-games-page {
+    /* Layout is handled by admin-content when in admin context */
+}
+
+/* Standalone page layout (if not in admin-content) */
+body:not(.admin-page) .past-games-page {
     min-height: 100vh;
     background: var(--color-bg-secondary);
     padding: 2rem 0 3rem;
+    margin-top: 56px;
 }
 
 .past-games-container {
     max-width: 1400px;
     margin: 0 auto;
-    padding: 0 1.5rem;
+    padding: 0;
 }
 
 /* ----------------------------------------

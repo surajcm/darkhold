@@ -20,58 +20,77 @@
     <script type="text/javascript" src="/scripts/audio-manager.js"></script>
     <script type="text/javascript" src="/scripts/accessibility.js"></script>
 </head>
-<body class="bg-admin">
-    <main>
-        <section class="d-flex align-items-center my-5 mt-lg-6 mb-lg-5">
-            <div class="container">
-                <div class="row justify-content-center">
-                    <div class="col-12 d-flex align-items-center justify-content-center">
-                        <div class="bg-white shadow-soft border rounded border-light p-4 p-lg-5 w-100 fmxw-500" style="opacity: 0.9;">
-                            <div class="text-center text-md-center mb-4 mt-md-0">
-                                <h1 class="mb-0 h3" th:text="#{registration.title}">Registration</h1>
-                            </div>
-                            <form th:action="@{/registration}" class="mt-4" method="post" th:object="${user}">
-                                <div class="form-group mb-4"><label for="name" class="col-sm-4 col-form-label" th:text="#{registration.firstName}">First Name</label>
-                                    <div class="input-group">
-                                        <span class="input-group-text" id="basic-addon1"><span class="fas fa-envelope"></span></span>
-                                        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-                                        <input id="name" class="form-control" type="text" th:field="*{firstName}" th:placeholder="#{registration.firstName}" placeholder="First Name" required minlength="8" maxlength="90" autofocus="autofocus" />
-                                    </div>
-                                </div>
-                                <div class="form-group mb-4"><label for="name" class="col-sm-4 col-form-label" th:text="#{registration.lastName}">Last Name</label>
-                                    <div class="input-group">
-                                        <span class="input-group-text" id="basic-addon2"><span class="fas fa-envelope"></span></span>
-                                        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-                                        <input id="name2" class="form-control" type="text" th:field="*{lastName}" th:placeholder="#{registration.lastName}" placeholder="Last Name" required minlength="8" maxlength="90"  />
-                                    </div>
-                                </div>
-                                <div class="form-group mb-4"><label for="email" class="col-sm-4 col-form-label" th:text="#{registration.email}"> Email</label>
-                                    <div class="input-group">
-                                        <span class="input-group-text" id="basic-addon3"><span class="fas fa-envelope"></span></span>
-                                        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-                                        <input id="email" class="form-control" type="email" th:field="*{email}" th:placeholder="#{registration.email}" placeholder="Email" required minlength="6" maxlength="90" />
-                                    </div>
-                                </div>
-                                <div class="form-group mb-4"><label for="password" class="col-sm-4 col-form-label" th:text="#{registration.password}">Password </label>
-                                    <div class="input-group">
-                                        <span class="input-group-text" id="basic-addon4">
-                                            <span class="fas fa-unlock-alt"></span>
-                                        </span>
-                                        <input id="password" class="form-control" type="password" th:placeholder="#{registration.password}" placeholder="Password"
-                                               th:field="*{password}" required minlength="8" maxlength="90" />
-                                    </div>
-                                </div>
-                                <div class="d-grid">
-                                    <button type="submit" class="btn btn-dark" th:text="#{registration.submit}">Register</button>
-                                    <span><span th:text="#{registration.alreadyRegistered}">Already registered?</span> <a href="/" th:href="@{/login}" th:text="#{registration.loginHere}">Login here</a></span>
-                                </div>
-                            </form>
-                        </div>
+<body class="login-page">
+    <div class="login-container">
+        <div class="login-card">
+            <!-- Logo/Brand -->
+            <div class="login-brand">
+                <img src="/images/favicon.png" alt="Darkhold" class="login-logo">
+                <h1 class="login-title" th:text="#{registration.title}">Create Account</h1>
+                <p class="login-subtitle" th:text="#{registration.subtitle}">Join Darkhold to create and play quizzes</p>
+            </div>
+            <!-- Registration Form -->
+            <form th:action="@{/registration}" method="post" th:object="${user}" class="login-form">
+                <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+
+                <!-- First Name -->
+                <div class="form-group">
+                    <label for="name" class="form-label" th:text="#{registration.firstName}">First Name</label>
+                    <div class="input-with-icon">
+                        <i class="fas fa-user input-icon"></i>
+                        <input id="name" class="form-input" type="text" th:field="*{firstName}"
+                               th:placeholder="#{registration.firstName}" placeholder="First Name"
+                               required minlength="2" maxlength="90" autofocus="autofocus" />
                     </div>
                 </div>
-            </div>
-        </section>
-    </main>
+
+                <!-- Last Name -->
+                <div class="form-group">
+                    <label for="name2" class="form-label" th:text="#{registration.lastName}">Last Name</label>
+                    <div class="input-with-icon">
+                        <i class="fas fa-user input-icon"></i>
+                        <input id="name2" class="form-input" type="text" th:field="*{lastName}"
+                               th:placeholder="#{registration.lastName}" placeholder="Last Name"
+                               required minlength="2" maxlength="90" />
+                    </div>
+                </div>
+
+                <!-- Email -->
+                <div class="form-group">
+                    <label for="email" class="form-label" th:text="#{registration.email}">Email</label>
+                    <div class="input-with-icon">
+                        <i class="fas fa-envelope input-icon"></i>
+                        <input id="email" class="form-input" type="email" th:field="*{email}"
+                               th:placeholder="#{registration.email}" placeholder="example@email.com"
+                               required minlength="6" maxlength="90" />
+                    </div>
+                </div>
+
+                <!-- Password -->
+                <div class="form-group">
+                    <label for="password" class="form-label" th:text="#{registration.password}">Password</label>
+                    <div class="input-with-icon">
+                        <i class="fas fa-lock input-icon"></i>
+                        <input id="password" class="form-input" type="password" th:field="*{password}"
+                               th:placeholder="#{registration.password}" placeholder="Enter password"
+                               required minlength="8" maxlength="90" />
+                    </div>
+                </div>
+
+                <!-- Submit Button -->
+                <button type="submit" class="btn-login">
+                    <span th:text="#{registration.submit}">Create Account</span>
+                    <i class="fas fa-arrow-right"></i>
+                </button>
+
+                <!-- Login Link -->
+                <div class="login-footer">
+                    <span th:text="#{registration.alreadyRegistered}">Already registered?</span>
+                    <a href="/login" th:href="@{/login}" class="login-link" th:text="#{registration.loginHere}">Login here</a>
+                </div>
+            </form>
+        </div>
+    </div>
     <script type="text/javascript" src="/scripts/core/popper.min.js"></script>
     <script type="text/javascript" src="/scripts/core/bootstrap-5.3.1/bootstrap.min.js"></script>
 </body>

@@ -1,0 +1,363 @@
+/* ============================================
+   EDIT CHALLENGE
+   Modern challenge editor with drag-and-drop
+   ============================================ */
+
+/* Reuse most styles from create-challenge.css */
+@import url('create-challenge.css');
+
+/* ----------------------------------------
+   Challenge Info Card
+   ---------------------------------------- */
+.challenge-info-card {
+    background: var(--color-bg-primary);
+    border: 1px solid var(--color-border-light);
+    border-radius: var(--radius-xl);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    margin-bottom: 2rem;
+    animation: slideDown 0.4s ease-out;
+}
+
+@keyframes slideDown {
+    0% {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.challenge-info-header {
+    padding: 1.5rem 2rem;
+    border-bottom: 1px solid var(--color-border-light);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.challenge-info-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--color-text-primary);
+    margin: 0;
+}
+
+.challenge-info-actions {
+    display: flex;
+    gap: 0.75rem;
+}
+
+.challenge-info-body {
+    padding: 1.5rem 2rem;
+}
+
+.challenge-description {
+    color: var(--color-text-secondary);
+    margin: 0;
+    line-height: 1.6;
+}
+
+.challenge-description.empty {
+    color: var(--color-text-tertiary);
+    font-style: italic;
+}
+
+/* ----------------------------------------
+   Questions Section Header
+   ---------------------------------------- */
+.questions-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+}
+
+.questions-title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--color-text-primary);
+    margin: 0;
+}
+
+.question-count {
+    color: var(--color-primary);
+}
+
+/* ----------------------------------------
+   Question Cards (Drag and Drop)
+   ---------------------------------------- */
+.question-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.question-card {
+    background: var(--color-bg-primary);
+    border: 2px solid var(--color-border-light);
+    border-radius: var(--radius-lg);
+    padding: 1.25rem 1.5rem;
+    cursor: move;
+    transition: all 0.2s ease;
+    animation: fadeIn 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+        transform: translateX(-10px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+.question-card:hover {
+    transform: translateX(5px);
+    border-color: var(--color-primary);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.question-card.sortable-ghost {
+    opacity: 0.4;
+    background: var(--color-bg-secondary);
+}
+
+.question-card.sortable-drag {
+    opacity: 1;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+}
+
+.question-card-content {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+}
+
+.question-number-badge {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 32px;
+    height: 32px;
+    background: var(--color-primary);
+    color: white;
+    border-radius: var(--radius-full);
+    font-weight: 700;
+    font-size: 0.9rem;
+    flex-shrink: 0;
+}
+
+.question-details {
+    flex: 1;
+    min-width: 0;
+}
+
+.question-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.question-text {
+    font-weight: 600;
+    color: var(--color-text-primary);
+    font-size: 1rem;
+    margin: 0;
+}
+
+.question-type-badge {
+    padding: 0.25rem 0.75rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    border-radius: var(--radius-full);
+    background: rgba(var(--color-primary-rgb, 0, 98, 204), 0.1);
+    color: var(--color-primary);
+}
+
+.question-time-badge {
+    padding: 0.25rem 0.75rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    border-radius: var(--radius-full);
+    background: rgba(255, 193, 7, 0.15);
+    color: #856404;
+}
+
+.question-answers {
+    font-size: 0.875rem;
+    color: var(--color-text-secondary);
+    line-height: 1.6;
+}
+
+.correct-answer {
+    color: var(--color-success);
+    font-weight: 600;
+}
+
+.question-actions {
+    display: flex;
+    gap: 0.5rem;
+    flex-shrink: 0;
+}
+
+.question-action-btn {
+    width: 36px;
+    height: 36px;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid var(--color-border-light);
+    background: var(--color-bg-primary);
+    color: var(--color-text-secondary);
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.question-action-btn:hover {
+    border-color: var(--color-primary);
+    color: var(--color-primary);
+    background: rgba(var(--color-primary-rgb, 0, 98, 204), 0.05);
+}
+
+.question-action-btn--delete {
+    border-color: var(--color-border-light);
+    color: var(--color-text-secondary);
+}
+
+.question-action-btn--delete:hover {
+    border-color: var(--color-error);
+    color: var(--color-error);
+    background: rgba(220, 53, 69, 0.05);
+}
+
+/* ----------------------------------------
+   Empty State
+   ---------------------------------------- */
+.empty-state {
+    text-align: center;
+    padding: 4rem 2rem;
+    background: var(--color-bg-secondary);
+    border: 2px dashed var(--color-border-light);
+    border-radius: var(--radius-xl);
+    color: var(--color-text-tertiary);
+}
+
+/* ----------------------------------------
+   Modal Customization
+   ---------------------------------------- */
+.modal-content {
+    border: none;
+    border-radius: var(--radius-xl);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+}
+
+.modal-header {
+    border-bottom: 1px solid var(--color-border-light);
+    padding: 1.5rem 2rem;
+}
+
+.modal-title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--color-text-primary);
+}
+
+.modal-body {
+    padding: 2rem;
+}
+
+.modal-footer {
+    border-top: 1px solid var(--color-border-light);
+    padding: 1.25rem 2rem;
+}
+
+/* ----------------------------------------
+   Form Elements in Modal
+   ---------------------------------------- */
+.form-label {
+    font-weight: 600;
+    color: var(--color-text-primary);
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+}
+
+.form-control,
+.form-select {
+    border: 1px solid var(--color-border-light);
+    border-radius: var(--radius-md);
+    padding: 0.75rem 1rem;
+    font-size: 0.95rem;
+    transition: all 0.2s ease;
+}
+
+.form-control:focus,
+.form-select:focus {
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px rgba(var(--color-primary-rgb, 0, 98, 204), 0.1);
+    outline: none;
+}
+
+.input-group-text {
+    background: var(--color-bg-secondary);
+    border: 1px solid var(--color-border-light);
+    border-right: none;
+}
+
+.input-group .form-control {
+    border-left: none;
+}
+
+/* Media Preview */
+.media-preview-container {
+    margin-top: 1rem;
+    padding: 1rem;
+    background: var(--color-bg-secondary);
+    border-radius: var(--radius-md);
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.media-preview-image {
+    max-width: 200px;
+    max-height: 150px;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--color-border-light);
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+@media (max-width: 768px) {
+    .challenge-info-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .challenge-info-actions {
+        width: 100%;
+    }
+
+    .question-card-content {
+        flex-direction: column;
+    }
+
+    .question-actions {
+        width: 100%;
+        justify-content: flex-end;
+    }
+
+    .modal-body {
+        padding: 1.5rem;
+    }
+}

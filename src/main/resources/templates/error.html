@@ -2,44 +2,43 @@
 <html lang="en">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="darkhold 404 page" />
-    <meta name="author" content="Suraj" />
-    <title>Error occurred: Darkhold classroom quiz experience</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="Page not found" />
+    <title>Error - Darkhold</title>
     <link rel="shortcut icon" href="/images/favicon.png">
     <link rel="manifest" href="/manifest.json">
     <link href="/styles/darkhold-styles.css" rel="stylesheet" />
+    <link href="/styles/error.css" rel="stylesheet" />
     <script type="text/javascript" src="/scripts/theme-manager.js"></script>
     <script type="text/javascript" src="/scripts/audio-manager.js"></script>
     <script type="text/javascript" src="/scripts/language-manager.js"></script>
     <script type="text/javascript" src="/scripts/accessibility.js"></script>
     <script type="text/javascript" src="/scripts/common-scripts.js"></script>
-    <script type="text/javascript" src="/scripts/core/bootstrap-5.3.1/bootstrap.min.js"></script>
 </head>
-<body class="bg-admin">
+<body class="error-page">
     <div th:insert="~{navbar :: navbar}"></div>
-    <form>
-        <div class="container">
-            <div class="body-style">
-                <div style="width:40%;">
-                    <img src="/images/404.png" style="float: right;" />
-                </div>
-                <div style="width:45%;float:left;margin-left:50px;">
-                    <h1 style="font-weight:bold;font-size:34px;">Page Not Found</h1>
-                    <div style="font-size:25px;text-align:left;">
-                        We can't find the page you're looking for.You can either return to the previous page,visit our homepage or contact our support team.
-                    </div>
-                    <div>
-                        <br/>
-                        <button class="button-style" onclick="toHome();">Visit Homepage</button>
-                    </div>
-                </div>
+
+    <div class="error-container">
+        <div class="error-content">
+            <img src="/images/404.png" alt="404 Error" class="error-illustration" />
+            <h1 class="error-code">404</h1>
+            <h2 class="error-title">Page Not Found</h2>
+            <p class="error-message">
+                We can't find the page you're looking for. You can either return to the previous page, visit our homepage, or contact our support team.
+            </p>
+            <div class="error-actions">
+                <a href="javascript:history.back()" class="error-btn error-btn--secondary">
+                    <i class="fas fa-arrow-left"></i>
+                    <span>Go Back</span>
+                </a>
+                <a href="/" class="error-btn error-btn--primary">
+                    <i class="fas fa-home"></i>
+                    <span>Visit Homepage</span>
+                </a>
             </div>
         </div>
-    </form>
+    </div>
+
+    <script type="text/javascript" src="/scripts/core/bootstrap-5.3.1/bootstrap.min.js"></script>
 </body>
 </html>

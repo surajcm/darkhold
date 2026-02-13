@@ -1,0 +1,353 @@
+/* ============================================
+   INTERSTITIAL / LOADING PAGE
+   Modern countdown screen before game starts
+   ============================================ */
+
+/* ----------------------------------------
+   Page Layout
+   ---------------------------------------- */
+.interstitial-page {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, var(--color-primary) 0%, #1a4b8c 100%);
+    padding: 2rem;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Animated background pattern */
+.interstitial-bg {
+    position: absolute;
+    inset: 0;
+    background-image:
+        linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+    background-size: 60px 60px;
+    animation: bgScroll 20s linear infinite;
+    pointer-events: none;
+}
+
+@keyframes bgScroll {
+    0% {
+        transform: translate(0, 0);
+    }
+    100% {
+        transform: translate(60px, 60px);
+    }
+}
+
+/* ----------------------------------------
+   Content Container
+   ---------------------------------------- */
+.interstitial-content {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+    max-width: 600px;
+    width: 100%;
+}
+
+/* ----------------------------------------
+   Countdown Circle
+   ---------------------------------------- */
+.countdown-circle-container {
+    position: relative;
+    width: 200px;
+    height: 200px;
+    margin: 0 auto 2rem;
+}
+
+.countdown-circle {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.countdown-svg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    transform: rotate(-90deg);
+}
+
+.countdown-circle-bg {
+    fill: none;
+    stroke: rgba(255, 255, 255, 0.1);
+    stroke-width: 8;
+}
+
+.countdown-circle-progress {
+    fill: none;
+    stroke: white;
+    stroke-width: 8;
+    stroke-linecap: round;
+    stroke-dasharray: 565.48;
+    stroke-dashoffset: 565.48;
+    animation: countdown 5s linear forwards;
+}
+
+@keyframes countdown {
+    0% {
+        stroke-dashoffset: 565.48;
+    }
+    100% {
+        stroke-dashoffset: 0;
+    }
+}
+
+.countdown-number {
+    font-size: 4rem;
+    font-weight: 900;
+    color: white;
+    font-family: var(--font-display);
+    animation: pulse 1s ease-in-out infinite;
+}
+
+@keyframes pulse {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.1);
+    }
+}
+
+/* ----------------------------------------
+   Play Icon
+   ---------------------------------------- */
+.play-icon-container {
+    width: 120px;
+    height: 120px;
+    margin: 0 auto 2rem;
+    position: relative;
+    animation: playIconPulse 2s ease-in-out infinite;
+}
+
+@keyframes playIconPulse {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.1);
+    }
+}
+
+.play-icon {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: white;
+    border-radius: 50%;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+    position: relative;
+}
+
+.play-icon i {
+    font-size: 3rem;
+    color: var(--color-primary);
+    margin-left: 0.25rem;
+}
+
+/* Ripple effect */
+.ripple {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    border: 2px solid white;
+    opacity: 0;
+    animation: ripple 2s ease-out infinite;
+}
+
+.ripple:nth-child(2) {
+    animation-delay: 0.5s;
+}
+
+.ripple:nth-child(3) {
+    animation-delay: 1s;
+}
+
+@keyframes ripple {
+    0% {
+        transform: scale(1);
+        opacity: 0.8;
+    }
+    100% {
+        transform: scale(2);
+        opacity: 0;
+    }
+}
+
+/* ----------------------------------------
+   Text Content
+   ---------------------------------------- */
+.interstitial-title {
+    font-size: clamp(1.75rem, 5vw, 2.5rem);
+    font-weight: 900;
+    color: white;
+    margin: 0 0 1rem;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+}
+
+.interstitial-message {
+    font-size: 1.15rem;
+    color: rgba(255, 255, 255, 0.95);
+    margin: 0 0 2rem;
+    line-height: 1.6;
+}
+
+/* ----------------------------------------
+   Status Pills
+   ---------------------------------------- */
+.status-pills {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+    margin-top: 2rem;
+}
+
+.status-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.6rem 1.25rem;
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: var(--radius-full);
+    color: white;
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+.status-pill i {
+    font-size: 1rem;
+}
+
+/* ----------------------------------------
+   Tips Section
+   ---------------------------------------- */
+.tips-section {
+    margin-top: 3rem;
+    padding: 1.5rem;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: var(--radius-xl);
+}
+
+.tips-title {
+    font-size: 1rem;
+    font-weight: 700;
+    color: white;
+    margin: 0 0 1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+}
+
+.tips-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.tip-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 0.9rem;
+    line-height: 1.5;
+    text-align: left;
+}
+
+.tip-icon {
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 50%;
+    flex-shrink: 0;
+    font-size: 0.7rem;
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+@media (max-width: 768px) {
+    .interstitial-page {
+        padding: 1.5rem;
+    }
+
+    .countdown-circle-container {
+        width: 160px;
+        height: 160px;
+    }
+
+    .countdown-number {
+        font-size: 3rem;
+    }
+
+    .play-icon-container {
+        width: 100px;
+        height: 100px;
+    }
+
+    .play-icon i {
+        font-size: 2.5rem;
+    }
+
+    .interstitial-title {
+        font-size: 1.5rem;
+    }
+
+    .interstitial-message {
+        font-size: 1rem;
+    }
+
+    .tips-section {
+        padding: 1.25rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .status-pills {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+    .status-pill {
+        width: 100%;
+        justify-content: center;
+    }
+}
+
+/* ============================================
+   REDUCED MOTION
+   ============================================ */
+@media (prefers-reduced-motion: reduce) {
+    .countdown-circle-progress,
+    .countdown-number,
+    .play-icon-container,
+    .ripple,
+    .interstitial-bg {
+        animation: none;
+    }
+}

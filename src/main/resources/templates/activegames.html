@@ -7,6 +7,7 @@
     <link rel="manifest" href="/manifest.json">
     <link rel="shortcut icon" href="/images/favicon.png">
     <link href="/styles/darkhold-styles.css" rel="stylesheet" />
+    <link href="/styles/admin-layout.css" rel="stylesheet" />
     <link href="/styles/active-games.css" rel="stylesheet" />
     <script type="text/javascript" src="/scripts/theme-manager.js"></script>
     <script type="text/javascript" src="/scripts/language-manager.js"></script>
@@ -14,14 +15,65 @@
     <script type="text/javascript" src="/scripts/audio-manager.js"></script>
     <script type="text/javascript" src="/scripts/accessibility.js"></script>
 </head>
-<body>
+<body class="admin-page">
     <div th:insert="~{navbar :: navbar}"></div>
 
-    <main class="active-games-page">
+    <!-- Admin Sidebar -->
+    <aside class="admin-sidebar" id="adminSidebar">
+        <div class="admin-sidebar-header">
+            <h2 class="admin-sidebar-title">
+                <i class="fas fa-shield-alt"></i>
+                <span th:text="#{admin.title}">Admin Panel</span>
+            </h2>
+        </div>
+        <nav class="admin-sidebar-nav">
+            <div class="admin-nav-section">
+                <div class="admin-nav-section-label" th:text="#{admin.main}">Main</div>
+                <a href="/options" class="admin-nav-item">
+                    <i class="fas fa-home"></i>
+                    <span th:text="#{admin.dashboard}">Dashboard</span>
+                </a>
+            </div>
+            <div class="admin-nav-section">
+                <div class="admin-nav-section-label" th:text="#{admin.management}">Management</div>
+                <a href="/userManagement" class="admin-nav-item">
+                    <i class="fas fa-users"></i>
+                    <span th:text="#{admin.users}">Users</span>
+                </a>
+                <a href="/options" class="admin-nav-item">
+                    <i class="fas fa-clipboard-list"></i>
+                    <span th:text="#{admin.challenges}">Challenges</span>
+                </a>
+                <a href="/activegames" class="admin-nav-item active">
+                    <i class="fas fa-gamepad"></i>
+                    <span th:text="#{admin.activeGames}">Active Games</span>
+                </a>
+                <a href="/pastgames" class="admin-nav-item">
+                    <i class="fas fa-history"></i>
+                    <span th:text="#{admin.pastGames}">Past Games</span>
+                </a>
+            </div>
+            <div class="admin-nav-section">
+                <div class="admin-nav-section-label" th:text="#{admin.system}">System</div>
+                <a href="/options" class="admin-nav-item">
+                    <i class="fas fa-cog"></i>
+                    <span th:text="#{admin.settings}">Settings</span>
+                </a>
+            </div>
+        </nav>
+    </aside>
+
+    <!-- Admin Content -->
+    <main class="admin-content active-games-page">
         <div class="active-games-container">
 
             <!-- Page Header -->
             <header class="active-games-header">
+                <div class="admin-breadcrumb">
+                    <a href="/options" th:text="#{admin.home}">Home</a>
+                    <span class="admin-breadcrumb-separator">/</span>
+                    <span th:text="#{activegames.title}">Active Games</span>
+                </div>
                 <h1 class="active-games-title" th:text="#{activegames.title}">My Active Games</h1>
                 <p class="active-games-subtitle">Monitor and manage your live quiz sessions in real-time</p>
             </header>
@@ -142,7 +194,18 @@
         </div>
     </main>
 
+    <!-- Mobile Sidebar Toggle -->
+    <button class="admin-sidebar-toggle" onclick="toggleAdminSidebar()">
+        <i class="fas fa-bars"></i>
+    </button>
+
     <script type="text/javascript" src="/scripts/core/popper.min.js"></script>
     <script type="text/javascript" src="/scripts/core/bootstrap-5.3.1/bootstrap.min.js"></script>
+    <script>
+        function toggleAdminSidebar() {
+            const sidebar = document.getElementById('adminSidebar');
+            sidebar.classList.toggle('active');
+        }
+    </script>
 </body>
 </html>
