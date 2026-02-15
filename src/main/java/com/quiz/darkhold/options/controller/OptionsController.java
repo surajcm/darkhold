@@ -8,6 +8,7 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import java.util.Collections;
@@ -82,7 +83,7 @@ public class OptionsController {
      *
      * @return create challenge page
      */
-    @PostMapping("/gameManagement")
+    @GetMapping("/gameManagement")
     public String manageGame() {
         log.info("Into the manageGame method");
         return "game/gameManagement";
