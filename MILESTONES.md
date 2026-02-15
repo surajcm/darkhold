@@ -490,21 +490,22 @@ This document breaks down the project goals into actionable milestones. Each mil
 
 ## Milestone 11: Internationalization - IN PROGRESS
 
-**Status**: ~70% Complete
+**Status**: ~35% Complete (1 of 3 target languages complete)
 **Focus**: Multi-language support
 
-### 11.1 Framework Setup - COMPLETED
+### 11.1 Framework Setup - COMPLETED ✅
 - [x] Configure Spring MessageSource (I18nConfig.java)
-- [x] Extract all UI strings to messages.properties (~380 keys)
+- [x] Extract all UI strings to messages.properties (427 keys)
 - [x] Create language selector component (navbar dropdown with globe icon)
 - [x] Store user language preference (localStorage + session)
+- [x] All 24 Thymeleaf templates updated to use `#{key}` expressions
 
-### 11.2 Translations - PARTIAL
-- [x] Complete English (en) base
-- [x] Add Spanish (es) translation
-- [ ] Add French (fr) translation
-- [ ] Add German (de) translation
-- [ ] Community contribution guidelines for translations
+### 11.2 Translations - PARTIAL ⚠️
+- [x] **English (en)** - 427/427 messages ✅ Complete
+- [x] **Spanish (es)** - 427/427 messages ✅ Complete
+- [ ] **French (fr)** - 55/427 messages (13%) - Structure created, needs native speaker translations
+- [ ] **German (de)** - 55/427 messages (13%) - Structure created, needs native speaker translations
+- [x] Community contribution guidelines added to CONTRIBUTING.md
 
 ### 11.3 RTL Support - PENDING
 - [ ] Add RTL CSS styles
@@ -513,9 +514,16 @@ This document breaks down the project goals into actionable milestones. Each mil
 
 ### Files Created
 - `src/main/java/com/quiz/darkhold/init/I18nConfig.java` - MessageSource, LocaleResolver, LocaleChangeInterceptor
-- `src/main/resources/messages.properties` - English base (~380 keys)
-- `src/main/resources/messages_es.properties` - Spanish translations
+- `src/main/resources/messages.properties` - English base (427 keys) ✅
+- `src/main/resources/messages_es.properties` - Spanish translations (427 keys) ✅
+- `src/main/resources/messages_fr.properties` - French template (55/427 keys) ⚠️ Needs completion
+- `src/main/resources/messages_de.properties` - German template (55/427 keys) ⚠️ Needs completion
 - `src/main/resources/static/scripts/language-manager.js` - Language switching logic
+
+### Next Steps for Full i18n
+- **French & German completion**: Need native speakers or professional translation service
+- **Options**: Community contributions, translation service (Lokalize/Transifex), or AI-assisted translation with review
+- **Estimated effort**: 6-8 hours per language for native speaker
 
 ### Templates Updated
 All 24 Thymeleaf templates updated to use `#{key}` message expressions:
@@ -578,7 +586,7 @@ All 24 Thymeleaf templates updated to use `#{key}` message expressions:
 | 8 | Game Modes | Self-paced & practice modes | ✅ COMPLETED |
 | 9 | Teams | Team-based gameplay | ✅ COMPLETED |
 | 10 | UI/UX | Modern, accessible interface | ✅ COMPLETED |
-| 11 | i18n | Multi-language support | 🔄 ~70% |
+| 11 | i18n | Multi-language support | 🔄 ~35% (EN+ES done) |
 | 12 | Security & Scale | Production hardening | Pending |
 
 ---

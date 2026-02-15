@@ -38,6 +38,48 @@ Give a ⭐️ if this project helped you!
 ## Screenshots
 Please head over to [Wiki](https://github.com/surajcm/darkhold/wiki/Screenshots)
 
-## Features
+## ✨ Key Features
 
-For system requirements, installation guides, as well as other documentation, please head over to [Wiki](https://github.com/surajcm/darkhold/wiki).
+### 🎮 Game Modes
+- **Multiplayer** - Real-time quiz with live PIN-based join
+- **Practice Mode** - Solo play with instant feedback
+- **Team Mode** - Collaborative gameplay with 3 assignment methods (Balanced, Random, Manual)
+
+### 📝 Question Types
+- Multiple Choice (2-4 options, single or multiple correct answers)
+- True/False
+- Type Answer (with fuzzy matching for typos)
+- Poll (no correct answer, shows distribution)
+
+### 🎨 Rich Content
+- Image support for questions
+- YouTube video embedding
+- Configurable time limits per question
+- Customizable point values
+
+### 📊 Analytics & Reports
+- Detailed game results with participant statistics
+- Question-level analytics (success rate, difficulty)
+- CSV export for external analysis
+- Past games history
+
+### 🌍 Internationalization
+- **English** (en) - Complete ✅
+- **Spanish** (es) - Complete ✅
+- **French** (fr) - Partial (contributors welcome!)
+- **German** (de) - Partial (contributors welcome!)
+
+### 🎨 Modern UI/UX
+- Dark/Light mode toggle
+- Sound effects and animations
+- PWA support for mobile
+- Fully responsive design
+- Accessibility features (ARIA, keyboard navigation)
+
+### 🔧 Technical
+- Spring Boot 4.0 with WebSocket/STOMP for real-time gameplay
+- PostgreSQL or H2 database support
+- Docker & Docker Compose ready
+- Comprehensive test suite (427 tests, 51% coverage)
+
+For detailed installation guides and system requirements, please head over to [Wiki](https://github.com/surajcm/darkhold/wiki).

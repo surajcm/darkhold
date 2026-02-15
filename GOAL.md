@@ -147,8 +147,12 @@ A self-hosted quiz platform inspired by Kahoot. This document outlines the curre
 - [ ] Color blind friendly color schemes
 
 #### 5.4 Internationalization
-- [ ] Multi-language support
-- [ ] RTL language support
+- [x] Multi-language support framework (Spring i18n with MessageSource)
+- [x] English (en) - Complete ✅
+- [x] Spanish (es) - Complete ✅
+- [ ] French (fr) - Template created, needs translations
+- [ ] German (de) - Template created, needs translations
+- [ ] RTL language support (planned for Arabic/Hebrew)
 
 ### Phase 6: Infrastructure & Security (Ongoing)
 
