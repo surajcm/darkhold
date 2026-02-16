@@ -586,7 +586,7 @@ All 24 Thymeleaf templates updated to use `#{key}` message expressions:
 | 8 | Game Modes | Self-paced & practice modes | ✅ COMPLETED |
 | 9 | Teams | Team-based gameplay | ✅ COMPLETED |
 | 10 | UI/UX | Modern, accessible interface | ✅ COMPLETED |
-| 11 | i18n | Multi-language support | 🔄 ~35% (EN+ES done) |
+| 11 | i18n | Multi-language support | ✅ COMPLETED |
 | 12 | Security & Scale | Production hardening | Pending |
 
 ---
