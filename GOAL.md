@@ -148,10 +148,10 @@ A self-hosted quiz platform inspired by Kahoot. This document outlines the curre
 
 #### 5.4 Internationalization
 - [x] Multi-language support framework (Spring i18n with MessageSource)
-- [x] English (en) - Complete ✅
-- [x] Spanish (es) - Complete ✅
-- [ ] French (fr) - Template created, needs translations
-- [ ] German (de) - Template created, needs translations
+- [x] English (en) - Complete ✅ (427/427 messages)
+- [x] Spanish (es) - Complete ✅ (427/427 messages)
+- [x] French (fr) - Complete ✅ (427/427 messages)
+- [x] German (de) - Complete ✅ (427/427 messages)
 - [ ] RTL language support (planned for Arabic/Hebrew)
 
 ### Phase 6: Infrastructure & Security (Ongoing)

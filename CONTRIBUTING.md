@@ -28,10 +28,10 @@ Darkhold supports multiple languages, and we welcome translation contributions! 
 |----------|--------|----------|
 | English (en) | ✅ Complete | 427/427 messages |
 | Spanish (es) | ✅ Complete | 427/427 messages |
-| French (fr) | ⚠️ Partial | 55/427 messages (13%) |
-| German (de) | ⚠️ Partial | 55/427 messages (13%) |
+| French (fr) | ✅ Complete | 427/427 messages |
+| German (de) | ✅ Complete | 427/427 messages |
 
-**We especially need help with French and German translations!**
+**All core languages are now complete!** We welcome contributions for additional languages (Portuguese, Italian, Japanese, Chinese, etc.).
 
 ### How to Contribute Translations
 

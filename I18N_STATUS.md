@@ -8,16 +8,16 @@ Darkhold supports multiple languages. This document tracks translation progress 
 |----------|------|--------|----------|---------------------|
 | English | `en` | ✅ Complete | 427/427 (100%) | No |
 | Spanish | `es` | ✅ Complete | 427/427 (100%) | No |
-| French | `fr` | ⚠️ Partial | 55/427 (13%) | **Yes - 372 messages needed** |
-| German | `de` | ⚠️ Partial | 55/427 (13%) | **Yes - 372 messages needed** |
+| French | `fr` | ✅ Complete | 427/427 (100%) | No |
+| German | `de` | ✅ Complete | 427/427 (100%) | No |
 
 **Last Updated**: 2026-02-16
 
 ## Quick Stats
 
 - **Total message keys**: 427
-- **Completed languages**: 2 (English, Spanish)
-- **Languages needing help**: 2 (French, German)
+- **Completed languages**: 4 (English, Spanish, French, German)
+- **Languages needing help**: 0
 - **Framework**: Spring MessageSource with `.properties` files
 
 ## For Contributors
@@ -69,13 +69,13 @@ See detailed instructions in [CONTRIBUTING.md](CONTRIBUTING.md#-contributing-tra
 
 ## Priority Languages
 
-Help us reach more users! We're looking for native speakers to contribute:
+Help us reach more users! We're looking for native speakers to contribute new languages:
 
-1. 🇫🇷 **French** - 372 messages needed (87% remaining)
-2. 🇩🇪 **German** - 372 messages needed (87% remaining)
-3. 🇵🇹 **Portuguese** - New language (0% - needs 427 messages)
-4. 🇯🇵 **Japanese** - New language (0% - needs 427 messages)
-5. 🇨🇳 **Chinese** - New language (0% - needs 427 messages)
+1. 🇵🇹 **Portuguese** - New language (0% - needs 427 messages)
+2. 🇯🇵 **Japanese** - New language (0% - needs 427 messages)
+3. 🇨🇳 **Chinese** - New language (0% - needs 427 messages)
+4. 🇮🇹 **Italian** - New language (0% - needs 427 messages)
+5. 🇳🇱 **Dutch** - New language (0% - needs 427 messages)
 
 ## Technical Details
 
