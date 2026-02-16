@@ -24,7 +24,17 @@ function connect() {
     let teamMode = document.getElementById('teamMode')?.value === 'true';
     let socket = new SockJS('/darkhold-websocket');
     stompClient = Stomp.over(socket);
-    stompClient.connect({}, function (frame) {
+
+    // Add CSRF token to connection headers
+    let headers = {};
+    if (typeof CsrfManager !== 'undefined') {
+        const token = CsrfManager.getToken();
+        if (token) {
+            headers['X-CSRF-TOKEN'] = token;
+        }
+    }
+
+    stompClient.connect(headers, function (frame) {
         console.log('Connected: ' + frame);
         stompClient.send("/app/user", {}, JSON.stringify({'name': name_val, 'pin': pin_val}));
         // Subscribe to PIN-scoped topics for concurrent game support

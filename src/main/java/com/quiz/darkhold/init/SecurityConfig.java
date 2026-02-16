@@ -8,11 +8,12 @@ import org.springframework.security.authentication.dao.DaoAuthenticationProvider
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
+import org.springframework.security.web.csrf.CsrfTokenRequestAttributeHandler;
 
 @Configuration
 @EnableWebSecurity
@@ -31,9 +32,19 @@ public class SecurityConfig {
     }
 
     @Bean
-    public SecurityFilterChain filterChain(final HttpSecurity http) {
-        //todo : we need to enable CSRF
-        http.csrf(AbstractHttpConfigurer::disable);
+    public SecurityFilterChain filterChain(final HttpSecurity http) throws Exception {
+        // Enable CSRF protection with cookie-based token repository
+        CsrfTokenRequestAttributeHandler requestHandler = new CsrfTokenRequestAttributeHandler();
+        // Set the name of the attribute the CsrfToken will be populated on
+        requestHandler.setCsrfRequestAttributeName("_csrf");
+
+        http.csrf((csrf) -> csrf
+                .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
+                .csrfTokenRequestHandler(requestHandler)
+                // Ignore CSRF for H2 console (development only)
+                .ignoringRequestMatchers("/h2-console/**")
+        );
+
         for (String paths : matchingPaths()) {
             http.authorizeHttpRequests(auth -> auth
                     .requestMatchers(paths).permitAll()
@@ -44,7 +55,7 @@ public class SecurityConfig {
         http.logout((logout) -> logout.logoutSuccessUrl("/")
                 .invalidateHttpSession(true)
                 .clearAuthentication(true)
-                .deleteCookies("JSESSIONID"));
+                .deleteCookies("JSESSIONID", "XSRF-TOKEN"));
 
         http.headers(
                 (header) -> header.frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin)

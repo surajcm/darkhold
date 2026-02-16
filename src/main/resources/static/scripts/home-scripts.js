@@ -113,6 +113,12 @@ function enterGame() {
     let xhr = new XMLHttpRequest();
     xhr.open('POST', "/enterGame", true);
     xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+
+    // Add CSRF token to request
+    if (typeof CsrfManager !== 'undefined') {
+        CsrfManager.addTokenToXHR(xhr);
+    }
+
     xhr.onload = function() {
         setLoadingState(false);
 
