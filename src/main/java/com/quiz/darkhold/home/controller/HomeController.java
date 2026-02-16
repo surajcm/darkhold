@@ -1,6 +1,7 @@
 package com.quiz.darkhold.home.controller;
 
 import com.quiz.darkhold.home.model.GameInfo;
+import com.quiz.darkhold.home.model.PinValidationResponse;
 import com.quiz.darkhold.home.service.HomeService;
 import com.quiz.darkhold.init.RateLimitingService;
 import com.quiz.darkhold.team.model.TeamAssignmentMethod;
@@ -74,32 +75,40 @@ public class HomeController {
      *
      * @param gamePin pin
      * @param request HTTP request to get client IP
-     * @return ajax call to same page
+     * @return PinValidationResponse with status and remaining attempts
      */
     @PostMapping("/enterGame")
     public @ResponseBody
-    Boolean enterGame(@ModelAttribute("gamePin") final String gamePin,
-                      final HttpServletRequest request) {
+    PinValidationResponse enterGame(@ModelAttribute("gamePin") final String gamePin,
+                                     final HttpServletRequest request) {
         String sanitizedPin = CommonUtils.sanitizedString(gamePin);
         String clientIp = getClientIpAddress(request);
+
+        // Check if IP is currently blocked
+        if (rateLimitingService.isBlocked(clientIp)) {
+            logger.warn("IP {} is currently blocked", clientIp);
+            return PinValidationResponse.blocked();
+        }
 
         // Check rate limiting
         if (!rateLimitingService.isAllowed(clientIp)) {
             logger.warn("Rate limit exceeded for IP: {}", clientIp);
-            return false;
+            int remainingAttempts = rateLimitingService.getRemainingAttempts(clientIp);
+            return PinValidationResponse.rateLimited(remainingAttempts);
         }
 
         logger.info("Game pin attempt: {} from IP: {}", sanitizedPin, clientIp);
-        Boolean isValid = homeService.validateGamePin(gamePin);
+        Boolean isValid = homeService.validateGamePin(sanitizedPin);
 
-        // Record attempt result
+        // Record attempt result and return response
         if (isValid) {
             rateLimitingService.recordSuccessfulAttempt(clientIp);
+            return PinValidationResponse.validPin();
         } else {
             rateLimitingService.recordFailedAttempt(clientIp);
+            int remainingAttempts = rateLimitingService.getRemainingAttempts(clientIp);
+            return PinValidationResponse.invalidPin(remainingAttempts);
         }
-
-        return isValid;
     }
 
     /**

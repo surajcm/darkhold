@@ -117,13 +117,25 @@ function enterGame() {
         setLoadingState(false);
 
         if (xhr.status === 200) {
-            if (xhr.responseText === 'true') {
-                // PIN is valid, show name entry
-                showNameStep();
-            } else {
-                showError("Invalid PIN. Please check and try again.");
-                gamePinInput.focus();
-                gamePinInput.select();
+            try {
+                const response = JSON.parse(xhr.responseText);
+
+                if (response.valid) {
+                    // PIN is valid, show name entry
+                    showNameStep();
+                } else {
+                    // Handle different error statuses
+                    handlePinError(response, gamePinInput);
+                }
+            } catch (e) {
+                // Fallback for non-JSON responses (backward compatibility)
+                if (xhr.responseText === 'true') {
+                    showNameStep();
+                } else {
+                    showError("Invalid PIN. Please check and try again.");
+                    gamePinInput.focus();
+                    gamePinInput.select();
+                }
             }
         } else {
             showError("Connection error. Please try again.");
@@ -197,6 +209,40 @@ function clearError() {
     if (messageDisp) {
         messageDisp.textContent = "";
     }
+}
+
+function handlePinError(response, gamePinInput) {
+    const status = response.status;
+    const remainingAttempts = response.remainingAttempts;
+
+    switch (status) {
+        case 'INVALID':
+            if (remainingAttempts !== undefined && remainingAttempts > 0) {
+                showError(`Invalid PIN. ${remainingAttempts} attempts remaining.`);
+            } else {
+                showError("Invalid PIN. Please check and try again.");
+            }
+            break;
+        case 'RATE_LIMITED':
+            showError("Too many attempts. Please slow down.");
+            break;
+        case 'BLOCKED':
+            showError("Too many failed attempts. You have been temporarily blocked for 15 minutes.");
+            // Disable the button when blocked
+            const joinBtn = document.getElementById("joinBtn");
+            if (joinBtn) {
+                joinBtn.disabled = true;
+                setTimeout(() => {
+                    joinBtn.disabled = false;
+                }, 900000); // 15 minutes
+            }
+            break;
+        default:
+            showError("Invalid PIN. Please check and try again.");
+    }
+
+    gamePinInput.focus();
+    gamePinInput.select();
 }
 
 // Legacy function name support

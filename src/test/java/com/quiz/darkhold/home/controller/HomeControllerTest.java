@@ -16,11 +16,12 @@ import java.util.List;
 
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.request;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -89,13 +90,15 @@ class HomeControllerTest {
     void testEnterGame_ValidPin() throws Exception {
         when(homeService.validateGamePin(testPin)).thenReturn(true);
         when(rateLimitingService.isAllowed("127.0.0.1")).thenReturn(true);
+        when(rateLimitingService.isBlocked("127.0.0.1")).thenReturn(false);
 
         mockMvc.perform(post("/enterGame")
                                                 .param("gamePin", testPin)
                         .header("X-Forwarded-For", "")
                         .remoteAddress("127.0.0.1"))
                 .andExpect(status().isOk())
-                .andExpect(content().string("true"));
+                .andExpect(jsonPath("$.valid").value(true))
+                .andExpect(jsonPath("$.status").value("VALID"));
 
         verify(homeService).validateGamePin(testPin);
         verify(rateLimitingService).recordSuccessfulAttempt("127.0.0.1");
@@ -105,37 +108,65 @@ class HomeControllerTest {
     void testEnterGame_InvalidPin() throws Exception {
         when(homeService.validateGamePin("99999")).thenReturn(false);
         when(rateLimitingService.isAllowed("127.0.0.1")).thenReturn(true);
+        when(rateLimitingService.isBlocked("127.0.0.1")).thenReturn(false);
+        when(rateLimitingService.getRemainingAttempts("127.0.0.1")).thenReturn(3);
 
         mockMvc.perform(post("/enterGame")
                                                 .param("gamePin", "99999")
                         .remoteAddress("127.0.0.1"))
                 .andExpect(status().isOk())
-                .andExpect(content().string("false"));
+                .andExpect(jsonPath("$.valid").value(false))
+                .andExpect(jsonPath("$.status").value("INVALID"))
+                .andExpect(jsonPath("$.remainingAttempts").value(3));
 
         verify(rateLimitingService).recordFailedAttempt("127.0.0.1");
     }
 
     @Test
     void testEnterGame_RateLimitExceeded() throws Exception {
+        when(rateLimitingService.isBlocked("127.0.0.1")).thenReturn(false);
         when(rateLimitingService.isAllowed("127.0.0.1")).thenReturn(false);
+        when(rateLimitingService.getRemainingAttempts("127.0.0.1")).thenReturn(0);
 
         mockMvc.perform(post("/enterGame")
                                                 .param("gamePin", testPin)
                         .remoteAddress("127.0.0.1"))
                 .andExpect(status().isOk())
-                .andExpect(content().string("false"));
+                .andExpect(jsonPath("$.valid").value(false))
+                .andExpect(jsonPath("$.status").value("RATE_LIMITED"))
+                .andExpect(jsonPath("$.remainingAttempts").value(0));
+
+        verify(homeService, never()).validateGamePin(anyString());
+    }
+
+    @Test
+    void testEnterGame_Blocked() throws Exception {
+        when(rateLimitingService.isBlocked("127.0.0.1")).thenReturn(true);
+
+        mockMvc.perform(post("/enterGame")
+                                                .param("gamePin", testPin)
+                        .remoteAddress("127.0.0.1"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.valid").value(false))
+                .andExpect(jsonPath("$.status").value("BLOCKED"))
+                .andExpect(jsonPath("$.remainingAttempts").value(0));
+
+        verify(homeService, never()).validateGamePin(anyString());
+        verify(rateLimitingService, never()).recordFailedAttempt(anyString());
     }
 
     @Test
     void testEnterGame_WithXForwardedFor() throws Exception {
         when(homeService.validateGamePin(testPin)).thenReturn(true);
+        when(rateLimitingService.isBlocked("192.168.1.100")).thenReturn(false);
         when(rateLimitingService.isAllowed("192.168.1.100")).thenReturn(true);
 
         mockMvc.perform(post("/enterGame")
                                                 .param("gamePin", testPin)
                         .header("X-Forwarded-For", "192.168.1.100, 10.0.0.1"))
                 .andExpect(status().isOk())
-                .andExpect(content().string("true"));
+                .andExpect(jsonPath("$.valid").value(true))
+                .andExpect(jsonPath("$.status").value("VALID"));
 
         verify(rateLimitingService).recordSuccessfulAttempt("192.168.1.100");
     }
@@ -143,26 +174,38 @@ class HomeControllerTest {
     @Test
     void testEnterGame_WithXRealIP() throws Exception {
         when(homeService.validateGamePin(testPin)).thenReturn(true);
+        when(rateLimitingService.isBlocked("192.168.1.200")).thenReturn(false);
         when(rateLimitingService.isAllowed("192.168.1.200")).thenReturn(true);
 
         mockMvc.perform(post("/enterGame")
                                                 .param("gamePin", testPin)
                         .header("X-Real-IP", "192.168.1.200"))
                 .andExpect(status().isOk())
-                .andExpect(content().string("true"));
+                .andExpect(jsonPath("$.valid").value(true))
+                .andExpect(jsonPath("$.status").value("VALID"));
 
         verify(rateLimitingService).recordSuccessfulAttempt("192.168.1.200");
     }
 
     @Test
     void testEnterGame_SanitizedPin() throws Exception {
-        when(homeService.validateGamePin("12345")).thenReturn(true);
+        // Sanitization only removes newlines/tabs, HTML tags pass through but validation should fail
+        // because PIN should be numeric
+        String unsanitizedPin = "12345<script>alert('xss')</script>";
+        when(homeService.validateGamePin(unsanitizedPin)).thenReturn(false);
+        when(rateLimitingService.isBlocked("127.0.0.1")).thenReturn(false);
         when(rateLimitingService.isAllowed("127.0.0.1")).thenReturn(true);
+        when(rateLimitingService.getRemainingAttempts("127.0.0.1")).thenReturn(4);
 
         mockMvc.perform(post("/enterGame")
-                                                .param("gamePin", "12345<script>alert('xss')</script>")
+                                                .param("gamePin", unsanitizedPin)
                         .remoteAddress("127.0.0.1"))
-                .andExpect(status().isOk());
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.valid").value(false))
+                .andExpect(jsonPath("$.status").value("INVALID"))
+                .andExpect(jsonPath("$.remainingAttempts").value(4));
+
+        verify(rateLimitingService).recordFailedAttempt("127.0.0.1");
     }
 
     // ==================== POST /joinGame Tests ====================
