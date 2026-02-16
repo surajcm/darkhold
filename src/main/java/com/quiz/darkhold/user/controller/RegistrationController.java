@@ -1,6 +1,7 @@
 package com.quiz.darkhold.user.controller;
 
 import com.quiz.darkhold.home.model.GameInfo;
+import com.quiz.darkhold.user.entity.Role;
 import com.quiz.darkhold.user.entity.User;
 import com.quiz.darkhold.user.service.UserService;
 import org.slf4j.Logger;
@@ -13,6 +14,8 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 @Controller
@@ -46,12 +49,14 @@ public class RegistrationController {
             logger.info(String.valueOf(bindingResult.getAllErrors().get(0)));
             return "login";
         }
-        var roles = userService.listRoles();
-        var role = roles.stream().filter(a -> a.getName().equals("GUEST")).findFirst();
+        List<Role> roles = userService.listRoles();
+        Optional<Role> role = roles.stream()
+                .filter(a -> a.getName().equals("GUEST"))
+                .findFirst();
         role.ifPresent(value -> user.setRoles(Set.of(value)));
         user.setEnabled(true);
         userService.save(user);
-        var gameInfo = new GameInfo();
+        com.quiz.darkhold.home.model.GameInfo gameInfo = new GameInfo();
         gameInfo.setMessage("Successfully created the account !!!");
         model.addAttribute("gameinfo", gameInfo);
         logger.info("successfully created the user !!!");

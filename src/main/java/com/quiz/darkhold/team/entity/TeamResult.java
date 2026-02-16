@@ -40,6 +40,9 @@ public class TeamResult {
     @Column(nullable = false)
     private Integer averageScorePerMember;
 
+    /**
+     * Default constructor required by JPA for entity instantiation.
+     */
     public TeamResult() {
     }
 

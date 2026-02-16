@@ -17,11 +17,11 @@ public class ChallengeExportDto {
     private List<QuestionExportDto> questions = new ArrayList<>();
 
     public static ChallengeExportDto fromEntity(final Challenge challenge) {
-        var dto = new ChallengeExportDto();
+        ChallengeExportDto dto = new ChallengeExportDto();
         dto.setTitle(challenge.getTitle());
         dto.setDescription(challenge.getDescription());
         if (challenge.getQuestionSets() != null) {
-            for (var questionSet : challenge.getQuestionSets()) {
+            for (QuestionSet questionSet : challenge.getQuestionSets()) {
                 dto.getQuestions().add(QuestionExportDto.fromEntity(questionSet));
             }
         }
@@ -71,7 +71,7 @@ public class ChallengeExportDto {
 
         @SuppressWarnings("checkstyle:MethodLength")
         public static QuestionExportDto fromEntity(final QuestionSet questionSet) {
-            var dto = new QuestionExportDto();
+            QuestionExportDto dto = new QuestionExportDto();
             dto.setQuestion(questionSet.getQuestion());
             dto.setAnswer1(questionSet.getAnswer1());
             dto.setAnswer2(questionSet.getAnswer2());

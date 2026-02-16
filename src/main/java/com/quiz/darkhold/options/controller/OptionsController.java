@@ -63,12 +63,12 @@ public class OptionsController {
     @PostMapping("/activeChallenge")
     public String activeChallenges(final Model model) {
         log.info("Into the activeChallenge method");
-        var publishInfo = previewService.getActiveChallenge();
+        com.quiz.darkhold.preview.model.PublishInfo publishInfo = previewService.getActiveChallenge();
         if (publishInfo != null && publishInfo.getPin() != null) {
             model.addAttribute("quizPin", publishInfo.getPin());
             model.addAttribute("user", publishInfo.getModerator());
             // Get all participants for the active game
-            var participants = gameService.getAllParticipants(publishInfo.getPin());
+            java.util.List<String> participants = gameService.getAllParticipants(publishInfo.getPin());
             model.addAttribute("participants", participants != null ? participants : Collections.emptyList());
             log.info("activeChallenges method, quizPin: " + publishInfo.getPin()
                     + ", participants: " + (participants != null ? participants.size() : 0));

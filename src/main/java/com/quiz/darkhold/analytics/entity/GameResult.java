@@ -78,6 +78,9 @@ public class GameResult {
     private List<QuestionResult> questionResults = new ArrayList<>();
 
     // Constructors
+    /**
+     * Default constructor required by JPA for entity instantiation.
+     */
     public GameResult() {
     }
 

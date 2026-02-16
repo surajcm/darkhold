@@ -8,6 +8,7 @@ import com.quiz.darkhold.user.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -33,7 +34,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public User save(final User user) {
         if (isUpdatingUser(user)) {
-            var existingUser = findExistingUser(user.getId());
+            User existingUser = findExistingUser(user.getId());
             user.setPassword(getPassword(user, existingUser));
         } else {
             user.setPassword(encodePassword(user.getPassword()));
@@ -64,7 +65,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Page<User> getAllUsers(final int pageNumber) {
-        var pageable = PageRequest.of(pageNumber - 1, USERS_PER_PAGE);
+        Pageable pageable = PageRequest.of(pageNumber - 1, USERS_PER_PAGE);
         return userRepository.findAll(pageable);
     }
 
@@ -75,7 +76,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Boolean isEmailUnique(final Long id, final String email) {
-        var userByEmail = userRepository.findByEmail(email);
+        User userByEmail = userRepository.findByEmail(email);
         if (userByEmail == null) {
             return true;
         }
@@ -94,7 +95,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void delete(final Long id) throws UserNotFoundException {
-        var countById = userRepository.countById(id);
+        Long countById = userRepository.countById(id);
         if (countById == null ||  countById == 0) {
             throw new UserNotFoundException("Could not find any user with the id " + id);
         }

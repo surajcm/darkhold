@@ -37,8 +37,8 @@ public class RateLimitingService {
      * @return true if the request is allowed, false if rate limited
      */
     public boolean isAllowed(final String ipAddress) {
-        final var now = Instant.now();
-        final var tracker = attemptMap.computeIfAbsent(ipAddress, k -> new AttemptTracker());
+        final Instant now = Instant.now();
+        final AttemptTracker tracker = attemptMap.computeIfAbsent(ipAddress, k -> new AttemptTracker());
 
         synchronized (tracker) {
             if (isCurrentlyBlocked(tracker, now, ipAddress)) {
@@ -78,8 +78,8 @@ public class RateLimitingService {
      * @param ipAddress The IP address of the requester
      */
     public void recordFailedAttempt(final String ipAddress) {
-        final var now = Instant.now();
-        final var tracker = attemptMap.computeIfAbsent(ipAddress, k -> new AttemptTracker());
+        final Instant now = Instant.now();
+        final AttemptTracker tracker = attemptMap.computeIfAbsent(ipAddress, k -> new AttemptTracker());
 
         synchronized (tracker) {
             tracker.attemptCount++;
@@ -100,7 +100,7 @@ public class RateLimitingService {
      * @param ipAddress The IP address of the requester
      */
     public void recordSuccessfulAttempt(final String ipAddress) {
-        final var tracker = attemptMap.get(ipAddress);
+        final AttemptTracker tracker = attemptMap.get(ipAddress);
         if (tracker != null) {
             synchronized (tracker) {
                 logger.debug("Rate limit: IP {} successful attempt, resetting counter", ipAddress);
@@ -116,7 +116,7 @@ public class RateLimitingService {
      * @return Number of remaining attempts
      */
     public int getRemainingAttempts(final String ipAddress) {
-        final var tracker = attemptMap.get(ipAddress);
+        final AttemptTracker tracker = attemptMap.get(ipAddress);
         if (tracker == null) {
             return maxAttempts;
         }
@@ -132,7 +132,7 @@ public class RateLimitingService {
      * @return true if blocked
      */
     public boolean isBlocked(final String ipAddress) {
-        final var tracker = attemptMap.get(ipAddress);
+        final AttemptTracker tracker = attemptMap.get(ipAddress);
         if (tracker == null) {
             return false;
         }

@@ -255,7 +255,7 @@ public class ImageProcessingService {
     }
 
     private boolean isDirectoryEmpty(final Path directory) throws IOException {
-        try (var stream = Files.list(directory)) {
+        try (java.util.stream.Stream<Path> stream = Files.list(directory)) {
             return stream.findAny().isEmpty();
         }
     }
@@ -265,7 +265,7 @@ public class ImageProcessingService {
             return;
         }
 
-        try (var stream = Files.walk(directory)) {
+        try (java.util.stream.Stream<Path> stream = Files.walk(directory)) {
             stream.sorted((a, b) -> b.compareTo(a)) // Delete files before directories
                     .forEach(path -> {
                         try {

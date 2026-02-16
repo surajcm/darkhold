@@ -39,12 +39,13 @@ public class PreviewService {
      * @return preview info with questions
      */
     public PreviewInfo fetchQuestions(final String challengeId) {
-        var previewInfo = new PreviewInfo();
-        var challengeOne = Long.valueOf(challengeId);
-        var challenge = challengeRepository.findById(challengeOne)
+        PreviewInfo previewInfo = new PreviewInfo();
+        Long challengeOne = Long.valueOf(challengeId);
+        com.quiz.darkhold.challenge.entity.Challenge challenge = challengeRepository.findById(challengeOne)
                 .orElseThrow(() -> new IllegalArgumentException("Challenge not found: " + challengeId));
         // convert challenge to type ArrayDeque<QuestionSet>
-        var dequeChallenge = new ArrayDeque<>(challenge.getQuestionSets());;
+        ArrayDeque<com.quiz.darkhold.challenge.entity.QuestionSet> dequeChallenge =
+                new ArrayDeque<>(challenge.getQuestionSets());
         previewInfo.setQuestionSets(dequeChallenge);
         previewInfo.setChallengeName(challenge.getTitle());
         previewInfo.setChallengeId(challengeId);
@@ -58,11 +59,12 @@ public class PreviewService {
      * @return all questions binded to preview info
      */
     public PreviewInfo fetchQuestionsFromPin(final String pin) {
-        var game = gameRepository.findByPin(pin);
-        var challengeId = game.getChallengeId();
-        var previewInfo = new PreviewInfo();
-        var challengeOne = Long.valueOf(challengeId);
-        var challenge = challengeRepository.findById(challengeOne);
+        Game game = gameRepository.findByPin(pin);
+        String challengeId = game.getChallengeId();
+        PreviewInfo previewInfo = new PreviewInfo();
+        Long challengeOne = Long.valueOf(challengeId);
+        java.util.Optional<com.quiz.darkhold.challenge.entity.Challenge> challenge =
+                challengeRepository.findById(challengeOne);
         challenge.ifPresent(value -> previewInfo.setQuestionSets(new ArrayDeque<>(value.getQuestionSets())));
         challenge.ifPresent(value -> previewInfo.setChallengeName(value.getTitle()));
         previewInfo.setChallengeId(challengeId);
@@ -110,7 +112,7 @@ public class PreviewService {
 
     private Game createAndSaveGame(final String pin, final String challengeId,
                                    final String moderator, final boolean teamMode) {
-        var game = new Game();
+        Game game = new Game();
         game.setPin(pin);
         game.setGameStatus(GameStatus.WAITING.name());
         game.setChallengeId(challengeId);
@@ -120,10 +122,10 @@ public class PreviewService {
     }
 
     private PublishInfo createPublishInfo(final Game game, final String moderator) {
-        var publishInfo = new PublishInfo();
+        PublishInfo publishInfo = new PublishInfo();
         publishInfo.setPin(game.getPin());
         publishInfo.setModerator(moderator);
-        var previewInfo = fetchQuestionsFromPin(game.getPin());
+        PreviewInfo previewInfo = fetchQuestionsFromPin(game.getPin());
         currentGame.saveCurrentStatus(publishInfo, previewInfo.getQuestionSets());
         return publishInfo;
     }
@@ -145,11 +147,11 @@ public class PreviewService {
      */
     @Deprecated(since = "Milestone 6 - Concurrent Games")
     public PublishInfo getActiveChallenge() {
-        var activeGames = gameRepository.findByGameStatusNot(GameStatus.FINISHED.name());
-        var publishInfo = new PublishInfo();
+        List<Game> activeGames = gameRepository.findByGameStatusNot(GameStatus.FINISHED.name());
+        PublishInfo publishInfo = new PublishInfo();
         if (!activeGames.isEmpty()) {
-            var size = activeGames.size();
-            var activeGame = activeGames.get(size - 1);
+            int size = activeGames.size();
+            Game activeGame = activeGames.get(size - 1);
             // Returns latest active game - only reliable with single game
             publishInfo.setPin(activeGame.getPin());
         }
@@ -164,8 +166,8 @@ public class PreviewService {
      * @return game info
      */
     public PublishInfo getGameByPin(final String pin) {
-        var game = gameRepository.findByPin(pin);
-        var publishInfo = new PublishInfo();
+        Game game = gameRepository.findByPin(pin);
+        PublishInfo publishInfo = new PublishInfo();
         if (game != null) {
             publishInfo.setPin(game.getPin());
         }

@@ -2,12 +2,12 @@ package com.quiz.darkhold.preview.model;
 
 import com.quiz.darkhold.challenge.entity.QuestionSet;
 
-import java.util.ArrayDeque;
+import java.util.Deque;
 
 public class PreviewInfo {
     private String challengeId;
     private String challengeName;
-    private ArrayDeque<QuestionSet> questionSets;
+    private Deque<QuestionSet> questionSets;
 
     public String getChallengeId() {
         return challengeId;
@@ -25,11 +25,11 @@ public class PreviewInfo {
         this.challengeName = challengeName;
     }
 
-    public ArrayDeque<QuestionSet> getQuestionSets() {
+    public Deque<QuestionSet> getQuestionSets() {
         return questionSets;
     }
 
-    public void setQuestionSets(final ArrayDeque<QuestionSet> questionSets) {
+    public void setQuestionSets(final Deque<QuestionSet> questionSets) {
         this.questionSets = questionSets;
     }
 }

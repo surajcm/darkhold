@@ -16,6 +16,10 @@ import jakarta.persistence.Table;
 @Table(name = "question_result")
 public class QuestionResult {
 
+    private static final double PERCENTAGE_MULTIPLIER = 100.0;
+    private static final double EASY_THRESHOLD = 75.0;
+    private static final double MEDIUM_THRESHOLD = 50.0;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -49,6 +53,9 @@ public class QuestionResult {
     private Integer fastestAnswerTimeSeconds;
 
     // Constructors
+    /**
+     * Default constructor required by JPA for entity instantiation.
+     */
     public QuestionResult() {
     }
 
@@ -152,7 +159,7 @@ public class QuestionResult {
         if (total == 0) {
             return 0.0;
         }
-        return (correctCount * 100.0) / total;
+        return (correctCount * PERCENTAGE_MULTIPLIER) / total;
     }
 
     /**
@@ -162,9 +169,9 @@ public class QuestionResult {
      */
     public String getDifficultyLevel() {
         double successRate = getSuccessRatePercentage();
-        if (successRate >= 75) {
+        if (successRate >= EASY_THRESHOLD) {
             return "EASY";
-        } else if (successRate >= 50) {
+        } else if (successRate >= MEDIUM_THRESHOLD) {
             return "MEDIUM";
         } else {
             return "HARD";

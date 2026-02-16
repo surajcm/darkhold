@@ -11,8 +11,8 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Deque;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -31,7 +31,7 @@ public class CurrentGame {
      *
      * @param publishInfo publish info
      */
-    public void saveCurrentStatus(final PublishInfo publishInfo, final ArrayDeque<QuestionSet> questionSets) {
+    public void saveCurrentStatus(final PublishInfo publishInfo, final Deque<QuestionSet> questionSets) {
         List<String> users = new ArrayList<>();
         users.add(publishInfo.getModerator());
 

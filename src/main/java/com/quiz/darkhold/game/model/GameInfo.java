@@ -15,6 +15,9 @@ public class GameInfo {
     private int participantCount;
     private String gameMode;
 
+    /**
+     * Default constructor for object initialization.
+     */
     public GameInfo() {
     }
 

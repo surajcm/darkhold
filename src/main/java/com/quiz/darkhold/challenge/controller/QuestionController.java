@@ -45,7 +45,7 @@ public class QuestionController {
     @PostMapping
     public ResponseEntity<QuestionResponse> createQuestion(@Valid @RequestBody final QuestionRequest request) {
         logger.info("Creating question for challenge: {}", request.getChallengeId());
-        var response = questionService.createQuestion(request);
+        QuestionResponse response = questionService.createQuestion(request);
         if (response == null) {
             return ResponseEntity.badRequest().build();
         }
@@ -61,7 +61,7 @@ public class QuestionController {
     @GetMapping("/{id}")
     public ResponseEntity<QuestionResponse> getQuestion(@PathVariable final Long id) {
         logger.info("Getting question: {}", id);
-        var response = questionService.getQuestion(id);
+        QuestionResponse response = questionService.getQuestion(id);
         if (response == null) {
             return ResponseEntity.notFound().build();
         }
@@ -80,7 +80,7 @@ public class QuestionController {
             @PathVariable final Long id,
             @Valid @RequestBody final QuestionRequest request) {
         logger.info("Updating question: {}", id);
-        var response = questionService.updateQuestion(id, request);
+        QuestionResponse response = questionService.updateQuestion(id, request);
         if (response == null) {
             return ResponseEntity.notFound().build();
         }
@@ -96,7 +96,7 @@ public class QuestionController {
     @DeleteMapping("/{id}")
     public ResponseEntity<Map<String, Boolean>> deleteQuestion(@PathVariable final Long id) {
         logger.info("Deleting question: {}", id);
-        var deleted = questionService.deleteQuestion(id);
+        boolean deleted = questionService.deleteQuestion(id);
         if (!deleted) {
             return ResponseEntity.notFound().build();
         }
@@ -112,7 +112,7 @@ public class QuestionController {
     @PostMapping("/{id}/duplicate")
     public ResponseEntity<QuestionResponse> duplicateQuestion(@PathVariable final Long id) {
         logger.info("Duplicating question: {}", id);
-        var response = questionService.duplicateQuestion(id);
+        QuestionResponse response = questionService.duplicateQuestion(id);
         if (response == null) {
             return ResponseEntity.notFound().build();
         }
@@ -128,7 +128,7 @@ public class QuestionController {
     @PostMapping("/reorder")
     public ResponseEntity<Map<String, Boolean>> reorderQuestions(@Valid @RequestBody final ReorderRequest request) {
         logger.info("Reordering questions in challenge: {}", request.getChallengeId());
-        var reordered = questionService.reorderQuestions(request);
+        boolean reordered = questionService.reorderQuestions(request);
         if (!reordered) {
             return ResponseEntity.badRequest().build();
         }
@@ -160,7 +160,7 @@ public class QuestionController {
     @DeleteMapping("/{id}/delete-image")
     public ResponseEntity<Map<String, Boolean>> deleteImage(@PathVariable final Long id) {
         logger.info("Deleting image for question: {}", id);
-        var deleted = questionService.deleteQuestionImage(id);
+        boolean deleted = questionService.deleteQuestionImage(id);
         if (!deleted) {
             return ResponseEntity.notFound().build();
         }
@@ -176,7 +176,7 @@ public class QuestionController {
     @PostMapping("/bulk-delete")
     public ResponseEntity<Map<String, Integer>> bulkDeleteQuestions(@RequestBody final List<Long> questionIds) {
         logger.info("Bulk deleting {} questions", questionIds.size());
-        var deleted = questionService.bulkDeleteQuestions(questionIds);
+        int deleted = questionService.bulkDeleteQuestions(questionIds);
         return ResponseEntity.ok(Map.of("deleted", deleted));
     }
 }

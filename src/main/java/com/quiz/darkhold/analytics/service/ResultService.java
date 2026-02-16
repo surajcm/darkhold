@@ -31,6 +31,7 @@ import java.util.Map;
 public class ResultService {
 
     private static final Logger logger = LogManager.getLogger(ResultService.class);
+    private static final int MODERATOR_RANK_OFFSET = 1;
 
     private final GameResultRepository gameResultRepository;
     private final GameRepository gameRepository;
@@ -94,7 +95,8 @@ public class ResultService {
         gameResult.setTotalQuestions(questions.size());
 
         List<String> participants = currentGame.getActiveUsersInGame(pin);
-        gameResult.setParticipantCount(participants != null ? participants.size() - 1 : 0);
+        gameResult.setParticipantCount(participants != null
+                ? participants.size() - MODERATOR_RANK_OFFSET : 0);
 
         gameResult.setStartedAt(game.getCreatedOn());
         gameResult.setCompletedAt(LocalDateTime.now(ZoneId.systemDefault()));

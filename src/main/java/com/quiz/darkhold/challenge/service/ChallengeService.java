@@ -23,6 +23,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.util.ArrayDeque;
 import java.util.Arrays;
+import java.util.Deque;
 import java.util.Locale;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -51,24 +52,24 @@ public class ChallengeService {
                                             final String title,
                                             final String description)
             throws ChallengeException {
-        var questionSets = readAndProcessChallenge(upload);
-        var challenge = new Challenge();
+        Deque<QuestionSet> questionSets = readAndProcessChallenge(upload);
+        Challenge challenge = new Challenge();
         challenge.setTitle(title);
         challenge.setDescription(description);
         challenge.setQuestionSets(questionSets.stream().toList());
         challenge.setChallengeOwner(currentUserId());
-        final var savedChallenge = challengeRepository.save(challenge);
+        final Challenge savedChallenge = challengeRepository.save(challenge);
         questionSets.forEach(q -> q.setChallenge(savedChallenge));
         questionSetRepository.saveAll(questionSets);
         return savedChallenge.getId();
     }
 
     public Boolean deleteChallenge(final Long challengeId) {
-        var response = Boolean.FALSE;
-        var challenge = challengeRepository.findById(challengeId);
+        Boolean response = Boolean.FALSE;
+        java.util.Optional<Challenge> challenge = challengeRepository.findById(challengeId);
         if (challenge.isPresent()) {
             logger.info("Challenge present in database");
-            var questionSets = challenge.get().getQuestionSets();
+            java.util.List<QuestionSet> questionSets = challenge.get().getQuestionSets();
             questionSetRepository.deleteAll(questionSets);
             challengeRepository.delete(challenge.get());
             response = Boolean.TRUE;
@@ -84,7 +85,7 @@ public class ChallengeService {
      * @return the created challenge
      */
     public Challenge createEmptyChallenge(final String title, final String description) {
-        var challenge = new Challenge();
+        Challenge challenge = new Challenge();
         challenge.setTitle(title);
         challenge.setDescription(description);
         challenge.setChallengeOwner(currentUserId());
@@ -100,9 +101,9 @@ public class ChallengeService {
      * @return the updated challenge or null if not found/not owned
      */
     public Challenge updateChallenge(final Long challengeId, final String title, final String description) {
-        var challengeOpt = challengeRepository.findById(challengeId);
+        java.util.Optional<Challenge> challengeOpt = challengeRepository.findById(challengeId);
         if (challengeOpt.isPresent()) {
-            var challenge = challengeOpt.get();
+            Challenge challenge = challengeOpt.get();
             if (!challenge.getChallengeOwner().equals(currentUserId())) {
                 logger.warn("User {} attempted to update challenge {} owned by {}",
                         currentUserId(), challengeId, challenge.getChallengeOwner());
@@ -122,11 +123,11 @@ public class ChallengeService {
      * @return the new challenge or null if not found/not owned
      */
     public Challenge duplicateChallenge(final Long challengeId) {
-        var challengeOpt = challengeRepository.findById(challengeId);
+        java.util.Optional<Challenge> challengeOpt = challengeRepository.findById(challengeId);
         if (challengeOpt.isEmpty()) {
             return null;
         }
-        var original = challengeOpt.get();
+        Challenge original = challengeOpt.get();
         if (!original.getChallengeOwner().equals(currentUserId())) {
             logger.warn("User {} attempted to duplicate challenge {} owned by {}",
                     currentUserId(), challengeId, original.getChallengeOwner());
@@ -134,18 +135,18 @@ public class ChallengeService {
         }
 
         // Create new challenge with copied title
-        var newChallenge = new Challenge();
+        Challenge newChallenge = new Challenge();
         newChallenge.setTitle(original.getTitle() + " (Copy)");
         newChallenge.setDescription(original.getDescription());
         newChallenge.setChallengeOwner(currentUserId());
-        var savedChallenge = challengeRepository.save(newChallenge);
+        Challenge savedChallenge = challengeRepository.save(newChallenge);
 
         // Duplicate all questions
         if (original.getQuestionSets() != null) {
-            var newQuestions = new ArrayDeque<QuestionSet>();
+            Deque<QuestionSet> newQuestions = new ArrayDeque<>();
             int order = 0;
-            for (var origQ : original.getQuestionSets()) {
-                var newQ = copyQuestionFields(origQ);
+            for (QuestionSet origQ : original.getQuestionSets()) {
+                QuestionSet newQ = copyQuestionFields(origQ);
                 newQ.setDisplayOrder(order++);
                 newQ.setChallenge(savedChallenge);
                 newQuestions.add(newQ);
@@ -163,9 +164,9 @@ public class ChallengeService {
      * @return the challenge or null if not found/not owned
      */
     public Challenge getChallengeForEdit(final Long challengeId) {
-        var challengeOpt = challengeRepository.findById(challengeId);
+        java.util.Optional<Challenge> challengeOpt = challengeRepository.findById(challengeId);
         if (challengeOpt.isPresent()) {
-            var challenge = challengeOpt.get();
+            Challenge challenge = challengeOpt.get();
             if (challenge.getChallengeOwner().equals(currentUserId())) {
                 return challenge;
             }
@@ -179,17 +180,17 @@ public class ChallengeService {
      * Import a challenge from JSON DTO.
      */
     public Challenge importFromJson(final ChallengeExportDto dto) {
-        var challenge = new Challenge();
+        Challenge challenge = new Challenge();
         challenge.setTitle(dto.getTitle());
         challenge.setDescription(dto.getDescription());
         challenge.setChallengeOwner(currentUserId());
-        var savedChallenge = challengeRepository.save(challenge);
+        Challenge savedChallenge = challengeRepository.save(challenge);
 
         if (dto.getQuestions() != null) {
-            var questions = new ArrayDeque<QuestionSet>();
+            Deque<QuestionSet> questions = new ArrayDeque<>();
             int order = 0;
-            for (var qDto : dto.getQuestions()) {
-                var qs = copyQuestionFieldsFromDto(qDto);
+            for (ChallengeExportDto.QuestionExportDto qDto : dto.getQuestions()) {
+                QuestionSet qs = copyQuestionFieldsFromDto(qDto);
                 qs.setDisplayOrder(order++);
                 qs.setChallenge(savedChallenge);
                 questions.add(qs);
@@ -200,7 +201,7 @@ public class ChallengeService {
     }
 
     private QuestionSet copyQuestionFields(final QuestionSet src) {
-        var dest = new QuestionSet();
+        QuestionSet dest = new QuestionSet();
         dest.setQuestion(src.getQuestion());
         dest.setAnswer1(src.getAnswer1());
         dest.setAnswer2(src.getAnswer2());
@@ -215,7 +216,7 @@ public class ChallengeService {
     }
 
     private QuestionSet copyQuestionFieldsFromDto(final ChallengeExportDto.QuestionExportDto src) {
-        var dest = new QuestionSet();
+        QuestionSet dest = new QuestionSet();
         dest.setQuestion(src.getQuestion());
         dest.setAnswer1(src.getAnswer1());
         dest.setAnswer2(src.getAnswer2());
@@ -230,16 +231,16 @@ public class ChallengeService {
     }
 
     private Long currentUserId() {
-        var auth = SecurityContextHolder.getContext().getAuthentication();
-        var principal = auth.getPrincipal();
+        org.springframework.security.core.Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        Object principal = auth.getPrincipal();
         return ((DarkholdUserDetails) principal).getUser().getId();
     }
 
     //replace LinkedList with ArrayDeque as the return type
-    private ArrayDeque<QuestionSet> readAndProcessChallenge(final MultipartFile upload) throws ChallengeException {
-        ArrayDeque<QuestionSet> questionSets = new ArrayDeque<>();
-        try (var workbook = new XSSFWorkbook(upload.getInputStream());) {
-            var datatypeSheet = workbook.getSheetAt(0);
+    private Deque<QuestionSet> readAndProcessChallenge(final MultipartFile upload) throws ChallengeException {
+        Deque<QuestionSet> questionSets = new ArrayDeque<>();
+        try (XSSFWorkbook workbook = new XSSFWorkbook(upload.getInputStream());) {
+            org.apache.poi.ss.usermodel.Sheet datatypeSheet = workbook.getSheetAt(0);
             for (Row currentRow : datatypeSheet) {
                 questionSets.add(populateQuestionSet(currentRow));
             }
@@ -251,10 +252,10 @@ public class ChallengeService {
     }
 
     private QuestionSet populateQuestionSet(final Row currentRow) {
-        var cellIterator = currentRow.iterator();
-        var questionSet = new QuestionSet();
+        java.util.Iterator<Cell> cellIterator = currentRow.iterator();
+        QuestionSet questionSet = new QuestionSet();
         while (cellIterator.hasNext()) {
-            var currentCell = cellIterator.next();
+            Cell currentCell = cellIterator.next();
             switch (currentCell.getColumnIndex()) {
                 case 0 -> questionSet.setQuestion(currentCell.getStringCellValue());
                 case 1 -> questionSet.setAnswer1(fetchCurrentCellValue(currentCell));
@@ -276,7 +277,7 @@ public class ChallengeService {
     }
 
     private String parseCorrectOptions(final Cell cell) {
-        var options = fetchCurrentCellValue(cell);
+        String options = fetchCurrentCellValue(cell);
         if (options == null || options.isBlank()) {
             return null;
         }
@@ -284,7 +285,7 @@ public class ChallengeService {
     }
 
     private QuestionType parseQuestionType(final Cell cell) {
-        var value = fetchCurrentCellValue(cell);
+        String value = fetchCurrentCellValue(cell);
         if (value == null || value.isBlank()) {
             return QuestionType.MULTIPLE_CHOICE;
         }
@@ -300,7 +301,7 @@ public class ChallengeService {
         if (cell.getCellType() == CellType.NUMERIC) {
             return (int) cell.getNumericCellValue();
         }
-        var value = fetchCurrentCellValue(cell);
+        String value = fetchCurrentCellValue(cell);
         if (value == null || value.isBlank()) {
             return null;
         }
@@ -316,7 +317,7 @@ public class ChallengeService {
         if (cell.getCellType() == CellType.NUMERIC) {
             return (int) cell.getNumericCellValue();
         }
-        var value = fetchCurrentCellValue(cell);
+        String value = fetchCurrentCellValue(cell);
         if (value == null || value.isBlank()) {
             return 1000; // Default points
         }
@@ -337,7 +338,7 @@ public class ChallengeService {
         } else if (currentCell.getCellType() == CellType.BOOLEAN) {
             result = String.valueOf(currentCell.getBooleanCellValue());
         } else {
-            var cellName = currentCell.getCellType().name();
+            String cellName = currentCell.getCellType().name();
             logger.error("Invalid cell type on  {}  is {}", currentCell.getColumnIndex(),
                     cellName);
         }

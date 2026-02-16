@@ -46,7 +46,7 @@ public class ScoreController {
     public String scoreCheck(final Model model,
                              @RequestParam(value = "quizPin", required = false) final String quizPin) {
         logger.info("On to the scoreboard screen for game: {}", quizPin);
-        var scores = gameService.getCurrentScore();
+        Map<String, Integer> scores = gameService.getCurrentScore();
         List<ScoreResult> scoreResults = buildScoreResults(scores, gameService.getPreviousScores());
         addScoreAttributes(model, scores, scoreResults, quizPin);
         addTeamScoresIfEnabled(model, quizPin, scoreResults);
@@ -55,7 +55,7 @@ public class ScoreController {
 
     private void addScoreAttributes(final Model model, final Map<String, Integer> scores,
                                      final List<ScoreResult> scoreResults, final String quizPin) {
-        var score = new CurrentScore();
+        CurrentScore score = new CurrentScore();
         score.setScore(scores);
         model.addAttribute("score", score);
         model.addAttribute("scoreResults", scoreResults);
@@ -78,7 +78,7 @@ public class ScoreController {
         Map<String, Integer> previousRanks = calculateRanks(prevScores);
         List<Map.Entry<String, Integer>> sortedEntries = sortScores(scores);
         int rank = 1;
-        for (var entry : sortedEntries) {
+        for (Map.Entry<String, Integer> entry : sortedEntries) {
             results.add(createScoreResult(entry, prevScores, previousRanks, sortedEntries.size(), rank++));
         }
         return results;
@@ -104,10 +104,10 @@ public class ScoreController {
     }
 
     private Map<String, Integer> calculateRanks(final Map<String, Integer> scores) {
-        java.util.Map<String, Integer> ranks = new java.util.HashMap<>();
+        Map<String, Integer> ranks = new java.util.HashMap<>();
         List<Map.Entry<String, Integer>> sorted = sortScores(scores);
         int rank = 1;
-        for (var entry : sorted) {
+        for (Map.Entry<String, Integer> entry : sorted) {
             ranks.put(entry.getKey(), rank++);
         }
         return ranks;

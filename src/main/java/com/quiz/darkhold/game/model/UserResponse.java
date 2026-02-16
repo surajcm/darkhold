@@ -5,6 +5,9 @@ import java.util.List;
 public class UserResponse {
     private List<String> users;
 
+    /**
+     * Default constructor for object initialization.
+     */
     public UserResponse() {
     }
 

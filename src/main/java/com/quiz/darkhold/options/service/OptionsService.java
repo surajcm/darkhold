@@ -28,18 +28,18 @@ public class OptionsService {
      * @return challenges
      */
     public ChallengeInfo populateChallengeInfo(final String email) {
-        var user = userRepository.findByEmail(email);
+        com.quiz.darkhold.user.entity.User user = userRepository.findByEmail(email);
         log.info(user.getId());
-        var challenges = challengeRepository.findByChallengeOwner(user.getId());
+        java.util.List<Challenge> challenges = challengeRepository.findByChallengeOwner(user.getId());
         log.info("total challenges owned by the user is " + challenges.size());
-        var summaries = challenges.stream().map(this::getChallengeSummary).toList();
-        var challengeInfo = new ChallengeInfo();
+        java.util.List<ChallengeSummary> summaries = challenges.stream().map(this::getChallengeSummary).toList();
+        ChallengeInfo challengeInfo = new ChallengeInfo();
         challengeInfo.setChallengeSummaryList(summaries);
         return challengeInfo;
     }
 
     private ChallengeSummary getChallengeSummary(final Challenge challenge) {
-        var summary = new ChallengeSummary();
+        ChallengeSummary summary = new ChallengeSummary();
         summary.setChallengeId(challenge.getId().intValue());
         summary.setChallengeName(challenge.getTitle());
         return summary;

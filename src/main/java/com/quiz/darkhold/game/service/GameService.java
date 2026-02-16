@@ -51,7 +51,7 @@ public class GameService {
     }
 
     public QuestionPointer getCurrentQuestionPointer() {
-        var pin = currentPin();
+        String pin = currentPin();
         logger.info("Current pin is {}", pin);
         return currentGame.getCurrentQuestionPointer(pin);
     }
@@ -68,7 +68,7 @@ public class GameService {
     }
 
     public void incrementQuestionNo() {
-        var pin = currentPin();
+        String pin = currentPin();
         currentGame.incrementQuestionCount(pin);
     }
 
@@ -79,17 +79,17 @@ public class GameService {
      * @param status of user
      */
     public void saveCurrentScore(final String name, final Integer status) {
-        var pin = currentPin();
+        String pin = currentPin();
         currentGame.saveCurrentScore(pin, name, status);
     }
 
     public String findModerator() {
-        var pin = currentPin();
+        String pin = currentPin();
         return currentGame.findModerator(pin);
     }
 
     public Map<String, Integer> getCurrentScore() {
-        var pin = currentPin();
+        String pin = currentPin();
         logger.info("current pin is {}", pin);
         return currentGame.getCurrentScore(pin);
     }
@@ -109,7 +109,7 @@ public class GameService {
         }
         // Fallback to legacy single-game behavior for backwards compatibility
         logger.warn("No PIN in session, falling back to getActiveChallenge()");
-        var publishInfo = previewService.getActiveChallenge();
+        PublishInfo publishInfo = previewService.getActiveChallenge();
         return publishInfo.getPin();
     }
 
@@ -130,7 +130,7 @@ public class GameService {
     }
 
     public void cleanUpCurrentGame() {
-        var pin = currentPin();
+        String pin = currentPin();
         logger.info("Cleaning up game: {}", pin);
         // make it inactive
         // save scores to a db
@@ -147,7 +147,7 @@ public class GameService {
      * @return new streak value
      */
     public int updateStreak(final String name, final boolean isCorrect) {
-        var pin = currentPin();
+        String pin = currentPin();
         return currentGame.updateStreak(pin, name, isCorrect);
     }
 
@@ -158,7 +158,7 @@ public class GameService {
      * @return streak count
      */
     public int getStreak(final String name) {
-        var pin = currentPin();
+        String pin = currentPin();
         return currentGame.getStreak(pin, name);
     }
 
@@ -166,7 +166,7 @@ public class GameService {
      * Save current scores before starting a new question.
      */
     public void savePreviousScores() {
-        var pin = currentPin();
+        String pin = currentPin();
         currentGame.savePreviousScores(pin);
     }
 
@@ -176,7 +176,7 @@ public class GameService {
      * @return previous scores map
      */
     public Map<String, Integer> getPreviousScores() {
-        var pin = currentPin();
+        String pin = currentPin();
         return currentGame.getPreviousScores(pin);
     }
 
@@ -188,7 +188,7 @@ public class GameService {
      * @param status new status
      */
     public void setGameStatus(final GameStatus status) {
-        var pin = currentPin();
+        String pin = currentPin();
         currentGame.setGameStatus(pin, status);
     }
 
@@ -198,7 +198,7 @@ public class GameService {
      * @return game status
      */
     public GameStatus getGameStatus() {
-        var pin = currentPin();
+        String pin = currentPin();
         return currentGame.getGameStatus(pin);
     }
 
@@ -208,7 +208,7 @@ public class GameService {
      * @return true if paused
      */
     public boolean pauseGame() {
-        var pin = currentPin();
+        String pin = currentPin();
         return currentGame.pauseGame(pin);
     }
 
@@ -218,7 +218,7 @@ public class GameService {
      * @return elapsed pause time in milliseconds
      */
     public long resumeGame() {
-        var pin = currentPin();
+        String pin = currentPin();
         return currentGame.resumeGame(pin);
     }
 
@@ -226,7 +226,7 @@ public class GameService {
      * Skip to the next question.
      */
     public void skipQuestion() {
-        var pin = currentPin();
+        String pin = currentPin();
         currentGame.incrementQuestionCount(pin);
     }
 
@@ -239,7 +239,7 @@ public class GameService {
      * @return true if removed
      */
     public boolean kickPlayer(final String username) {
-        var pin = currentPin();
+        String pin = currentPin();
         return currentGame.removeUserFromGame(pin, username);
     }
 
@@ -249,7 +249,7 @@ public class GameService {
      * @return participant count
      */
     public int getParticipantCount() {
-        var pin = currentPin();
+        String pin = currentPin();
         return currentGame.getParticipantCount(pin);
     }
 
@@ -275,7 +275,7 @@ public class GameService {
      * @return GameMode (MULTIPLAYER or PRACTICE)
      */
     public GameMode getGameMode() {
-        var pin = currentPin();
+        String pin = currentPin();
         return currentGame.getGameMode(pin);
     }
 
@@ -306,7 +306,7 @@ public class GameService {
      * @return true if team mode, false otherwise
      */
     public boolean isTeamMode() {
-        var pin = currentPin();
+        String pin = currentPin();
         return teamService.isTeamMode(pin);
     }
 
@@ -326,7 +326,7 @@ public class GameService {
      * @return map of team name to total score
      */
     public Map<String, Integer> getTeamScores() {
-        var pin = currentPin();
+        String pin = currentPin();
         return teamService.calculateTeamScores(pin);
     }
 

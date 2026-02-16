@@ -50,8 +50,8 @@ public class PracticeService {
         String practiceId = "PRACTICE-" + UUID.randomUUID().toString().substring(0, 8);
 
         // Fetch challenge questions
-        var challengeIdLong = Long.valueOf(challengeId);
-        var challenge = challengeRepository.findById(challengeIdLong)
+        Long challengeIdLong = Long.valueOf(challengeId);
+        com.quiz.darkhold.challenge.entity.Challenge challenge = challengeRepository.findById(challengeIdLong)
                 .orElseThrow(() -> new IllegalArgumentException("Challenge not found: " + challengeId));
 
         List<QuestionSet> questionsList = new ArrayList<>(challenge.getQuestionSets());

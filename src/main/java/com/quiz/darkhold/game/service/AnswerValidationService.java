@@ -36,6 +36,16 @@ public class AnswerValidationService {
     private static final double LONG_ANSWER_TOLERANCE_RATIO = 0.2;
 
     /**
+     * Maximum length for short answers.
+     */
+    private static final int SHORT_ANSWER_MAX_LENGTH = 5;
+
+    /**
+     * Maximum length for medium answers.
+     */
+    private static final int MEDIUM_ANSWER_MAX_LENGTH = 10;
+
+    /**
      * Validate a user's answer against the correct answer(s) for a question.
      *
      * @param question   the question being answered
@@ -47,7 +57,7 @@ public class AnswerValidationService {
             return false;
         }
 
-        var questionType = question.getQuestionType();
+        QuestionType questionType = question.getQuestionType();
         if (questionType == null) {
             questionType = QuestionType.MULTIPLE_CHOICE;
         }
@@ -81,17 +91,17 @@ public class AnswerValidationService {
     }
 
     private boolean validateMultipleChoice(final QuestionSet question, final String userAnswer) {
-        var correctOptions = question.getCorrectOptions();
+        String correctOptions = question.getCorrectOptions();
         if (correctOptions == null || correctOptions.isBlank()) {
             return false;
         }
         // User answer is option letter(s) like "A" or "A,B"
-        var userOptions = userAnswer.toUpperCase(Locale.ROOT).trim();
+        String userOptions = userAnswer.toUpperCase(Locale.ROOT).trim();
         return correctOptions.equalsIgnoreCase(userOptions);
     }
 
     private boolean validateTrueFalse(final QuestionSet question, final String userAnswer) {
-        var correctAnswer = question.getCorrectOptions();
+        String correctAnswer = question.getCorrectOptions();
         if (correctAnswer == null || correctAnswer.isBlank()) {
             return false;
         }
@@ -100,12 +110,12 @@ public class AnswerValidationService {
     }
 
     private boolean validateTypeAnswer(final QuestionSet question, final String userAnswer) {
-        var correctAnswer = question.getAnswer1();
+        String correctAnswer = question.getAnswer1();
         if (correctAnswer == null || correctAnswer.isBlank()) {
             logger.warn("TYPE_ANSWER question has no correct answer set");
             return false;
         }
-        var normalizedUserAnswer = normalizeAnswer(userAnswer);
+        String normalizedUserAnswer = normalizeAnswer(userAnswer);
         if (isFuzzyMatch(normalizedUserAnswer, normalizeAnswer(correctAnswer))) {
             return true;
         }
@@ -116,7 +126,7 @@ public class AnswerValidationService {
         if (acceptableAnswers == null || acceptableAnswers.isBlank()) {
             return false;
         }
-        for (var alt : acceptableAnswers.split(",", -1)) {
+        for (String alt : acceptableAnswers.split(",", -1)) {
             if (isFuzzyMatch(userAnswer, normalizeAnswer(alt))) {
                 return true;
             }
@@ -146,7 +156,7 @@ public class AnswerValidationService {
         int maxLength = Math.max(userAnswer.length(), correctAnswer.length());
         int tolerance = calculateTolerance(maxLength);
 
-        var isMatch = distance <= tolerance;
+        boolean isMatch = distance <= tolerance;
         if (isMatch && distance > 0) {
             logger.debug("Fuzzy match: '{}' -> '{}' (distance: {})", userAnswer, correctAnswer, distance);
         }
@@ -157,9 +167,9 @@ public class AnswerValidationService {
      * Calculate the allowed Levenshtein distance based on answer length.
      */
     private int calculateTolerance(final int length) {
-        if (length <= 5) {
+        if (length <= SHORT_ANSWER_MAX_LENGTH) {
             return SHORT_ANSWER_TOLERANCE;
-        } else if (length <= 10) {
+        } else if (length <= MEDIUM_ANSWER_MAX_LENGTH) {
             return MEDIUM_ANSWER_TOLERANCE;
         } else {
             return (int) Math.ceil(length * LONG_ANSWER_TOLERANCE_RATIO);

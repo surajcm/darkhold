@@ -64,8 +64,8 @@ public class ChallengeController {
                                                                    final RedirectAttributes redirectAttributes) {
         logParams(upload, title, description);
         try {
-            var challengeId = challengeService.readProcessAndSaveChallenge(upload, title, description);
-            var responseText = "Successfully created " + CommonUtils.sanitizedString(title) + " !!!";
+            Long challengeId = challengeService.readProcessAndSaveChallenge(upload, title, description);
+            String responseText = "Successfully created " + CommonUtils.sanitizedString(title) + " !!!";
             return ResponseEntity.ok(new ChallengeWithResponse(challengeId, responseText));
         } catch (ChallengeException challengeException) {
             logger.error("Failed to process challenge: {}", challengeException.getErrorMessage());
@@ -77,12 +77,12 @@ public class ChallengeController {
     private void logParams(final MultipartFile upload,
                            final String title, final String description) {
         logger.info("Received incoming traffic and redirected to upload_pdf");
-        var sanitizedTitle = CommonUtils.sanitizedString(title);
-        var sanitizedDescription = CommonUtils.sanitizedString(description);
+        String sanitizedTitle = CommonUtils.sanitizedString(title);
+        String sanitizedDescription = CommonUtils.sanitizedString(description);
         logger.info("title : {}, description : {} ",
                 sanitizedTitle, sanitizedDescription);
-        var sanitizedOriginalFileName = CommonUtils.sanitizedString(upload.getOriginalFilename());
-        var sanitizedFileSize = CommonUtils.sanitizedString(String.valueOf(upload.getSize()));
+        String sanitizedOriginalFileName = CommonUtils.sanitizedString(upload.getOriginalFilename());
+        String sanitizedFileSize = CommonUtils.sanitizedString(String.valueOf(upload.getSize()));
         logger.info("File details getOriginalFilename : {}, getSize : {}} ",
                 sanitizedOriginalFileName, sanitizedFileSize);
     }
@@ -97,9 +97,9 @@ public class ChallengeController {
     @DeleteMapping("/delete_challenge")
     public ResponseEntity<Boolean> deleteChallenge(final Long challenge,
                                                    final RedirectAttributes redirectAttributes) {
-        var sanitizeChallenge = CommonUtils.sanitizedString(String.valueOf(challenge));
+        String sanitizeChallenge = CommonUtils.sanitizedString(String.valueOf(challenge));
         logger.info("received incoming request to delete_challenge : {}", sanitizeChallenge);
-        var deleted = challengeService.deleteChallenge(challenge);
+        Boolean deleted = challengeService.deleteChallenge(challenge);
         if (deleted) {
             return ResponseEntity.ok(true);
         }
@@ -128,10 +128,11 @@ public class ChallengeController {
     public ResponseEntity<ChallengeWithResponse> saveChallenge(
             @RequestParam @NotBlank @Size(max = 100) final String title,
             @RequestParam @Size(max = 250) final String description) {
-        var sanitizedTitle = CommonUtils.sanitizedString(title);
-        var sanitizedDescription = CommonUtils.sanitizedString(description);
+        String sanitizedTitle = CommonUtils.sanitizedString(title);
+        String sanitizedDescription = CommonUtils.sanitizedString(description);
         logger.info("Creating new challenge: title={}, description={}", sanitizedTitle, sanitizedDescription);
-        var challenge = challengeService.createEmptyChallenge(title, description);
+        com.quiz.darkhold.challenge.entity.Challenge challenge =
+                challengeService.createEmptyChallenge(title, description);
         return ResponseEntity.ok(new ChallengeWithResponse(challenge.getId(),
                 "Successfully created " + sanitizedTitle + " !!!"));
     }
@@ -146,7 +147,7 @@ public class ChallengeController {
     @GetMapping("/edit_challenge/{id}")
     public String showEditChallengeForm(@PathVariable final Long id, final Model model) {
         logger.info("Showing edit form for challenge: {}", id);
-        var challenge = challengeService.getChallengeForEdit(id);
+        com.quiz.darkhold.challenge.entity.Challenge challenge = challengeService.getChallengeForEdit(id);
         if (challenge == null) {
             logger.warn("Challenge not found or not owned by user: {}", id);
             return "redirect:/options";
@@ -168,9 +169,10 @@ public class ChallengeController {
             @PathVariable final Long id,
             @RequestParam @NotBlank @Size(max = 100) final String title,
             @RequestParam @Size(max = 250) final String description) {
-        var sanitizedTitle = CommonUtils.sanitizedString(title);
+        String sanitizedTitle = CommonUtils.sanitizedString(title);
         logger.info("Updating challenge {}: title={}", id, sanitizedTitle);
-        var challenge = challengeService.updateChallenge(id, title, description);
+        com.quiz.darkhold.challenge.entity.Challenge challenge =
+                challengeService.updateChallenge(id, title, description);
         if (challenge == null) {
             return ResponseEntity.notFound().build();
         }
@@ -187,7 +189,7 @@ public class ChallengeController {
     @PostMapping("/duplicate_challenge/{id}")
     public ResponseEntity<ChallengeWithResponse> duplicateChallenge(@PathVariable final Long id) {
         logger.info("Duplicating challenge: {}", id);
-        var newChallenge = challengeService.duplicateChallenge(id);
+        com.quiz.darkhold.challenge.entity.Challenge newChallenge = challengeService.duplicateChallenge(id);
         if (newChallenge == null) {
             return ResponseEntity.notFound().build();
         }
@@ -201,7 +203,7 @@ public class ChallengeController {
     @GetMapping("/export_challenge/{id}/json")
     public ResponseEntity<byte[]> exportChallengeAsJson(@PathVariable final Long id) {
         logger.info("Exporting challenge as JSON: {}", id);
-        var challenge = challengeService.getChallengeForEdit(id);
+        com.quiz.darkhold.challenge.entity.Challenge challenge = challengeService.getChallengeForEdit(id);
         if (challenge == null) {
             return ResponseEntity.notFound().build();
         }
@@ -210,11 +212,11 @@ public class ChallengeController {
 
     private ResponseEntity<byte[]> buildJsonExport(
             final com.quiz.darkhold.challenge.entity.Challenge challenge) {
-        var dto = ChallengeExportDto.fromEntity(challenge);
-        var mapper = new ObjectMapper();
-        var filename = challenge.getTitle().replaceAll("[^a-zA-Z0-9]", "_") + ".json";
+        ChallengeExportDto dto = ChallengeExportDto.fromEntity(challenge);
+        ObjectMapper mapper = new ObjectMapper();
+        String filename = challenge.getTitle().replaceAll("[^a-zA-Z0-9]", "_") + ".json";
         try {
-            var json = mapper.writerWithDefaultPrettyPrinter().writeValueAsBytes(dto);
+            byte[] json = mapper.writerWithDefaultPrettyPrinter().writeValueAsBytes(dto);
             return ResponseEntity.ok()
                     .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + filename + "\"")
                     .contentType(MediaType.APPLICATION_JSON).body(json);
@@ -230,7 +232,7 @@ public class ChallengeController {
     @GetMapping("/export_challenge/{id}/csv")
     public ResponseEntity<byte[]> exportChallengeAsCsv(@PathVariable final Long id) {
         logger.info("Exporting challenge as CSV: {}", id);
-        var challenge = challengeService.getChallengeForEdit(id);
+        com.quiz.darkhold.challenge.entity.Challenge challenge = challengeService.getChallengeForEdit(id);
         if (challenge == null) {
             return ResponseEntity.notFound().build();
         }
@@ -239,17 +241,17 @@ public class ChallengeController {
 
     private ResponseEntity<byte[]> buildCsvExport(
             final com.quiz.darkhold.challenge.entity.Challenge challenge) {
-        var csv = buildCsvContent(challenge);
-        var filename = challenge.getTitle().replaceAll("[^a-zA-Z0-9]", "_") + ".csv";
+        String csv = buildCsvContent(challenge);
+        String filename = challenge.getTitle().replaceAll("[^a-zA-Z0-9]", "_") + ".csv";
         return ResponseEntity.ok()
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + filename + "\"")
                 .contentType(MediaType.parseMediaType("text/csv")).body(csv.getBytes(StandardCharsets.UTF_8));
     }
 
     private String buildCsvContent(final com.quiz.darkhold.challenge.entity.Challenge challenge) {
-        var header = "Question,Answer1,Answer2,Answer3,Answer4,CorrectOptions,"
+        String header = "Question,Answer1,Answer2,Answer3,Answer4,CorrectOptions,"
                 + "Type,TimeLimit,Points,AcceptableAnswers,ImageUrl,VideoUrl\n";
-        var sb = new StringBuilder(header);
+        StringBuilder sb = new StringBuilder(header);
         if (challenge.getQuestionSets() != null) {
             challenge.getQuestionSets().forEach(q -> appendCsvRow(sb, q));
         }
@@ -258,24 +260,24 @@ public class ChallengeController {
 
     private void appendCsvRow(final StringBuilder sb,
             final com.quiz.darkhold.challenge.entity.QuestionSet question) {
-        sb.append(escapeCsv(question.getQuestion())).append(",");
-        sb.append(escapeCsv(question.getAnswer1())).append(",");
-        sb.append(escapeCsv(question.getAnswer2())).append(",");
-        sb.append(escapeCsv(question.getAnswer3())).append(",");
-        sb.append(escapeCsv(question.getAnswer4())).append(",");
-        sb.append(escapeCsv(question.getCorrectOptions())).append(",");
+        sb.append(escapeCsv(question.getQuestion())).append(',');
+        sb.append(escapeCsv(question.getAnswer1())).append(',');
+        sb.append(escapeCsv(question.getAnswer2())).append(',');
+        sb.append(escapeCsv(question.getAnswer3())).append(',');
+        sb.append(escapeCsv(question.getAnswer4())).append(',');
+        sb.append(escapeCsv(question.getCorrectOptions())).append(',');
         appendExtendedFields(sb, question);
     }
 
     private void appendExtendedFields(final StringBuilder sb,
             final com.quiz.darkhold.challenge.entity.QuestionSet question) {
-        var qType = question.getQuestionType() != null ? question.getQuestionType().name() : "";
-        sb.append(escapeCsv(qType)).append(",");
-        sb.append(question.getTimeLimit() != null ? question.getTimeLimit() : "").append(",");
-        sb.append(question.getPoints() != null ? question.getPoints() : "").append(",");
-        sb.append(escapeCsv(question.getAcceptableAnswers())).append(",");
-        sb.append(escapeCsv(question.getImageUrl())).append(",");
-        sb.append(escapeCsv(question.getVideoUrl())).append("\n");
+        String qType = question.getQuestionType() != null ? question.getQuestionType().name() : "";
+        sb.append(escapeCsv(qType)).append(',');
+        sb.append(question.getTimeLimit() != null ? question.getTimeLimit() : "").append(',');
+        sb.append(question.getPoints() != null ? question.getPoints() : "").append(',');
+        sb.append(escapeCsv(question.getAcceptableAnswers())).append(',');
+        sb.append(escapeCsv(question.getImageUrl())).append(',');
+        sb.append(escapeCsv(question.getVideoUrl())).append('\n');
     }
 
     private String escapeCsv(final String value) {
@@ -296,9 +298,9 @@ public class ChallengeController {
             @RequestParam("file") final MultipartFile file) {
         logger.info("Importing challenge from JSON");
         try {
-            var mapper = new ObjectMapper();
-            var dto = mapper.readValue(file.getInputStream(), ChallengeExportDto.class);
-            var challenge = challengeService.importFromJson(dto);
+            ObjectMapper mapper = new ObjectMapper();
+            ChallengeExportDto dto = mapper.readValue(file.getInputStream(), ChallengeExportDto.class);
+            com.quiz.darkhold.challenge.entity.Challenge challenge = challengeService.importFromJson(dto);
             return ResponseEntity.ok(new ChallengeWithResponse(challenge.getId(),
                     "Successfully imported " + challenge.getTitle() + " !!!"));
         } catch (java.io.IOException ioException) {

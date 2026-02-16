@@ -41,7 +41,7 @@ public class UserValidator implements Validator {
     private void validatePassword(final Errors errors, final User user) {
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "password", "NotEmpty");
 
-        var password = user.getPassword();
+        String password = user.getPassword();
 
         if (!isValidPasswordLength(password)) {
             errors.rejectValue("password", "Size.userForm.password");
@@ -84,13 +84,13 @@ public class UserValidator implements Validator {
      * @return true if the password is common
      */
     private boolean isCommonPassword(final String password) {
-        var commonPasswords = new String[]{
+        String[] commonPasswords = new String[]{
             "password", "Password1", "12345678", "qwerty", "abc123",
             "password123", "admin123", "letmein", "welcome", "monkey",
             "1234567890", "password1", "qwerty123", "welcome1", "admin"
         };
 
-        var lowerPassword = password.toLowerCase(Locale.ROOT);
+        String lowerPassword = password.toLowerCase(Locale.ROOT);
         for (var common : commonPasswords) {
             if (lowerPassword.equals(common.toLowerCase(Locale.ROOT))) {
                 return true;

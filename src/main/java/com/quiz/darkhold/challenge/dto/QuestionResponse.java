@@ -24,6 +24,9 @@ public class QuestionResponse {
     private String imageUrl;
     private String videoUrl;
 
+    /**
+     * Default constructor for DTO initialization.
+     */
     public QuestionResponse() {
     }
 
@@ -34,7 +37,7 @@ public class QuestionResponse {
      * @return the response DTO
      */
     public static QuestionResponse fromEntity(final QuestionSet questionSet) {
-        var response = new QuestionResponse();
+        QuestionResponse response = new QuestionResponse();
         mapBasicFields(response, questionSet);
         mapExtendedFields(response, questionSet);
         return response;

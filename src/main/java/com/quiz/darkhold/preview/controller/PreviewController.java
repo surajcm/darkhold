@@ -49,9 +49,9 @@ public class PreviewController {
      */
     @PostMapping("/preconfigure")
     public String preconfigure(final Model model, @RequestParam("challenges") final String challenges) {
-        var sanitizedChallenges = CommonUtils.sanitizedString(challenges);
+        String sanitizedChallenges = CommonUtils.sanitizedString(challenges);
         log.info("Into the preconfigure method : {}", sanitizedChallenges);
-        var previewInfo = previewService.fetchQuestions(challenges);
+        com.quiz.darkhold.preview.model.PreviewInfo previewInfo = previewService.fetchQuestions(challenges);
         model.addAttribute("previewInfo", previewInfo);
         return "challenge/preview";
     }
@@ -81,7 +81,7 @@ public class PreviewController {
                           final Principal principal,
                           final HttpSession session) {
         log.info("Into publish method : {} teamMode: {}", CommonUtils.sanitizedString(challengeId), teamMode);
-        var publishInfo = previewService.generateQuizPin(challengeId, principal.getName(), teamMode);
+        PublishInfo publishInfo = previewService.generateQuizPin(challengeId, principal.getName(), teamMode);
         storeSessionAttributes(session, publishInfo.getPin(), teamMode);
         createTeamsIfEnabled(teamMode, teamCount, assignmentMethod, teamNames, publishInfo.getPin());
         addPublishAttributes(model, publishInfo, teamMode, teamCount, assignmentMethod);
@@ -145,11 +145,11 @@ public class PreviewController {
                                 @RequestParam("challenge_id") final String challengeId,
                                 final Principal principal,
                                 final HttpSession session) {
-        var sanitizedChallengeId = CommonUtils.sanitizedString(challengeId);
+        String sanitizedChallengeId = CommonUtils.sanitizedString(challengeId);
         log.info("Starting practice mode for challenge: {} player: {}",
                 sanitizedChallengeId, principal.getName());
 
-        var publishInfo = practiceService.initializePracticeGame(
+        PublishInfo publishInfo = practiceService.initializePracticeGame(
                 challengeId, principal.getName(), session);
 
         model.addAttribute("quizPin", publishInfo.getPin());

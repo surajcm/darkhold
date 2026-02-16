@@ -24,6 +24,9 @@ public class Role implements Serializable {
     @Column(length = 150, nullable = false)
     private String description;
 
+    /**
+     * Default constructor required by JPA for entity instantiation.
+     */
     public Role() {
     }
 

@@ -3,6 +3,7 @@ package com.quiz.darkhold.home.controller;
 import com.quiz.darkhold.home.model.GameInfo;
 import com.quiz.darkhold.home.service.HomeService;
 import com.quiz.darkhold.init.RateLimitingService;
+import com.quiz.darkhold.team.model.TeamAssignmentMethod;
 import com.quiz.darkhold.team.service.TeamService;
 import com.quiz.darkhold.user.service.SecurityService;
 import com.quiz.darkhold.util.CommonUtils;
@@ -79,8 +80,8 @@ public class HomeController {
     public @ResponseBody
     Boolean enterGame(@ModelAttribute("gamePin") final String gamePin,
                       final HttpServletRequest request) {
-        var sanitizedPin = CommonUtils.sanitizedString(gamePin);
-        var clientIp = getClientIpAddress(request);
+        String sanitizedPin = CommonUtils.sanitizedString(gamePin);
+        String clientIp = getClientIpAddress(request);
 
         // Check rate limiting
         if (!rateLimitingService.isAllowed(clientIp)) {
@@ -89,7 +90,7 @@ public class HomeController {
         }
 
         logger.info("Game pin attempt: {} from IP: {}", sanitizedPin, clientIp);
-        var isValid = homeService.validateGamePin(gamePin);
+        Boolean isValid = homeService.validateGamePin(gamePin);
 
         // Record attempt result
         if (isValid) {
@@ -110,15 +111,15 @@ public class HomeController {
      */
     private String getClientIpAddress(final HttpServletRequest request) {
         // Check for X-Forwarded-For header (proxy/load balancer)
-        var xForwardedFor = request.getHeader("X-Forwarded-For");
+        String xForwardedFor = request.getHeader("X-Forwarded-For");
         if (xForwardedFor != null && !xForwardedFor.isEmpty()) {
             // Take first IP if multiple are present
-            var commaIndex = xForwardedFor.indexOf(',');
+            int commaIndex = xForwardedFor.indexOf(',');
             return commaIndex > 0 ? xForwardedFor.substring(0, commaIndex).trim() : xForwardedFor.trim();
         }
 
         // Check for X-Real-IP header (nginx)
-        var xRealIp = request.getHeader("X-Real-IP");
+        String xRealIp = request.getHeader("X-Real-IP");
         if (xRealIp != null && !xRealIp.isEmpty()) {
             return xRealIp;
         }
@@ -151,7 +152,7 @@ public class HomeController {
         populateGameInfo(gameInfo);
 
         // Check if moderator is trying to join their own game
-        var moderator = homeService.getModerator(gameInfo.getGamePin());
+        String moderator = homeService.getModerator(gameInfo.getGamePin());
         if (gameInfo.getName().equalsIgnoreCase(moderator)) {
             logger.warn("Moderator {} is joining their own game", moderator);
             model.addAttribute("moderatorWarning", true);
@@ -167,7 +168,8 @@ public class HomeController {
 
         // Pass assignment method for drag-drop UI
         if (teamMode) {
-            var assignmentMethod = teamService.getAssignmentMethod(gameInfo.getGamePin());
+            TeamAssignmentMethod assignmentMethod =
+                    teamService.getAssignmentMethod(gameInfo.getGamePin());
             model.addAttribute("assignmentMethod", assignmentMethod.name());
         }
 
@@ -176,7 +178,7 @@ public class HomeController {
     }
 
     private void populateGameInfo(final GameInfo gameInfo) {
-        var activeUsers = homeService.participantsInActiveQuiz(gameInfo.getGamePin());
+        java.util.List<String> activeUsers = homeService.participantsInActiveQuiz(gameInfo.getGamePin());
         activeUsers.add(gameInfo.getName());
         gameInfo.setUsers(activeUsers);
         gameInfo.setModerator(homeService.getModerator(gameInfo.getGamePin()));

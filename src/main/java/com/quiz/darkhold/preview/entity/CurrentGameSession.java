@@ -78,6 +78,9 @@ public class CurrentGameSession {
     private static final ObjectMapper objectMapper = new ObjectMapper();
 
     // Constructors
+    /**
+     * Default constructor required by JPA for entity instantiation.
+     */
     public CurrentGameSession() {
     }
 

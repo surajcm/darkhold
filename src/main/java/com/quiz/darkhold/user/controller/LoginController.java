@@ -47,7 +47,7 @@ public class LoginController {
         securityService.autoLogin(userName, password);
         logger.info("AutoLogin done !!!");
         if (error != null || logout != null) {
-            var tuple = modelAttributes(error, logout);
+            Map.Entry<String, String> tuple = modelAttributes(error, logout);
             model.addAttribute(tuple.getKey(), tuple.getValue());
         }
         model.addAttribute("userForm", new User());
@@ -74,7 +74,7 @@ public class LoginController {
     @GetMapping("/logout")
     public String logout(final HttpServletRequest request) {
         logger.info("Inside logout method of user controller");
-        var session = request.getSession(false);
+        jakarta.servlet.http.HttpSession session = request.getSession(false);
         SecurityContextHolder.clearContext();
         if (session != null) {
             session.invalidate();
@@ -83,7 +83,7 @@ public class LoginController {
     }
 
     private void logUserName(final String userName) {
-        var sanitizedUserName = CommonUtils.sanitizedString(userName);
+        String sanitizedUserName = CommonUtils.sanitizedString(userName);
         logger.info("Login method : user name is {}", sanitizedUserName);
     }
 
@@ -100,7 +100,7 @@ public class LoginController {
     }
 
     private void logError(final String error) {
-        var sanitizedError = CommonUtils.sanitizedString(error);
+        String sanitizedError = CommonUtils.sanitizedString(error);
         logger.info("Login method, error : {}", sanitizedError);
     }
 

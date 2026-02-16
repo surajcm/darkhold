@@ -24,7 +24,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     @Transactional(readOnly = true)
     public UserDetails loadUserByUsername(final String username) {
         logger.info("requested user name is {}", username);
-        var user = userRepository.findByEmail(username);
+        com.quiz.darkhold.user.entity.User user = userRepository.findByEmail(username);
         if (user == null) {
             logger.error("Username not found !!");
             throw new UsernameNotFoundException(username);

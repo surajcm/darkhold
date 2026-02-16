@@ -31,7 +31,7 @@ public class SecurityServiceImpl implements SecurityService {
 
     @Override
     public String findLoggedInUsername() {
-        var userDetails = SecurityContextHolder.getContext().getAuthentication().getDetails();
+        Object userDetails = SecurityContextHolder.getContext().getAuthentication().getDetails();
         if (userDetails instanceof UserDetails details) {
             return details.getUsername();
         }
@@ -40,29 +40,36 @@ public class SecurityServiceImpl implements SecurityService {
 
     @Override
     public void autoLogin(final String username, final String password) {
-        var unRegistered = password.equalsIgnoreCase(UNREGISTERED_USER);
-        var userDetails = getUserDetails(username, unRegistered);
-        var authorities = (Set<GrantedAuthority>) userDetails.getAuthorities();
+        boolean unRegistered = password.equalsIgnoreCase(UNREGISTERED_USER);
+        UserDetails userDetails = getUserDetails(username, unRegistered);
+        Set<GrantedAuthority> authorities = (Set<GrantedAuthority>) userDetails.getAuthorities();
         logger.info("Successfully fetched user details : {} ", userDetails);
-        var token = new UsernamePasswordAuthenticationToken(userDetails, password, authorities);
+        UsernamePasswordAuthenticationToken token = createAuthToken(userDetails, password, authorities);
         if (!unRegistered) {
             authenticationManager.authenticate(token);
         }
         if (token.isAuthenticated()) {
             SecurityContextHolder.getContext().setAuthentication(token);
-            var sanitizedUserName = CommonUtils.sanitizedString(username);
+            String sanitizedUserName = CommonUtils.sanitizedString(username);
             logger.info("Auto login {} successfully! : ", sanitizedUserName);
         }
     }
 
     @Override
     public boolean isAuthenticated() {
-        var authentication = SecurityContextHolder.getContext().getAuthentication();
+        org.springframework.security.core.Authentication authentication =
+                SecurityContextHolder.getContext().getAuthentication();
         if (authentication == null ||
                 AnonymousAuthenticationToken.class.isAssignableFrom(authentication.getClass())) {
             return false;
         }
         return authentication.isAuthenticated();
+    }
+
+    private UsernamePasswordAuthenticationToken createAuthToken(final UserDetails userDetails,
+                                                                final String password,
+                                                                final Set<GrantedAuthority> authorities) {
+        return new UsernamePasswordAuthenticationToken(userDetails, password, authorities);
     }
 
     private UserDetails getUserDetails(final String username, final boolean unRegistered) {

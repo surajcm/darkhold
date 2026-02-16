@@ -7,6 +7,9 @@ public class Game {
     private String name;
     private String pin;
 
+    /**
+     * Default constructor for object initialization.
+     */
     public Game() {
     }
 

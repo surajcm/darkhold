@@ -36,32 +36,32 @@ public class QuestionService {
 
     @Transactional
     public QuestionResponse createQuestion(final QuestionRequest request) {
-        var challenge = getOwnedChallenge(request.getChallengeId());
+        Challenge challenge = getOwnedChallenge(request.getChallengeId());
         if (challenge == null) {
             return null;
         }
-        var questionSet = buildQuestionSet(request, challenge);
+        QuestionSet questionSet = buildQuestionSet(request, challenge);
         questionSet.setDisplayOrder(getNextDisplayOrder(challenge));
-        var saved = questionSetRepository.save(questionSet);
+        QuestionSet saved = questionSetRepository.save(questionSet);
         logger.info("Created question {} for challenge {}", saved.getId(), request.getChallengeId());
         return QuestionResponse.fromEntity(saved);
     }
 
     @Transactional
     public QuestionResponse updateQuestion(final Long questionId, final QuestionRequest request) {
-        var question = getOwnedQuestion(questionId);
+        QuestionSet question = getOwnedQuestion(questionId);
         if (question == null) {
             return null;
         }
         updateQuestionFields(question, request);
-        var saved = questionSetRepository.save(question);
+        QuestionSet saved = questionSetRepository.save(question);
         logger.info("Updated question {}", questionId);
         return QuestionResponse.fromEntity(saved);
     }
 
     @Transactional
     public boolean deleteQuestion(final Long questionId) {
-        var question = getOwnedQuestion(questionId);
+        QuestionSet question = getOwnedQuestion(questionId);
         if (question == null) {
             return false;
         }
@@ -75,13 +75,13 @@ public class QuestionService {
     }
 
     public QuestionResponse getQuestion(final Long questionId) {
-        var question = getOwnedQuestion(questionId);
+        QuestionSet question = getOwnedQuestion(questionId);
         return question == null ? null : QuestionResponse.fromEntity(question);
     }
 
     @Transactional
     public boolean reorderQuestions(final ReorderRequest request) {
-        var challenge = getOwnedChallenge(request.getChallengeId());
+        Challenge challenge = getOwnedChallenge(request.getChallengeId());
         if (challenge == null) {
             return false;
         }
@@ -92,12 +92,12 @@ public class QuestionService {
 
     @Transactional
     public QuestionResponse duplicateQuestion(final Long questionId) {
-        var original = getOwnedQuestion(questionId);
+        QuestionSet original = getOwnedQuestion(questionId);
         if (original == null) {
             return null;
         }
-        var newQuestion = copyQuestion(original);
-        var saved = questionSetRepository.save(newQuestion);
+        QuestionSet newQuestion = copyQuestion(original);
+        QuestionSet saved = questionSetRepository.save(newQuestion);
         logger.info("Duplicated question {} as {}", questionId, saved.getId());
         return QuestionResponse.fromEntity(saved);
     }
@@ -105,7 +105,7 @@ public class QuestionService {
     @Transactional
     public int bulkDeleteQuestions(final List<Long> questionIds) {
         int deleted = 0;
-        for (var questionId : questionIds) {
+        for (Long questionId : questionIds) {
             if (deleteQuestion(questionId)) {
                 deleted++;
             }
@@ -116,7 +116,7 @@ public class QuestionService {
 
     @Transactional
     public String uploadQuestionImage(final Long questionId, final MultipartFile file) {
-        var question = getOwnedQuestion(questionId);
+        QuestionSet question = getOwnedQuestion(questionId);
         if (question == null) {
             throw new ImageValidationException("Question not found or access denied");
         }
@@ -127,8 +127,8 @@ public class QuestionService {
         }
 
         // Save new image
-        var challengeId = question.getChallenge().getId();
-        var imageUrl = imageProcessingService.saveQuestionImage(challengeId, questionId, file);
+        Long challengeId = question.getChallenge().getId();
+        String imageUrl = imageProcessingService.saveQuestionImage(challengeId, questionId, file);
 
         // Update question entity
         question.setImageUrl(imageUrl);
@@ -140,7 +140,7 @@ public class QuestionService {
 
     @Transactional
     public boolean deleteQuestionImage(final Long questionId) {
-        var question = getOwnedQuestion(questionId);
+        QuestionSet question = getOwnedQuestion(questionId);
         if (question == null || question.getImageUrl() == null) {
             return false;
         }
@@ -157,7 +157,7 @@ public class QuestionService {
     }
 
     private Challenge getOwnedChallenge(final Long challengeId) {
-        var challengeOpt = challengeRepository.findById(challengeId);
+        java.util.Optional<Challenge> challengeOpt = challengeRepository.findById(challengeId);
         if (challengeOpt.isEmpty() || !isOwner(challengeOpt.get())) {
             logger.warn("Challenge {} not found or not owned", challengeId);
             return null;
@@ -166,12 +166,12 @@ public class QuestionService {
     }
 
     private QuestionSet getOwnedQuestion(final Long questionId) {
-        var questionOpt = questionSetRepository.findById(questionId);
+        java.util.Optional<QuestionSet> questionOpt = questionSetRepository.findById(questionId);
         if (questionOpt.isEmpty()) {
             logger.warn("Question not found: {}", questionId);
             return null;
         }
-        var question = questionOpt.get();
+        QuestionSet question = questionOpt.get();
         if (question.getChallenge() == null || !isOwner(question.getChallenge())) {
             logger.warn("Question {} not owned by user", questionId);
             return null;
@@ -194,7 +194,7 @@ public class QuestionService {
 
     @SuppressWarnings("checkstyle:MethodLength")
     private QuestionSet buildQuestionSet(final QuestionRequest request, final Challenge challenge) {
-        var qs = new QuestionSet();
+        QuestionSet qs = new QuestionSet();
         qs.setQuestion(request.getQuestion());
         qs.setAnswer1(request.getAnswer1());
         qs.setAnswer2(request.getAnswer2());
@@ -228,7 +228,7 @@ public class QuestionService {
 
     private void updateQuestionOrders(final Long challengeId, final List<Long> questionIds) {
         for (int i = 0; i < questionIds.size(); i++) {
-            var questionOpt = questionSetRepository.findById(questionIds.get(i));
+            java.util.Optional<QuestionSet> questionOpt = questionSetRepository.findById(questionIds.get(i));
             if (questionOpt.isPresent() && belongsToChallenge(questionOpt.get(), challengeId)) {
                 questionOpt.get().setDisplayOrder(i);
                 questionSetRepository.save(questionOpt.get());
@@ -241,7 +241,7 @@ public class QuestionService {
     }
 
     private QuestionSet copyQuestion(final QuestionSet original) {
-        var newQuestion = new QuestionSet();
+        QuestionSet newQuestion = new QuestionSet();
         copyBasicFields(newQuestion, original);
         copyExtendedFields(newQuestion, original);
         newQuestion.setDisplayOrder(getNextDisplayOrder(original.getChallenge()));
@@ -268,8 +268,8 @@ public class QuestionService {
     }
 
     private Long currentUserId() {
-        var auth = SecurityContextHolder.getContext().getAuthentication();
-        var principal = auth.getPrincipal();
+        org.springframework.security.core.Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        Object principal = auth.getPrincipal();
         return ((DarkholdUserDetails) principal).getUser().getId();
     }
 }

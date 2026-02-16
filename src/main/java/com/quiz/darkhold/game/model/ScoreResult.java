@@ -6,6 +6,15 @@ package com.quiz.darkhold.game.model;
  */
 public class ScoreResult {
 
+    private static final int STREAK_THRESHOLD_LEVEL_1 = 1;
+    private static final int STREAK_THRESHOLD_LEVEL_2 = 3;
+    private static final int STREAK_THRESHOLD_LEVEL_3 = 5;
+    private static final int STREAK_MULTIPLIER_LEVEL_1 = 1;
+    private static final int STREAK_MULTIPLIER_LEVEL_2 = 2;
+    private static final int STREAK_MULTIPLIER_LEVEL_3 = 3;
+    private static final int STREAK_MULTIPLIER_LEVEL_4 = 4;
+    private static final int MIN_ACTIVE_STREAK = 2;
+
     private String username;
     private int currentScore;
     private int previousScore;
@@ -18,6 +27,9 @@ public class ScoreResult {
     private int basePoints;
     private int bonusPoints;
 
+    /**
+     * Default constructor for object initialization.
+     */
     public ScoreResult() {
     }
 
@@ -42,14 +54,14 @@ public class ScoreResult {
      * 0-1: 1x, 2-3: 2x, 4-5: 3x, 6+: 4x
      */
     public static int calculateStreakMultiplier(final int streak) {
-        if (streak <= 1) {
-            return 1;
-        } else if (streak <= 3) {
-            return 2;
-        } else if (streak <= 5) {
-            return 3;
+        if (streak <= STREAK_THRESHOLD_LEVEL_1) {
+            return STREAK_MULTIPLIER_LEVEL_1;
+        } else if (streak <= STREAK_THRESHOLD_LEVEL_2) {
+            return STREAK_MULTIPLIER_LEVEL_2;
+        } else if (streak <= STREAK_THRESHOLD_LEVEL_3) {
+            return STREAK_MULTIPLIER_LEVEL_3;
         } else {
-            return 4;
+            return STREAK_MULTIPLIER_LEVEL_4;
         }
     }
 
@@ -161,14 +173,14 @@ public class ScoreResult {
      * Checks if the player has an active streak (2+ correct).
      */
     public boolean hasStreak() {
-        return streak >= 2;
+        return streak >= MIN_ACTIVE_STREAK;
     }
 
     /**
      * Returns display string for streak (e.g., "x3" for 3-streak).
      */
     public String getStreakDisplay() {
-        if (streak < 2) {
+        if (streak < MIN_ACTIVE_STREAK) {
             return "";
         }
         return "x" + streakMultiplier;

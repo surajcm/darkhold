@@ -6,6 +6,8 @@ import com.quiz.darkhold.game.model.Challenge;
 import com.quiz.darkhold.game.model.CurrentScore;
 import com.quiz.darkhold.game.model.ExamStatus;
 import com.quiz.darkhold.game.model.Game;
+import com.quiz.darkhold.game.model.GameMode;
+import com.quiz.darkhold.game.model.GameStatus;
 import com.quiz.darkhold.game.model.QuestionPointer;
 import com.quiz.darkhold.game.model.StartTrigger;
 import com.quiz.darkhold.game.model.UserResponse;
@@ -30,11 +32,16 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.security.Principal;
+import java.util.List;
+import java.util.Map;
 
 @SuppressWarnings("unused")
 @Controller
 public class GameController {
     private final Logger logger = LogManager.getLogger(GameController.class);
+
+    private static final int MESSAGE_PARTS_KICK_PLAYER = 2;
+    private static final int MESSAGE_PARTS_TEAM_ASSIGN = 3;
 
     private final GameService gameService;
     private final GameConfig gameConfig;
@@ -59,7 +66,7 @@ public class GameController {
 
     @PostMapping("/interstitial")
     public String startInterstitial(final Model model, @RequestParam("quiz_pin") final String quizPin) {
-        var sanitizedPin = CommonUtils.sanitizedString(quizPin);
+        String sanitizedPin = CommonUtils.sanitizedString(quizPin);
         logger.info("On to interstitial : {}", sanitizedPin);
         model.addAttribute("quizPin", quizPin);
         return "interstitial";
@@ -78,7 +85,7 @@ public class GameController {
                            @RequestParam(value = "quizPin", required = false) final String quizPin,
                            final Principal principal) {
         logger.info("On to question : {}", quizPin);
-        var questionPointer = quizPin != null
+        QuestionPointer questionPointer = quizPin != null
                 ? gameService.getCurrentQuestionPointer(quizPin)
                 : gameService.getCurrentQuestionPointer();
         logger.info("Question pointer: current={}, total={}",
@@ -106,17 +113,17 @@ public class GameController {
     public String finalScore(final Model model,
                              @RequestParam(value = "quizPin", required = false) final String quizPin) {
         logger.info("On to the finalScore for PIN: {}", quizPin);
-        var score = new CurrentScore();
-        var scores = gameService.getCurrentScore();
+        CurrentScore score = new CurrentScore();
+        Map<String, Integer> scores = gameService.getCurrentScore();
         score.setScore(scores);
         model.addAttribute("score", score);
 
         // Check if team mode and add team scores
         if (quizPin != null && gameService.isTeamMode(quizPin)) {
-            var teamScores = gameService.getTeamScores(quizPin);
+            Map<String, Integer> teamScores = gameService.getTeamScores(quizPin);
             model.addAttribute("teamScores", teamScores);
             model.addAttribute("isTeamMode", true);
-            var teams = teamService.getTeams(quizPin);
+            List<TeamInfo> teams = teamService.getTeams(quizPin);
             model.addAttribute("teams", teams);
         } else {
             model.addAttribute("isTeamMode", false);
@@ -155,12 +162,12 @@ public class GameController {
                             @RequestParam(value = "quizPin", required = false) final String quizPin,
                             final Principal principal) {
         logger.info("On to game : {}", quizPin);
-        var questionPointer = quizPin != null
+        QuestionPointer questionPointer = quizPin != null
                 ? gameService.getCurrentQuestionPointer(quizPin)
                 : gameService.getCurrentQuestionPointer();
-        var currentQuestion = questionPointer.getCurrentQuestion();
-        var challenge = buildChallengeModel(questionPointer, currentQuestion);
-        var gameMode = quizPin != null
+        QuestionSet currentQuestion = questionPointer.getCurrentQuestion();
+        Challenge challenge = buildChallengeModel(questionPointer, currentQuestion);
+        GameMode gameMode = quizPin != null
                 ? gameService.getGameMode(quizPin)
                 : gameService.getGameMode();
 
@@ -172,7 +179,7 @@ public class GameController {
     }
 
     private Challenge buildChallengeModel(final QuestionPointer qp, final QuestionSet qs) {
-        var challenge = new Challenge();
+        Challenge challenge = new Challenge();
         challenge.setQuestionNumber(qp.getCurrentQuestionNumber());
         challenge.setTotalQuestions(qp.getTotalQuestionCount());
         challenge.setQuestionSet(qs);
@@ -183,7 +190,7 @@ public class GameController {
     private void addQuestionAttributes(final Model model, final QuestionSet qs) {
         int timeLimit = qs.getTimeLimit() != null ? qs.getTimeLimit() : gameConfig.getTimerSeconds();
         model.addAttribute("game_timer", String.valueOf(timeLimit));
-        var qType = qs.getQuestionType() != null ? qs.getQuestionType() : QuestionType.MULTIPLE_CHOICE;
+        QuestionType qType = qs.getQuestionType() != null ? qs.getQuestionType() : QuestionType.MULTIPLE_CHOICE;
         model.addAttribute("question_type", qType.name());
         int points = qs.getPoints() != null ? qs.getPoints() : 1000;
         model.addAttribute("question_points", String.valueOf(points));
@@ -195,8 +202,8 @@ public class GameController {
                       @ModelAttribute("user") final String user,
                       @ModelAttribute("timeTook") final String timeTook) {
         logParams(selectedOptions, user, timeTook);
-        var status = getExamStatus(selectedOptions);
-        var moderator = gameService.findModerator();
+        ExamStatus status = getExamStatus(selectedOptions);
+        String moderator = gameService.findModerator();
         boolean isPracticeMode = gameService.isPracticeMode();
 
         logger.info("is user moderator : {}", user.equalsIgnoreCase(moderator));
@@ -222,10 +229,10 @@ public class GameController {
     private void processPlayerAnswer(final String user, final ExamStatus status, final String timeTook) {
         boolean isCorrect = status == ExamStatus.SUCCESS;
         int streak = gameService.updateStreak(user, isCorrect);
-        var questionPointer = gameService.getCurrentQuestionPointer();
-        var currentQuestion = questionPointer.getCurrentQuestion();
+        QuestionPointer questionPointer = gameService.getCurrentQuestionPointer();
+        QuestionSet currentQuestion = questionPointer.getCurrentQuestion();
         int basePoints = currentQuestion.getPoints() != null ? currentQuestion.getPoints() : 1000;
-        var scoreOnStatus = calculateScoreWithStreak(status, timeTook, basePoints, streak);
+        int scoreOnStatus = calculateScoreWithStreak(status, timeTook, basePoints, streak);
         logger.info("score is {} (streak: {}, base: {})", scoreOnStatus, streak, basePoints);
         gameService.saveCurrentScore(user, scoreOnStatus);
     }
@@ -244,13 +251,13 @@ public class GameController {
                               @ModelAttribute("user") final String user,
                               @ModelAttribute("timeTook") final String timeTook) {
         logger.info("Validating TYPE_ANSWER: '{}' for user {}", userAnswer, user);
-        var questionPointer = gameService.getCurrentQuestionPointer();
-        var currentQuestion = questionPointer.getCurrentQuestion();
+        QuestionPointer questionPointer = gameService.getCurrentQuestionPointer();
+        QuestionSet currentQuestion = questionPointer.getCurrentQuestion();
 
         boolean isCorrect = answerValidationService.validateAnswer(currentQuestion, userAnswer);
-        var status = isCorrect ? ExamStatus.SUCCESS : ExamStatus.FAILURE;
+        ExamStatus status = isCorrect ? ExamStatus.SUCCESS : ExamStatus.FAILURE;
 
-        var moderator = gameService.findModerator();
+        String moderator = gameService.findModerator();
         boolean isPracticeMode = gameService.isPracticeMode();
 
         // In practice mode, moderator CAN score. In multiplayer, moderator cannot.
@@ -267,9 +274,9 @@ public class GameController {
     }
 
     private void logParams(final String selectedOptions, final String user, final String timeTook) {
-        var sanitizedOptions = CommonUtils.sanitizedString(selectedOptions);
-        var sanitizedUser = CommonUtils.sanitizedString(user);
-        var sanitizedTime = CommonUtils.sanitizedString(timeTook);
+        String sanitizedOptions = CommonUtils.sanitizedString(selectedOptions);
+        String sanitizedUser = CommonUtils.sanitizedString(user);
+        String sanitizedTime = CommonUtils.sanitizedString(timeTook);
         logger.info("selectedOptions are {}, user is {}, and timeTook is {}",
                 sanitizedOptions, sanitizedUser, sanitizedTime);
     }
@@ -284,11 +291,11 @@ public class GameController {
 
     private int calculateTimeFactor(final String timeTook, final int basePoints, final int streak) {
         try {
-            var timeTakenMs = Integer.parseInt(timeTook);
+            int timeTakenMs = Integer.parseInt(timeTook);
             if (timeTakenMs <= 0) {
                 return 0;
             }
-            var timerMs = gameConfig.getTimerSeconds() * 1000;
+            int timerMs = gameConfig.getTimerSeconds() * 1000;
             int timeFactor = Math.max(0, (timerMs - timeTakenMs) * 1000 / timerMs);
             return gameService.calculateScoreWithStreak(basePoints, timeFactor, streak);
         } catch (NumberFormatException ex) {
@@ -324,12 +331,12 @@ public class GameController {
     @MessageMapping("/user")
     public void getGame(final Game game) {
         logger.info("On to getGame : {}", game);
-        var users = gameService.saveAndGetAllParticipants(game.getPin(), game.getName());
+        List<String> users = gameService.saveAndGetAllParticipants(game.getPin(), game.getName());
 
         // Auto-assign to team if team mode enabled and not MANUAL assignment
         autoAssignToTeamIfEnabled(game.getPin(), game.getName());
 
-        var response = new UserResponse(users);
+        UserResponse response = new UserResponse(users);
         messagingTemplate.convertAndSend("/topic/" + game.getPin() + "/user", response);
     }
 
@@ -355,7 +362,7 @@ public class GameController {
         teamService.autoAssignPlayer(pin, username, method);
 
         // Broadcast team update to all clients
-        java.util.List<TeamInfo> teams = teamService.getTeams(pin);
+        List<TeamInfo> teams = teamService.getTeams(pin);
         messagingTemplate.convertAndSend("/topic/" + pin + "/team_update", teams);
     }
 
@@ -372,7 +379,7 @@ public class GameController {
         logger.info("On to startGame : {}", pin);
         logger.info("On to startGame : user : {}", principal.getName());
         // who started the game is already in nitrate
-        var trigger = new StartTrigger(pin);
+        StartTrigger trigger = new StartTrigger(pin);
         messagingTemplate.convertAndSend("/topic/" + pin + "/start", trigger);
     }
 
@@ -387,7 +394,7 @@ public class GameController {
         logger.info("On to questionFetch : {}", message);
         // Extract PIN from message (format: "pin" or "pin:username")
         String pin = message.contains(":") ? message.substring(0, message.indexOf(":")) : message;
-        var questionPointer = gameService.getCurrentQuestionPointer(pin);
+        QuestionPointer questionPointer = gameService.getCurrentQuestionPointer(pin);
         StartTrigger trigger;
         if (questionPointer.getCurrentQuestionNumber() == questionPointer.getTotalQuestionCount()) {
             trigger = new StartTrigger("END_GAME");
@@ -423,7 +430,7 @@ public class GameController {
     @MessageMapping("/pause_game")
     public void pauseGame(final String pin) {
         logger.info("Pausing game: {}", pin);
-        Boolean result = gameService.pauseGame();
+        boolean result = gameService.pauseGame();
         messagingTemplate.convertAndSend("/topic/" + pin + "/game_paused", result);
     }
 
@@ -436,7 +443,7 @@ public class GameController {
     @MessageMapping("/resume_game")
     public void resumeGame(final String pin) {
         logger.info("Resuming game: {}", pin);
-        Long elapsed = gameService.resumeGame();
+        long elapsed = gameService.resumeGame();
         messagingTemplate.convertAndSend("/topic/" + pin + "/game_resumed", elapsed);
     }
 
@@ -463,8 +470,7 @@ public class GameController {
     @MessageMapping("/end_game_early")
     public void endGameEarly(final String pin) {
         logger.info("Ending game early: {}", pin);
-        gameService.setGameStatus(
-                com.quiz.darkhold.game.model.GameStatus.ENDED);
+        gameService.setGameStatus(GameStatus.ENDED);
         messagingTemplate.convertAndSend("/topic/" + pin + "/game_ended", true);
     }
 
@@ -477,8 +483,8 @@ public class GameController {
     @MessageMapping("/kick_player")
     public void kickPlayer(final String message) {
         // Expected format: "pin:username"
-        String[] parts = message.split(":", 2);
-        if (parts.length != 2) {
+        String[] parts = message.split(":", MESSAGE_PARTS_KICK_PLAYER);
+        if (parts.length != MESSAGE_PARTS_KICK_PLAYER) {
             logger.warn("Invalid kick message format: {}", message);
             return;
         }
@@ -498,7 +504,7 @@ public class GameController {
      */
     @MessageMapping("/participant_count")
     public void getParticipantCount(final String pin) {
-        Integer count = gameService.getParticipantCount();
+        int count = gameService.getParticipantCount();
         messagingTemplate.convertAndSend("/topic/" + pin + "/participant_count", count);
     }
 
@@ -512,8 +518,8 @@ public class GameController {
      */
     @MessageMapping("/team/assign")
     public void assignToTeam(final String message) {
-        String[] parts = message.split(":", 3);
-        if (parts.length != 3) {
+        String[] parts = message.split(":", MESSAGE_PARTS_TEAM_ASSIGN);
+        if (parts.length != MESSAGE_PARTS_TEAM_ASSIGN) {
             logger.warn("Invalid team assign message format: {}", message);
             return;
         }
@@ -524,7 +530,7 @@ public class GameController {
         logger.info("Assigning player {} to team {} in game {}", username, teamName, pin);
         teamService.assignPlayerToTeam(pin, username, teamName);
 
-        java.util.List<TeamInfo> teams = teamService.getTeams(pin);
+        List<TeamInfo> teams = teamService.getTeams(pin);
         messagingTemplate.convertAndSend("/topic/" + pin + "/team_update", teams);
     }
 
@@ -537,7 +543,7 @@ public class GameController {
     @MessageMapping("/team/list")
     public void getTeams(final String pin) {
         logger.info("Fetching teams for game: {}", pin);
-        java.util.List<TeamInfo> teams = teamService.getTeams(pin);
+        List<TeamInfo> teams = teamService.getTeams(pin);
         messagingTemplate.convertAndSend("/topic/" + pin + "/team_list", teams);
     }
 
@@ -550,7 +556,7 @@ public class GameController {
     @MessageMapping("/team/scores")
     public void getTeamScores(final String pin) {
         logger.info("Fetching team scores for game: {}", pin);
-        java.util.Map<String, Integer> teamScores = teamService.calculateTeamScores(pin);
+        Map<String, Integer> teamScores = teamService.calculateTeamScores(pin);
         messagingTemplate.convertAndSend("/topic/" + pin + "/team_scores", teamScores);
     }
 }

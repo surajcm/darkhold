@@ -25,7 +25,7 @@ public class HomeService {
      * @return true or false
      */
     public Boolean validateGamePin(final String pin) {
-        var game = gameRepository.findByPin(pin);
+        com.quiz.darkhold.game.entity.Game game = gameRepository.findByPin(pin);
         if (game != null && (game.getGameStatus().equalsIgnoreCase(GameStatus.WAITING.name())
                 || game.getGameStatus().equalsIgnoreCase(GameStatus.STARTED.name()))) {
             return Boolean.TRUE;
@@ -54,7 +54,7 @@ public class HomeService {
      * @return true if team mode is enabled
      */
     public boolean isTeamMode(final String pin) {
-        var game = gameRepository.findByPin(pin);
+        com.quiz.darkhold.game.entity.Game game = gameRepository.findByPin(pin);
         return game != null && Boolean.TRUE.equals(game.getTeamMode());
     }
 }

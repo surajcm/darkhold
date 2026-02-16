@@ -34,7 +34,7 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(final HttpSecurity http) {
         //todo : we need to enable CSRF
         http.csrf(AbstractHttpConfigurer::disable);
-        for (var paths : matchingPaths()) {
+        for (String paths : matchingPaths()) {
             http.authorizeHttpRequests(auth -> auth
                     .requestMatchers(paths).permitAll()
             );
