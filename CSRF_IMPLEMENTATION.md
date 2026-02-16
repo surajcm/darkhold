@@ -140,10 +140,10 @@ stompClient.connect(headers, function (frame) {
 
 ### Updated Scripts (WebSocket CSRF)
 - ✅ `game-wait-scripts.js` - Player lobby connection
-- ⏳ `game-scripts.js` - 2 connections (showScoreboard, connect)
-- ⏳ `scoreboard-scripts.js` - 2 connections
-- ⏳ `publish-scripts.js` - 2 connections
-- ⏳ `question-scripts.js` - 1 connection
+- ✅ `game-scripts.js` - 2 connections (showScoreboard, connect)
+- ✅ `scoreboard-scripts.js` - 2 connections (askQuestion, connect)
+- ✅ `publish-scripts.js` - 2 connections (startGame, connect)
+- ✅ `question-scripts.js` - 1 connection (connect)
 
 ### HTTP AJAX Updates
 - ✅ `home-scripts.js` - PIN validation (enterGame)
@@ -166,16 +166,18 @@ stompClient.connect(headers, function (frame) {
 - [ ] File uploads
 - [ ] Challenge import/export
 
-### WebSocket Operations
-- [x] Player join lobby (`/app/user`)
-- [ ] Game start trigger (`/app/start`)
-- [ ] Question fetch (`/app/question_fetch`)
-- [ ] Answer submission (via HTTP, not WebSocket)
-- [ ] Pause/Resume game
-- [ ] Skip question
-- [ ] End game early
-- [ ] Kick player
-- [ ] Team assignment
+### WebSocket Operations (CSRF Tokens Added)
+- [x] Player join lobby (`/app/user`) - game-wait-scripts.js
+- [x] Game start trigger (`/app/start`) - publish-scripts.js
+- [x] Question fetch (`/app/question_fetch`) - question-scripts.js
+- [x] Fetch scores (`/app/fetch_scores`) - game-scripts.js
+- [x] Next question (`/app/next_question`) - scoreboard-scripts.js
+- [ ] Answer submission (via HTTP POST, not WebSocket)
+- [ ] Pause/Resume game (via moderator controls)
+- [ ] Skip question (via moderator controls)
+- [ ] End game early (via moderator controls)
+- [ ] Kick player (via moderator controls)
+- [ ] Team assignment (via drag-drop UI)
 
 ## Migration Path for Developers
 
@@ -273,7 +275,7 @@ H2 console is **excluded** from CSRF protection:
 
 ## Next Steps
 
-1. **Complete WebSocket Updates**: Update remaining 7 WebSocket connections
+1. ✅ ~~**Complete WebSocket Updates**~~: All 8 WebSocket connections updated
 2. **Test All Endpoints**: Comprehensive testing of 35+ HTTP endpoints
 3. **Update Documentation**: Add CSRF examples to API docs
 4. **Audit Templates**: Ensure all forms use Thymeleaf `th:action`
@@ -288,4 +290,4 @@ H2 console is **excluded** from CSRF protection:
 ---
 
 **Last Updated**: 2026-02-16
-**Status**: 🟡 Partially Complete - Core protection enabled, frontend updates in progress
+**Status**: 🟢 Complete - Core protection enabled, all 8 WebSocket connections updated

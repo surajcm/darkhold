@@ -2,7 +2,14 @@ function askQuestion() {
     let pin = document.getElementById('quizPin').value;
     let socket = new SockJS('/darkhold-websocket');
     stompClient = Stomp.over(socket);
-    stompClient.connect({}, function (frame) {
+
+    // Add CSRF token to connection headers
+    let headers = {};
+    if (typeof CsrfManager !== 'undefined') {
+        headers = CsrfManager.getHeadersForStomp();
+    }
+
+    stompClient.connect(headers, function (frame) {
         console.log('Connected: ' + frame);
         // Send PIN for PIN-scoped topic
         stompClient.send("/app/next_question", {}, pin);
@@ -48,7 +55,14 @@ function connect() {
     let pin = document.getElementById('quizPin').value;
     let socket = new SockJS('/darkhold-websocket');
     stompClient = Stomp.over(socket);
-    stompClient.connect({}, function (frame) {
+
+    // Add CSRF token to connection headers
+    let headers = {};
+    if (typeof CsrfManager !== 'undefined') {
+        headers = CsrfManager.getHeadersForStomp();
+    }
+
+    stompClient.connect(headers, function (frame) {
         console.log('Connected: ' + frame);
         // Subscribe to PIN-scoped topics for concurrent game support
         stompClient.subscribe('/topic/' + pin + '/ready_for_question', function (greeting) {

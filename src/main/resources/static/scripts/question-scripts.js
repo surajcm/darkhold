@@ -25,7 +25,14 @@ function connect() {
     let pin = document.getElementById('quizPin').value;
     let socket = new SockJS('/darkhold-websocket');
     stompClient = Stomp.over(socket);
-    stompClient.connect({}, function (frame) {
+
+    // Add CSRF token to connection headers
+    let headers = {};
+    if (typeof CsrfManager !== 'undefined') {
+        headers = CsrfManager.getHeadersForStomp();
+    }
+
+    stompClient.connect(headers, function (frame) {
         console.log('Connected: ' + frame);
         // Send PIN:name format for PIN-scoped topic
         stompClient.send("/app/question_fetch", {}, pin + ":" + name);
