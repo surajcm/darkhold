@@ -1,270 +1,243 @@
 # Test Coverage Improvement Plan
 
-## Current Status
-- **Overall Instruction Coverage:** 43% (5,762 / 13,287)
-- **Branch Coverage:** 28% (240 / 840)
-- **Tests Passing:** 358 ✅
-- **Minimum Required:** 35% ✅ (Currently meeting)
+*Updated: 2026-02-18 (from actual JaCoCo report)*
+
+## Current State
+
+| Metric | Value |
+|--------|-------|
+| **Instruction Coverage** | 51% (6,989 / 13,481) |
+| **Branch Coverage** | 34% (287 / 842) |
+| **Test Files** | 38 |
+| **Source Files** | 101 |
+| **JaCoCo Minimum** | 35% (current threshold) |
+| **Target** | 85% instructions, 70% branches |
 
 ---
 
-## Priority 1: Critical Controllers (< 10% Coverage)
+## Per-Package Coverage (Actual JaCoCo Data)
 
-### Analytics Controller (3% → Target: 70%)
-**Files:** `AnalyticsController.java`
-**Missing Tests:**
-- GET `/game-result/{id}` - View game results
-- GET `/game-result/{id}/export-csv` - CSV export
-- Error handling for invalid game IDs
+### Critical Gaps (Below 25%)
 
-**Suggested Test Cases:**
-```java
-@Test
-void testViewGameResult_Success()
-@Test
-void testViewGameResult_NotFound()
-@Test
-void testExportGameResultCSV_Success()
-@Test
-void testExportGameResultCSV_InvalidId()
+| Package | Inst. Cov. | Branch Cov. | Priority |
+|---------|:----------:|:-----------:|:--------:|
+| analytics.service | 4% | 0% | P0 |
+| team.service | 7% | 0% | P0 |
+| admin.controller | 10% | n/a | P0 |
+| practice.service | 11% | n/a | P0 |
+| challenge.service | 15% | 9% | P0 |
+| challenge.controller | 18% | 4% | P0 |
+| user.service | 24% | 11% | P1 |
+
+### Low Coverage (25-50%)
+
+| Package | Inst. Cov. | Branch Cov. | Priority |
+|---------|:----------:|:-----------:|:--------:|
+| options.model | 25% | n/a | P1 |
+| preview.entity | 26% | 20% | P1 |
+| game.service | 36% | 67% | P1 |
+| preview.repository | 37% | 20% | P1 |
+| challenge.exception | 47% | n/a | P2 |
+
+### Medium Coverage (50-70%)
+
+| Package | Inst. Cov. | Branch Cov. | Priority |
+|---------|:----------:|:-----------:|:--------:|
+| options.controller | 52% | 12% | P2 |
+| game.controller | 53% | 45% | P2 |
+| game.entity | 56% | 0% | P2 |
+| account.controller | 60% | n/a | P2 |
+| init | 60% | 6% | P2 |
+
+### Adequate Coverage (70%+)
+
+| Package | Inst. Cov. | Branch Cov. |
+|---------|:----------:|:-----------:|
+| home.service | 63% | 40% |
+| user.entity | 64% | 0% |
+| game.model | 66% | 56% |
+| home.model | 74% | n/a |
+| preview.service | 77% | 37% |
+| options.service | 77% | n/a |
+| preview.model | 79% | n/a |
+| user.validator | 91% | 80% |
+| challenge.entity | 92% | n/a |
+| score.controller | 94% | 100% |
+| analytics.controller | 98% | 100% |
+| home.controller | 99% | 90% |
+
+### Full Coverage (100%)
+
+user.controller, challenge.dto, analytics.entity, preview.controller, team.model, team.dto, team.controller, team.entity, util, DarkholdApplication, user.exception
+
+---
+
+## Goal: 51% to 85% in 5 Milestones
+
+Each milestone is self-contained and raises the coverage floor progressively. Milestones are labeled TC-1 through TC-5 and tracked in [MILESTONES.md](MILESTONES.md).
+
+### Milestone TC-1: Security & Infrastructure Tests (51% -> 58%)
+
+**Focus**: Security-critical code that is almost entirely untested.
+
+| Target | Current | Goal | Est. Tests |
+|--------|:-------:|:----:|:----------:|
+| SecurityConfig | 60% inst / 6% branch | 80% / 60% | 15 |
+| RateLimitingService | (within init 60%) | 90% / 80% | 12 |
+| WebSocketConfig | (within init 60%) | 75% / 50% | 8 |
+| FileUploadUtil | (within init 60%) | 85% / 70% | 10 |
+| GlobalExceptionHandler | (within init 60%) | 90% / 80% | 8 |
+
+**Test types**: Unit tests with mocked Spring context, `@WebMvcTest` for security chain.
+
+**Key test scenarios**:
+- Authentication flows (login success/failure, remember-me, logout)
+- Authorization rules (admin-only, game-manager-only, public endpoints)
+- CSRF token validation (form and WebSocket)
+- Rate limiting (threshold, blocking, reset)
+- File upload validation (type, size, malicious content)
+- WebSocket handshake and STOMP endpoint registration
+- Exception handler response codes and bodies
+
+**JaCoCo threshold raise**: 35% -> 45%
+
+---
+
+### Milestone TC-2: Core Service Layer (58% -> 67%)
+
+**Focus**: Business logic services -- the biggest gap and highest-value tests.
+
+| Target | Current | Goal | Est. Tests |
+|--------|:-------:|:----:|:----------:|
+| analytics.service (ResultService) | 4% | 65% | 18 |
+| team.service (TeamService) | 7% | 65% | 20 |
+| practice.service (PracticeService) | 11% | 65% | 15 |
+| challenge.service (ChallengeService) | 15% | 55% | 20 |
+| user.service (UserService, SecurityService) | 24% | 65% | 15 |
+| game.service (GameService, Cleanup) | 36% | 65% | 12 |
+
+**Test types**: Unit tests with `@ExtendWith(MockitoExtension.class)`, mocked repositories.
+
+**Key test scenarios**:
+- ResultService: save game results, calculate stats, CSV export formatting
+- TeamService: balanced/random/manual assignment, score aggregation, team creation
+- PracticeService: session creation, solo gameplay flow, score tracking
+- ChallengeService: CRUD, Excel/JSON import parsing, duplicate, export, validation
+- UserService: registration, password change, role management, email uniqueness
+- GameService: game lifecycle (create/start/pause/resume/end), question advancement
+- GameCleanupScheduler: expired game cleanup, edge cases (active games not cleaned)
+
+**JaCoCo threshold raise**: 45% -> 55%
+
+---
+
+### Milestone TC-3: Controller Integration Tests (67% -> 73%)
+
+**Focus**: Undertested controllers with `MockMvc` integration tests.
+
+| Target | Current | Goal | Est. Tests |
+|--------|:-------:|:----:|:----------:|
+| admin.controller | 10% | 75% | 10 |
+| challenge.controller | 18% | 70% | 15 |
+| options.controller | 52% | 80% | 8 |
+| game.controller | 53% | 75% | 10 |
+| account.controller | 60% | 85% | 8 |
+
+**Test types**: `@WebMvcTest` with `@MockBean` for service dependencies.
+
+**Key test scenarios**:
+- AdminController: user management CRUD, role assignment, admin-only access
+- ChallengeController: create, edit, delete, duplicate, import/export endpoints
+- OptionsController: settings page, preference updates
+- GameController: publish, join, gameplay WebSocket endpoints, question flow
+- AccountController: profile view, profile update
+
+**JaCoCo threshold raise**: 55% -> 62%
+
+---
+
+### Milestone TC-4: Data Layer & Model Tests (73% -> 78%)
+
+**Focus**: Entities, repositories, and models with low coverage.
+
+| Target | Current | Goal | Est. Tests |
+|--------|:-------:|:----:|:----------:|
+| preview.entity | 26% | 75% | 12 |
+| preview.repository | 37% | 70% | 10 |
+| options.model | 25% | 80% | 8 |
+| game.entity | 56% | 85% | 8 |
+| user.entity | 64% | 90% | 8 |
+| home.model | 74% | 95% | 5 |
+
+**Test types**: Unit tests for models/entities; `@DataJpaTest` for repository integration tests.
+
+**Key test scenarios**:
+- CurrentGameSession: state transitions, JSON serialization, field validation
+- CurrentGame: CRUD operations, PIN-scoped queries, concurrent access
+- Repository custom queries: find by status, find by moderator, date filtering
+- Entity validation: required fields, constraints, relationship cascades
+- Model builders and equality contracts
+
+**JaCoCo threshold raise**: 62% -> 68%
+
+---
+
+### Milestone TC-5: Branch Coverage & End-to-End (78% -> 85%)
+
+**Focus**: Branch coverage (34% -> 70%), error paths, integration tests.
+
+| Target | Current Goal | Est. Tests |
+|--------|:-----------:|:----------:|
+| Branch coverage across all packages | 34% -> 70% | 30 |
+| Full game lifecycle integration test | New | 5 |
+| WebSocket integration tests | New | 8 |
+| Error/edge case paths | Mixed | 20 |
+
+**Test types**: `@SpringBootTest` integration tests, parameterized tests for branches.
+
+**Key test scenarios**:
+- Full game lifecycle: create challenge -> publish -> join -> play all questions -> scoreboard -> end
+- WebSocket: STOMP connect, subscribe, send answer, receive scoreboard update
+- Error paths: invalid PIN, expired game, duplicate nickname, concurrent answer
+- Boundary conditions: 0 participants, max participants, timer expiry, no correct answer
+- Null/empty inputs across all service methods
+- Concurrent game isolation (two games running simultaneously)
+
+**JaCoCo threshold raise**: 68% -> 75%
+
+---
+
+## Test Configuration
+
+Create `src/test/resources/application-test.properties`:
+```properties
+darkhold.game.timer-seconds=5
+darkhold.game.pin-length=5
+spring.jpa.hibernate.ddl-auto=create-drop
+logging.level.com.quiz.darkhold=WARN
 ```
-
-### Score Controller (6% → Target: 70%)
-**Files:** `ScoreController.java`
-**Missing Tests:**
-- POST `/scores/submit` - Submit player scores
-- GET `/scores/leaderboard/{gameId}` - Get leaderboard
-- WebSocket score updates
-
-### Team Controller (4% → Target: 70%)
-**Files:** `TeamController.java`
-**Missing Tests:**
-- POST `/team/create` - Create team
-- GET `/team/{id}` - Get team details
-- PUT `/team/{id}/assign-player` - Assign player to team
-
-### Home Controller (7% → Target: 70%)
-**Files:** `HomeController.java`
-**Missing Tests:**
-- GET `/` - Home page
-- GET `/login` - Login page
-- POST `/logout` - Logout
-
-### Preview Controller (6% → Target: 70%)
-**Files:** `PreviewController.java`
-**Missing Tests:**
-- GET `/preview/{id}` - Preview challenge
-- POST `/preview/start` - Start preview session
-
----
-
-## Priority 2: Service Layer (10-25% Coverage)
-
-### Challenge Service (15% → Target: 60%)
-**Files:** `ChallengeService.java`, `ChallengeServiceImpl.java`
-**Missing Tests:**
-- `deleteChallenge(Long id)` - Delete with dependency check
-- `updateChallenge(...)` - Update existing challenge
-- `validateChallengeData(...)` - Validation logic
-- Excel import edge cases (empty rows, invalid format)
-
-### Team Service (7% → Target: 60%)
-**Files:** `TeamService.java`, `TeamServiceImpl.java`
-**Missing Tests:**
-- `assignPlayersToTeams(...)` - Team assignment algorithms
-- `calculateTeamScores(...)` - Team score calculation
-- `redistributePlayers(...)` - Player rebalancing
-- Random vs manual assignment modes
-
-### User Service (25% → Target: 70%)
-**Files:** `UserService.java`, `UserServiceImpl.java`
-**Missing Tests:**
-- `updateUserPhoto(...)` - Photo upload validation
-- `changePassword(...)` - Password change logic
-- `deleteUser(...)` - Cascade deletion
-- Email uniqueness validation
-
-### Practice Service (11% → Target: 60%)
-**Files:** `PracticeService.java`
-**Missing Tests:**
-- Practice session creation
-- Solo gameplay flow
-- Score tracking without leaderboard
-
----
-
-## Priority 3: Game Flow & Integration
-
-### Game Service (36% → Target: 75%)
-**Files:** `GameService.java`, `GameServiceImpl.java`
-**Focus Areas:**
-- Complete game lifecycle (start → play → end)
-- WebSocket message handling
-- Multi-player synchronization
-- Question advancement logic
-
-### Analytics Service (4% → Target: 60%)
-**Files:** `AnalyticsService.java`
-**Missing Tests:**
-- `generateGameReport(...)` - Statistics calculation
-- `calculatePlayerStats(...)` - Individual metrics
-- `getQuestionAnalytics(...)` - Question difficulty analysis
-- CSV export formatting
-
----
-
-## Implementation Strategy
-
-### Week 1: Controller Layer
-**Focus:** Critical controllers (Analytics, Score, Team, Home, Preview)
-- Write integration tests using `@SpringBootTest` and `MockMvc`
-- Mock service layer dependencies
-- Test HTTP responses, status codes, view names
-- **Estimated Coverage Gain:** +10-12%
-
-### Week 2: Service Layer
-**Focus:** Challenge, Team, User services
-- Unit tests with mocked repositories
-- Edge case testing (null inputs, invalid data)
-- Business logic validation
-- **Estimated Coverage Gain:** +8-10%
-
-### Week 3: Game Flow & WebSocket
-**Focus:** Game service and real-time features
-- Integration tests for WebSocket endpoints
-- Game state transition testing
-- Concurrent player handling
-- **Estimated Coverage Gain:** +6-8%
-
-### Week 4: Analytics & Reports
-**Focus:** Analytics service and data export
-- Report generation testing
-- CSV export validation
-- Statistical calculation accuracy
-- **Estimated Coverage Gain:** +4-6%
-
----
-
-## Quick Wins (Easy 5% Boost)
-
-### 1. DTOs and Entities
-Most DTOs/Entities already have constructors and getters. Add simple tests:
-```java
-@Test
-void testConstructorAndGetters() {
-    var dto = new GameResultDTO(1L, "Test Game", 10);
-    assertThat(dto.getId()).isEqualTo(1L);
-    assertThat(dto.getName()).isEqualTo("Test Game");
-}
-```
-
-### 2. Validators
-Add validation failure tests:
-```java
-@Test
-void testEmailValidator_Invalid() {
-    assertFalse(validator.isValid("invalid-email", context));
-}
-```
-
-### 3. Exception Handlers
-Test `GlobalExceptionHandler`:
-```java
-@Test
-void testHandleNotFoundException() {
-    var response = handler.handleNotFound(new NotFoundException());
-    assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
-}
-```
-
----
-
-## Test Patterns to Follow
-
-### Controller Tests
-```java
-@WebMvcTest(AnalyticsController.class)
-class AnalyticsControllerTest {
-    @Autowired
-    private MockMvc mockMvc;
-
-    @MockBean
-    private AnalyticsService analyticsService;
-
-    @Test
-    void testViewGameResult() throws Exception {
-        when(analyticsService.getGameResult(1L))
-            .thenReturn(mockGameResult);
-
-        mockMvc.perform(get("/game-result/1"))
-            .andExpect(status().isOk())
-            .andExpect(view().name("gameresult"))
-            .andExpect(model().attributeExists("gameResult"));
-    }
-}
-```
-
-### Service Tests
-```java
-@ExtendWith(MockitoExtension.class)
-class TeamServiceTest {
-    @Mock
-    private TeamRepository teamRepository;
-
-    @InjectMocks
-    private TeamServiceImpl teamService;
-
-    @Test
-    void testCreateTeam() {
-        Team team = new Team("Red Team");
-        when(teamRepository.save(any())).thenReturn(team);
-
-        Team result = teamService.createTeam("Red Team");
-
-        assertThat(result.getName()).isEqualTo("Red Team");
-        verify(teamRepository).save(any());
-    }
-}
-```
-
----
-
-## Coverage Goals
-
-| Phase | Target | Expected Timeline |
-|-------|--------|-------------------|
-| **Current** | 43% | - |
-| **Phase 1** | 53% | Week 1-2 |
-| **Phase 2** | 63% | Week 3-4 |
-| **Phase 3** | 70% | Week 5-6 |
-| **Stretch Goal** | 75% | Week 7-8 |
 
 ---
 
 ## Monitoring Progress
 
-### Run Coverage Report
 ```bash
+# Run coverage report
 ./gradlew test jacocoTestReport
 open build/reports/jacoco/test/html/index.html
-```
 
-### Check Minimum Threshold
-```bash
+# Verify threshold
 ./gradlew jacocoTestCoverageVerification
 ```
 
-### CI/CD Integration
-- Add JaCoCo report to GitHub Actions
-- Fail PR if coverage drops below threshold
-- Display coverage badge in README
-
 ---
 
-## Notes
+## Summary
 
-- Focus on **business logic** over trivial getters/setters
-- Prioritize **controller layer** for immediate impact
-- Test **edge cases** and **error scenarios**
-- Aim for **60-70% realistic coverage** (100% is often unnecessary)
-- Write **maintainable tests** that document expected behavior
+| Milestone | Focus | Coverage Target | Threshold Raise |
+|-----------|-------|:---------------:|:---------------:|
+| TC-1 | Security & Infrastructure | 58% | 35% -> 45% |
+| TC-2 | Core Service Layer | 67% | 45% -> 55% |
+| TC-3 | Controller Integration | 73% | 55% -> 62% |
+| TC-4 | Data Layer & Models | 78% | 62% -> 68% |
+| TC-5 | Branches & End-to-End | 85% | 68% -> 75% |

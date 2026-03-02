@@ -572,7 +572,795 @@ All 24 Thymeleaf templates updated to use `#{key}` message expressions:
 
 ---
 
+## Milestone 13: REST API & Integration Foundation
+
+**Status**: Pending
+**Focus**: Expose programmatic access to all platform capabilities
+**Addresses**: Limitation L1 (No REST API), L8 (No Webhooks)
+**Enables**: Milestones 14, 16, 18, 20
+
+### 13.1 API Infrastructure
+- [ ] Add springdoc-openapi dependency for Swagger UI and OpenAPI 3.0 spec generation
+- [ ] Create `/api/v1/` base path with versioning strategy
+- [ ] Implement JWT-based API authentication (issue tokens via `/api/v1/auth/token`)
+- [ ] Add API rate limiting (separate from UI rate limits)
+- [ ] Create API key management for service-to-service integration
+- [ ] Add CORS configuration for API consumers
+
+### 13.2 Challenge API
+- [ ] `GET /api/v1/challenges` - List challenges (paginated, filterable)
+- [ ] `POST /api/v1/challenges` - Create challenge
+- [ ] `GET /api/v1/challenges/{id}` - Get challenge details
+- [ ] `PUT /api/v1/challenges/{id}` - Update challenge
+- [ ] `DELETE /api/v1/challenges/{id}` - Delete challenge
+- [ ] `POST /api/v1/challenges/{id}/duplicate` - Duplicate challenge
+- [ ] `GET /api/v1/challenges/{id}/questions` - List questions
+- [ ] `POST /api/v1/challenges/{id}/questions` - Add question
+- [ ] `PUT /api/v1/challenges/{id}/questions/{qid}` - Update question
+- [ ] `DELETE /api/v1/challenges/{id}/questions/{qid}` - Delete question
+- [ ] `POST /api/v1/challenges/import` - Import (JSON/Excel)
+- [ ] `GET /api/v1/challenges/{id}/export` - Export (JSON/CSV)
+
+### 13.3 Game API
+- [ ] `POST /api/v1/games` - Create/publish game from challenge
+- [ ] `GET /api/v1/games/{pin}` - Get game status
+- [ ] `POST /api/v1/games/{pin}/start` - Start game
+- [ ] `POST /api/v1/games/{pin}/pause` - Pause game
+- [ ] `POST /api/v1/games/{pin}/resume` - Resume game
+- [ ] `POST /api/v1/games/{pin}/skip` - Skip current question
+- [ ] `POST /api/v1/games/{pin}/end` - End game
+- [ ] `GET /api/v1/games/{pin}/participants` - List participants
+- [ ] `GET /api/v1/games/{pin}/scoreboard` - Get current scoreboard
+
+### 13.4 Analytics API
+- [ ] `GET /api/v1/analytics/games` - List past games (paginated)
+- [ ] `GET /api/v1/analytics/games/{id}` - Get game result details
+- [ ] `GET /api/v1/analytics/games/{id}/participants` - Participant results
+- [ ] `GET /api/v1/analytics/games/{id}/questions` - Question statistics
+- [ ] `GET /api/v1/analytics/games/{id}/export` - Export results (CSV/PDF)
+
+### 13.5 User & Admin API
+- [ ] `GET /api/v1/users/me` - Current user profile
+- [ ] `PUT /api/v1/users/me` - Update profile
+- [ ] `GET /api/v1/admin/users` - List users (admin only)
+- [ ] `POST /api/v1/admin/users` - Create user (admin only)
+- [ ] `PUT /api/v1/admin/users/{id}` - Update user (admin only)
+
+### 13.6 Webhook System
+- [ ] Create webhook registration entity and admin UI
+- [ ] `POST /api/v1/webhooks` - Register webhook URL
+- [ ] `GET /api/v1/webhooks` - List registered webhooks
+- [ ] `DELETE /api/v1/webhooks/{id}` - Remove webhook
+- [ ] Emit events: `game.created`, `game.started`, `game.ended`, `participant.joined`, `results.finalized`
+- [ ] Implement retry logic with exponential backoff (3 attempts)
+- [ ] Add webhook signature verification (HMAC-SHA256)
+
+### Files to Create/Modify
+- `api/` package - New API controllers, DTOs, JWT filter
+- `init/ApiSecurityConfig.java` - Separate security chain for `/api/**`
+- `init/JwtTokenProvider.java` - JWT issue/validate
+- `webhook/` package - Webhook entity, repository, service, async dispatcher
+- Database migration for webhook and API key tables
+- `application.properties` - JWT secret, webhook config
+
+**Deliverable**: Documented REST API (Swagger UI at `/api/docs`) with JWT auth and webhook event system
+
+---
+
+## Milestone 14: AI-Powered Quiz Generation
+
+**Status**: Pending
+**Focus**: Generate quizzes from text, documents, and URLs using AI
+**Addresses**: Limitation L2 (No AI Features)
+**Depends on**: Milestone 13 (REST API for AI endpoints)
+
+### 14.1 AI Provider Abstraction
+- [ ] Create `AiProvider` interface with `generateQuestions(prompt, config)` method
+- [ ] Implement `OpenAiProvider` (GPT-4o / GPT-4o-mini)
+- [ ] Implement `AnthropicProvider` (Claude)
+- [ ] Implement `OllamaProvider` for local models (Llama 3, Mistral, Gemma)
+- [ ] Create provider factory with configurable selection
+- [ ] Add admin settings page for API keys and provider selection
+- [ ] Support provider fallback chain (try primary, fall back to secondary)
+
+### 14.2 Content Extraction Pipeline
+- [ ] Plain text input - direct pass to LLM
+- [ ] PDF upload - extract text via Apache PDFBox
+- [ ] URL input - fetch and extract main content (Jsoup HTML parsing)
+- [ ] Word document upload - extract via Apache POI (already in dependencies)
+- [ ] Implement content chunking for documents exceeding token limits
+- [ ] Add content sanitization and length validation
+
+### 14.3 Quiz Generation Engine
+- [ ] Design prompt templates for each question type (MCQ, T/F, Type Answer, Poll)
+- [ ] Generate configurable number of questions (5, 10, 15, 20)
+- [ ] Generate difficulty levels (Easy, Medium, Hard, Mixed)
+- [ ] Generate distractors (wrong answers) that are plausible
+- [ ] Parse structured LLM output into QuestionRequest DTOs
+- [ ] Add generation parameters: topic focus, language, target audience
+
+### 14.4 Review & Edit Workflow
+- [ ] Create "AI Generate" button on challenge creation page
+- [ ] Build generation wizard UI (input source -> configure -> review)
+- [ ] Show generated questions in editable preview before saving
+- [ ] Allow accept/reject/edit individual questions
+- [ ] "Regenerate" button for individual questions
+- [ ] Save accepted questions to challenge via existing QuestionService
+
+### 14.5 AI API Endpoints
+- [ ] `POST /api/v1/ai/generate` - Generate questions from text/URL/file
+- [ ] `POST /api/v1/ai/regenerate` - Regenerate a single question
+- [ ] `GET /api/v1/ai/providers` - List available providers and status
+- [ ] `POST /api/v1/ai/explain` - Generate explanation for a question (future use)
+
+### 14.6 Air-Gapped / Local Model Support
+- [ ] Document Ollama setup and compatible models
+- [ ] Auto-detect Ollama availability on configurable host:port
+- [ ] Test with Llama 3 8B, Mistral 7B, Gemma 2B (various resource profiles)
+- [ ] Add model selection in admin settings
+- [ ] Graceful fallback messaging when no AI provider is configured
+
+### Files to Create/Modify
+- `ai/` package - AiProvider interface, implementations, service, controller
+- `ai/prompt/` - Prompt templates per question type and language
+- `ai/extraction/` - PDF, URL, DOCX content extractors
+- Admin settings page for AI configuration
+- AI generation wizard templates and JavaScript
+- Database migration for AI configuration storage
+
+**Deliverable**: AI quiz generation from text, PDF, URLs with support for cloud APIs and local models (Ollama)
+
+---
+
+## Milestone 15: SSO & Enterprise Identity
+
+**Status**: Pending
+**Focus**: Enterprise identity provider integration
+**Addresses**: Limitation L3 (No SSO/SAML/OIDC)
+
+### 15.1 OAuth2 / OIDC Integration
+- [ ] Add spring-boot-starter-oauth2-client dependency
+- [ ] Configure OAuth2 login for generic OIDC providers
+- [ ] Implement auto-provisioning of users from OIDC claims (email, name, roles)
+- [ ] Map OIDC groups/roles to Darkhold roles (ADMIN, GAME_MANAGER, PARTICIPANT)
+- [ ] Support multiple concurrent OIDC providers
+
+### 15.2 Pre-configured Providers
+- [ ] Google Workspace (OAuth2)
+- [ ] Microsoft Azure AD / Entra ID (OAuth2 + OIDC)
+- [ ] Okta (OIDC)
+- [ ] Keycloak (OIDC)
+- [ ] Generic OIDC provider (manual configuration)
+
+### 15.3 SAML 2.0 Support
+- [ ] Add spring-security-saml2-service-provider dependency
+- [ ] Implement SAML 2.0 Service Provider
+- [ ] Support metadata XML import for IdP configuration
+- [ ] Map SAML attributes to user fields and roles
+- [ ] Test with ADFS, Okta SAML, Shibboleth
+
+### 15.4 Admin Configuration UI
+- [ ] Create "Identity Providers" admin page
+- [ ] Add/edit/delete OIDC provider configuration
+- [ ] Add/edit/delete SAML provider configuration
+- [ ] Test connection button for each provider
+- [ ] Configure role mapping rules
+- [ ] Enable/disable local password login per deployment
+
+### 15.5 User Lifecycle
+- [ ] Just-in-time (JIT) user provisioning on first SSO login
+- [ ] Link existing local accounts to SSO identities by email
+- [ ] Handle account deactivation when removed from IdP
+- [ ] Support forced SSO (disable local login option)
+- [ ] Audit log for SSO login events
+
+### 15.6 Database Changes
+- [ ] Migration: Add `identity_provider` table (id, type, name, config_json, enabled)
+- [ ] Migration: Add `user_identity` table (user_id, provider_id, external_id, email)
+- [ ] Migration: Add `sso_enabled` and `local_login_enabled` to app settings
+
+### Files to Create/Modify
+- `sso/` package - SSO configuration, provider management, user provisioning
+- `init/SecurityConfig.java` - Add OAuth2/SAML security chains
+- Admin pages for identity provider management
+- Database migrations for SSO tables
+- `application.properties` - SSO configuration properties
+
+**Deliverable**: Enterprise SSO via OAuth2/OIDC and SAML 2.0 with auto-provisioning and role mapping
+
+---
+
+## Milestone 16: Async & Homework Mode
+
+**Status**: Pending
+**Focus**: Enable self-paced quiz completion with deadlines
+**Addresses**: Limitation L4 (No Async/Homework Mode)
+**Depends on**: Milestone 13 (REST API)
+
+### 16.1 Assignment Data Model
+- [ ] Create `Assignment` entity (challenge_id, creator_id, title, instructions)
+- [ ] Add deadline fields (start_datetime, end_datetime, timezone)
+- [ ] Add attempt configuration (max_attempts, allow_retake, best_score_policy)
+- [ ] Add access control (password, allowed_users, allowed_groups)
+- [ ] Create `AssignmentAttempt` entity (assignment_id, user_id, started_at, completed_at, score)
+- [ ] Database migration for assignment tables
+
+### 16.2 Assignment Creation UI
+- [ ] Add "Assign as Homework" option alongside "Play Live" on preview page
+- [ ] Create assignment configuration form (deadline, attempts, access)
+- [ ] Generate shareable link (no PIN needed, URL-based access)
+- [ ] Generate QR code for assignment link
+- [ ] Show assignment in "My Assignments" dashboard
+
+### 16.3 Self-Paced Play Experience
+- [ ] Participant opens assignment link, authenticates or enters name
+- [ ] Skip waiting room - go directly to first question
+- [ ] Show timer per question (or allow untimed mode)
+- [ ] Show correct answer and explanation after each question
+- [ ] Allow review of all answers before final submission
+- [ ] Track attempt duration and per-question timing
+
+### 16.4 Results & Aggregation
+- [ ] Aggregate results after deadline
+- [ ] Show class/group performance summary
+- [ ] Compare across attempts (if retakes allowed)
+- [ ] Rank by best score or latest attempt (configurable)
+- [ ] Integrate with existing analytics (Milestone 7 tables)
+- [ ] Export assignment results (CSV, API)
+
+### 16.5 Notifications (Optional)
+- [ ] Email notification when assignment is published (if SMTP configured)
+- [ ] Reminder before deadline (24h, 1h)
+- [ ] Results available notification after deadline
+- [ ] Webhook events for assignment lifecycle
+
+### 16.6 API Endpoints
+- [ ] `POST /api/v1/assignments` - Create assignment
+- [ ] `GET /api/v1/assignments` - List assignments
+- [ ] `GET /api/v1/assignments/{id}` - Get assignment details
+- [ ] `PUT /api/v1/assignments/{id}` - Update assignment
+- [ ] `DELETE /api/v1/assignments/{id}` - Delete assignment
+- [ ] `GET /api/v1/assignments/{id}/results` - Get aggregated results
+- [ ] `POST /api/v1/assignments/{id}/attempt` - Start attempt (participant)
+
+### Files to Create/Modify
+- `assignment/` package - Entity, repository, service, controller
+- Assignment creation and management templates
+- Self-paced play templates (extend practice mode infrastructure)
+- Assignment results/analytics templates
+- Database migration for assignment tables
+- `preview.html` - Add "Assign as Homework" card to game mode selection
+
+**Deliverable**: Full async/homework mode with deadlines, retakes, and aggregate results
+
+---
+
+## Milestone 17: Advanced Analytics & Reporting
+
+**Status**: Pending
+**Focus**: Rich analytics dashboards with visualizations and PDF reports
+**Addresses**: Limitation L5 (No Advanced Analytics)
+**Depends on**: Milestone 7 (existing analytics tables), Milestone 13 (API)
+
+### 17.1 Analytics Dashboard
+- [ ] Add Chart.js or Apache ECharts dependency (CDN or bundled)
+- [ ] Create analytics landing page with summary cards (total games, participants, questions)
+- [ ] Add date range picker for filtering
+- [ ] Show games-over-time line chart
+- [ ] Show participants-per-game bar chart
+- [ ] Show average scores trend line
+
+### 17.2 Learning Gap Analysis
+- [ ] Identify questions with lowest success rates across games
+- [ ] Group weak areas by topic/tag (requires question tags from Question Bank)
+- [ ] Show per-participant knowledge heatmap (topics vs. mastery)
+- [ ] Highlight questions where wrong answers cluster on specific distractors
+- [ ] Provide "recommended review" topics based on gap analysis
+
+### 17.3 Question Analytics Deep Dive
+- [ ] Question difficulty curve (distribution across Easy/Medium/Hard)
+- [ ] Answer distribution pie charts per question
+- [ ] Average time-to-answer per question
+- [ ] Discrimination index (do good students get it right, weak students wrong?)
+- [ ] Flag problematic questions (too easy, too hard, bad distractors)
+
+### 17.4 Participant Progress Tracking
+- [ ] Track individual participant performance over multiple games
+- [ ] Show improvement trends (score trajectory over time)
+- [ ] Compare participants within a cohort/group
+- [ ] Streak and accuracy statistics per participant
+- [ ] Achievement milestones (personal bests, improvement badges)
+
+### 17.5 Report Generation
+- [ ] PDF report generation using OpenPDF library
+- [ ] Game summary report (overview, participants, question stats)
+- [ ] Participant report card (individual performance, strengths, weaknesses)
+- [ ] Cohort comparison report (class average, distribution, outliers)
+- [ ] Email report delivery (if SMTP configured)
+- [ ] Scheduled report generation (weekly/monthly summaries)
+
+### 17.6 API Endpoints
+- [ ] `GET /api/v1/analytics/dashboard` - Dashboard summary data
+- [ ] `GET /api/v1/analytics/trends` - Time-series data for charts
+- [ ] `GET /api/v1/analytics/gaps` - Learning gap analysis
+- [ ] `GET /api/v1/analytics/participants/{id}/progress` - Individual progress
+- [ ] `GET /api/v1/analytics/reports/{id}/pdf` - Generate PDF report
+
+### Files to Create/Modify
+- `analytics/dashboard/` - Dashboard controller, service, aggregation queries
+- `analytics/report/` - PDF generator, email sender
+- Analytics dashboard templates with Chart.js integration
+- Participant progress tracking templates
+- Database migration for tracking tables (if needed beyond existing schema)
+
+**Deliverable**: Interactive analytics dashboards with charts, learning gap analysis, and PDF reports
+
+---
+
+## Milestone 18: LMS Integration (SCORM & LTI)
+
+**Status**: Pending
+**Focus**: Integrate with Learning Management Systems
+**Addresses**: Limitation L6 (No LMS Integration)
+**Depends on**: Milestone 13 (REST API), Milestone 16 (Async Mode)
+
+### 18.1 SCORM 1.2 Export
+- [ ] Create SCORM 1.2 content package generator
+- [ ] Package challenge as SCO (Shareable Content Object)
+- [ ] Implement SCORM API adapter (JavaScript runtime)
+- [ ] Track: completion_status, score.raw, score.min, score.max, session_time
+- [ ] Generate imsmanifest.xml with proper metadata
+- [ ] ZIP package download from challenge export page
+
+### 18.2 SCORM 2004 Export
+- [ ] Create SCORM 2004 (3rd/4th Edition) package generator
+- [ ] Implement sequencing and navigation rules
+- [ ] Track: cmi.completion_status, cmi.success_status, cmi.score.scaled
+- [ ] Support multi-SCO packages (one SCO per question group)
+
+### 18.3 LTI 1.3 Tool Provider
+- [ ] Add IMS Global LTI 1.3 library dependency
+- [ ] Implement LTI 1.3 launch endpoint
+- [ ] Handle OIDC login initiation flow
+- [ ] Implement Deep Linking (Content-Item Message) for challenge selection
+- [ ] Implement Assignment and Grade Services (AGS) for grade passback
+- [ ] Support Names and Roles Provisioning Services (NRPS)
+
+### 18.4 LMS Platform Registration
+- [ ] Create LMS registration admin page
+- [ ] Store platform credentials (client_id, deployment_id, key set URL)
+- [ ] Support Moodle LTI 1.3 configuration
+- [ ] Support Canvas LTI 1.3 configuration
+- [ ] Support Blackboard LTI 1.3 configuration
+- [ ] Support Google Classroom (via LTI or Classroom API)
+- [ ] Provide Darkhold's public key set endpoint (JWKS)
+
+### 18.5 Grade Passback
+- [ ] Send scores back to LMS grade book after game/assignment completion
+- [ ] Map Darkhold scores to LMS grade scale (0-100%)
+- [ ] Support both immediate (live game) and deferred (assignment) grading
+- [ ] Handle grade update for retakes (best score, latest score, average)
+- [ ] Sync completion status for compliance tracking
+
+### 18.6 xAPI (Experience API) Support
+- [ ] Implement xAPI statement generation for game events
+- [ ] Statements: attempted, completed, scored, answered, interacted
+- [ ] Configure Learning Record Store (LRS) endpoint in admin settings
+- [ ] Batch statement sending with retry logic
+
+### Files to Create/Modify
+- `lms/` package - SCORM packager, LTI provider, xAPI client
+- `lms/scorm/` - SCORM manifest builder, API adapter JS
+- `lms/lti/` - LTI launch handler, OIDC flow, AGS service
+- `lms/xapi/` - Statement builder, LRS client
+- Admin pages for LMS platform registration
+- Database migration for LMS platform credentials and grade sync records
+- Challenge export page - Add SCORM download button
+
+**Deliverable**: SCORM 1.2/2004 export, LTI 1.3 provider with grade passback, xAPI event reporting
+
+---
+
+## Milestone 19: White-Label & Branding
+
+**Status**: Pending
+**Focus**: Organization-specific branding and customization
+**Addresses**: Limitation L7 (No White-Label/Branding)
+
+### 19.1 Brand Asset Management
+- [ ] Create `BrandConfig` entity (logo_url, favicon_url, primary_color, secondary_color, accent_color, font_family, app_name)
+- [ ] Admin page for uploading/configuring brand assets
+- [ ] Store uploaded logos and favicons on disk (configurable path)
+- [ ] Preview brand changes before saving
+- [ ] Database migration for brand configuration table
+
+### 19.2 Dynamic Theme Application
+- [ ] Extend existing CSS custom properties to accept admin-configured values
+- [ ] Inject brand colors into `theme-variables.css` dynamically via Thymeleaf
+- [ ] Replace hardcoded "Darkhold" text with configurable `app_name` throughout templates
+- [ ] Replace logo and favicon references with brand-configured assets
+- [ ] Support custom CSS injection for advanced customization
+
+### 19.3 Game Screen Branding
+- [ ] Show organization logo on game waiting screen
+- [ ] Show organization logo on final score screen
+- [ ] Optional "Powered by Darkhold" footer (can be hidden for full white-label)
+- [ ] Custom background patterns/images for game screens
+
+### 19.4 Email & Export Branding
+- [ ] Branded email templates (if SMTP configured)
+- [ ] Branded PDF report headers and footers
+- [ ] Branded CSV export with organization metadata
+- [ ] Custom domain support documentation
+
+### Files to Create/Modify
+- `branding/` package - BrandConfig entity, repository, service, controller
+- Admin branding configuration page
+- Update all Thymeleaf templates to use brand variables
+- Update `theme-variables.css` generation to include brand overrides
+- Database migration for brand config table
+
+**Deliverable**: Admin-configurable branding with custom logos, colors, fonts, and app name
+
+---
+
+## Milestone 20: Platform Ecosystem
+
+**Status**: Pending
+**Focus**: Plugin architecture, embeddable widgets, and community marketplace
+**Addresses**: Limitation L9 (No Presentation Integration), future extensibility
+**Depends on**: Milestone 13 (REST API)
+
+### 20.1 Embeddable Game Widget
+- [ ] Create lightweight embeddable game view (`/embed/game/{pin}`)
+- [ ] Strip navigation, header, footer for clean iframe embedding
+- [ ] Generate embed code snippet (`<iframe>` with configurable dimensions)
+- [ ] Support PostMessage API for parent-frame communication
+- [ ] Configurable embed options (show/hide scoreboard, branding, sound)
+
+### 20.2 Presentation Tool Integration
+- [ ] Google Slides Add-on: Launch quiz from within a presentation
+- [ ] PowerPoint Add-in (Office.js): Embed quiz slide in PPTX
+- [ ] Generic embed URL for any presentation tool that supports web embeds
+- [ ] "Presentation Mode" game view optimized for projector display
+
+### 20.3 Plugin Architecture
+- [ ] Define plugin interface: `DarkholdPlugin` with lifecycle hooks (init, destroy)
+- [ ] Extension points: custom question types, custom scoring algorithms, custom themes, custom export formats
+- [ ] Plugin descriptor format (plugin.json with metadata, dependencies, version)
+- [ ] Plugin classloader isolation (prevent conflicts)
+- [ ] Plugin admin management page (install, enable, disable, remove)
+- [ ] Plugin configuration storage (per-plugin settings)
+
+### 20.4 Challenge Marketplace
+- [ ] Allow users to publish challenges as "public" (opt-in)
+- [ ] Create browse/search interface for public challenges
+- [ ] Add tagging and categorization (subject, grade level, difficulty)
+- [ ] Rating and review system (1-5 stars, text reviews)
+- [ ] Fork/clone public challenges to own library
+- [ ] Featured/trending challenges section
+- [ ] Report inappropriate content mechanism
+
+### 20.5 Community Features
+- [ ] Public user profiles (games hosted, challenges created, rating)
+- [ ] Follow creators for notifications on new challenges
+- [ ] Challenge collections/playlists (curated sets by topic)
+- [ ] Contributor leaderboard (most shared, highest rated)
+
+### Files to Create/Modify
+- `embed/` package - Embeddable game controller and stripped-down templates
+- `plugin/` package - Plugin loader, registry, extension point interfaces
+- `marketplace/` package - Public challenge service, search, ratings
+- Embed templates (game-embed.html, scoreboard-embed.html)
+- Marketplace browse/search templates
+- Database migrations for marketplace tables (ratings, tags, visibility)
+
+**Deliverable**: Embeddable quiz widget, presentation tool plugins, plugin architecture, and community challenge marketplace
+
+---
+
+## Milestone 21: Horizontal Scaling & High Availability
+
+**Status**: Pending
+**Focus**: Multi-node deployment for large-scale use
+**Addresses**: Limitation L10 (Single-Server Architecture)
+**Depends on**: Milestone 12 (Security & Scale foundation)
+
+### 21.1 Distributed WebSocket Messaging
+- [ ] Add Spring WebSocket broker relay with Redis pub-sub (or RabbitMQ STOMP)
+- [ ] Replace SimpleBroker with external message broker
+- [ ] Ensure game events propagate across all nodes
+- [ ] Test concurrent games across multiple nodes
+- [ ] Handle node failure gracefully (in-flight games continue on surviving nodes)
+
+### 21.2 Distributed Session & State
+- [ ] Add Spring Session with Redis backend
+- [ ] Migrate `CurrentGame` in-memory state to Redis or database-backed store
+- [ ] Implement distributed locks for game state mutations (Redisson or Spring Integration)
+- [ ] Configure sticky sessions as fallback (if Redis unavailable)
+- [ ] Session replication across nodes
+
+### 21.3 Caching Layer
+- [ ] Add Spring Cache with Redis backend
+- [ ] Cache challenge data (read-heavy, write-infrequent)
+- [ ] Cache user profiles and roles
+- [ ] Cache i18n message bundles
+- [ ] Implement cache invalidation on write operations
+- [ ] Add cache hit/miss metrics
+
+### 21.4 Database Optimization
+- [ ] Connection pool tuning (HikariCP) for multi-node
+- [ ] Read replica support for analytics queries
+- [ ] Database migration for optimistic locking on game state
+- [ ] Index optimization for high-query tables (game_result, participant_result)
+- [ ] Query performance monitoring and slow query logging
+
+### 21.5 Kubernetes Deployment
+- [ ] Create Kubernetes manifests (Deployment, Service, Ingress, ConfigMap, Secret)
+- [ ] Create Helm chart with configurable values (replicas, resources, database, Redis)
+- [ ] Add horizontal pod autoscaler (HPA) based on CPU/memory/WebSocket connections
+- [ ] Configure liveness and readiness probes (actuator endpoints)
+- [ ] Document rolling update strategy with zero-downtime deployment
+- [ ] Add PodDisruptionBudget for availability during node maintenance
+
+### 21.6 Monitoring & Observability
+- [ ] Add Micrometer metrics for Prometheus
+- [ ] Expose: active games, connected WebSockets, questions served, API latency
+- [ ] Create Grafana dashboard templates
+- [ ] Implement distributed tracing (Micrometer Tracing + Zipkin/Jaeger)
+- [ ] Structured JSON logging for log aggregation (ELK/Loki)
+- [ ] Alert rules for critical metrics (game failures, high latency, node loss)
+
+### Files to Create/Modify
+- `init/RedisConfig.java` - Redis connection and Spring Session/Cache config
+- `init/WebSocketConfig.java` - Switch to broker relay
+- `preview/repository/CurrentGame.java` - Refactor to distributed store
+- `k8s/` directory - Kubernetes manifests
+- `helm/darkhold/` directory - Helm chart
+- `grafana/` directory - Dashboard JSON templates
+- `application-cluster.properties` - Clustering configuration profile
+- Database migrations for optimistic locking columns
+
+**Deliverable**: Multi-node deployment with Redis, Kubernetes manifests, Helm chart, and Grafana monitoring
+
+---
+
+## Milestone TC-1: Test Coverage - Security & Infrastructure
+
+**Status**: Pending
+**Focus**: Security-critical code with near-zero test coverage
+**Coverage Target**: 51% -> 58% instruction, raise JaCoCo minimum from 35% to 45%
+**Details**: See [TEST_COVERAGE_PLAN.md](TEST_COVERAGE_PLAN.md)
+
+### TC-1.1 Security Configuration Tests
+- [ ] Authentication flow tests (login success, failure, logout, remember-me)
+- [ ] Authorization rule tests (admin-only endpoints, game-manager endpoints, public access)
+- [ ] CSRF token validation tests (form submission, WebSocket handshake)
+- [ ] Password encoding verification (BCrypt)
+- [ ] Session management tests (concurrent sessions, session timeout)
+
+### TC-1.2 Rate Limiting Tests
+- [ ] PIN entry rate limit enforcement (5 attempts per 5-minute window)
+- [ ] 15-minute block after threshold exceeded
+- [ ] Rate limit reset after window expiry
+- [ ] Different IP addresses tracked independently
+- [ ] Edge cases: exactly at threshold, rapid successive attempts
+
+### TC-1.3 WebSocket Configuration Tests
+- [ ] STOMP endpoint registration verification
+- [ ] WebSocket handshake with valid/invalid CSRF token
+- [ ] Message broker topic configuration
+- [ ] Allowed origins validation
+- [ ] SockJS fallback behavior
+
+### TC-1.4 File Upload & Exception Handling Tests
+- [ ] File type validation (allowed: xlsx, png, jpg; rejected: exe, sh)
+- [ ] File size limit enforcement
+- [ ] Malicious filename sanitization
+- [ ] GlobalExceptionHandler: 404, 500, validation errors, access denied
+- [ ] Error response structure and HTTP status codes
+
+### TC-1.5 Raise JaCoCo Threshold
+- [ ] Update `staticCodeAnalysis.gradle`: minimum 0.35 -> 0.45
+- [ ] Verify all tests pass with new threshold
+- [ ] Update CI/CD pipeline if needed
+
+**Deliverable**: ~53 new tests covering security infrastructure; JaCoCo minimum raised to 45%
+
+---
+
+## Milestone TC-2: Test Coverage - Core Service Layer
+
+**Status**: Pending
+**Focus**: Business logic services (largest gap, highest-value tests)
+**Coverage Target**: 58% -> 67% instruction, raise JaCoCo minimum to 55%
+**Depends on**: TC-1
+
+### TC-2.1 ResultService Tests (analytics.service: 4% -> 65%)
+- [ ] Save game results on game end
+- [ ] Calculate participant statistics (score, accuracy, streak)
+- [ ] Calculate question statistics (success rate, difficulty)
+- [ ] CSV export formatting and content
+- [ ] Handle games with 0 participants
+- [ ] Handle questions with 0 answers
+
+### TC-2.2 TeamService Tests (team.service: 7% -> 65%)
+- [ ] Balanced team assignment (even distribution)
+- [ ] Random team assignment (all players assigned)
+- [ ] Manual team assignment
+- [ ] Team score aggregation from member scores
+- [ ] Team creation with custom names and colors
+- [ ] Edge cases: 1 player, odd numbers, more teams than players
+
+### TC-2.3 PracticeService Tests (practice.service: 11% -> 65%)
+- [ ] Practice session creation (UUID-based, no PIN)
+- [ ] Solo gameplay flow (question progression)
+- [ ] Score tracking without leaderboard
+- [ ] Session-based state management
+- [ ] Practice mode with different question types
+
+### TC-2.4 ChallengeService Tests (challenge.service: 15% -> 55%)
+- [ ] Challenge CRUD operations
+- [ ] Excel import (valid file, empty rows, invalid format, backward compat)
+- [ ] JSON import/export round-trip
+- [ ] Challenge duplication (deep copy verification)
+- [ ] Question ordering and reordering
+- [ ] Validation (missing title, too few questions)
+
+### TC-2.5 UserService & SecurityService Tests (user.service: 24% -> 65%)
+- [ ] User registration (valid data, duplicate email, weak password)
+- [ ] Password change (correct old password, wrong old password)
+- [ ] Role management (assign, revoke)
+- [ ] User lookup by email and ID
+- [ ] SecurityService: auto-login after registration
+
+### TC-2.6 GameService Tests (game.service: 36% -> 65%)
+- [ ] Game lifecycle: create, start, pause, resume, end
+- [ ] Question advancement (next question, skip, last question)
+- [ ] Player join and kick
+- [ ] Streak tracking across questions
+- [ ] GameCleanupScheduler: expired WAITING games, expired active games, active games untouched
+
+### TC-2.7 Raise JaCoCo Threshold
+- [ ] Update `staticCodeAnalysis.gradle`: minimum 0.45 -> 0.55
+- [ ] Verify all tests pass with new threshold
+
+**Deliverable**: ~100 new tests covering all service classes; JaCoCo minimum raised to 55%
+
+---
+
+## Milestone TC-3: Test Coverage - Controller Integration
+
+**Status**: Pending
+**Focus**: Undertested controllers with MockMvc integration tests
+**Coverage Target**: 67% -> 73% instruction, raise JaCoCo minimum to 62%
+**Depends on**: TC-2
+
+### TC-3.1 AdminController Tests (10% -> 75%)
+- [ ] GET user management page (admin access only)
+- [ ] POST create user (valid data, validation errors)
+- [ ] PUT update user roles
+- [ ] Access denied for non-admin users
+- [ ] User list pagination and filtering
+
+### TC-3.2 ChallengeController Tests (18% -> 70%)
+- [ ] GET view challenges page
+- [ ] POST create challenge (valid, validation errors)
+- [ ] GET/POST edit challenge
+- [ ] POST duplicate challenge
+- [ ] DELETE challenge (own, not owned, admin override)
+- [ ] GET export CSV/JSON
+- [ ] POST import Excel/JSON (valid, invalid, empty)
+
+### TC-3.3 OptionsController Tests (52% -> 80%)
+- [ ] GET options page with current settings
+- [ ] POST update preferences (theme, sound, language)
+- [ ] Validation of preference values
+
+### TC-3.4 GameController Tests (53% -> 75%)
+- [ ] POST publish game (creates game with PIN)
+- [ ] POST join game (valid PIN, invalid PIN, expired PIN)
+- [ ] Game control endpoints (pause, resume, skip, end)
+- [ ] Access control (only moderator can control)
+
+### TC-3.5 AccountController Tests (60% -> 85%)
+- [ ] GET profile page
+- [ ] POST update profile (name, email)
+- [ ] Validation errors on invalid input
+
+### TC-3.6 Raise JaCoCo Threshold
+- [ ] Update `staticCodeAnalysis.gradle`: minimum 0.55 -> 0.62
+- [ ] Verify all tests pass with new threshold
+
+**Deliverable**: ~51 new tests for controller layer; JaCoCo minimum raised to 62%
+
+---
+
+## Milestone TC-4: Test Coverage - Data Layer & Models
+
+**Status**: Pending
+**Focus**: Entities, repositories, and models with low coverage
+**Coverage Target**: 73% -> 78% instruction, raise JaCoCo minimum to 68%
+**Depends on**: TC-3
+
+### TC-4.1 Preview Entity & Repository Tests
+- [ ] CurrentGameSession: constructor, getters/setters, state transitions
+- [ ] CurrentGameSession: JSON field serialization/deserialization
+- [ ] CurrentGame: CRUD operations via repository
+- [ ] CurrentGame: PIN-scoped queries (find active by PIN)
+- [ ] CurrentGameSessionRepository: custom query methods
+- [ ] Concurrent access patterns
+
+### TC-4.2 Game Entity Tests (56% -> 85%)
+- [ ] Game entity: field validation, status enum transitions
+- [ ] GameRepository: find by status, find by moderator
+- [ ] GameMode enum coverage
+
+### TC-4.3 User Entity Tests (64% -> 90%)
+- [ ] User entity: required fields, role association
+- [ ] DarkholdUserDetails: authorities mapping from roles
+- [ ] Role entity: name constraints
+
+### TC-4.4 Model & DTO Tests
+- [ ] Options models (ChallengeInfo, ChallengeSummary): construction, fields
+- [ ] Home models (GameInfo, PinValidationResponse): construction, fields
+- [ ] Preview models (PreviewInfo, PublishInfo): construction, fields
+
+### TC-4.5 Raise JaCoCo Threshold
+- [ ] Update `staticCodeAnalysis.gradle`: minimum 0.62 -> 0.68
+- [ ] Verify all tests pass with new threshold
+
+**Deliverable**: ~51 new tests for data layer; JaCoCo minimum raised to 68%
+
+---
+
+## Milestone TC-5: Test Coverage - Branch Coverage & End-to-End
+
+**Status**: Pending
+**Focus**: Branch coverage (34% -> 70%), error paths, full integration tests
+**Coverage Target**: 78% -> 85% instruction, 70% branch; JaCoCo minimum to 75%
+**Depends on**: TC-4
+
+### TC-5.1 Branch Coverage Improvement
+- [ ] Parameterized tests for all enum-based switches (QuestionType, GameStatus, GameMode)
+- [ ] Null-path testing across service methods
+- [ ] Error branch testing (try/catch paths, validation failures)
+- [ ] Conditional logic in ChallengeService Excel parser (all column combinations)
+- [ ] Init package branch coverage (6% -> 60%): config conditional paths
+
+### TC-5.2 Full Game Lifecycle Integration Tests
+- [ ] Complete multiplayer game: create -> publish -> 3 players join -> play 5 questions -> end
+- [ ] Practice mode: create -> start -> play all questions -> view results
+- [ ] Team game: create -> configure teams -> play -> team results
+- [ ] Game with all question types (MCQ, T/F, Type Answer, Poll)
+
+### TC-5.3 WebSocket Integration Tests
+- [ ] STOMP client connect and subscribe to game topic
+- [ ] Send answer via STOMP and receive acknowledgment
+- [ ] Receive scoreboard update after all players answer
+- [ ] Handle disconnect and reconnect during game
+- [ ] Multiple concurrent games on different topics
+
+### TC-5.4 Error & Edge Case Tests
+- [ ] Invalid PIN entry (wrong PIN, expired game, rate limited)
+- [ ] Duplicate nickname in same game
+- [ ] Answer after timer expires
+- [ ] Concurrent answers from same player
+- [ ] Game with 0 questions (validation)
+- [ ] Maximum participants per game
+
+### TC-5.5 Raise JaCoCo Threshold
+- [ ] Update `staticCodeAnalysis.gradle`: minimum 0.68 -> 0.75
+- [ ] Verify all tests pass with new threshold
+- [ ] Add per-package minimum rules for critical packages (init, game.service, challenge.service)
+
+**Deliverable**: ~63 new tests; 85% instruction coverage, 70% branch coverage; JaCoCo minimum at 75%
+
+---
+
 ## Summary
+
+### Phase 1: Kahoot Feature Parity (Completed)
 
 | Milestone | Focus Area | Key Deliverable | Status |
 |-----------|------------|-----------------|--------|
@@ -587,26 +1375,65 @@ All 24 Thymeleaf templates updated to use `#{key}` message expressions:
 | 9 | Teams | Team-based gameplay | ✅ COMPLETED |
 | 10 | UI/UX | Modern, accessible interface | ✅ COMPLETED |
 | 11 | i18n | Multi-language support | ✅ COMPLETED |
-| 12 | Security & Scale | Production hardening | Pending |
+
+### Phase 2: Enterprise-Ready AI Platform (Planned)
+
+| Milestone | Focus Area | Key Deliverable | Addresses | Status |
+|-----------|------------|-----------------|-----------|--------|
+| 12 | Security & Scale | Production hardening | L11 (Test Coverage) | Pending |
+| 13 | REST API | Documented API + Webhooks | L1, L8 | Pending |
+| 14 | AI Generation | AI quiz from text/PDF/URL | L2 | Pending |
+| 15 | SSO / Identity | OAuth2, OIDC, SAML 2.0 | L3 | Pending |
+| 16 | Async Mode | Homework with deadlines | L4 | Pending |
+| 17 | Analytics | Dashboards, charts, PDF reports | L5 | Pending |
+| 18 | LMS Integration | SCORM, LTI 1.3, xAPI | L6 | Pending |
+| 19 | White-Label | Custom branding | L7 | Pending |
+| 20 | Ecosystem | Plugins, embeds, marketplace | L9 | Pending |
+| 21 | Scaling | Redis, Kubernetes, Helm | L10 | Pending |
+
+### Phase 3: Test Coverage (51% -> 85%)
+
+| Milestone | Focus Area | Key Deliverable | Coverage Target | Status |
+|-----------|------------|-----------------|:---------------:|--------|
+| TC-1 | Security & Infrastructure | Security config, rate limiting, WebSocket tests | 51% -> 58% | Pending |
+| TC-2 | Core Service Layer | ResultService, TeamService, GameService, etc. | 58% -> 67% | Pending |
+| TC-3 | Controller Integration | Admin, Challenge, Options, Game controllers | 67% -> 73% | Pending |
+| TC-4 | Data Layer & Models | Entities, repositories, DTOs | 73% -> 78% | Pending |
+| TC-5 | Branch Coverage & E2E | Error paths, lifecycle integration, WebSocket | 78% -> 85% | Pending |
+
+See [TEST_COVERAGE_PLAN.md](TEST_COVERAGE_PLAN.md) for per-package breakdown and detailed test scenarios.
 
 ---
 
-## Recommended Implementation Order
+## Recommended Execution Order
 
-**Suggested sequence based on value and dependencies:**
+**Phase 1 milestones (1-11)** are completed. **Phase 2 milestones (12-21)** should be executed in this order based on dependencies and strategic value:
 
-1. **Milestone 1** - Foundation (required for everything)
-2. **Milestone 3** - Question Editor (high user value)
-3. **Milestone 2** - Question Types (expands functionality)
-4. **Milestone 5** - Game Experience (polish current flow)
-5. **Milestone 6** - Concurrent Games (scalability)
-6. **Milestone 4** - Media Support (rich content)
-7. **Milestone 7** - Analytics (insights)
-8. **Milestone 8** - Game Modes (flexibility)
-9. **Milestone 10** - UI/UX (polish)
-10. **Milestone 9** - Teams (advanced feature)
-11. **Milestone 11** - i18n (reach)
-12. **Milestone 12** - Security & Scale (production)
+| Order | Milestone | Rationale |
+|:-----:|:---------:|-----------|
+| 1 | **M12** | Foundation hardening; already scoped; unblocks enterprise trust |
+| 2 | **M13** | REST API enables M14, M16, M18, M20; transforms app into platform |
+| 3 | **M14** | Closes #1 competitive gap; unique with local AI for air-gapped deployments |
+| 4 | **M15** | Hard gate to enterprise adoption; Spring Security 6 has built-in support |
+| 5 | **M16** | Doubles use-case surface area; teachers and trainers need assignments |
+| 6 | **M17** | Premium differentiator; leverages existing analytics tables |
+| 7 | **M18** | Unlocks education (44.9%) and enterprise training (20.3% CAGR) procurement |
+| 8 | **M19** | Enterprise requirement; extends existing CSS custom properties |
+| 9 | **M20** | Ecosystem play; community-driven growth and content network effects |
+| 10 | **M21** | Large deployment support; requires stable platform from M12-M20 |
+
+### Dependency Graph
+
+```
+M12 (Security) ─────────────────────────────────────────── M21 (Scaling)
+  │
+  └── M13 (REST API) ──┬── M14 (AI Generation)
+                        ├── M15 (SSO)
+                        ├── M16 (Async Mode) ──── M18 (LMS Integration)
+                        ├── M17 (Analytics)
+                        ├── M19 (White-Label)
+                        └── M20 (Ecosystem)
+```
 
 ---
 

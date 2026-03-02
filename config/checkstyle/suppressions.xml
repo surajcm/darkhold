@@ -41,4 +41,15 @@ WHAT AND WHY CHECKS SUPPRESSED
     <suppress files="TeamService.java" checks="IllegalCatch"/>
     <suppress files="TeamService.java" checks="CatchParameterName"/>
     <suppress files="ResultService.java" checks="VariableDeclarationUsageDistance"/>
+    <suppress files="SecurityConfigTest.java" checks="MethodLength"/>
+    <suppress files="RateLimitingServiceTest.java" checks="MethodLength"/>
+    <suppress files="WebSocketConfigTest.java" checks="MethodLength"/>
+    <suppress files="AppMvcConfigTest.java" checks="MethodLength"/>
+    <suppress files="ResultServiceTest.java" checks="MethodLength"/>
+    <suppress files="TeamServiceTest.java" checks="MethodLength"/>
+    <suppress files="GameServiceTest.java" checks="MethodLength"/>
+    <suppress files="GameCleanupSchedulerTest.java" checks="MethodLength"/>
+    <suppress files="UserServiceImplTest.java" checks="MethodLength"/>
+    <suppress files="SecurityServiceImplTest.java" checks="MethodLength"/>
+    <suppress files="PracticeServiceTest.java" checks="MethodLength"/>
 </suppressions>

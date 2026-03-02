@@ -1,7 +1,9 @@
 package com.quiz.darkhold.challenge.service;
 
+import com.quiz.darkhold.challenge.dto.ChallengeExportDto;
 import com.quiz.darkhold.challenge.entity.Challenge;
 import com.quiz.darkhold.challenge.entity.QuestionSet;
+import com.quiz.darkhold.challenge.entity.QuestionType;
 import com.quiz.darkhold.challenge.exception.ChallengeException;
 import com.quiz.darkhold.challenge.repository.ChallengeRepository;
 import com.quiz.darkhold.challenge.repository.QuestionSetRepository;
@@ -34,6 +36,8 @@ import java.util.Optional;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
@@ -296,7 +300,249 @@ class ChallengeServiceTest {
         }
     }
 
+    @Nested
+    @DisplayName("createEmptyChallenge tests")
+    class CreateEmptyChallengeTests {
+
+        @Test
+        @DisplayName("Should create challenge with title and description")
+        void shouldCreateChallengeWithTitleAndDescription() {
+            Challenge savedChallenge = new Challenge();
+            savedChallenge.setId(10L);
+            when(challengeRepository.save(any(Challenge.class))).thenReturn(savedChallenge);
+
+            Challenge result = challengeService.createEmptyChallenge("New Quiz", "A new quiz");
+
+            ArgumentCaptor<Challenge> captor = ArgumentCaptor.forClass(Challenge.class);
+            verify(challengeRepository).save(captor.capture());
+            assertEquals("New Quiz", captor.getValue().getTitle());
+            assertEquals("A new quiz", captor.getValue().getDescription());
+        }
+
+        @Test
+        @DisplayName("Should set owner to current user")
+        void shouldSetOwnerToCurrentUser() {
+            when(challengeRepository.save(any(Challenge.class))).thenAnswer(inv -> inv.getArgument(0));
+
+            challengeService.createEmptyChallenge("Quiz", "Desc");
+
+            ArgumentCaptor<Challenge> captor = ArgumentCaptor.forClass(Challenge.class);
+            verify(challengeRepository).save(captor.capture());
+            assertEquals(testUserId, captor.getValue().getChallengeOwner());
+        }
+    }
+
+    @Nested
+    @DisplayName("updateChallenge tests")
+    class UpdateChallengeTests {
+
+        @Test
+        @DisplayName("Should update title and description")
+        void shouldUpdateTitleAndDescription() {
+            Challenge existing = new Challenge();
+            existing.setId(1L);
+            existing.setTitle("Old Title");
+            existing.setDescription("Old Desc");
+            existing.setChallengeOwner(testUserId);
+            when(challengeRepository.findById(1L)).thenReturn(Optional.of(existing));
+            when(challengeRepository.save(any(Challenge.class))).thenAnswer(inv -> inv.getArgument(0));
+
+            Challenge result = challengeService.updateChallenge(1L, "New Title", "New Desc");
+
+            assertNotNull(result);
+            assertEquals("New Title", result.getTitle());
+            assertEquals("New Desc", result.getDescription());
+        }
+
+        @Test
+        @DisplayName("Should return null when not found")
+        void shouldReturnNullWhenNotFound() {
+            when(challengeRepository.findById(999L)).thenReturn(Optional.empty());
+
+            Challenge result = challengeService.updateChallenge(999L, "Title", "Desc");
+
+            assertNull(result);
+        }
+
+        @Test
+        @DisplayName("Should return null when not owned by current user")
+        void shouldReturnNullWhenNotOwnedByCurrentUser() {
+            Challenge existing = new Challenge();
+            existing.setId(1L);
+            existing.setChallengeOwner(999L);
+            when(challengeRepository.findById(1L)).thenReturn(Optional.of(existing));
+
+            Challenge result = challengeService.updateChallenge(1L, "Title", "Desc");
+
+            assertNull(result);
+            verify(challengeRepository, never()).save(any());
+        }
+    }
+
+    @Nested
+    @DisplayName("duplicateChallenge tests")
+    class DuplicateChallengeTests {
+
+        @Test
+        @DisplayName("Should create copy with Copy suffix")
+        void shouldCreateCopyWithCopySuffix() {
+            Challenge original = createChallengeWithQuestions(1L, testUserId);
+            when(challengeRepository.findById(1L)).thenReturn(Optional.of(original));
+            when(challengeRepository.save(any(Challenge.class))).thenAnswer(inv -> inv.getArgument(0));
+
+            Challenge result = challengeService.duplicateChallenge(1L);
+
+            assertNotNull(result);
+            assertEquals("Test Challenge (Copy)", result.getTitle());
+        }
+
+        @Test
+        @DisplayName("Should deep copy questions")
+        void shouldDeepCopyQuestions() {
+            Challenge original = createChallengeWithQuestions(1L, testUserId);
+            when(challengeRepository.findById(1L)).thenReturn(Optional.of(original));
+            when(challengeRepository.save(any(Challenge.class))).thenAnswer(inv -> inv.getArgument(0));
+
+            challengeService.duplicateChallenge(1L);
+
+            verify(questionSetRepository).saveAll(any());
+        }
+
+        @Test
+        @DisplayName("Should return null when not found")
+        void shouldReturnNullWhenNotFound() {
+            when(challengeRepository.findById(999L)).thenReturn(Optional.empty());
+
+            Challenge result = challengeService.duplicateChallenge(999L);
+
+            assertNull(result);
+        }
+
+        @Test
+        @DisplayName("Should return null when not owned")
+        void shouldReturnNullWhenNotOwned() {
+            Challenge original = createChallengeWithQuestions(1L, 999L);
+            when(challengeRepository.findById(1L)).thenReturn(Optional.of(original));
+
+            Challenge result = challengeService.duplicateChallenge(1L);
+
+            assertNull(result);
+        }
+    }
+
+    @Nested
+    @DisplayName("getChallengeForEdit tests")
+    class GetChallengeForEditTests {
+
+        @Test
+        @DisplayName("Should return challenge when owned")
+        void shouldReturnChallengeWhenOwned() {
+            Challenge challenge = new Challenge();
+            challenge.setId(1L);
+            challenge.setChallengeOwner(testUserId);
+            when(challengeRepository.findById(1L)).thenReturn(Optional.of(challenge));
+
+            Challenge result = challengeService.getChallengeForEdit(1L);
+
+            assertNotNull(result);
+            assertEquals(1L, result.getId());
+        }
+
+        @Test
+        @DisplayName("Should return null when not found")
+        void shouldReturnNullWhenNotFound() {
+            when(challengeRepository.findById(999L)).thenReturn(Optional.empty());
+
+            Challenge result = challengeService.getChallengeForEdit(999L);
+
+            assertNull(result);
+        }
+
+        @Test
+        @DisplayName("Should return null when owned by other user")
+        void shouldReturnNullWhenOwnedByOtherUser() {
+            Challenge challenge = new Challenge();
+            challenge.setId(1L);
+            challenge.setChallengeOwner(999L);
+            when(challengeRepository.findById(1L)).thenReturn(Optional.of(challenge));
+
+            Challenge result = challengeService.getChallengeForEdit(1L);
+
+            assertNull(result);
+        }
+    }
+
+    @Nested
+    @DisplayName("importFromJson tests")
+    class ImportFromJsonTests {
+
+        @Test
+        @DisplayName("Should create challenge from DTO")
+        void shouldCreateChallengeFromDto() {
+            ChallengeExportDto dto = new ChallengeExportDto();
+            dto.setTitle("Imported Quiz");
+            dto.setDescription("Imported Description");
+            when(challengeRepository.save(any(Challenge.class))).thenAnswer(inv -> inv.getArgument(0));
+
+            Challenge result = challengeService.importFromJson(dto);
+
+            assertNotNull(result);
+            ArgumentCaptor<Challenge> captor = ArgumentCaptor.forClass(Challenge.class);
+            verify(challengeRepository).save(captor.capture());
+            assertEquals("Imported Quiz", captor.getValue().getTitle());
+        }
+
+        @Test
+        @DisplayName("Should import questions with display order")
+        void shouldImportQuestionsWithDisplayOrder() {
+            ChallengeExportDto dto = new ChallengeExportDto();
+            dto.setTitle("Quiz");
+            dto.setDescription("Desc");
+            ChallengeExportDto.QuestionExportDto questionDto = new ChallengeExportDto.QuestionExportDto();
+            questionDto.setQuestion("Q1");
+            questionDto.setAnswer1("A1");
+            questionDto.setAnswer2("A2");
+            dto.setQuestions(List.of(questionDto));
+            when(challengeRepository.save(any(Challenge.class))).thenAnswer(inv -> inv.getArgument(0));
+
+            challengeService.importFromJson(dto);
+
+            verify(questionSetRepository).saveAll(any());
+        }
+
+        @Test
+        @DisplayName("Should handle null questions in DTO")
+        void shouldHandleNullQuestionsInDto() {
+            ChallengeExportDto dto = new ChallengeExportDto();
+            dto.setTitle("Quiz");
+            dto.setDescription("Desc");
+            dto.setQuestions(null);
+            when(challengeRepository.save(any(Challenge.class))).thenAnswer(inv -> inv.getArgument(0));
+
+            Challenge result = challengeService.importFromJson(dto);
+
+            assertNotNull(result);
+            verify(questionSetRepository, never()).saveAll(any());
+        }
+    }
+
     // Helper methods
+
+    private Challenge createChallengeWithQuestions(final Long id, final Long ownerId) {
+        Challenge challenge = new Challenge();
+        challenge.setId(id);
+        challenge.setTitle("Test Challenge");
+        challenge.setDescription("Test Desc");
+        challenge.setChallengeOwner(ownerId);
+        QuestionSet qs = new QuestionSet();
+        qs.setQuestion("Q1");
+        qs.setAnswer1("A1");
+        qs.setAnswer2("A2");
+        qs.setCorrectOptions("A");
+        qs.setQuestionType(QuestionType.MULTIPLE_CHOICE);
+        challenge.setQuestionSets(List.of(qs));
+        return challenge;
+    }
 
     private MultipartFile createValidExcelFile() throws IOException {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
